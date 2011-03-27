@@ -1,0 +1,105 @@
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="../style.css" />
+<title>SSH</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<p>
+经常碰到一个概念SSH。下面就通过实际的应用，将SSH的基本概念，基本使用说明清楚。
+</p>
+
+<h2 id="toc_0.1">SSH应用场景</h2>
+<p>
+下面就是我碰到的几种情况：
+</p>
+<ul>
+<li>
+搭建wordpress博客，使用了Media Temple作为服务器，使用SSH远程登录服务器。
+</li>
+<li>
+使用git工具进行版本控制，使用github作为代码服务器的时候，需要配置SSH密钥。
+</li>
+<li>
+使用SSH登录交换机，相当于使用telnet登录交换机。
+</li>
+</ul>
+
+<h2 id="toc_0.2">SSH是什么</h2>
+<p>
+SSH为Secure Shell的缩写，由IETF的网络工作小组（Network Working Group）所制定；SSH为创建在应用层和传输层基础上的安全协议。传统的网络服务程序，如FTP、POP和Telnet其本质上都是不安全的；而SSH是目前较可靠，专为远程登录会话和其他网络服务提供安全性的协议。SSH之另一项优点为其传输的数据是经过压缩的，所以可以加快传输的速度。SSH有很多功能，它既可以代替Telnet，又可以为FTP、POP、甚至为PPP提供一个安全的“通道”。
+</p>
+
+<p>
+在客户端来看，SSH提供两种级别的安全验证。
+第一种级别（基于密码的安全验证），知道帐号和密码，就可以登录到远程主机，并且所有传输的数据都会被加密。但是，可能会有别的服务器在冒充真正的服务器，无法避免被“中间人”攻击。
+第二种级别（基于密匙的安全验证），需要依靠密匙，也就是你必须为自己创建一对密匙，并把公有密匙放在需要访问的服务器上。
+</p>
+
+<p>
+（摘自《维基百科》）
+</p>
+
+<h2 id="toc_0.3">SSH远程登录服务器</h2>
+<p>
+在搭建自己的网站，博客的时候，可能你想远程登录到服务器上，向管理自己电脑上的文件一样管理服务器上的文件（增删该）。可能你还想把其它地方的文件（例如自己本地电脑上，或者其它服务器上）拷贝到服务器上，或者把服务器上的文件拷贝下来。这个时候，你就可以使用SSH。
+</p>
+
+<ul>
+<li>
+确定服务器支持SSH
+</li>
+</ul>
+<p>
+如何判定服务器是否支持SSH呢？如果在服务器的说明中没有看到，那还是直接问服务器提供者吧。可以肯定，Media Temple是支持SSH的，但是默认情况下是没有启动的。所以必须设置启动。例如我的设置就在网站管理-&gt;虚拟主机设置。将“通过SSH访问服务器“的禁用改为其它的，例如改为/bin/bash(chrooted)。同时记得设定一个用户名和密码。
+</p>
+
+<ul>
+<li>
+SSH登录服务器
+</li>
+</ul>
+<p>
+在确定服务器支持SSH，并且服务器已经允许通过SSH访问的情况下，就可以登录服务器了。
+</p>
+<pre>
+[ny@localhost ~]$ ssh 用户名@nienet.com
+[ny@localhost ~]$ ssh 用户名@72.10.38.50
+......
+bash-3.2$ pwd
+/
+bash-3.2$ ls
+anon_ftp  cgi-bin  dev         etc       lib    pd       statistics  tmp  var
+bin       conf     error_docs  httpdocs  lib64  private  subdomains  usr  web_users
+</pre>
+<p>
+使用ssh远程登录服务器，@前面的为上一步设定的用户名，@后面的为服务器的IP地址，或者对应的域名（如果已经将域名解析到该IP地址上的话）。
+登录之后，使用pwd看看登录之后的位置，ls看看当前位置下的内容，可以看到已经登录到服务器的目录下了。使用exit命令可以退出登录。
+下面就可以像操作本地文件一样操作服务器上的文件啦，当然前提是你熟悉linux的基本命令行操作。
+</p>
+
+<ul>
+<li>
+SSH传送文件
+</li>
+</ul>
+<p>
+如何将本地的文件传送到主机上呢?由于使用SSH，我们需要用到scp命令对本地计算机和SSH服务器上的文件进行交流。
+</p>
+<pre>
+scp &lt;本地文件名&gt; &lt;用户名&gt;@&lt;ssh服务器地址&gt;:&lt;上传保存路径即文件名&gt;
+例如：
+[ny@localhost ~]$ scp -r vimwiki_linux nieyong@72.10.38.50:/httpdocs/
+nieyong@72.10.38.50's password: 
+index.wiki                                            100%   52     0.1KB/s   00:00 
+</pre>
+<p>
+将服务器上的文件拷贝到本地计算机，只需要将scp的目的和源对调即可。一定要注意目录的权限。
+</p>
+
+<p>
+另外，获取其它服务器上的文件，可以在SSH下面使用wget命令。
+</p>
+
+</body>
+</html>
