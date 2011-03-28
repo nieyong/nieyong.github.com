@@ -1,0 +1,10 @@
+/etc/init.d/rcS:系统启动脚本，是最开始执行的脚本
+
+/etc/udev/udev.conf：udev 的配置文件
+/etc/udev/rules.d/*.rules：udev 的 rule 文件
+/etc/udev/script/*.sh：udev 的脚本文件
+/sbin/hotplug：hotplug 脚本
+/usr/cpufreqd/*：cpufreqd 库文件和配置文件
+/usr/alsa/*：ALSA工具和库文件
+/usr/tslib/*：tslib 库文件和测试程序
+

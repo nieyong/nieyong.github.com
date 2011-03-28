@@ -1,0 +1,2 @@
+问题描述
+chrome无法登录https://github.com/网站，提示错误The server's security certificate is revoked!
