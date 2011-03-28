@@ -101,5 +101,32 @@ index.wiki                                            100%   52     0.1KB/s   00
 另外，获取其它服务器上的文件，可以在SSH下面使用wget命令。
 </p>
 
+<h2 id="toc_0.4">SSH和github</h2>
+<p>
+首先，产生一对SSH密钥，包括一个私钥和一个公钥。命令如下：
+</p>
+<pre>
+[ny@localhost .ssh]$ ssh-keygen -C 'nieyong_1947@126.com' -t rsa
+[ny@localhost .ssh]$ ls
+id_rsa  id_rsa.pub  known_hosts
+</pre>
+<p>
+可以看到，在~/.ssh/目录下，多了两个文件，其中id_rsa是私钥，而id_rsa.pub就是公钥。利用more命令显示出公钥的内容（当然内容是加密过的），然后把这个公钥的内容复制到github网站的账户的SSH Public Key中。
+</p>
+<pre>
+[ny@localhost .ssh]$ more id_rsa.pub 
+</pre>
+<p>
+可以看到，在github账户的SSH Public Key的网页中，可以建立多个Key。这个对于有多个用户很有用。例如，我的系统中有根用户root和普通用户ny，那么为根用户root建立一对密钥，私钥位于/root/.ssh/下，为普通用户建立一对密钥，私钥位于/home/ny/.ssh/下。
+如果你只建立一对密钥，那么另外一个用户肯定找不到私钥的位置（因为不是默认路径下了），这样使用git push提交的时候，会出现权限不够的提示。
+</p>
+
+<h3 id="toc_0.4.1">其它参考</h3>
+<p>
+<a href="http://www.pureweber.com/article/git-and-github/">http://www.pureweber.com/article/git-and-github/</a>
+<a href="https://github.com/shenhaocn/jzcode-x11">https://github.com/shenhaocn/jzcode-x11</a>
+<a href="http://progit.org/book/zh/">http://progit.org/book/zh/</a>
+</p>
+
 </body>
 </html>
