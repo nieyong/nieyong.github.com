@@ -1,5 +1,5 @@
 body {
-    margin: 1em 15em 1em 15em; 
+    margin: 1em 10% 1em 10%; 
     font-size: 100%;
     font-family : Bitstream Vera Sans, Lucida Sans, SimSun, ËÎÌו, sans-serif;
     color: black;
@@ -87,7 +87,7 @@ li {
 }
 p {
     text-indent : 2em;
-    font-size: 10.5pt;
+    font-size: 13pt;
     line-height: 150%;
 }
 img {

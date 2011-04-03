@@ -1,0 +1,7 @@
+== 关于本站 ==
+个人wiki，使用vimwiki编辑，托管于github，Powered by Github Pages
+
+== NIENET.COM ==
+欢迎访问网站:http://nienet.com
+
+该网站很多内容都是本wiki的进一步修改，整理，致力于为嵌入式初学者提供一站式的学习参考平台
