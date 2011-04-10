@@ -16,6 +16,53 @@
 
 在刚开始的时候，由于没有在.config文件中将jz-lcd驱动选项去掉，所以加载了两个帧缓冲设备，如上面所示。
 
+== 命令行查看FrameBuffer的中断信息 ==
+查看到帧设备之后，那么帧设备有没有工作呢？我们可以通过产看中断的办法，大概的看到帧设备是否工作。
+{{{
+# cat /proc/interrupts
+           CPU0
+  3:          2            INTC  ohci_hcd:usb1
+  9:       5758            INTC  serial
+ 14:          0            INTC  MMC/SD
+ 15:          0            INTC  rtc
+ 17:          0            INTC  cim
+ 23:      73137            INTC  jz-timerirq
+ 30:          0            INTC  lcd
+ 32:          0             DMA  auto
+ 33:          0             DMA  MMC Rx
+ 34:          0             DMA  MMC Tx
+ 35:          0             DMA  audio adc
+ 36:          0             DMA  audio dac
+150:          0            GPIO  udc_pnp
+158:          0            GPIO  MMC card detect
+173:          0            GPIO  poweroff
+
+ERR:          0
+}}}
+通过打印/proc/interrupts的信息，可以看到30号中断，对应上面的jz-lcd驱动，而32号中断，是DMA中断，名字为auto，这其实对应jz-slcd的中断，jz4740_slcd.c文件中有下面的代码为证：
+{{{
+static int slcd_dma_init(void)
+{
+	/* Request DMA channel and setup irq handler */
+	dma_chan = jz_request_dma(DMA_ID_AUTO, "auto", slcd_dma_irq, 0, NULL);
+	if (dma_chan < 0) {
+		printk("Request DMA Failed\n");
+		return -1;
+	}
+	printk("DMA channel %d is requested by SLCD!\n", dma_chan);
+	……
+}
+}}}
+可以看到，这驱动中，通过jz_request_dma()函数请求可一个DMA通道，名字为auto，并且注册了DMA中断函数slcd_dma_irq()。通过查看内核启动信息，也可以验证这一点。
+{{{
+# cat /proc/
+……
+DMA channel 0 is requested by SLCD!
+……
+}}}
+
+其中，cat /proc/interrupts的输出第二列表示进入这个中断的次数。可以看到，进入jz-lcd和auto的中断次数为0次，也就是从没有进入过中断。没有进入过中断，就没有DMA将图像从内存写入显存（GRAM）的过程，LCD上没有图像显示，也就不足为奇了。
+
 == 查看内核启动信息 ==
 查看内核启动时的输出信息是最直接，有效的调试方式。可以在命令行下使用klog命令，也可以直接接串口获得内核启动信息。下面就下面的输出做出分析：
 {{{

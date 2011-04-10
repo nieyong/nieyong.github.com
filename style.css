@@ -86,9 +86,8 @@ li {
     line-height: 150%;
 }
 p {
-    text-indent : 2em;
     font-size: 13pt;
-    line-height: 150%;
+    line-height: 130%;
 }
 img {
     border: 0;
@@ -97,7 +96,7 @@ pre, blockquote, table{
     margin: 0.5em 0 1em;
 }
 blockquote, pre {margin-top: 1em; margin-bottom: 1em;}
-pre {border-left: 2px solid #ccc; margin-left: 2em; padding-left: 0.5em;}
+pre {margin-top: 0; margin-bottom: 0; font-size: 14px;	background-color:#eeeeee;	border: 1px solid #ccc;	padding: 5px 5px 5px 5px;}
 table {margin-left: 2em;}
 blockquote {padding: 0.4em; background-color: #f6f5eb;}
 th, td {border: 1px solid #ccc; padding: 0.3em;}
