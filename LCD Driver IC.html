@@ -1,0 +1,131 @@
+<html>
+<head>
+	<link rel="Stylesheet" type="text/css" href="style.css" />
+        <title>LCD Driver IC</title>
+        <meta http-equiv="Content-Type" content="text/html" />
+<div id="header"> 
+	<ul id="top-nav"> 
+		<li> 
+			<a href="index.html">首页</a> 
+		</li> 
+		<li> 
+			<a href="Navigate.html">本站导图</a> 
+		</li> 
+		<li> 
+			<a href="AboutMe.html">关于本站</a> 
+		</li> 
+	</ul> 
+</div> 
+</head>
+<body>
+        <div class="contents">
+<h2 id="toc_0.1">LG LGDP4551 Smart LCD panel</h2>
+<p>
+config JZ_SLCD_LGDP4551, bool "LG LGDP4551 Smart LCD panel",Driver for Smart LCD LGDP4551, 8-bit sytem interface, 16BPP.
+</p>
+
+<p>
+LGDP4551驱动在make menucofig中的配置位置：
+</p>
+<ul>
+<li>
+-&gt; Device Drivers
+</li>
+<li>
+-&gt; Graphics support 
+</li>
+<li>
+-&gt; Support for frame buffer devices (FB [=y])
+</li>
+<li>
+-&gt; JZSOC LCD controller support (FB_JZSOC [=y])
+</li>
+<li>
+-&gt; JZ4740 Smart LCD controller support (FB_JZ4740_SLCD [=y])
+</li>
+<li>
+-&gt; SLCD Panel (&lt;choice&gt; [=y])
+</li>
+</ul>
+
+<p>
+还支持的其它smart LCD屏
+</p>
+<ul>
+<li>
+SPFD5420A Smart LCD panel
+</li>
+<li>
+RULY Smart LCD panel (MAX Pixels 400x240) 
+</li>
+</ul>
+
+<h2 id="toc_0.2">LCD屏常用参数</h2>
+<p>
+示图像像素值的位数叫做图像的像素深度，又称为位/像素（BPP）
+玻璃：LG liquid crystal panel 
+Driver IC：R61509/SPFD5420A 可以互相替代 
+通讯：并行16bit命令 并行18bit数据 
+</p>
+
+<h2 id="toc_0.3">其它</h2>
+<h4 id="toc_0.3.0.1">R61509/SPFD5420A</h4>
+<p>
+注意R400H寄存器。另外我这里旋转了270度。屏旋转注意R003H寄存器。 
+</p>
+
+<p>
+关键的寄存器 R003H R400H R401H R402H.
+</p>
+
+<p>
+<a href="http://www.cnblogs.com/mercuryxu/archive/2009/11/27/1611786.html">http://www.cnblogs.com/mercuryxu/archive/2009/11/27/1611786.html</a>
+</p>
+
+<p>
+芯片我已经说了R61509或者是SPFD5420A。这个芯片就是个MPU屏的驱动IC，支持WQVGA的玻璃，400×240分辨率。
+</p>
+
+<p>
+关于spfd5420a的驱动和datasheet。
+<a href="http://www.ourdev.cn/bbs/bbs_content.jsp?bbs_sn=3521423&amp;bbs_id=9999">http://www.ourdev.cn/bbs/bbs_content.jsp?bbs_sn=3521423&amp;bbs_id=9999</a>
+</p>
+
+<h4 id="toc_0.3.0.2">ILI9325</h4>
+<p>
+关于ili9325的驱动和。
+<a href="http://bbs.21ic.com/icview-213425-1-1.html">http://bbs.21ic.com/icview-213425-1-1.html</a>
+</p>
+
+<p>
+<a href="http://club.noahedu.com/thread-99852-1-1.html">http://club.noahedu.com/thread-99852-1-1.html</a>
+</p>
+
+
+<p>
+<a href="http://apps.hi.baidu.com/share/detail/23512369">http://apps.hi.baidu.com/share/detail/23512369</a>
+</p>
+<blockquote>
+LCD_WR_REG(0x00e3,0x3008); 
+LCD_WR_REG(0x00e7,0x0012); 
+LCD_WR_REG(0x00ef,0x1231);//Set the internal vcore voltage 
+LCD_WR_REG(0x0001,0x0100);//S 
+上面是初始化函数的一部分，可为什么会有0x00e7地址啊，我看资料手册上只到 
+0x00a5啊，那么0x00e7这个地址是从哪儿来的？
+</blockquote>
+<p>
+芯达stm32的FSMC TFT例程，为了兼容ILI9325  与 OTM3225两种驱动IC，整合这两种初始化驱动代码。 
+所以可能这几句不是ILI9325的 我试了下 把它们删了也没有什么问题...
+</p>
+
+
+<p>
+你的屏，我们早就在用了。 
+直接下载ALIENTEK MiniSTM32开发板的任何一个含液晶驱动的代码，里面就支持你的4531了的。偷偷的告诉你，代码同时兼容：9320，9325，4531，4558，5408，68021等这些型号的液晶...
+</p>
+<div id="footer">
+    <p id="legal">Copyright &copy; 2012 NIENET. All Rights Reserved.</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<html>
+<head>
+	<link rel="Stylesheet" type="text/css" href="style.css" />
+        <title>LCD 驱动调试</title>
+        <meta http-equiv="Content-Type" content="text/html" />
+<div id="header"> 
+	<ul id="top-nav"> 
+		<li> 
+			<a href="index.html">首页</a> 
+		</li> 
+		<li> 
+			<a href="Navigate.html">本站导图</a> 
+		</li> 
+		<li> 
+			<a href="AboutMe.html">关于本站</a> 
+		</li> 
+	</ul> 
+</div> 
+</head>
+<body>
+        <div class="contents">
+<p>
+为一块新的LCD屏编写了驱动，然后编译进内核，下载到开发板上，这时候，屏幕也许除了背光，没有其它任何的显示，这个时候，我们应该怎么进行调试呢？下面是几个最基本的问题：
+</p>
+<ul>
+<li>
+如何确定LCD驱动加载了呢？
+</li>
+<li>
+LCD驱动的基本信息是否正确呢，如何检查？
+</li>
+<li>
+能否通过应用程序来对LCD屏幕进行控制呢？这里的FrameBuffer的应用程序如何编写呢？
+</li>
+</ul>
+<p>
+下面是一些我现在用到的办法：
+</p>
+
+<h2 id="toc_0.1">命令行查看FrameBuffer的信息</h2>
+<pre>
+# cat /proc/fb		//在/proc目录，查看当前系统中的帧缓冲设备
+0 jz-lcd
+1 jz-slcd
+#
+# ls /dev/fb*		//查看/dev目录下的不同的帧缓冲设备
+</pre>
+<p>
+可以看到，现在系统中有两个帧缓冲设备，其中第0个设备，其实就是/dev/fb0，应该对应的是jz-lcd的驱动，而第1个设备，其实就是/dev/fb1，就是jz-slcd的驱动。而lcd和slcd就是jz soc上两个LCD的控制器。
+</p>
+
+<p>
+在刚开始的时候，由于没有在.config文件中将jz-lcd驱动选项去掉，所以加载了两个帧缓冲设备，如上面所示。
+</p>
+
+<h2 id="toc_0.2">查看内核启动信息</h2>
+<p>
+查看内核启动时的输出信息是最直接，有效的调试方式。可以在命令行下使用klog命令，也可以直接接串口获得内核启动信息。下面就下面的输出做出分析：
+</p>
+<pre>
+
+fb_alloc_cmap,fb.cmap.len:256....
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:0,RGBt:(0,0,0,65535)
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:1,RGBt:(0,0,43690,65535)
+……		//省略了regno:2~regno:253
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:254,RGBt:(44767,65503,65519,65535)
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:255,RGBt:(65535,65535,65535,65535)
+jzfb_set_var: after fb_set_cmap...
+slcd_hw_init---------jzfb.w:240jzfb.h:320,jzfb.bpp:16
+in order to init slcd SLCD_CFG=0x4400
+SLCDC: PixClock:16000000 LcdClock:28000000
+SLCD_CFG=0x4400
+jzfb_set_pardbg::drivers/video/jz4740_slcd.c,LINE(460): var.yoffset: 0
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:0,RGBt:(0,0,0,65535)
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:1,RGBt:(0,0,43690,65535)
+……		//省略了regno:2~regno:13
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:14,RGBt:(65535,65535,21845,65535)
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:15,RGBt:(65535,65535,65535,65535)
+Console: switching to colour frame buffer device 30x40
+dbg::drivers/video/jz4740_slcd.c,LINE(460): var.yoffset: 0
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:0,RGBt:(0,0,0,65535)
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:1,RGBt:(0,0,43690,65535)
+……		//省略了regno:2~regno:13
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:14,RGBt:(65535,65535,21845,65535)
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:15,RGBt:(65535,65535,65535,65535)
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:0,RGBt:(0,0,0,65535)
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:1,RGBt:(0,0,43690,65535)
+……		//省略了regno:2~regno:13
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:14,RGBt:(65535,65535,21845,65535)
+dbg::drivers/video/jz4740_slcd.c,LINE(221): regno:15,RGBt:(65535,65535,65535,65535)
+fb0: jz-ny-slcd frame buffer device, using 256K of video memory
+DMA channel 0 is requested by SLCD!
+</pre>
+<p>
+之所以有上面这么多的输出信息，是因为驱动文件中原来定义的调试宏被打开了，并且，你也可以在你自己觉得有疑问，需要打印的地方加入输出信息。
+打开调试宏的办法：
+例如在文件jz4740_slcd.c中，
+</p>
+<pre>
+//#undef DEBUG		//如果不想打印调试信息，那么就使用这一句
+#define DEBUG		//如果想打印调试信息，使用这一句
+#ifdef DEBUG
+#define dprintk(x...)	printk(x)
+#else
+#define dprintk(x...)
+#endif
+</pre>
+<p>
+原来#define DEBUG是被注释掉的，现在去掉注释，然后将#undef DEBUG注释掉。这样，下面文件中使用到的dprintk()函数就会使用printk()函数做内核的输出答应。
+</p>
+
+<p>
+至于添加答应操作，那么就使用dprintk()函数就可以了，用法和printf()类似。
+</p>
+<div id="footer">
+    <p id="legal">Copyright &copy; 2012 NIENET. All Rights Reserved.</p>
+</div>
+</div>
+</body>
+</html>

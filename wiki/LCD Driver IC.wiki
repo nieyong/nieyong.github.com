@@ -1,0 +1,56 @@
+== LG LGDP4551 Smart LCD panel ==
+config JZ_SLCD_LGDP4551, bool "LG LGDP4551 Smart LCD panel",Driver for Smart LCD LGDP4551, 8-bit sytem interface, 16BPP.
+
+LGDP4551驱动在make menucofig中的配置位置：
+* -> Device Drivers
+* -> Graphics support 
+* -> Support for frame buffer devices (FB [=y])
+* -> JZSOC LCD controller support (FB_JZSOC [=y])
+* -> JZ4740 Smart LCD controller support (FB_JZ4740_SLCD [=y])
+* -> SLCD Panel (<choice> [=y])
+
+还支持的其它smart LCD屏
+* SPFD5420A Smart LCD panel
+* RULY Smart LCD panel (MAX Pixels 400x240) 
+
+== LCD屏常用参数 ==
+示图像像素值的位数叫做图像的像素深度，又称为位/像素（BPP）
+玻璃：LG liquid crystal panel 
+Driver IC：R61509/SPFD5420A 可以互相替代 
+通讯：并行16bit命令 并行18bit数据 
+
+== 其它 ==
+==== R61509/SPFD5420A ====
+注意R400H寄存器。另外我这里旋转了270度。屏旋转注意R003H寄存器。 
+
+关键的寄存器 R003H R400H R401H R402H.
+
+http://www.cnblogs.com/mercuryxu/archive/2009/11/27/1611786.html
+
+芯片我已经说了R61509或者是SPFD5420A。这个芯片就是个MPU屏的驱动IC，支持WQVGA的玻璃，400×240分辨率。
+
+关于spfd5420a的驱动和datasheet。
+http://www.ourdev.cn/bbs/bbs_content.jsp?bbs_sn=3521423&bbs_id=9999
+
+==== ILI9325 ====
+关于ili9325的驱动和。
+http://bbs.21ic.com/icview-213425-1-1.html
+
+http://club.noahedu.com/thread-99852-1-1.html
+
+
+http://apps.hi.baidu.com/share/detail/23512369
+
+
+           LCD_WR_REG(0x00e3,0x3008); 
+	   LCD_WR_REG(0x00e7,0x0012); 
+	   LCD_WR_REG(0x00ef,0x1231);//Set the internal vcore voltage 
+	   LCD_WR_REG(0x0001,0x0100);//S 
+	   上面是初始化函数的一部分，可为什么会有0x00e7地址啊，我看资料手册上只到 
+	   0x00a5啊，那么0x00e7这个地址是从哪儿来的？
+芯达stm32的FSMC TFT例程，为了兼容ILI9325  与 OTM3225两种驱动IC，整合这两种初始化驱动代码。 
+所以可能这几句不是ILI9325的 我试了下 把它们删了也没有什么问题...
+
+
+你的屏，我们早就在用了。 
+直接下载ALIENTEK MiniSTM32开发板的任何一个含液晶驱动的代码，里面就支持你的4531了的。偷偷的告诉你，代码同时兼容：9320，9325，4531，4558，5408，68021等这些型号的液晶...
