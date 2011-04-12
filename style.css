@@ -46,7 +46,7 @@ code {
 h1 {
     font-family : Arial, Bitstream Vera Sans, Lucida Sans, 黑体, sans-serif;
     margin-top: 28pt;
-    margin-bottom: 21pt;
+    margin-bottom: 4pt;
     padding-bottom: 10pt;
     font-size: 22pt;
     border-bottom: 4px solid #ffa500;
@@ -54,40 +54,47 @@ h1 {
 h2 {
     font-family : Arial, Bitstream Vera Sans, Lucida Sans, 黑体, sans-serif;
     margin-top: 20pt;
-    margin-bottom: 15pt;
+    margin-bottom: 4pt;
     font-size: 16pt;
     border-bottom: 2px solid #ffa500;
 }
 h3 {
     font-family : Arial, Bitstream Vera Sans, Lucida Sans, 黑体, sans-serif;
     margin-top: 16pt;
-    margin-bottom: 12pt;
+    margin-bottom: 4pt;
     font-size: 14pt;
     border-bottom: 1px dashed #ffa500;
 }
 h4 {
     font-family : Bitstream Vera Sans, Lucida Sans, SimSun, 宋体, sans-serif;
     margin-top: 10pt;
-    margin-bottom: 10pt;
+    margin-bottom: 4pt;
     font-size: 12pt;
 }
 h5 {
     font-family : Bitstream Vera Sans, Lucida Sans, SimSun, 宋体, sans-serif;
     margin-top: 10pt;
-    margin-bottom: 5pt;
+    margin-bottom: 3pt;
     font-size: 12pt;
 }
 h6 {
     font-family : Bitstream Vera Sans, Lucida Sans, SimSun, 宋体, sans-serif;
     margin-top: 10pt;
+    margin-bottom: 3pt;
     font-size: 12pt;
 }
 li {
     line-height: 150%;
 }
 p {
+    margin-top: 3px;
+    margin-bottom: 3px;
     font-size: 13pt;
     line-height: 130%;
+}
+ul {
+    margin-top: 6px;
+    margin-bottom: 6px;
 }
 img {
     border: 0;
@@ -128,6 +135,7 @@ th {background-color: #f0f0f0;}
     top: 4px;
     width: 400px;
     margin: 0 auto;
+    margin-bottom: 60px;
     overflow: hidden;
     zoom: 1;
 }
