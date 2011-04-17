@@ -1,3 +1,7 @@
-Linux
+== 按照文章内容进行分类  点击[[ContentIndex|这里]]进入按照内容分类页面 ==
 
-[[SSH]]		[[LCD Driver IC]]
+=== Linux Config系列文章 ===
+* [[yum manual]]
+* [[linux fonts]]
+
+== 按照标题字母顺序分类  点击[[WordIndex|这里]]进入按照字母顺序分类页面 ==
