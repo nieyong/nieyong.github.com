@@ -1,0 +1,20 @@
+== 关于Linux字体 ==
+以前一直没有关注国Linux的字体，一般安装系统的时候，默认配置是什么，就是什么。但是，在fedora下，中文字体在很多地方表现得很糟糕。一个最大的问题，就是在chrome浏览器下的中文字体表现的很差，笔画不清晰，很多字体发虚（网上很多文章都用这个词，我只是借用过来，至于是否和最先想表达的想法相同，也就不追究了）。
+
+自己以前对字体没有什么基本的概念，下面就将学习内容做一些笔记。
+
+== 关于WQY字体 ==
+{{{
+[root@localhost yum.repos.d]# yum -C list wqy*
+Loaded plugins: presto, refresh-packagekit
+Available Packages
+wqy-bitmap-fonts.noarch                  1.0.0-0.1.rc1.fc12                 updates-ftp.sjtu.edu.cn   
+wqy-microhei-fonts.noarch                0.2.0-0.2.beta.fc12                updates-ftp.sjtu.edu.cn   
+wqy-unibit-fonts.noarch                  1.1.0-7.fc12                       Everything-ftp.sjtu.edu.cn
+wqy-zenhei-fonts.noarch                  0.8.38-3.fc12                      Everything-ftp.sjtu.edu.cn
+}}}
+
+
+wqy-bitmap-fonts.noarch		wqy点阵宋体
+wqy-unibit-fonts		wqy Unibit等宽字体
+wqy-zenhei-fonts		wqy正黑体

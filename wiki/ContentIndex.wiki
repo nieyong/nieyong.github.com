@@ -1,0 +1,4 @@
+== Linux Config系列文章 ==
+本人使用的Linux发行版本为Fedora 12，同时也尝试过Suse和Ubuntu，还一边在使用LFS（linux from sctrach）。下面就是记录在使用Linux的过程中的基本配置。
+* [[yum manual]]
+* [[linux fonts]]
