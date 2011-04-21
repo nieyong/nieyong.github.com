@@ -1,0 +1,20 @@
+想在shell脚本中实现用户切换，如下：
+
+#!/bin/sh
+
+su - user1 << END
+user1passwd
+END
+
+这个恐怕办不到了，su也不允许通过重定向输入密码。
+可以使用root用户执行这个脚本，这样su时就不要输入密码了。
+
+su读密码是通过/dev/tty读的，而不是通过stdin。所以你用普通的stdin重定向不能实现自动输入密码的功能。
+
+我签写日子也试过，只能通过/dev/tty,不能同步哦stdin
+如：
+Assembly code
+
+echo -e "user\npass\n" | su
+standard in must be a tty
+

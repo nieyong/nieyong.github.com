@@ -1,0 +1,134 @@
+<html>
+<head>
+	<link rel="Stylesheet" type="text/css" href="style.css" />
+        <title>linux multimedia</title>
+        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
+<div id="header"> 
+	<ul id="top-nav"> 
+		<li> 
+			<a href="index.html">首页</a> 
+		</li> 
+		<li> 
+			<a href="Navigate.html">本站导图</a> 
+		</li> 
+		<li> 
+			<a href="AboutMe.html">关于本站</a> 
+		</li> 
+	</ul> 
+</div> 
+</head>
+<body>
+        <div class="contents">
+<p>
+install gstreamer-plugins-good
+yum install gstreamer-plugins-bad
+yum install gstreamer-plugins-ugly
+</p>
+
+<p>
+[root@localhost yum.repos.d]# rpm -qa |grep gstreamer
+gstreamer-0.10.28-2.fc12.i686
+phonon-backend-gstreamer-4.4.0-3.fc12.i686
+gstreamer-plugins-bad-free-0.10.18-1.fc12.i686
+gstreamer-python-0.10.16-1.fc12.i686
+PackageKit-gstreamer-plugin-0.5.7-2.fc12.i686
+gstreamer-plugins-bad-0.10.17-4.fc12.i686
+gstreamer-plugins-ugly-0.10.13-1.fc12.i686
+gstreamer-plugins-base-0.10.25-5.fc12.i686
+gstreamer-plugins-good-0.10.21-1.fc12.i686
+gstreamer-tools-0.10.28-2.fc12.i686
+</p>
+
+
+
+
+<p>
+Getting mp3 support for RhythmBox by Roger Ignazio, III 6/18/05
+</p>
+
+<p>
+To enable mp3 support in RhythmBox, follow these directions:
+</p>
+
+<p>
+su -
+&lt;root password&gt;
+</p>
+
+<p>
+yum -y install gstreamer gstreamer-plugins-mp3
+</p>
+
+<p>
+When installed, as root run: gst-register-0.8
+Then type exit and run gst-register-0.8 as yourself.
+A huge list will go flying by, then it will end and return you to a [user@hostname dir]# prompt.
+When done, open RhythmBox. Nothing will appear different, but mp3 support IS there.
+</p>
+
+
+<p>
+***NOTICE: to do the above process, you NEED livna repos. If you do not have livna repos set up, follow these directions:
+</p>
+
+<p>
+su -
+&lt;root password&gt;
+</p>
+
+<p>
+rpm --import <a href="http://rpm.livna.org/RPM-LIVNA-GPG-KEY">http://rpm.livna.org/RPM-LIVNA-GPG-KEY</a>
+</p>
+
+<p>
+Copy and paste this into your /etc/yum.conf file:
+[livna]
+name=Livna.org Fedora Compatible Packages
+baseurl=<a href="http://rpm.livna.org/fedora/$releasever/$basearch/RPMS.lvn">http://rpm.livna.org/fedora/$releasever/$basearch/RPMS.lvn</a>
+gpgcheck=1
+enabled=1
+</p>
+
+<p>
+OK. livna repos is now a part of yum.
+Now, follow directions above to install gstreamer.
+</p>
+
+
+<p>
+Fedora 10安装amarok中文乱码解决办法 
+<a href="http://kpjack.blog.51cto.com/627289/128145">http://kpjack.blog.51cto.com/627289/128145</a>
+</p>
+
+
+
+
+<p>
+觉得 mplayer 自带那个 GUI 程序用着别扭（操作不便、中文支持不好之类），还不想装 nogui 版本的可以看看这个：
+gnome-mplayer，并不依赖任何gnome组件，gconf都可以不要
+Linux下我是Mplayer+Realplay
+用了一年 smplayer，换回来了。就那么几个需要配置的地方和几个常用快捷键，smplayer 弄得复杂了。
+</p>
+
+
+<p>
+gmplayer 设置
+<a href="http://shareitem.org/archive/gmplayer-skill.html">http://shareitem.org/archive/gmplayer-skill.html</a>
+</p>
+
+<p>
+安装GMplayer网络电视软件
+<a href="http://blog.sina.com.cn/s/blog_5392989a0100aj0q.html">http://blog.sina.com.cn/s/blog_5392989a0100aj0q.html</a>
+</p>
+
+
+
+<p>
+這些都是所謂的「終端模擬器」,這是一些可以讓您的計算機界面變得易於操作，並解可以幫助您和對話的程序。現在有很多的終端模擬器供我們使用。一般的Linux系統通常包含多種終端模擬器，就像:xterm、rxvt、konsole、kvt、gnome-terminal、nxterm、 eterm. 
+</p>
+<div id="footer">
+    <p id="legal">Copyright &copy; 2012 NIENET. All Rights Reserved.</p>
+</div>
+</div>
+</body>
+</html>

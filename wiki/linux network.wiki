@@ -1,0 +1,8 @@
+mbclient -L 机器IP -U 用户名%密码
+
+看到共享目录后
+#smbclient //机器IP/共享目录 -U 用户名称
+
+
+http://blog.chinaunix.net/u/16292/showart_358661.html 
+

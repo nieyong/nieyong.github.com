@@ -1,0 +1,120 @@
+<html>
+<head>
+	<link rel="Stylesheet" type="text/css" href="style.css" />
+        <title>linux patition and grub</title>
+        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
+<div id="header"> 
+	<ul id="top-nav"> 
+		<li> 
+			<a href="index.html">首页</a> 
+		</li> 
+		<li> 
+			<a href="Navigate.html">本站导图</a> 
+		</li> 
+		<li> 
+			<a href="AboutMe.html">关于本站</a> 
+		</li> 
+	</ul> 
+</div> 
+</head>
+<body>
+        <div class="contents">
+<h2 id="toc_0.1">硬盘分区情况分析</h2>
+<pre>
+[root@localhost grub]# fdisk -l
+
+Disk /dev/sda: 80.0 GB, 80026361856 bytes
+255 heads, 63 sectors/track, 9729 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Disk identifier: 0xc001c001
+
+   Device Boot      Start         End      Blocks   Id  System
+   /dev/sda1               1        2432    19535008+  83  Linux
+   /dev/sda2            2433        3040     4883760   83  Linux
+   /dev/sda3            3041        5472    19535040   8e  Linux LVM
+   /dev/sda4            5473        9729    34194352+   5  Extended
+   /dev/sda5            7905        9606    13671283+   b  W95 FAT32
+   /dev/sda6            9607        9729      987966   82  Linux swap / Solaris
+   /dev/sda7   *        5473        5498      204800   83  Linux
+
+   Partition table entries are not in disk order
+
+   Disk /dev/dm-0: 8388 MB, 8388608000 bytes
+   255 heads, 63 sectors/track, 1019 cylinders
+   Units = cylinders of 16065 * 512 = 8225280 bytes
+   Disk identifier: 0x00000000
+
+   Disk /dev/dm-0 doesn't contain a valid partition table
+
+   Disk /dev/dm-1: 10.5 GB, 10485760000 bytes
+   255 heads, 63 sectors/track, 1274 cylinders
+   Units = cylinders of 16065 * 512 = 8225280 bytes
+   Disk identifier: 0x00000000
+
+   Disk /dev/dm-1 doesn't contain a valid partition table
+
+   Disk /dev/dm-2: 1128 MB, 1128267776 bytes
+   255 heads, 63 sectors/track, 137 cylinders
+   Units = cylinders of 16065 * 512 = 8225280 bytes
+   Disk identifier: 0x00000000
+
+   Disk /dev/dm-2 doesn't contain a valid partition table
+</pre>
+<p>
+可以看到，一共有4个Disk被检测到了，分别是：
+</p>
+<pre>
+Disk /dev/sda
+Disk /dev/dm-0
+Disk /dev/dm-1
+Disk /dev/dm-2
+</pre>
+<p>
+其中，我们可以看到磁盘/dev/sda的分区情况。“Partition table entries are not in disk order”的含义是，分区命名的顺序和其中磁盘中的位置并不一致。/dev/sda7 的分区数是最大的，但是，其实他再磁盘中，cylinders是从 5473到5498，再逻辑分区/dev/sda5的前面，占据我们的扩展分区/dev/sda4的最开始的位置。
+</p>
+
+<h2 id="toc_0.2">UUID和grub</h2>
+<p>
+查看硬盘各分区的UUID，用命令ls -al /dev/disk/by-uuid 查看你的所有的硬盘的UUID信息！
+</p>
+<pre>
+[ny@localhost disk]$ pwd
+/dev/disk
+[ny@localhost disk]$ ll
+total 0
+drwxr-xr-x 2 root root 520 2011-04-18 04:33 by-id
+drwxr-xr-x 2 root root 300 2011-04-18 04:33 by-path
+drwxr-xr-x 2 root root 240 2011-04-18 04:33 by-uuid
+[ny@localhost disk]$ ll by-uuid/
+total 0
+lrwxrwxrwx 1 root root 11 2011-04-18 04:33 127ad9a9-694b-478d-9d57-6973dcc348a3 -&gt; ../../sda13
+lrwxrwxrwx 1 root root 10 2011-04-18 04:33 15678ede-8363-4e55-bd61-fba7c4879a88 -&gt; ../../sda8
+lrwxrwxrwx 1 root root 10 2011-04-18 04:33 19df1940-6796-4b8b-844e-50d7811349b6 -&gt; ../../sda7
+lrwxrwxrwx 1 root root 11 2011-04-18 04:33 1b820644-b312-416f-8837-4acbf39334e5 -&gt; ../../sda10
+lrwxrwxrwx 1 root root 11 2011-04-18 04:33 224ee11f-029f-45eb-9374-7a29429bd696 -&gt; ../../sda11
+lrwxrwxrwx 1 root root 10 2011-04-18 04:33 8E84E98B84E975DD -&gt; ../../sda1
+lrwxrwxrwx 1 root root 11 2011-04-18 04:33 902886c5-a501-471d-b09d-e8a05d2b7a82 -&gt; ../../sda12
+lrwxrwxrwx 1 root root 10 2011-04-18 04:33 C4CC0EEECC0EDA96 -&gt; ../../sda5
+lrwxrwxrwx 1 root root 10 2011-04-18 04:33 d87dceaa-5e15-49fe-b5f6-d55f3f1a8bb5 -&gt; ../../sda9
+lrwxrwxrwx 1 root root 10 2011-04-18 04:33 F02D-ECB2 -&gt; ../../sda6
+</pre>
+
+<p>
+安装好之后如果只有XP与Ubuntu 9.10的启动菜单而没有Fedora 12的菜单，先进入Fedora系统，打开终端，编辑menu.lst，使用Linux下查看UUID方法这一文的方法，找出Ubuntu 9.10安装分区的UUID。
+</p>
+
+<p>
+进入Fedora 12系统，在menu.lst中加入
+</p>
+<pre>
+title  Ubuntu 9.10, kernel 2.6.28-11-generic (recovery mode)
+uuid  9f3ad068-eaf0-484d-bfc0-4c13fd7a79ae
+kernel  /boot/vmlinuz-2.6.28-11-generic root=UUID=9f3ad068-eaf0-484d-bfc0-4c13fd7a79ae ro  single
+initrd  /boot/initrd.img-2.6.28-11-generic
+</pre>
+<div id="footer">
+    <p id="legal">Copyright &copy; 2012 NIENET. All Rights Reserved.</p>
+</div>
+</div>
+</body>
+</html>
