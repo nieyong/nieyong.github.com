@@ -1,0 +1,60 @@
+<html>
+<head>
+	<link rel="Stylesheet" type="text/css" href="style.css" />
+        <title>Linux Shell</title>
+        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
+<div id="header"> 
+	<ul id="top-nav"> 
+		<li> 
+			<a href="index.html">首页</a> 
+		</li> 
+		<li> 
+			<a href="Navigate.html">本站导图</a> 
+		</li> 
+		<li> 
+			<a href="AboutMe.html">关于本站</a> 
+		</li> 
+	</ul> 
+</div> 
+</head>
+<body>
+        <div class="contents">
+<p>
+想在shell脚本中实现用户切换，如下：
+</p>
+
+<p>
+#!/bin/sh
+</p>
+
+<p>
+su - user1 &lt;&lt; END
+user1passwd
+END
+</p>
+
+<p>
+这个恐怕办不到了，su也不允许通过重定向输入密码。
+可以使用root用户执行这个脚本，这样su时就不要输入密码了。
+</p>
+
+<p>
+su读密码是通过/dev/tty读的，而不是通过stdin。所以你用普通的stdin重定向不能实现自动输入密码的功能。
+</p>
+
+<p>
+我签写日子也试过，只能通过/dev/tty,不能同步哦stdin
+如：
+Assembly code
+</p>
+
+<p>
+echo -e "user\npass\n" | su
+standard in must be a tty
+</p>
+<div id="footer">
+    <p id="legal">Copyright &copy; 2012 NIENET. All Rights Reserved.</p>
+</div>
+</div>
+</body>
+</html>

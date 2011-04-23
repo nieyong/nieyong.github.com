@@ -1,0 +1,168 @@
+<html>
+<head>
+	<link rel="Stylesheet" type="text/css" href="style.css" />
+        <title>git manual</title>
+        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
+<div id="header"> 
+	<ul id="top-nav"> 
+		<li> 
+			<a href="index.html">首页</a> 
+		</li> 
+		<li> 
+			<a href="Navigate.html">本站导图</a> 
+		</li> 
+		<li> 
+			<a href="AboutMe.html">关于本站</a> 
+		</li> 
+	</ul> 
+</div> 
+</head>
+<body>
+        <div class="contents">
+<h2 id="toc_0.1">git管理仓库</h2>
+<p>
+如无特别说明，下面的git命令都是在git的版本库目录下执行的。所谓的git的版本库目录，就是管理的文件所在的目录。如何确定是否是git管理的版本库呢？在该目录下，使用命令ls -a，如果有.git这样一个文件夹，那么就说明该目录是git的版本库目录。而.git这个文件夹下，就是存放着该版本库的版本信息等，所以，.git文件夹又叫做该git版本库的git管理仓库。
+</p>
+
+<h2 id="toc_0.2">git用户信息</h2>
+<p>
+查看git用户信息，使用命令 <strong>git config --list</strong>
+</p>
+<pre>
+[root@localhost jzcode]# git config --list
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+remote.origin.url=git@github.com:jzcode/jzcode-x11.git
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+[root@localhost jzcode]# exit
+[ny@localhost jzcode]$ git config --list
+user.name=Yong Nie
+user.email=nieyong_1947@126.com
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+remote.origin.url=git@github.com:jzcode/jzcode-x11.git
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+[ny@localhost jzcode]$ 
+</pre>
+<p>
+在同一个目录jzcode下，根用户root和普通用户ny分别使用git config --list查看用户信息，打印出来的信息有差别。可以看到，使用普通用户ny打印出来的信息，多了两行：
+</p>
+<pre>
+user.name=Yong Nie
+user.email=nieyong_1947@126.com
+</pre>
+<p>
+这是为什么呢？
+</p>
+
+<h2 id="toc_0.3">git状态查看</h2>
+<p>
+查看一个git源的状态，使用命令git status。命令很简单，关键是要能够明白命令输出的各种状态代表什么含义。下面列举出几种常用的状态。
+</p>
+<ul>
+<li>
+没有变化需要提交的，版本库和git管理仓库（就是当前路径下的隐形文件夹.git）中的记录是一致的。
+<pre>
+[root@localhost jzcode]# git status
+# On branch master
+nothing to commit (working directory clean)
+</pre>
+</li>
+<li>
+删除了一个文件/文件夹。下面就以删除版本库中一个已经受控的文件nieyong.c为例，说明在各个阶段git状态的含义。重点是区分Changed but not updated和Changes to be committed的异同。
+<pre>
+[root@localhost jzcode]# git status
+# On branch master
+# Changed but not updated:
+#   (use "git add/rm &lt;file&gt;..." to update what will be committed)
+#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#
+#       deleted:    linux-2.6.24.3/drivers/video/nieyong.c
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+/***************
+可以看到，显示nieyong.c文件不再当前目录下，被删除了，但是这个删除操作并没有记录在git管理仓库中，也就是changed but not updated的含义。因为没有删除操作（以及其它的操作，例如添加，更改）记录在案，所以，git认为并不需要更新git管理仓库中的版本，或者说，并不需要将这些改变的操作提交到管理仓库中，也就是no changes added to commit的含义。
+****************/
+
+[root@localhost jzcode]# git rm linux-2.6.24.3/drivers/video/nieyong.c
+rm 'linux-2.6.24.3/drivers/video/nieyong.c'
+/***************
+在git管理仓库中删除nieyong.c文件
+***************/
+
+[root@localhost jzcode]# git status
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD &lt;file&gt;..." to unstage)
+#
+#       deleted:    linux-2.6.24.3/drivers/video/nieyong.c
+#
+/***************
+nieyong.c文件已经在git管理仓库中删除，下面，你就需要将这个改变提交，得到一个新的版本。
+***************/
+
+[root@localhost jzcode]# git commit -m "删除SLCD调试时的临时文件nieyong.c"
+[master a3a54a7] 删除SLCD调试时的临时文件nieyong.c
+Committer: root &lt;root@localhost.localdomain&gt;
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+git config --global user.name "Your Name"
+git config --global user.email you@example.com
+
+If the identity used for this commit is wrong, you can fix it with:
+
+git commit --amend --author='Your Name &lt;you@example.com&gt;'
+
+1 files changed, 0 insertions(+), 95 deletions(-)
+delete mode 100644 linux-2.6.24.3/drivers/video/nieyong.c
+/****************
+提交这一次操作到git管理仓库中，获得一个新的版本。
+*****************/
+
+[root@localhost jzcode]# git status
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#
+nothing to commit (working directory clean)
+/***************
+又恢复到版本库中的文件和git管理仓库中的描述是一致的状态。
+***************/
+
+[root@localhost jzcode]# git push
+Counting objects: 9, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 470 bytes, done.
+Total 5 (delta 4), reused 0 (delta 0)
+To git@github.com:jzcode/jzcode-x11.git
+   2e7a6f8..a3a54a7  master -&gt; master
+[root@localhost jzcode]# git status
+# On branch master
+nothing to commit (working directory clean)
+/***************
+git push之前的操作都是在本地，目的是为了保持版本库和管理仓库的一致性。而git push就是把本地的这一个新的版本发送到github服务器端。
+***************/
+</pre>
+</li>
+</ul>
+
+<h2 id="toc_0.4">扩展阅读</h2>
+<p>
+<a href="http://zhwen.org/?p=articles/git">http://zhwen.org/?p=articles/git</a>
+</p>
+<div id="footer">
+    <p id="legal">Copyright &copy; 2012 NIENET. All Rights Reserved.</p>
+</div>
+</div>
+</body>
+</html>

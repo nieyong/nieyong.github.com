@@ -51,7 +51,7 @@ index.wiki                                            100%   52     0.1KB/s   00
 另外，获取其它服务器上的文件，可以在SSH下面使用wget命令。
 
 == SSH和github ==
-首先，产生一对SSH密钥，包括一个私钥和一个公钥。命令如下：
+版本控制工具git必须使用SSH安全配置，有关git的使用，可以查看[[git manual]]。在这里，我们只说明git中SSH的使用。首先，产生一对SSH密钥，包括一个私钥和一个公钥。命令如下：
 {{{
 [ny@localhost .ssh]$ ssh-keygen -C 'nieyong_1947@126.com' -t rsa
 [ny@localhost .ssh]$ ls
