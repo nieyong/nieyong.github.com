@@ -111,7 +111,17 @@ pre, blockquote, table{
     margin: 0.5em 0 1em;
 }
 blockquote, pre {margin-top: 1em; margin-bottom: 1em;}
-pre {margin-top: 0; margin-bottom: 0; font-size: 14px;	background-color:#eeeeee;	border: 1px solid #ccc;	padding: 5px 5px 5px 5px;}
+pre {
+    word-wrap:break-word; 
+    overflow:hidden;
+    margin-top: 0; 
+    margin-bottom: 0; 
+    margin-right: 0;
+    font-size: 14px;	
+    background-color:#eeeeee;	
+    border: 1px solid #ccc;	
+    padding: 5px 5px 5px 5px;
+}
 table {margin-left: 2em;}
 blockquote {padding: 0.4em; background-color: #f6f5eb;}
 th, td {border: 1px solid #ccc; padding: 0.3em;}
