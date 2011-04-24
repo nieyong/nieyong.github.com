@@ -37,12 +37,14 @@ user.email=nieyong_1947@126.com
 == git状态查看 ==
 查看一个git源的状态，使用命令git status。命令很简单，关键是要能够明白命令输出的各种状态代表什么含义。下面列举出几种常用的状态。
 * 没有变化需要提交的，版本库和git管理仓库（就是当前路径下的隐形文件夹.git）中的记录是一致的。
+
 {{{
 [root@localhost jzcode]# git status
 # On branch master
 nothing to commit (working directory clean)
 }}}
 * 删除了一个文件/文件夹。下面就以删除版本库中一个已经受控的文件nieyong.c为例，说明在各个阶段git状态的含义。重点是区分Changed but not updated和Changes to be committed的异同。
+
 {{{
 [root@localhost jzcode]# git status
 # On branch master

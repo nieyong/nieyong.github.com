@@ -70,14 +70,20 @@ user.email=nieyong_1947@126.com
 <ul>
 <li>
 没有变化需要提交的，版本库和git管理仓库（就是当前路径下的隐形文件夹.git）中的记录是一致的。
+</li>
+</ul>
+
 <pre>
 [root@localhost jzcode]# git status
 # On branch master
 nothing to commit (working directory clean)
 </pre>
-</li>
+<ul>
 <li>
 删除了一个文件/文件夹。下面就以删除版本库中一个已经受控的文件nieyong.c为例，说明在各个阶段git状态的含义。重点是区分Changed but not updated和Changes to be committed的异同。
+</li>
+</ul>
+
 <pre>
 [root@localhost jzcode]# git status
 # On branch master
@@ -153,8 +159,6 @@ nothing to commit (working directory clean)
 git push之前的操作都是在本地，目的是为了保持版本库和管理仓库的一致性。而git push就是把本地的这一个新的版本发送到github服务器端。
 ***************/
 </pre>
-</li>
-</ul>
 
 <h2 id="toc_0.4">扩展阅读</h2>
 <p>
