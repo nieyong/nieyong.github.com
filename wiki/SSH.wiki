@@ -33,7 +33,7 @@ bash-3.2$ ls
 anon_ftp  cgi-bin  dev         etc       lib    pd       statistics  tmp  var
 bin       conf     error_docs  httpdocs  lib64  private  subdomains  usr  web_users
 }}}
-使用ssh远程登录服务器，@前面的为上一步设定的用户名，@后面的为服务器的IP地址，或者对应的域名（如果已经将域名解析到该IP地址上的话）。
+使用ssh远程登录服务器，@前面的为开启Media Temple支持SSH功能时设定的用户名，@后面的为服务器的IP地址，或者对应的域名（如果已经将域名解析到该IP地址上的话）。
 登录之后，使用pwd看看登录之后的位置，ls看看当前位置下的内容，可以看到已经登录到服务器的目录下了。使用exit命令可以退出登录。
 下面就可以像操作本地文件一样操作服务器上的文件啦，当然前提是你熟悉linux的基本命令行操作。
 

@@ -3,21 +3,23 @@
 	<link rel="Stylesheet" type="text/css" href="style.css" />
         <title>FrameBuffer</title>
         <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-<div id="header"> 
-	<ul id="top-nav"> 
-		<li> 
-			<a href="index.html">首页</a> 
-		</li> 
-		<li> 
-			<a href="Navigate.html">本站导图</a> 
-		</li> 
-		<li> 
-			<a href="AboutMe.html">关于本站</a> 
-		</li> 
-	</ul> 
-</div> 
 </head>
 <body>
+	<div id="header"> 
+	    <div id="headerlogo">
+		<h1><a href="index.html">NieNet 知识库</a></h1>
+		<p>Edit by Vimwiki Powered by Github Pages</p>
+	    </div>
+
+	    <div id="headernav">
+		<ul id="nav">
+		    <li><a href="index.html">首页</a></li>
+		    <li><a href="Navigate.html">本站导图</a> </li>
+		    <li><a href="AboutMe.html">关于</a> </li>
+		    <li><a href="http://nienet.com">返回NieNet</a></li>
+		</ul>
+	    </div>
+	</div> 
         <div class="contents">
 <h2 id="toc_0.1">Frame buffer</h2>
 <p>
@@ -85,7 +87,7 @@ console和fb的高层理解
 这样大家应该明白frame buffer和console的关系了吧。后续我们会具体讲述fb对console的支持。但是对console本身不会设计太多，具体参考tty或console的设计。当完成了fb对console的支持，frame buffer device driver设计就完了：）
 </p>
 <div id="footer">
-    <p id="legal">Copyright &copy; 2012 NIENET. All Rights Reserved.</p>
+    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
 </div>
 </div>
 </body>

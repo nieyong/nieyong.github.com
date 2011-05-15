@@ -3,21 +3,23 @@
 	<link rel="Stylesheet" type="text/css" href="style.css" />
         <title>LCD 驱动调试</title>
         <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-<div id="header"> 
-	<ul id="top-nav"> 
-		<li> 
-			<a href="index.html">首页</a> 
-		</li> 
-		<li> 
-			<a href="Navigate.html">本站导图</a> 
-		</li> 
-		<li> 
-			<a href="AboutMe.html">关于本站</a> 
-		</li> 
-	</ul> 
-</div> 
 </head>
 <body>
+	<div id="header"> 
+	    <div id="headerlogo">
+		<h1><a href="index.html">NieNet 知识库</a></h1>
+		<p>Edit by Vimwiki Powered by Github Pages</p>
+	    </div>
+
+	    <div id="headernav">
+		<ul id="nav">
+		    <li><a href="index.html">首页</a></li>
+		    <li><a href="Navigate.html">本站导图</a> </li>
+		    <li><a href="AboutMe.html">关于</a> </li>
+		    <li><a href="http://nienet.com">返回NieNet</a></li>
+		</ul>
+	    </div>
+	</div> 
         <div class="contents">
 <p>
 为一块新的LCD屏编写了驱动，然后编译进内核，下载到开发板上，这时候，屏幕也许除了背光，没有其它任何的显示，这个时候，我们应该怎么进行调试呢？下面是几个最基本的问题：
@@ -42,11 +44,38 @@ LCD驱动的基本信息是否正确呢，如何检查？
 # cat /proc/fb		//在/proc目录，查看当前系统中的帧缓冲设备
 0 jz-lcd
 1 jz-slcd
-#
 # ls /dev/fb*		//查看/dev目录下的不同的帧缓冲设备
+/dev/fb0  /dev/fb1
 </pre>
 <p>
-可以看到，现在系统中有两个帧缓冲设备，其中第0个设备，其实就是/dev/fb0，应该对应的是jz-lcd的驱动，而第1个设备，其实就是/dev/fb1，就是jz-slcd的驱动。而lcd和slcd就是jz soc上两个LCD的控制器。
+可以看到，现在系统中有两个帧缓冲设备。其中第0个帧缓存设备/dev/fb0，对应的是LCD控制器（jz-lcd）的驱动，而第1个帧缓存设备/dev/fb1，就是智能LCD控制器（jz-slcd）的驱动。可以在./drivers/video/目录下面的驱动文件（这里是jzlcd.c文件和jz4740_slcd.c文件）中看到/proc/fb中命名和注册。
+</p>
+<pre>
+static struct lcd_cfb_info * jzfb_alloc_fb_info(void)
+{
+    ……
+    strcpy(cfb-&gt;fb.fix.id, "jz-lcd");	//这里的字符串"jz-lcd"就是在/proc/fb中看到的打印信息，修改这里可以在/proc/fb中看到相应的改动
+    ……
+}
+
+
+static int __init jzfb_init(void)
+{
+    ……
+    err = register_framebuffer(&amp;cfb-&gt;fb);
+    if (err &lt; 0) {
+	    dprintk("jzfb_init(): register framebuffer err.\n");
+	    goto failed;
+    }
+    ……
+｝
+</pre>
+<p>
+register_framebuffer()函数就是将LCD控制器（jz-lcd）的驱动注册到frame buffer中，这样才有我们看到的/proc/fb中的帧缓存设备0 jz-lcd以及/dev/fb0设备描述符。同理，我们还可以同时将智能LCD控制器（jz-slcd）的驱动注册到frame buffer中。
+</p>
+
+<p>
+可以看到，frame buffer作为驱动程序，是各种不同的显示设备对OS，应用层的一个统一的接口，一个驱动接口。
 </p>
 
 <p>
@@ -168,7 +197,7 @@ DMA channel 0 is requested by SLCD!
 至于添加答应操作，那么就使用dprintk()函数就可以了，用法和printf()类似。
 </p>
 <div id="footer">
-    <p id="legal">Copyright &copy; 2012 NIENET. All Rights Reserved.</p>
+    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
 </div>
 </div>
 </body>

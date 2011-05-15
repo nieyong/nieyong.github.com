@@ -10,4 +10,7 @@
 == Linux Technology系列文章 ==
 Linux技术类文章，例如Linux内核，驱动，SHELL脚本等。
 * [[Linux Shell]]
+
+== Others ==
+* [[wordpress theme]]
 * [[git manual]]

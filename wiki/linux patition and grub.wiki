@@ -81,3 +81,8 @@ uuid  9f3ad068-eaf0-484d-bfc0-4c13fd7a79ae
 kernel  /boot/vmlinuz-2.6.28-11-generic root=UUID=9f3ad068-eaf0-484d-bfc0-4c13fd7a79ae ro  single
 initrd  /boot/initrd.img-2.6.28-11-generic
 }}}
+
+
+http://www.fedoraforum.org/forum/showthread.php?t=252004
+
+http://rwmj.wordpress.com/about/

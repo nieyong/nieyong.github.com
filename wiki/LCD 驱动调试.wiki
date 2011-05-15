@@ -9,10 +9,33 @@
 # cat /proc/fb		//在/proc目录，查看当前系统中的帧缓冲设备
 0 jz-lcd
 1 jz-slcd
-#
 # ls /dev/fb*		//查看/dev目录下的不同的帧缓冲设备
+/dev/fb0  /dev/fb1
 }}}
-可以看到，现在系统中有两个帧缓冲设备，其中第0个设备，其实就是/dev/fb0，应该对应的是jz-lcd的驱动，而第1个设备，其实就是/dev/fb1，就是jz-slcd的驱动。而lcd和slcd就是jz soc上两个LCD的控制器。
+可以看到，现在系统中有两个帧缓冲设备。其中第0个帧缓存设备/dev/fb0，对应的是LCD控制器（jz-lcd）的驱动，而第1个帧缓存设备/dev/fb1，就是智能LCD控制器（jz-slcd）的驱动。可以在./drivers/video/目录下面的驱动文件（这里是jzlcd.c文件和jz4740_slcd.c文件）中看到/proc/fb中命名和注册。
+{{{
+static struct lcd_cfb_info * jzfb_alloc_fb_info(void)
+{
+    ……
+    strcpy(cfb->fb.fix.id, "jz-lcd");	//这里的字符串"jz-lcd"就是在/proc/fb中看到的打印信息，修改这里可以在/proc/fb中看到相应的改动
+    ……
+}
+
+
+static int __init jzfb_init(void)
+{
+    ……
+    err = register_framebuffer(&cfb->fb);
+    if (err < 0) {
+	    dprintk("jzfb_init(): register framebuffer err.\n");
+	    goto failed;
+    }
+    ……
+｝
+}}}
+register_framebuffer()函数就是将LCD控制器（jz-lcd）的驱动注册到frame buffer中，这样才有我们看到的/proc/fb中的帧缓存设备0 jz-lcd以及/dev/fb0设备描述符。同理，我们还可以同时将智能LCD控制器（jz-slcd）的驱动注册到frame buffer中。
+
+可以看到，frame buffer作为驱动程序，是各种不同的显示设备对OS，应用层的一个统一的接口，一个驱动接口。
 
 在刚开始的时候，由于没有在.config文件中将jz-lcd驱动选项去掉，所以加载了两个帧缓冲设备，如上面所示。
 

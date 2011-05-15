@@ -1,5 +1,8 @@
 == 关于Linux字体 ==
-以前一直没有关注国Linux的字体，一般安装系统的时候，默认配置是什么，就是什么。但是，在fedora下，中文字体在很多地方表现得很糟糕。一个最大的问题，就是在chrome浏览器下的中文字体表现的很差，笔画不清晰，很多字体发虚（网上很多文章都用这个词，我只是借用过来，至于是否和最先想表达的想法相同，也就不追究了）。
+以前一直没有关注Linux的字体。最近遇到好几个关于字体的问题，特地了解了以下Linux下字体的相关知识。下面，首先列出遇到的问题：
+
+* 在fedora下，中文字体在很多地方表现得很糟糕，很不美观。一个最大的问题，就是在chrome浏览器下的中文字体表现的很差，笔画不清晰，很多字体发虚（网上很多文章都用这个词，我只是借用过来，至于是否和最先想表达的想法相同，也就不追究了）。
+* IDE工具NetBeans文件中的中文无法显示，现象为用“口”字代替。这里，首先得明白一点，NetBeans这个IDE是使用JAVA开发的，也就是说NetBeans是一个JAVA应用程序。
 
 自己以前对字体没有什么基本的概念，下面就将学习内容做一些笔记。
 
@@ -18,3 +21,72 @@ wqy-zenhei-fonts.noarch                  0.8.38-3.fc12                      Ever
 wqy-bitmap-fonts.noarch		wqy点阵宋体
 wqy-unibit-fonts		wqy Unibit等宽字体
 wqy-zenhei-fonts		wqy正黑体
+
+== NetBeans中文字体 ==
+缺省的NetBeans在使用Swing的缺省字体，大小为11
+IDE工具NetBeans文件中的中文显示为方框的原因:
+
+NetBeans是一个Java应用程序，Java程序启动的时候会去在$JAVA_HOME/jre/lib/fonts目录下寻找相应的字体来显示。由于JDK默认没有中文字体，所以我们需要手工的来设置一下，让java应用程序能够找到相应的中文字体。这样就能够解决问题了。
+
+netbeans是一个java应用程序，所以在安装是，肯定会在你的系统中安装有java development kit (jdk) 或 java runtime environment (jre) 的安装包。可以通过NetBeans的配置文件查看到其运行时jre所在的位置。在NetBeans安装目录的etc/netbeans.conf文件中，可以看到需要的jre的位置如下所示：
+{{{
+# Default location of JDK, can be overridden by using --jdkhome <dir>:
+netbeans_jdkhome="/usr/lib/jvm/jre"
+}}}
+下面你需要作的，就是配置好这个JRE中的字体，让这个JRE支持中文字体。那么，怎们让jre支持中文字体，或者说找到系统中的中文字体呢？
+
+=== jrd的中文支持 ===
+按Sun的文档描述，jrd在一个操作系统的字体配置文件，根据下列信息来确定。JRE 使用按下列顺序第一个找到的文件作为系统的字体配置文件：
+{{{
+JavaHome/lib/fontconfig.OS.Version.properties
+JavaHome/lib/fontconfig.OS.Version.bfc
+JavaHome/lib/fontconfig.OS.properties
+JavaHome/lib/fontconfig.OS.bfc
+JavaHome/lib/fontconfig.Version.properties
+JavaHome/lib/fontconfig.Version.bfc
+JavaHome/lib/fontconfig.properties
+JavaHome/lib/fontconfig.bfc
+}}}
+其中，JavaHome是JRE 的目录；OS表示操作系统的种类的字符串，对 Windows，为 “98″, “2000″, “Me”, “XP”, “2003″.对Solaris，为空.对Linux，为 “Sun”, “RedHat”, “Turbo”, “SuSE”；Version 表示操作系统版本的字符串。另外，上面的文件以 .properties 为扩展名的为文本文件，以 .bfc 结尾的是二进制文件。
+
+按照这个文档的说明，我们可以按照下面的方法来配置中文字体。
+
+# 确定系统的发布版类型，判别方法是 /etc 目录下的 release 文件：
+{{{
+/etc/redhat-release => RedHat
+/etc/sun-release => Sun
+/etc/turbolinux-release => Turbo
+/etc/SuSE-release => SuSE
+}}}
+按这种判断方法，Fedora 等发源于 RedHat 的发布版都属于 RedHat 类。如果 /etc 目录下不存在上面 4 个文件的任何一个，则 OS 为空。
+
+# 拷贝 JavaHome/lib/fontconfig.OS.properties.src 为 JavaHome/lib/fontconfig.OS.properties。如对于 Fedora：
+{{{
+cp fontconfig.RedHat.properties.src fontconfig.RedHat.properties
+}}}
+对于不属于上面 4 类的发布版，不妨拷贝 RedHat 的配置文件为 fontconfig.properties：
+{{{
+cp fontconfig.RedHat.properties.src fontconfig.properties
+}}}
+# 编辑上述 .properties 文件，在文件的“Font File Names”一节里，找到在下面一行：
+{{{
+filename.-misc-zysong18030-medium-r-normal--*-%d-*-*-c-*-iso10646-1=/usr/share/fonts/chinese/TrueType/zysong.ttf
+}}}
+将“=”号以后的中文字体文件名，改为本系统上存在的一个中文字体文件名。您如果愿意，可以修改其他几行，为繁体中文、日语、韩语等您可能用到的语言设置合适的字体。
+
+经过这么简单的修改，Java 的图形界面程序就可以正确地显示中文了。
+
+上面介绍的是设置中文字体的标准的做法。另外，还有一个“偷懒”的做法。这就是：不需要修改任何文件，只要创建一个新目录：
+{{{
+JavaHome/lib/fonts/fallback/
+}}}
+然后把中文字体的 TTF 文件拷贝到这个目录里就 OK 了！
+
+其实不只netbeans，我们经常会发现在Linux下，很多其它的java应用程序的中文会变成一个一个的“口”字，都是同样的原因。解决的办法也是一样的。
+
+== 字体格式 ==
+我在linux中双击字体文件名就看到了, 包括几乎所有字体格式, 如pfb, ttf, otf, pfa, pcf等, 但无法看到afm, 和tfm格式的.
+
+
+
+
