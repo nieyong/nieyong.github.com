@@ -1,7 +1,26 @@
 == 按照文章内容进行分类  点击[[ContentIndex|这里]]进入按照内容分类页面 ==
-
-=== Linux Config系列文章 ===
+= Linux专题 =
+== Linux Config系列文章 ==
+本人使用的Linux发行版本为Fedora 12，同时也尝试过Suse和Ubuntu，还一边在使用LFS（linux from sctrach）。下面就是记录在使用Linux的过程中的基本配置。
 * [[yum manual]]
 * [[linux fonts]]
+* [[linux patition and grub]]
+* [[linux network]]
+* [[linux multimedia]]
+
+
+== Linux Technology系列文章 ==
+Linux技术类文章，例如Linux内核，驱动，SHELL脚本等。
+* [[Linux Shell]]
+
+== Others ==
+* [[wordpress theme]]
+* [[git manual]]
+
+= 嵌入式开发专题 =
+* [[LCD wiki]]
+* [[LCD Driver IC]]
+* [[FrameBuffer]]
+* [[LCD 驱动调试]]
 
 == 按照标题字母顺序分类  点击[[WordIndex|这里]]进入按照字母顺序分类页面 ==
