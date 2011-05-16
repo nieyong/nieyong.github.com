@@ -1,7 +1,5 @@
 == 写在开头 ==
-这是NIENET的wiki首页。
-
-本Wiki专注与四个方面的技术：
+这是NIENET的wiki首页。本Wiki专注与四个方面的技术：
 * *ARM&MIPS* -- CPU体系架构
 * *Linux* -- Linux配置和使用
 * *嵌入式开发*
