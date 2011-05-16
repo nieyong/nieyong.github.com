@@ -8,7 +8,7 @@
 	<div id="header"> 
 	    <div id="headerlogo">
 		<h1><a href="index.html">NieNet 知识库</a></h1>
-		<p>Edit by Vimwiki Powered by Github Pages</p>
+		<p>Edit by Vimwiki--Powered by Github Pages</p>
 	    </div>
 
 	    <div id="headernav">
