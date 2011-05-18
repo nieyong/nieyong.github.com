@@ -20,4 +20,4 @@
 		</ul>
 	    </div>
 	</div> 
-        <div class="contents">
+        <div id="contents">

@@ -1,10 +1,8 @@
 body {
-    margin: 9px auto 0px;
-    font-size: 100%;
+    margin: 0px auto 0px;
     font-family : Bitstream Vera Sans, Lucida Sans, SimSun, ËÎÌו, sans-serif;
     color: black;
     background-color:#FAFAFA;
-    width: 960px;
 }
 .tabBodyFrame {
     margin-left: 28%;
@@ -22,153 +20,159 @@ body {
     max-width: 1000px;
 }
 /************************************************
-* *	Header  									*
-* ************************************************/
+* *	Header  								
+**************************************************/
 #header {
-width: 960px;
-height: 110px;
-font-size: 16px;
-font-weight: normal;
-margin: 0px auto 0px;
-padding: 0px;
-overflow: hidden;
-background:url(images/header_bg.png) no-repeat;
+    width: 960px;
+    height: 110px;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0px auto 0px;
+    padding: 0px;
+    overflow: hidden;
+    background:url(images/header_bg.png) no-repeat;
 }
 
 #header p {
-padding: 0px 0px 5px 0px;
-margin: 0px;
-line-height: 20px;
-color: #FFFFFF;
+    padding: 0px 0px 5px 0px;
+    margin: 0px;
+    line-height: 20px;
+    color: #FFFFFF;
 }
 
 #header h1 {
-font-size: 36px;
-font-family: Times New Roman, Georgia, Trebuchet MS;
-font-weight: normal;
-margin: 0px;
-padding: 20px 0px 0px 18px;
-text-decoration: none;
-color: #FFFFFF;
+    font-size: 36px;
+    font-family: Times New Roman, Georgia, Trebuchet MS;
+    font-weight: normal;
+    margin: 0px;
+    padding: 20px 0px 0px 18px;
+    text-decoration: none;
+    color: #FFFFFF;
 }
 
 #header h1 a, #header h1 a:visited {
-font-size: 36px;
-font-family: Times New Roman, Georgia, Trebuchet MS;
-font-weight: normal;
-margin: 0px;
-padding: 20px 0px 0px 0px;
-text-decoration: none;
-color: #FFFFFF;
+    font-size: 36px;
+    font-family: Times New Roman, Georgia, Trebuchet MS;
+    font-weight: normal;
+    margin: 0px;
+    padding: 20px 0px 0px 0px;
+    text-decoration: none;
+    color: #FFFFFF;
 }
 
 #header h1 a:hover {
-text-decoration: none;
-color: #FFFFFF;
+    text-decoration: none;
+    color: #FFFFFF;
 }
 
 #headerlogo{
-width: 400px;
-float: left;
-margin: 0px;
-padding: 0px;
-overflow: hidden;
-color: #FFFFFF;
+    width: 400px;
+    float: left;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    color: #FFFFFF;
 }
 
 #headerlogo p{
-padding-left: 18px;
+    padding-left: 18px;
 }
 
 #headernav{
-width: 400px;
-float: right;
-margin: 0px;
-padding: 65px 0px 0px 0px;
-text-align: left;
+    width: 400px;
+    float: right;
+    margin: 0px;
+    padding: 65px 0px 0px 0px;
+    text-align: left;
 
 }
 
-#headersearch{
-width: 200px;
-float: left;
-margin: 0px;
-padding: 65px 0px 0px 0px;
-text-align: right;
-}
 #nav {
-margin: 0px;
-padding: 0px;
-list-style: none;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
 }
 
 #nav ul {
-margin: 0px;
-padding: 0px;
-list-style: none;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
 }
 
 #nav a {
-color: #FFFFFF;
-display: block;
-font-weight: bold;
-margin: 0px 20px 0px 0px;
-padding: 8px 10px 7px 10px;
+    color: #FFFFFF;
+    display: block;
+    font-weight: bold;
+    margin: 0px 20px 0px 0px;
+    padding: 8px 10px 7px 10px;
 }
 
 #nav a:hover {
-background: #4A7EB8;
-color: #FFFFFF;
-display: block;
-text-decoration: none;
-margin: 0px 20px 0px 0px;
-padding: 8px 10px 7px 10px;
+    background: #4A7EB8;
+    color: #FFFFFF;
+    display: block;
+    text-decoration: none;
+    margin: 0px 20px 0px 0px;
+    padding: 8px 10px 7px 10px;
 }
 
 #nav li {
-float: left;
-margin: 0px;
-padding: 0px;
+    float: left;
+    margin: 0px;
+    padding: 0px;
 }
 
 #nav li li {
-float: left;
-margin: 0px;
-padding: 0px;
-width: 140px;
+    float: left;
+    margin: 0px;
+    padding: 0px;
+    width: 140px;
 }
 
 #nav li li a, #nav li li a:link, #nav li li a:visited {
-background: #4A7EB8;
-color: #FFFFFF;
-width: 140px;
-float: none;
-margin: 0px;
-padding: 6px 10px 5px 10px;
-border-bottom: 1px solid #FFFFFF;
-border-left: 1px solid #FFFFFF;
-border-right: 1px solid #FFFFFF;
+    background: #4A7EB8;
+    color: #FFFFFF;
+    width: 140px;
+    float: none;
+    margin: 0px;
+    padding: 6px 10px 5px 10px;
+    border-bottom: 1px solid #FFFFFF;
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #FFFFFF;
 }
 
 #nav li li a:hover, #nav li li a:active {
-background: #1A4E88;
-color: #FFFFFF;
+    background: #1A4E88;
+    color: #FFFFFF;
 }
 
 #nav li ul {
-position: absolute;
-width: 10em;
-left: -999em;
+    position: absolute;
+    width: 10em;
+    left: -999em;
 }
 
 #nav li:hover ul {
-left: auto;
-display: block;
+    left: auto;
+    display: block;
 }
 
 #nav li:hover ul, #nav li.sfhover ul {
-left: auto;
+    left: auto;
 }
+/*****************************************
+ * end of header
+*****************************************/
+
+/***************************************
+ * content
+****************************************/
+#contents {
+    width:960px;
+    margin:0px auto 0px;
+}
+
+
 a {
 color: blue;
 text-decoration: none;
