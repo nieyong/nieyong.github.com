@@ -2,6 +2,7 @@ body {
     margin: 0px auto 0px;
     font-family : Bitstream Vera Sans, Lucida Sans, SimSun, ËÎÌו, sans-serif;
     color: black;
+    text-align:center;
     background-color:#FAFAFA;
 }
 .tabBodyFrame {
@@ -25,6 +26,7 @@ body {
 #header {
     width: 960px;
     height: 110px;
+    text-align:left;
     font-size: 16px;
     font-weight: normal;
     margin: 0px auto 0px;
@@ -83,7 +85,7 @@ body {
     float: right;
     margin: 0px;
     padding: 65px 0px 0px 0px;
-    text-align: left;
+    text-align: right;
 
 }
 
@@ -170,6 +172,7 @@ body {
 #contents {
     width:960px;
     margin:0px auto 0px;
+    text-align:left;
 }
 
 
