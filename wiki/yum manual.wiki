@@ -111,56 +111,109 @@ yum makecache就是把服务器的包header信息下载到本地电脑缓存起�
   -C                    run entirely from cache, don't update cache
 }}}
 
-=== 查看和跟新某个软件包 ===
+=== 查看和跟新某个软件 ===
 查看系统中安装的某个包的版本以及现在可以跟新的最新版本：
 {{{
-yum makecache
-yum info xxx 
+yum makecache	//将服务器上最新的软件版本的相关信息（也就是header）下载到本地
+yum info xxx 	//查看xxx软件的相关信息
 }}}
-例如，查看kdegraphics这个包的情况，可以看出，输出结果列举了已经安装的软件包（Installed Packages）和源中的最新软件包（Available Packages）。
+例如想要更新chrome浏览器到最新版本。首先确定安装了chrome的源。
 {{{
-[root@localhost 12]# yum info kdegraphics
+[root@localhost yum.repos.d]# pwd
+/etc/yum.repos.d
+[root@localhost yum.repos.d]# more ./google.repo 
+[google]
+name=Google - i386
+baseurl=http://dl.google.com/linux/rpm/stable/i386
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub  
+}}}
+以上命令可以看到已经安装了chrome的源文件google.repo在路径/etc/yum.repos.d/下。更新本地的源描述文件。
+{{{
+[root@localhost yum.repos.d]# yum makecache
+Loaded plugins: presto, refresh-packagekit
+google                                                      |  951 B     00:00     
+Metadata Cache Created
+}}}
+以上命令yum makecache就是将服务器上软件软件版本的相关信息下载到了本地yum的cache中。下面就查看chrome的软件版本是否有跟新。当然，刚开始你可能并不知道chrome浏览器在源中的全名是什么，我们可以首先用匹配查找。
+{{{
+[root@localhost yum.repos.d]# yum -C search chrome
+Loaded plugins: presto, refresh-packagekit
+================================= Matched: chrome =================================
+links.i686 : Web browser running in both graphics and text mode
+google-chrome-beta.i386 : Google Chrome
+google-chrome-stable.i386 : Google Chrome
+google-chrome-unstable.i386 : Google Chrome
+……
+}}}
+通过查找，大概知道应该叫做google-chrome-xxx，其中beta，stable，unstable是各种发行版而已。下面就看看chrome浏览器有没有跟新。输出结果列举了已经安装的软件（Installed Packages）和服务器源中的最新软件（Available Packages）。
+{{{
+[root@localhost yum.repos.d]# yum info google-chrome*
 Loaded plugins: presto, refresh-packagekit
 Installed Packages
-Name       : kdegraphics
-Arch       : i686
-Epoch      : 7
-Version    : 4.3.2
-Release    : 3.fc12
-Size       : 6.7 M
+Name       : google-chrome-beta
+Arch       : i386
+Version    : 7.0.517.24		//已经安装的软件版本
+Release    : 60738
+Size       : 73 M
 Repo       : installed
-From repo  : dvd_iso	//说明现在安装的软件包是通过dvd_iso这个iso本地源安装的
-Summary    : K Desktop Environment - Graphics Applications
-URL        : http://www.kde.org/
-License    : GPLv2
-Description: Graphics applications, including
-	   : * gwenview (an image viewer)
-	   : * kamera (digital camera support)
-	   : * kcolorchooser (a color chooser)
-	   : * kolourpaint4 (an easy-to-use paint program)
-	   : * kruler (screen ruler and color measurement tool)
-	   : * ksnapshot (screen capture utility)
-	   : * okular (a document viewer)
+From repo  : google
+Summary    : Google Chrome
+URL        : http://chrome.google.com/
+License    : Multiple, see http://chrome.google.com/
+Description: The web browser from Google
+           : 
+	   : Google Chrome is a browser that combines a minimal design with
+	   : sophisticated technology to make the web faster, safer, and easier.
 
 Available Packages
-Name       : kdegraphics
-Arch       : i686
-Epoch      : 7
-Version    : 4.4.5	//相对现在安装的4.3.2为更新版本
-Release    : 3.fc12
-Size       : 3.2 M
-Repo       : updates-ftp.sjtu.edu.cn	//说明这个更新版本的软件包是在sjtu这个服务器源上
-Summary    : KDE Graphics Applications
-URL        : http://www.kde.org/
-License    : GPLv2
-Description: Graphics applications, including
-	   : * gwenview (an image viewer)
-	   : * kamera (digital camera support)
-	   : * kcolorchooser (a color chooser)
-	   : * kolourpaint4 (an easy-to-use paint program)
-	   : * kruler (screen ruler and color measurement tool)
-	   : * ksnapshot (screen capture utility)
-	   : * okular (a document viewer)
+Name       : google-chrome-beta
+Arch       : i386
+Version    : 8.0.552.200	//服务器上现在有的软件版本
+Release    : 65749
+Size       : 33 M
+Repo       : google
+Summary    : Google Chrome
+URL        : http://chrome.google.com/
+License    : Multiple, see http://chrome.google.com/
+Description: The web browser from Google
+	   : 
+	   : Google Chrome is a browser that combines a minimal design with
+	   : sophisticated technology to make the web faster, safer, and easier.
+
+Name       : google-chrome-stable
+Arch       : i386
+Version    : 7.0.517.44
+Release    : 64615
+Size       : 27 M
+Repo       : google
+Summary    : Google Chrome
+URL        : http://chrome.google.com/
+License    : Multiple, see http://chrome.google.com/
+Description: The web browser from Google
+	   :
+	   : Google Chrome is a browser that combines a minimal design with
+	   : sophisticated technology to make the web faster, safer, and easier.
+
+Name       : google-chrome-unstable
+Arch       : i386
+Version    : 9.0.576.0
+Release    : 65344
+Size       : 34 M
+Repo       : google
+Summary    : Google Chrome
+URL        : http://chrome.google.com/
+License    : Multiple, see http://chrome.google.com/
+Description: The web browser from Google
+	   : 
+	   : Google Chrome is a browser that combines a minimal design with
+	   : sophisticated technology to make the web faster, safer, and easier.
+}}}
+可以看到，系统中已经安装的版本为google-chrome-beta的7.0.517.24版本。而服务器源上google-chrome-beta的最新版本是8.0.552.200。这样，我们就可以通过yum命令直接升级chrome浏览器。
+{{{
+[root@localhost yum.repos.d]# yum update google-chrome-beta
+……
 }}}
 
 === gpg的问题 ===
@@ -178,14 +231,14 @@ vim /etc/yum.conf 将gpgcheck=1改为gpgcheck=0
 == 未解决的问题 ==
 如何只安装一个package中的某一个软件呢，例如，我只想安装kdegraphics中的okular这个pdf阅读器？
 {{{
-  Details:
-  Graphics applications, including
-  * gwenview (an image viewer)
-  * * kamera (digital camera support)
-  * * kcolorchooser (a color chooser)
-  * * kolourpaint4 (an easy-to-use paint program)
-  * * kruler (screen ruler and color measurement tool)
-  * * ksnapshot (screen capture utility)
-  * * okular (a document viewer)
+Details:
+Graphics applications, including
+* gwenview (an image viewer)
+* * kamera (digital camera support)
+* * kcolorchooser (a color chooser)
+* * kolourpaint4 (an easy-to-use paint program)
+* * kruler (screen ruler and color measurement tool)
+* * ksnapshot (screen capture utility)
+* * okular (a document viewer)
 }}}
 
