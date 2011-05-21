@@ -1,6 +1,6 @@
 body {
     margin: 0px auto 0px;
-    font-family : Bitstream Vera Sans, Lucida Sans, SimSun, ËÎÌו, sans-serif;
+    font-family: tahoma, ËÎÌו, verdana, arial, sans-serif;
     color: black;
     text-align:center;
     background-color:#FAFAFA;
@@ -37,6 +37,7 @@ body {
 
 #header p {
     padding: 0px 0px 5px 0px;
+    font-weight: bold;
     margin: 0px;
     line-height: 20px;
     color: #FFFFFF;
@@ -45,7 +46,7 @@ body {
 #header h1 {
     font-size: 36px;
     font-family: Times New Roman, Georgia, Trebuchet MS;
-    font-weight: normal;
+    font-weight: bold;
     margin: 0px;
     padding: 20px 0px 0px 18px;
     text-decoration: none;
@@ -167,11 +168,11 @@ body {
 *****************************************/
 
 /***************************************
- * content
+ * wrap
 ****************************************/
-#contents {
+#wrap {
     width:960px;
-    margin:0px auto 0px;
+    margin:50px auto 0px;
     text-align:left;
 }
 
@@ -347,7 +348,10 @@ th {background-color: #f0f0f0;}
 }
 
 #footer {
-    margin-top: 20px;
+    width:960px;
+    margin:0px auto 0px;
+    margin-top: 40px;
+    margin-bottom: 40px;
     text-align: center;
     border: 5px solid #ffa500;
     border-width: 1px 1px;

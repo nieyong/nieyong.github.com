@@ -20,7 +20,7 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="contents">
+        <div id="wrap">
 <h2 id="toc_0.1">Frame buffer</h2>
 <p>
 Linux的LCD驱动通常是以Framebuffer的方式工作的，不管是何种LCD控制器，其驱动结构和使用接口都是一样的，比如说一个字符设备接口"/dev/fb0"。 
@@ -86,9 +86,9 @@ console和fb的高层理解
 使用Init3多用户模式登陆，这里是没有X server支持的。所有的输入输出都是基于console的。Framebuffer就相当于你的显示器。通过ALT+CTRL+F*，我们可以切换到不同的console，而每个console的设置都可以很独立的完成。每隔console会在自己的数据区记录历史命令，在不同的console可以登陆不同的用户到系统。但是，因为只有一个屏幕，所以当前可视的console只有一个。Frame buffer驱动程序要能够根据ALT+CTRL+F*切换命令去完成console的切换显示。
 这样大家应该明白frame buffer和console的关系了吧。后续我们会具体讲述fb对console的支持。但是对console本身不会设计太多，具体参考tty或console的设计。当完成了fb对console的支持，frame buffer device driver设计就完了：）
 </p>
+</div>
 <div id="footer">
     <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
 </div>
 </body>
 </html>
