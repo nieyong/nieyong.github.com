@@ -82,11 +82,10 @@ body {
 }
 
 #headernav{
-    width: 400px;
     float: right;
     margin: 0px;
     padding: 65px 0px 0px 0px;
-    text-align: right;
+    text-align: left;
 
 }
 

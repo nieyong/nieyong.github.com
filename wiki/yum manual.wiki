@@ -216,8 +216,8 @@ Description: The web browser from Google
 ……
 }}}
 
-=== gpg的问题 ===
-有时用yum install xxx.rpm时会提示"Package xxx.rpm is not signed"而使安装中断，有两种解决方法：
+== gpg的问题 ==
+如果你下载了一个rpm包到本地，然后要用yum命令来安装（当然，你也可以用rpm命令安装）。绝大部分时候，用yum install xxx.rpm时会提示"Package xxx.rpm is not signed"而使安装中断，有两种解决方法：
 
 (1)加上--nogpgcheck选项
 {{{
