@@ -15,7 +15,8 @@
 == 最近编辑 ==
 最近经常编辑的文章，一般是最近的工作内容或者学习领域。
 * [[SSH]]
-* [[git manual]]
+* [[git使用笔记]]
+* [[git使用思考]]
 * [[LCD wiki]]
 * [[LCD Driver IC]]
 * [[FrameBuffer]]

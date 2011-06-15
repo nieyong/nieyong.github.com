@@ -14,7 +14,7 @@ Linux技术类文章，例如Linux内核，驱动，SHELL脚本等。
 
 == Others ==
 * [[wordpress theme]]
-* [[git manual]]
+* [[git使用笔记]]
 
 = 嵌入式开发专题 =
 * [[LCD wiki]]
