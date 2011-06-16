@@ -285,9 +285,9 @@ Description: The web browser from Google
 ……
 </pre>
 
-<h3 id="toc_0.5.3">gpg的问题</h3>
+<h2 id="toc_0.6">gpg的问题</h2>
 <p>
-有时用yum install xxx.rpm时会提示"Package xxx.rpm is not signed"而使安装中断，有两种解决方法：
+如果你下载了一个rpm包到本地，然后要用yum命令来安装（当然，你也可以用rpm命令安装）。绝大部分时候，用yum install xxx.rpm时会提示"Package xxx.rpm is not signed"而使安装中断，有两种解决方法：
 </p>
 
 <p>
@@ -303,7 +303,7 @@ yum --nogpgcheck install xxx.rpm
 vim /etc/yum.conf 将gpgcheck=1改为gpgcheck=0
 </pre>
 
-<h2 id="toc_0.6">未解决的问题</h2>
+<h2 id="toc_0.7">未解决的问题</h2>
 <p>
 如何只安装一个package中的某一个软件呢，例如，我只想安装kdegraphics中的okular这个pdf阅读器？
 </p>
