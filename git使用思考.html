@@ -22,21 +22,25 @@
 	</div> 
         <div id="wrap">
 <p>
-公司使用的版本控制工具是SVN，自己的资料则是使用的git，并且托管与github上。原来只是每次将更新的内容push到github上，以为这个和SVN没有什么区别。最近再次折腾了git，对其有了些深入的了解。下面记录自己的一些理解和思考。
+公司使用的版本控制工具是SVN，自己的资料版本控制则是使用的git，并且托管与github上。最近再次折腾了git，对其有了些深入的了解。下面记录自己的一些理解和思考。主要有是git的两个亮点特征，分布式版本控制和强大的分支管理功能。
 </p>
 
 <h2 id="toc_0.1">分布式的git</h2>
 <p>
-git是一个分布式的版本控制工具，而SVN是一个集中式的版本控制工具。集中式的，例如SVN，版本的控制文件等都集中放置在服务器上，本地只是一个拷贝，一个工作的过程就是update-&gt;modify-&gt;commit。update指将本地的拷贝更新到服务器上的版本，commit指将本地的修改上传到服务器上，产生一个新的版本。
+git是一个分布式的版本控制工具，版本控制信息（就是版本仓库repo，.git目录）可以保存在本地，并不依赖网络和中心服务器。当然，如果是团队协同开发，那么总需要一个地方来保存和合并最终的代码，那时候就需要网络和中心服务器。
 </p>
 
 <p>
-如果你只想将自己电脑上的某份代码做一个版本控制，你总不至于为此在自己的电脑上安装一个SVN的服务端吧。如果这份代码就你一个人维护，那么不需要上传到某个服务器上吧，当然前提是你有网络的情况下。基于上面的这些简单的日常个人应用，git就能够轻松帮你搞定：本地一个目录，就能够作一个版本，不需要服务器端，所有的版本信息都保存在本地的一个目录下。当然，如果你要多人协同开发，你也看可以为git架设服务器端。例如github就是这样一个服务器端。
+SVN是一个集中式的版本控制工具。集中式的SVN，版本的控制文件等都集中放置在中心服务器上，本地只是一个拷贝，一个工作的过程就是update-&gt;modify-&gt;commit。update指将本地的拷贝更新到服务器上的版本，commit指将本地的修改上传到服务器上，产生一个新的版本。区别与git的commit操作，git的commit操作是将修改写入本地的版本仓库.git目录。
+</p>
+
+<p>
+下面我们来看一个实际情况。你想将自己电脑上的某份代码做一个版本控制，如果这份代码就你一个人维护，无须上传到服务器，或者你压根儿就没有网络。还可以增加一些条件，例如你想将这份代码用U盘拷贝到其它电脑上工作。你总不至于为此在自己的电脑上安装一个SVN的服务端吧。基于上面的这些简单的日常个人应用，git就能够轻松帮你搞定：本地一个目录，就能够作一个版本，不需要服务器端，所有的版本信息都保存在本地的一个目录下。当然，如果你要多人协同开发，你也看可以为git架设中心服务器端。例如github就是这样一个服务器端。
 </p>
 
 <h2 id="toc_0.2">分支管理的git</h2>
 <p>
-git的分支管理，和SVN的分支不是同一个概念。
+git的分支管理在本地建立分支，和SVN的分支不是同一个概念。
 </p>
 
 <p>
@@ -47,36 +51,44 @@ git的分支管理，和SVN的分支不是同一个概念。
 git则可以帮你轻松搞定这个问题。你在本地就可以建立多个分支，然后你在使用分支1解决问题1，分支2解决问题2。你可以轻松在分支之间切换，而且你还可以保持从服务器上pull下来的那个master分支的干净（也就是不做任何修改）。
 </p>
 
-
 <p>
-举一个实际的例子，以前我所在的小组使用SVN作为版本控制工具，当我正在试图增强一个模块，工作做到一半，由于会改变原模块的行为导致代码服务器上许多测试的失败，所以并没有提交代码。这时候上级对我说，现在有一个很紧急的Bug需要处理， 必须在两个小时内完成。我只好将本地的所有修改diff，并输出成为一个patch文件，然后回滚有关当前任务的所有代码，再开始修改Bug的任务，等到修改好后，在将patch应用回来。前前后后要完成多个繁琐的步骤，这还不计中间代码发生冲突所要进行的工作量。可是如果使用Git， 我们只需要开一个分支或者转回到主分支上，就可以随时开始Bug修改的任务，完成之后，只要切换到原来的分支就可以优雅的继续以前的任务。只要你愿意，每一个新的任务都可以开一个分支，完成后，再将它合并到主分支上，轻松而优雅。
+举另外一个实际的例子，以前我所在的小组使用SVN作为版本控制工具，当我正在试图增强一个模块，工作做到一半，由于会改变原模块的行为导致代码服务器上许多测试的失败，所以并没有提交代码。这时候上级对我说，现在有一个很紧急的Bug需要处理， 必须在两个小时内完成。我只好将本地的所有修改diff，并输出成为一个patch文件，然后回滚有关当前任务的所有代码，再开始修改Bug的任务，等到修改好后，在将patch应用回来。前前后后要完成多个繁琐的步骤，这还不计中间代码发生冲突所要进行的工作量。可是如果使用Git， 我们只需要开一个分支或者转回到主分支上，就可以随时开始Bug修改的任务，完成之后，只要切换到原来的分支就可以优雅的继续以前的任务。只要你愿意，每一个新的任务都可以开一个分支，完成后，再将它合并到主分支上，轻松而优雅。（摘自<a href="http://phoenixtoday.blogbus.com/logs/33458940.html">活灵活现用Git-基础篇</a>）
 </p>
 
-
 <p>
-另外checkout一个copy就可以解决你老板给的紧急任务的切换问题。
+注：在上面的实例中，使用SVN，另外checkout一个copy就可以解决你老板给的紧急任务的切换问题。
 </p>
 
+<h2 id="toc_0.3">网络资料</h2>
 <ul>
 <li>
 <a href="http://phoenixtoday.blogbus.com/logs/33458940.html">活灵活现用Git-基础篇</a>
 </li>
 <li>
-<a href="http://phoenixtoday.blogbus.com/logs/35149540.html">活灵活现用Git-技巧篇</a>
+<a href="http://phoenixtoday.blogbus.com/logs/35149540.html">活灵活现用Git-技巧篇</a> 个性化定制你的Git，更酷更巧妙的使用Git，以及如何在Git Hub上开启你自己的开源项目
 </li>
 </ul>
-<p>
-个性化定制你的Git，更酷更巧妙的使用Git，以及如何在Git Hub上开启你自己的开源项目。
-</p>
 
 <p>
-一个成功的Git分支模型<a href="http://www.juvenxu.com/2010/11/28/a-successful-git-branching-model/">http://www.juvenxu.com/2010/11/28/a-successful-git-branching-model/</a>
-<a href="http://nvie.com/posts/a-successful-git-branching-model/">http://nvie.com/posts/a-successful-git-branching-model/</a>A successful Git branching model
+介绍如何使用git的分支来建设团队软件开发流程，对于团队软件开发流程建设有参考价值。
 </p>
+<ul>
+<li>
+<a href="http://nvie.com/posts/a-successful-git-branching-model/">A successful Git branching model</a>
+</li>
+<li>
+<a href="http://www.juvenxu.com/2010/11/28/a-successful-git-branching-model/">一个成功的Git分支模型</a> 中文翻译版本
+</li>
+</ul>
 
 <p>
-分支在git的软件上是如何实现的<a href="http://progit.org/book/zh/ch3-1.html">http://progit.org/book/zh/ch3-1.html</a>
+git分支的原理，深入了解git是如何实现本地分支管理，有利于阅读git源代码。
 </p>
+<ul>
+<li>
+<a href="http://progit.org/book/zh/ch3-1.html">git分支</a>
+</li>
+</ul>
 </div>
 <div id="footer">
     <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
