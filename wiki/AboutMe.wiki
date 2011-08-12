@@ -1,25 +1,14 @@
 == 关于Wiki ==
 这是NieYong 的个人工作wiki，使用vimwiki编辑，托管于github，Powered by Github Pages
 
-== 关于NieYong ==
-NieYong此人二十出头，电子科大电工人，在深圳努力并坚持着。技术领域主要在嵌入式，Linux方面。本Wiki专注与四个方面的技术：
-* *ARM&MIPS* -- CPU体系架构
-* *Linux* -- Linux配置和使用
-* *嵌入式开发*
-* *Android* -- 预备领域
-
-== 浏览本站 ==
-如果你想很快的浏览本站，请点击本页顶部的[[Navigate|本站导图]]。
-
-本站致力于将技术知识进行归类，整理，概括。本站对所有文章提供两种归类方式：
-# *按照文章内容进行分类* ，例如：Linux Config系列，Linux Tech系统…… 点击[[ContentIndex|这里]]进入按照内容分类页面。
-# *按照标题字母顺序分类* ，点击[[WordIndex|这里]]进入按照字母顺序分类页面。
+== 关于作者 ==
+NieYong此人二十出头，电子科大电工人，在深圳努力并坚持着。技术领域主要在嵌入式，Linux方面。
 
 == NIENET.COM ==
 欢迎访问网站:http://nienet.com
 
-NieNet是NieYong使用wordpress搭建的一个站点。关于该站点的目的和形式，一直在变化。下面以时间为序，记录了NieNet网站的变迁过程。
+NieNet是使用wordpress搭建的一个站点。关于该站点的目的和形式，一直在变化。下面以时间为序，记录了NieNet网站的变迁过程。
 
-2011.5.1~8.1 ~~NieNet网站很多内容都是本wiki的进一步修改，整理，致力于为嵌入式初学者提供一站式的学习参考平台。~~
+* ~~NieNet网站很多内容都是本wiki的进一步修改，整理，致力于为嵌入式初学者提供一站式的学习参考平台。~~
 
-8.1~现在 NieNet不再作为一个技术博客，所有的技术文章将放置到 *知识库* 中。我们将尝试将NieNet作为一个关注web2.0，移动App，创业团队的IT资讯类博客。
+* NieNet是一个关注web2.0，移动App，创业团队的IT资讯类博客。NieNet知识库专注IT知识技术的积累，形成一个技术wiki。
