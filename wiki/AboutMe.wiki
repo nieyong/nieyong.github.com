@@ -1,10 +1,10 @@
 == 关于Wiki ==
 这是NieYong 的个人工作wiki，使用vimwiki编辑，托管于github，Powered by Github Pages
 
-== 关于作者 ==
+== 关于Nieyong ==
 NieYong此人二十出头，电子科大电工人，在深圳努力并坚持着。技术领域主要在嵌入式，Linux方面。
 
-== NIENET.COM ==
+== 关于Nienet ==
 欢迎访问网站:http://nienet.com
 
 NieNet是使用wordpress搭建的一个站点。关于该站点的目的和形式，一直在变化。下面以时间为序，记录了NieNet网站的变迁过程。
