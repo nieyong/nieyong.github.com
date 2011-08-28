@@ -71,7 +71,7 @@ user.email=nieyong_1947@126.com
 </p>
 <ul>
 <li>
-没有变化需要提交的，版本库和git管理仓库（就是当前路径下的隐形文件夹.git）中的记录是一致的。
+受管理的文件没有被修改（增删改），和git管理仓库（就是当前路径下的隐形文件夹.git）中的记录是一致的。
 </li>
 </ul>
 
@@ -97,7 +97,7 @@ nothing to commit (working directory clean)
 #
 no changes added to commit (use "git add" and/or "git commit -a")
 /***************
-可以看到，显示nieyong.c文件不再当前目录下，被删除了，但是这个删除操作并没有记录在git管理仓库中，也就是changed but not updated的含义。因为没有删除操作（以及其它的操作，例如添加，更改）记录在案，所以，git认为并不需要更新git管理仓库中的版本，或者说，并不需要将这些改变的操作提交到管理仓库中，也就是no changes added to commit的含义。
+可以看到，显示nieyong.c文件不在当前目录下，被删除了，但是这个删除操作并没有记录在git管理仓库中，也就是changed but not updated的含义。因为没有操作（例如添加，更改，删除等）记录在案，所以，git认为并不需要更新git管理仓库中的版本，或者说，git应该先将这个改变（nieyong.c文件被删除了）记录在案（update），然后再提交到管理仓库中（commit）。因为现在还没有记录在案，也就有no changes added to commit。
 ****************/
 
 [root@localhost jzcode]# git rm linux-2.6.24.3/drivers/video/nieyong.c
