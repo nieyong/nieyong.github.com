@@ -86,3 +86,6 @@ initrd  /boot/initrd.img-2.6.28-11-generic
 http://www.fedoraforum.org/forum/showthread.php?t=252004
 
 http://rwmj.wordpress.com/about/
+
+
+开机启动时自动挂载某个分区，需要修改文件：/etc/fstab则可。
