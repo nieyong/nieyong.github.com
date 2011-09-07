@@ -1,0 +1,61 @@
+<html>
+<head>
+	<link rel="Stylesheet" type="text/css" href="style.css" />
+        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
+        <title>Android tool chain</title>
+</head>
+<body>
+	<div id="header"> 
+	    <div id="headerlogo">
+		<h1><a href="index.html">NieNet 知识库</a></h1>
+		<p>Edit by Vimwiki--Powered by Github Pages</p>
+	    </div>
+
+	    <div id="headernav">
+		<ul id="nav">
+		    <li><a href="index.html">首页</a></li>
+		    <li><a href="Navigate.html">本站导图</a> </li>
+		    <li><a href="AboutMe.html">关于</a> </li>
+		    <li><a href="http://nienet.com">返回NieNet</a></li>
+		</ul>
+	    </div>
+	</div> 
+        <div id="wrap">
+<p>
+1.启动eclipse，点击window——&gt;preferences——&gt;install/update——&gt;available software sites，点击Add，把如下几个网址添加过去
+Eclipse GEF <a href="http://download.eclipse.org/tools/gef/updates/releases/">http://download.eclipse.org/tools/gef/updates/releases/</a>
+Eclipse EMF       <a href="http://download.eclipse.org/modeling/emf/updates/releases/">http://download.eclipse.org/modeling/emf/updates/releases/</a>
+Eclipse GMF       <a href="http://download.eclipse.org/modeling/gmf/updates/releases">http://download.eclipse.org/modeling/gmf/updates/releases</a>
+Eclipse Webtools <a href="http://download.eclipse.org/webtools/updates/">http://download.eclipse.org/webtools/updates/</a>
+Google eclipse Plugin <a href="http://dl.google.com/eclipse/plugin/3.5">http://dl.google.com/eclipse/plugin/3.5</a>
+</p>
+
+
+
+<p>
+Step 1. 编辑 /home/username/bin/repo文件
+REPO_URL='git://android.git.kernel.org/tools/repo.git' 
++ REPO_URL='<a href="http://android.git.kernel.org/tools/repo.git">http://android.git.kernel.org/tools/repo.git</a>'
+</p>
+
+<p>
+Step 2. 运行新的命令
+$ repo init -u <a href="http://android.git.kernel.org/platform/manifest.git">http://android.git.kernel.org/platform/manifest.git</a> -b gingerbread
+</p>
+
+<p>
+Step 3. 修改文件.repo/manifests/default.xml
+将   fetch="git://android.git.kernel.org/"
+改成fetch="<a href="http://android.git.kernel.org/">http://android.git.kernel.org/</a>"
+</p>
+
+<p>
+Step 4. 运行命令
+repo sync
+</p>
+</div>
+<div id="footer">
+    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+</div>
+</body>
+</html>

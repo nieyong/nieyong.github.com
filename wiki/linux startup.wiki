@@ -1,0 +1,35 @@
+ 下面这些程序，在系统启动的时候就已经启动，占用了不少的内存，设置为手动启动。
+
+ kgpg:密码管理，关闭
+ kPackageKit:系统update，进行软件包的管理，每次启动，都会自动运行，设置为手动运行。
+
+
+ 一、开机启动速度的优化。
+
+ 开机启动主要（浪）费时间的就集中在三个服务模块：cups、kudzu、network，分别为UNIX打印服务、自动检测新硬件、激活网络。经本人实机测试，发现针对性的经过一些配置后，系统启动速度提高非常多。方法如下：
+ （一）cups和kudzu两项服务我们平常用的不多
+ #chkconfig    cups   off
+ #chkconfig kudzu off
+ （二）关于network服务，最好还是要设为自动启动，不过我们可对网卡参数进行相关设置：网卡IP一定要手工设置，主机名和域名一定要修改（反正不是默认的localhost.localdomain即可）；并设置好网关、域名服务器等参数。详细的设置方法不另介绍。
+ （三）其它的启动服务按默认设置即可，因为它们花费的时间非常少。
+
+
+ 发现有几台redhat机器启动的时候，在启动NFS的时候停留很长时间。 于是google一把，发现解决方法如下：
+ NFS启动慢的问题
+
+ 用linux开发的朋友对这个问题一定很有体会，有时候开机时在start NFS这一步会停很长的时间，这个问题困扰了我很长的时间，今天终于忍不住上google搜索了一把，答案是因为每次客户端mount过NFS而又没有正常umount后，在/var/lib/nfs/rmtab里会留下记录，每次NFS启动的时候都会去check以前的IP，如果不通，要等到timeout才行。我cat rmtab看了一下，hoho，从上海，konka，TCL，Changhong用过的IP都在里面记着，难怪慢的象蜗牛一样！删了后试了一下，马上就起来了！ 
+
+
+
+ npviewer.bin文件的CPU占有率很高
+ 这个应该是 firefox 的 flash 插件弄的。
+ 安装个 flashblock 插件
+
+ Flashblock 扩展可以阻止网页上那些让人讨厌的 Flash。它将会阻止载入所有的 Flash 内容，并在网页上显示为占位符，使您可以点击查看或下载这些 Flash。
+
+ KDE性能提升建议zz
+ http://www.linuxfans.org/bbs/thread-43317-1-1.html
+
+
+
+

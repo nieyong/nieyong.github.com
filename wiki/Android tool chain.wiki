@@ -1,0 +1,22 @@
+启动eclipse，点击window——>preferences——>install/update——>available software sites，点击Add，把如下几个网址添加过去
+* Eclipse GEF http://download.eclipse.org/tools/gef/updates/releases/
+* Eclipse EMF http://download.eclipse.org/modeling/emf/updates/releases/
+* Eclipse GMF http://download.eclipse.org/modeling/gmf/updates/releases
+* Eclipse Webtools http://download.eclipse.org/webtools/updates/
+* Google eclipse Plugin http://dl.google.com/eclipse/plugin/3.5
+
+
+
+* Step 1. 编辑 /home/username/bin/repo文件
+REPO_URL='git://android.git.kernel.org/tools/repo.git' 
+修改为REPO_URL='http://android.git.kernel.org/tools/repo.git'
+
+* Step 2. 运行新的命令
+$ repo init -u http://android.git.kernel.org/platform/manifest.git -b gingerbread
+
+* Step 3. 修改文件.repo/manifests/default.xml
+将fetch="git://android.git.kernel.org/"
+改成fetch="http://android.git.kernel.org/"
+
+* Step 4. 运行命令
+repo sync

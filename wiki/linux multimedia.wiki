@@ -72,3 +72,60 @@ http://blog.sina.com.cn/s/blog_5392989a0100aj0q.html
 
 這些都是所謂的「終端模擬器」,這是一些可以讓您的計算機界面變得易於操作，並解可以幫助您和對話的程序。現在有很多的終端模擬器供我們使用。一般的Linux系統通常包含多種終端模擬器，就像:xterm、rxvt、konsole、kvt、gnome-terminal、nxterm、 eterm. 
 
+
+
+yum install gstreamer-plugins-good
+yum install gstreamer-plugins-bad
+yum install gstreamer-plugins-ugly
+
+[root@localhost yum.repos.d]# rpm -qa |grep gstreamer
+gstreamer-0.10.28-2.fc12.i686
+phonon-backend-gstreamer-4.4.0-3.fc12.i686
+gstreamer-plugins-bad-free-0.10.18-1.fc12.i686
+gstreamer-python-0.10.16-1.fc12.i686
+PackageKit-gstreamer-plugin-0.5.7-2.fc12.i686
+gstreamer-plugins-bad-0.10.17-4.fc12.i686
+gstreamer-plugins-ugly-0.10.13-1.fc12.i686
+gstreamer-plugins-base-0.10.25-5.fc12.i686
+gstreamer-plugins-good-0.10.21-1.fc12.i686
+gstreamer-tools-0.10.28-2.fc12.i686
+
+
+
+
+Getting mp3 support for RhythmBox by Roger Ignazio, III 6/18/05
+
+To enable mp3 support in RhythmBox, follow these directions:
+
+su -
+<root password>
+
+yum -y install gstreamer gstreamer-plugins-mp3
+
+When installed, as root run: gst-register-0.8
+Then type exit and run gst-register-0.8 as yourself.
+A huge list will go flying by, then it will end and return you to a [user@hostname dir]# prompt.
+When done, open RhythmBox. Nothing will appear different, but mp3 support IS there.
+
+
+***NOTICE: to do the above process, you NEED livna repos. If you do not have livna repos set up, follow these directions:
+
+su -
+<root password>
+
+rpm --import http://rpm.livna.org/RPM-LIVNA-GPG-KEY
+
+Copy and paste this into your /etc/yum.conf file:
+[livna]
+name=Livna.org Fedora Compatible Packages
+baseurl=http://rpm.livna.org/fedora/$releasever/$basearch/RPMS.lvn
+gpgcheck=1
+enabled=1
+
+OK. livna repos is now a part of yum.
+Now, follow directions above to install gstreamer.
+
+
+Fedora 10安装amarok中文乱码解决办法 
+http://kpjack.blog.51cto.com/627289/128145
+

@@ -1,0 +1,12 @@
+http://www.google.com/linuxrepositories/index.html
+
+As root, add the following to a file called google.repo in /etc/yum.repos.d/:
+
+[google]
+name=Google - i386
+baseurl=http://dl.google.com/linux/rpm/stable/i386
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub  
+
+Chrome中一旦退格IBus无法输入，一旦按了backspace删除之前输入的文字，就要重新启动ibus才能输入，不然输入什么都是不能显示的，已经证实是iBus的key snooper特性导致了这个问题。可以考虑将iBus升级到1.3.5以上（添加PPA）

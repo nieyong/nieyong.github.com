@@ -1,0 +1,6 @@
+plasca workplace
+
+  a little known utility called kstart
+
+  The System Tray
+  ksystraycmd
