@@ -5,6 +5,7 @@
 
 == 最近编辑 ==
 最近经常编辑的文章，一般是最近的工作内容或者学习领域。
+* [[java base]]
 * [[ADW launcher]]
 * [[Android tool chain]]
 * [[Android]]

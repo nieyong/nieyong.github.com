@@ -22,37 +22,98 @@
 	</div> 
         <div id="wrap">
 <p>
-1.启动eclipse，点击window——&gt;preferences——&gt;install/update——&gt;available software sites，点击Add，把如下几个网址添加过去
+启动eclipse，点击window——&gt;preferences——&gt;install/update——&gt;available software sites，点击Add，把如下几个网址添加过去
+</p>
+<ul>
+<li>
 Eclipse GEF <a href="http://download.eclipse.org/tools/gef/updates/releases/">http://download.eclipse.org/tools/gef/updates/releases/</a>
-Eclipse EMF       <a href="http://download.eclipse.org/modeling/emf/updates/releases/">http://download.eclipse.org/modeling/emf/updates/releases/</a>
-Eclipse GMF       <a href="http://download.eclipse.org/modeling/gmf/updates/releases">http://download.eclipse.org/modeling/gmf/updates/releases</a>
+</li>
+<li>
+Eclipse EMF <a href="http://download.eclipse.org/modeling/emf/updates/releases/">http://download.eclipse.org/modeling/emf/updates/releases/</a>
+</li>
+<li>
+Eclipse GMF <a href="http://download.eclipse.org/modeling/gmf/updates/releases">http://download.eclipse.org/modeling/gmf/updates/releases</a>
+</li>
+<li>
 Eclipse Webtools <a href="http://download.eclipse.org/webtools/updates/">http://download.eclipse.org/webtools/updates/</a>
+</li>
+<li>
 Google eclipse Plugin <a href="http://dl.google.com/eclipse/plugin/3.5">http://dl.google.com/eclipse/plugin/3.5</a>
-</p>
+</li>
+</ul>
 
 
 
-<p>
+<ul>
+<li>
 Step 1. 编辑 /home/username/bin/repo文件
+</li>
+</ul>
+<p>
 REPO_URL='git://android.git.kernel.org/tools/repo.git' 
-+ REPO_URL='<a href="http://android.git.kernel.org/tools/repo.git">http://android.git.kernel.org/tools/repo.git</a>'
+修改为REPO_URL='<a href="http://android.git.kernel.org/tools/repo.git">http://android.git.kernel.org/tools/repo.git</a>'
 </p>
 
-<p>
+<ul>
+<li>
 Step 2. 运行新的命令
+</li>
+</ul>
+<p>
 $ repo init -u <a href="http://android.git.kernel.org/platform/manifest.git">http://android.git.kernel.org/platform/manifest.git</a> -b gingerbread
 </p>
 
-<p>
+<ul>
+<li>
 Step 3. 修改文件.repo/manifests/default.xml
-将   fetch="git://android.git.kernel.org/"
+</li>
+</ul>
+<p>
+将fetch="git://android.git.kernel.org/"
 改成fetch="<a href="http://android.git.kernel.org/">http://android.git.kernel.org/</a>"
 </p>
 
-<p>
+<ul>
+<li>
 Step 4. 运行命令
+</li>
+</ul>
+<p>
 repo sync
 </p>
+
+
+
+<p>
+如果你的电脑上已经安装了JDK，请确认它的版本符合需求。JDK 1.4或者GCJ(Gnu Compiler for Java) 均不支持Android开发。推荐安装最新的JDK 6。
+如果你需要在Fedora上安装Sun JDK 6，可以参考这篇日志。
+</p>
+
+<pre>
+#切换到root用户
+su
+
+#安装JDK
+sh /some/path/jdk-6u22-linux-i586-rpm.bin
+
+#安装java, javac等
+## java ##
+alternatives --install /usr/bin/java java /usr/java/jdk1.6.0_27/jre/bin/java 20000
+## javaws (32-bit only) ##
+alternatives --install /usr/bin/javaws javaws /usr/java/jdk1.6.0_27/jre/bin/javaws 20000
+## Firefox浏览器插件32位
+alternatives --install /usr/lib/mozilla/plugins/libjavaplugin.so libjavaplugin.so /usr/java/jdk1.6.0_27/jre/lib/i386/libnpjp2.so 20000
+## Firefox浏览器插件64位
+alternatives --install /usr/lib64/mozilla/plugins/libjavaplugin.so libjavaplugin.so.x86_64 /usr/java/jdk1.6.0_27/jre/lib/amd64/libnpjp2.so 20000
+## 安装javac
+alternatives --install /usr/bin/javac javac /usr/java/jdk1.6.0_27/bin/javac 20000
+
+#切换默认Java # 运行下面的命令，选择刚刚安装的Sun JDK
+alternatives --config java
+
+#查看现在的Java版本，看看是否切换成功
+java -version
+</pre>
 </div>
 <div id="footer">
     <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>

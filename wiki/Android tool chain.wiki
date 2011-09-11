@@ -20,3 +20,34 @@ $ repo init -u http://android.git.kernel.org/platform/manifest.git -b gingerbrea
 
 * Step 4. 运行命令
 repo sync
+
+
+
+如果你的电脑上已经安装了JDK，请确认它的版本符合需求。JDK 1.4或者GCJ(Gnu Compiler for Java) 均不支持Android开发。推荐安装最新的JDK 6。
+如果你需要在Fedora上安装Sun JDK 6，可以参考这篇日志。
+
+{{{
+#切换到root用户
+su
+
+#安装JDK
+sh /some/path/jdk-6u22-linux-i586-rpm.bin
+
+#安装java, javac等
+## java ##
+alternatives --install /usr/bin/java java /usr/java/jdk1.6.0_27/jre/bin/java 20000
+## javaws (32-bit only) ##
+alternatives --install /usr/bin/javaws javaws /usr/java/jdk1.6.0_27/jre/bin/javaws 20000
+## Firefox浏览器插件32位
+alternatives --install /usr/lib/mozilla/plugins/libjavaplugin.so libjavaplugin.so /usr/java/jdk1.6.0_27/jre/lib/i386/libnpjp2.so 20000
+## Firefox浏览器插件64位
+alternatives --install /usr/lib64/mozilla/plugins/libjavaplugin.so libjavaplugin.so.x86_64 /usr/java/jdk1.6.0_27/jre/lib/amd64/libnpjp2.so 20000
+## 安装javac
+alternatives --install /usr/bin/javac javac /usr/java/jdk1.6.0_27/bin/javac 20000
+
+#切换默认Java # 运行下面的命令，选择刚刚安装的Sun JDK
+alternatives --config java
+
+#查看现在的Java版本，看看是否切换成功
+java -version
+}}}

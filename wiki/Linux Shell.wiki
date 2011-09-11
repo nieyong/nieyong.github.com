@@ -1,20 +1,33 @@
+== shell脚本用户切换密码输入 ==
 想在shell脚本中实现用户切换，如下：
 
+{{{
 #!/bin/sh
 
 su - user1 << END
 user1passwd
 END
+}}}
 
-这个恐怕办不到了，su也不允许通过重定向输入密码。
-可以使用root用户执行这个脚本，这样su时就不要输入密码了。
+这个恐怕办不到了，su也不允许通过重定向输入密码。可以使用root用户执行这个脚本，这样su时就不要输入密码了。
 
 su读密码是通过/dev/tty读的，而不是通过stdin。所以你用普通的stdin重定向不能实现自动输入密码的功能。
 
-我签写日子也试过，只能通过/dev/tty,不能同步哦stdin
-如：
+我也试过，只能通过/dev/tty,不能同步哦stdin。如：
+{{{
 Assembly code
 
 echo -e "user\npass\n" | su
 standard in must be a tty
+}}}
 
+
+== shell脚本切换路径 ==
+我在一个脚本中切换了路径，如下： 
+{{{
+#!/bin/bash 
+cd /home/winter 
+}}}
+运行推出后发现仍然是在运行脚本的路径，请教如何才可以在退出脚本后进入我指定的目录呢？ 
+
+通常，当你执行一个shell script时，shell会重新运行一个新的shell来执行，而你执行cd xxx, 只是那个新的shell cd到xxx, 执行完退出，原本的shell当然没有变化，但有另一种执行方式, 可以让当前的shell直接执行命令, 这样就可以达到你要的效果了，将./shell_script.sh 改为 source ./shell_script.sh 
