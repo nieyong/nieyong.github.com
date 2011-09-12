@@ -1,3 +1,4 @@
+== ADP的安装 ==
 启动eclipse，点击window——>preferences——>install/update——>available software sites，点击Add，把如下几个网址添加过去
 * Eclipse GEF http://download.eclipse.org/tools/gef/updates/releases/
 * Eclipse EMF http://download.eclipse.org/modeling/emf/updates/releases/
@@ -6,7 +7,7 @@
 * Google eclipse Plugin http://dl.google.com/eclipse/plugin/3.5
 
 
-
+== Android Source的获取 ==
 * Step 1. 编辑 /home/username/bin/repo文件
 REPO_URL='git://android.git.kernel.org/tools/repo.git' 
 修改为REPO_URL='http://android.git.kernel.org/tools/repo.git'
@@ -22,9 +23,8 @@ $ repo init -u http://android.git.kernel.org/platform/manifest.git -b gingerbrea
 repo sync
 
 
-
-如果你的电脑上已经安装了JDK，请确认它的版本符合需求。JDK 1.4或者GCJ(Gnu Compiler for Java) 均不支持Android开发。推荐安装最新的JDK 6。
-如果你需要在Fedora上安装Sun JDK 6，可以参考这篇日志。
+== JDK的安装 ==
+如果你的电脑上已经安装了JDK，请确认它的版本符合需求。JDK 1.4或者GCJ(Gnu Compiler for Java) 均不支持Android开发。推荐安装最新的JDK 6。如果你需要在Fedora上安装Sun JDK 6，可以参考这篇日志。
 
 {{{
 #切换到root用户

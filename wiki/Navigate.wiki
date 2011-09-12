@@ -2,7 +2,7 @@
 
 == Linux Config系列文章 ==
 本人使用的Linux发行版本为Fedora 12，同时也尝试过Suse和Ubuntu，还一边在使用LFS（linux from sctrach）。下面就是记录在使用Linux的过程中的基本配置。Linux技术类文章，例如Linux内核，驱动，SHELL脚本等。
-* [[yum manual]]
+* [[linux yum manual]]
 * [[linux fonts]]
 * [[linux patition and grub]]
 * [[linux network]]
@@ -17,22 +17,19 @@
 == Others ==
 * [[wordpress theme]]
 * [[git使用笔记]]
+* [[git使用思考]]
+* [[SSH]]
 
 == 嵌入式开发 ==
 * [[LCD wiki]]
 * [[LCD Driver IC]]
 * [[FrameBuffer]]
 * [[LCD 驱动调试]]
+* [[嵌入式Linux的启动过程]]
+
+== CPU体系架构 ==
+* [[温故知新-x86体系架构]]
 
 == 较新编辑 ==
-* [[温故知新-x86体系架构]]
-* [[SSH]]
-* [[git使用笔记]]
-* [[git使用思考]]
-* [[LCD wiki]]
-* [[LCD Driver IC]]
-* [[FrameBuffer]]
-* [[LCD 驱动调试]]
 * [[PFN]]
-* [[嵌入式Linux的启动过程]]
 * [[vimwiki-HTML站点]]
