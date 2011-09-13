@@ -1,9 +1,19 @@
-the   field   *   is   never   read   locally   
-
+== the   field   *   is   never   read   locally ==   
 这是个善意的提示，意思是说，你定义了这个变量，但没有使用它。如果你不需要这个变量，可以考虑删除它的定义。
 
-AdapterView is a raw type. References to generic type 
-	 AdapterView<T> should be parameterized
+== AdapterView is a raw type. References to generic type AdapterView<T> should be parameterized ==
 
 泛型基本问题，多看基础资料
 http://java.sun.com/j2se/1.5/pdf/generics-tutorial.pdf
+
+
+== 解决eclipse中overlaps the location of another project: 'xxxx' ==
+new -> android project -> create project from exist source 出现如下错误信息： 
+{{{
+Invalid project description 
+------>detail: ->>> xxxx(project path) overlaps the location of another project: 'xxxx' 
+}}}
+最后发现时我把源码把放到了workspace目录下了的原因导致的。eclipse插件在创建项目的时候需要在workspace目录下创建一个同名的目录。但发现workspace目录下已存在对应的目录时，就会报上面的处错误信息了。 
+
+解决办法很简单，就是将源码包移到非workspace目录下。
+
