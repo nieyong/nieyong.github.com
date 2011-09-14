@@ -1,0 +1,103 @@
+<html>
+<head>
+	<link rel="Stylesheet" type="text/css" href="style.css" />
+        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
+        <title>linux command</title>
+</head>
+<body>
+	<div id="header"> 
+	    <div id="headerlogo">
+		<h1><a href="index.html">NieNet 知识库</a></h1>
+		<p>Edit by Vimwiki--Powered by Github Pages</p>
+	    </div>
+
+	    <div id="headernav">
+		<ul id="nav">
+		    <li><a href="index.html">首页</a></li>
+		    <li><a href="Navigate.html">本站导图</a> </li>
+		    <li><a href="AboutMe.html">关于</a> </li>
+		    <li><a href="http://nienet.com">返回NieNet</a></li>
+		</ul>
+	    </div>
+	</div> 
+        <div id="wrap">
+<h2 id="toc_0.1">alternatives 命令</h2>
+<p>
+这是一个只有 root 才能执行的命令。alternatives 的意思是 “可选择的内容”。假如你的系统中有几个命令功能十分类似，却又不能随意删除，那么可以用 alternatives 来指定一个全局的设置。在 FC3 中，全局默认输入法和 java 系统等等都是用它来进行设置的。它有几种功能，可以用命令行参数来指定。alternatives --install &lt;link&gt; &lt;name&gt; &lt;path&gt; &lt;priority&gt; 意思是在 alternatives 数据库中添加一个 &lt;path&gt;，使它成为 &lt;link&gt; 的可选项，优先级是 &lt;priority&gt;。而 &lt;name&gt; 则是一个中转站。这样说似乎有些抽象 所以，执行一下看看
+</p>
+
+<p>
+代码:
+</p>
+<pre>
+alternatives --install /etc/X11/xinit/xinput.d/zh_CN xinput-zh_CN /etc/X11/xinit/xinput.d/scim 100
+alternatives --install /etc/X11/xinit/xinput.d/zh_CN xinput-zh_CN /etc/X11/xinit/xinput.d/fcitx 99
+</pre>
+
+<p>
+这两个命令的意思就是将刚才新建的 scim 和 fcitx 两个文件作为 zh_CN 的可选内容。它们的优先级分别是 100 和 99，它们共同的名字是 xinput-zh_CN。
+</p>
+
+<p>
+另外一种功能是选择默认值。上面的命令仅仅向数据库中添加了可选内容，接下来当然是进行选择了。可以用两种办法，第一种是 alternatives --auto &lt;name&gt;，这时系统会根据优先级来选择 &lt;name&gt; 的默认值。例如，运行
+</p>
+
+<p>
+代码:
+</p>
+<pre>
+alternatives --auto xinput-zh_CN
+</pre>
+
+<p>
+会把默认输入法设置为 scim。(为什么？因为我们在上面指定的优先级是 100，是最高的，fcitx 只有 99)
+</p>
+
+<p>
+第二种是 alternatives --config &lt;name&gt;，这时会显示一个对话框，大概是这样
+</p>
+
+<p>
+代码:
+</p>
+<pre>
+[root@jackbillow ~]# alternatives --config xinput-zh_CN
+There are 3 programs which provide 'xinput-zh_CN'.
+
+Selection     Command
+-----------------------------------------------
+1          /etc/X11/xinit/xinput.d/iiimf
+*+ 2          /etc/X11/xinit/xinput.d/scim
+3          /etc/X11/xinit/xinput.d/fcitx
+
+Enter to keep the current selection[+], or type selection number:
+</pre>
+
+<p>
+可以看到系统中已经通过 alternatives --install 添加了三个可选内容。优先级最高的是 <code>*</code>指示的那一个，目前的默认全局使用的是`+'指示的那一个。输入数字 3 就会将默认值改为fcitx，输入回车的话就不做改动。
+</p>
+
+<p>
+哪种好一点？它们不会冲突，哪个都可以。要修改优先级怎么办？比如要把 fcitx 的优先级提高成 101，应该怎么办？答案很简单，再运行一次 alternatives --install 就可以了。
+</p>
+
+<p>
+代码:
+</p>
+<pre>
+alternatives --install /etc/X11/xinit/xinput.d/zh_CN xinput-zh_CN /etc/X11/xinit/xinput.d/fcitx 101
+</pre>
+
+<p>
+需要注意的是，这样做不会修改当前的默认值，只有再运行 alternatives --auto 才会做出选择。或者，用 alternatives --config 也可以。
+</p>
+
+<p>
+alternatives 还有一些功能，包括删除一个可选项等等。同样，这个设置应该由输入法的安装程序 rpm 来做。有关alternatives命令配置java的实例，参考<a href="Android tool chain.html">Android tool chain</a>。
+</p>
+</div>
+<div id="footer">
+    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+</div>
+</body>
+</html>

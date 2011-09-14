@@ -51,3 +51,4 @@ alternatives --config java
 #查看现在的Java版本，看看是否切换成功
 java -version
 }}}
+这里有一个很重要的命令alternatives，如果你对该命令还比较陌生，点击[[linux command]]。

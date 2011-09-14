@@ -13,6 +13,7 @@
 * [[linux optimization]] --开机速度/内存占用
 * [[linux rpm]]
 * [[linux app]]
+* [[linux command]]
 
 == Others ==
 * [[wordpress theme]]

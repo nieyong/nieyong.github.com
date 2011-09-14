@@ -1,0 +1,48 @@
+== alternatives 命令 ==
+这是一个只有 root 才能执行的命令。alternatives 的意思是 “可选择的内容”。假如你的系统中有几个命令功能十分类似，却又不能随意删除，那么可以用 alternatives 来指定一个全局的设置。在 FC3 中，全局默认输入法和 java 系统等等都是用它来进行设置的。它有几种功能，可以用命令行参数来指定。alternatives --install <link> <name> <path> <priority> 意思是在 alternatives 数据库中添加一个 <path>，使它成为 <link> 的可选项，优先级是 <priority>。而 <name> 则是一个中转站。这样说似乎有些抽象 所以，执行一下看看
+
+代码:
+{{{
+alternatives --install /etc/X11/xinit/xinput.d/zh_CN xinput-zh_CN /etc/X11/xinit/xinput.d/scim 100
+alternatives --install /etc/X11/xinit/xinput.d/zh_CN xinput-zh_CN /etc/X11/xinit/xinput.d/fcitx 99
+}}}
+
+这两个命令的意思就是将刚才新建的 scim 和 fcitx 两个文件作为 zh_CN 的可选内容。它们的优先级分别是 100 和 99，它们共同的名字是 xinput-zh_CN。
+
+另外一种功能是选择默认值。上面的命令仅仅向数据库中添加了可选内容，接下来当然是进行选择了。可以用两种办法，第一种是 alternatives --auto <name>，这时系统会根据优先级来选择 <name> 的默认值。例如，运行
+
+代码:
+{{{
+alternatives --auto xinput-zh_CN
+}}}
+
+会把默认输入法设置为 scim。(为什么？因为我们在上面指定的优先级是 100，是最高的，fcitx 只有 99)
+
+第二种是 alternatives --config <name>，这时会显示一个对话框，大概是这样
+
+代码:
+{{{
+[root@jackbillow ~]# alternatives --config xinput-zh_CN
+There are 3 programs which provide 'xinput-zh_CN'.
+
+Selection     Command
+-----------------------------------------------
+1          /etc/X11/xinit/xinput.d/iiimf
+*+ 2          /etc/X11/xinit/xinput.d/scim
+3          /etc/X11/xinit/xinput.d/fcitx
+
+Enter to keep the current selection[+], or type selection number:
+}}}
+
+可以看到系统中已经通过 alternatives --install 添加了三个可选内容。优先级最高的是 `*`指示的那一个，目前的默认全局使用的是`+'指示的那一个。输入数字 3 就会将默认值改为fcitx，输入回车的话就不做改动。
+
+哪种好一点？它们不会冲突，哪个都可以。要修改优先级怎么办？比如要把 fcitx 的优先级提高成 101，应该怎么办？答案很简单，再运行一次 alternatives --install 就可以了。
+
+代码:
+{{{
+alternatives --install /etc/X11/xinit/xinput.d/zh_CN xinput-zh_CN /etc/X11/xinit/xinput.d/fcitx 101
+}}}
+
+需要注意的是，这样做不会修改当前的默认值，只有再运行 alternatives --auto 才会做出选择。或者，用 alternatives --config 也可以。
+
+alternatives 还有一些功能，包括删除一个可选项等等。同样，这个设置应该由输入法的安装程序 rpm 来做。有关alternatives命令配置java的实例，参考[[Android tool chain]]。
