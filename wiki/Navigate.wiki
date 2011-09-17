@@ -20,6 +20,7 @@
 * [[git使用笔记]]
 * [[git使用思考]]
 * [[SSH]]
+* [[linux from scratch]]
 
 == 嵌入式开发 ==
 * [[LCD wiki]]

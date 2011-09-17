@@ -1,0 +1,158 @@
+ = LFS笔记 =
+== LFS LiveCD ==
+The LFS LiveCD works well as a host system, providing all the tools you need .这就是liveCD的含义之所在。
+
+
+== journaling file systems == 
+日志文件系统的概念。ext2不是日志文件系统，ext3是日志文件系统。
+
+== work-arounds ==
+The newest package versions may also have problems that require work-arounds
+
+== sticky directory ==
+这是在使用命令chmod的时候，涉及到的一个概念。sticky directory就是说只能够被拥有者删除。
+
+== login shell 和non-login shell ==
+假设先以root用户登录
+# 用su - oracle切换到oracle用户，那么使用的是login shell，登录进程或者说shell会重新读取/etc/profile和~/.bash_profile来应用新的环境变量。login shell 也会读取.bashrc文件。login shell启动时并不执行.bashrc,但是惯例上在.bash_profile显示调用.bashrc。
+# 用su oracle切换到oracle用户，那么使用的是non-login shell，此时shell不会读取/etc/profile和~/.bash_profile，而是读取~/.bashrc来应用新的环境变量。
+
+== 制作交叉编译器 ==
+做交叉编译器要弄清楚3个概念：host, build, target：
+* build – 你在什么平台上编译的这个编译器
+* host – 这个编译器将来要在什么平台上运行
+* target – 编译器最终会生成在哪个平台上执行的可执行代码
+
+这里我可以给个例子 build=i386 host=sparc64 target=mips32 表示我们在x86平台上编译了一个在sparc64平台上运行的编译器，它将源码编译生成了要在mips32平台上运行的可执行程序。
+
+描述一个平台，通常使用三元组：arch-vendor-os, 比如i386-redhat-linux 表示x86平台，生产商是redhat，而使用的os是linux。
+
+== Linux Standard Base (LSB) == 
+== LSB Runtime Languages: Perl == 
+
+
+
+== 安装LINUX API的执行结果 ==
+{{{
+root:/sources/linux-2.6.32.8# make INSTALL_HDR_PATH=dest headers_install
+CHK     include/linux/version.h
+make[1]: `scripts/unifdef' is up to date.
+INSTALL include/asm-generic (34 files)
+INSTALL include/drm (12 files)
+INSTALL include/linux/byteorder (2 files)
+INSTALL include/linux/can (4 files)
+INSTALL include/linux/dvb (8 files)
+INSTALL include/linux/hdlc (1 file)
+INSTALL include/linux/isdn (1 file)
+INSTALL include/linux/netfilter (58 files)
+INSTALL include/linux/netfilter_arp (2 files)
+INSTALL include/linux/netfilter_bridge (16 files)
+INSTALL include/linux/netfilter_ipv4 (14 files)
+INSTALL include/linux/netfilter_ipv6 (11 files)
+INSTALL include/linux/nfsd (6 files)
+INSTALL include/linux/raid (2 files)
+INSTALL include/linux/spi (1 file)
+INSTALL include/linux/sunrpc (1 file)
+INSTALL include/linux/tc_act (6 files)
+INSTALL include/linux/tc_ematch (4 files)
+INSTALL include/linux/usb (8 files)
+INSTALL include/linux/wimax (1 file)
+INSTALL include/linux (356 files)
+INSTALL include/mtd (5 files)
+INSTALL include/rdma (1 file)
+INSTALL include/scsi (4 files)
+INSTALL include/sound (9 files)
+INSTALL include/video (3 files)
+INSTALL include/xen (1 file)
+INSTALL include (0 file)
+INSTALL include/asm (54 files)
+}}}
+
+
+== 安装man-pages执行的结果 ==
+可以看到，manual的相关文档，都放置在/usr/share/man路径下。
+{{{
+root:/sources/man-pages-3.23# make install
+for i in man?; do \
+install -d -m 755 /usr/share/man/"$i" || exit $?; \
+install -m 644 "$i"/* /usr/share/man/"$i" || exit $?; \
+done; \
+}}}
+
+
+== 字符集，字体的安装 ==
+路径/usr/lib/locale下面。
+{{{
+localedef -i de_DE -f ISO-8859-1 de_DE
+localedef -i de_DE@euro -f ISO-8859-15 de_DE@euro
+localedef -i de_DE -f UTF-8 de_DE.UTF-8
+localedef -i en_HK -f ISO-8859-1 en_HK
+localedef -i en_PH -f ISO-8859-1 en_PH
+localedef -i en_US -f ISO-8859-1 en_US
+localedef -i en_US -f UTF-8 en_US.UTF-8
+localedef -i es_MX -f ISO-8859-1 es_MX
+localedef -i fa_IR -f UTF-8 fa_IR
+localedef -i fr_FR -f ISO-8859-1 fr_FR
+localedef -i fr_FR@euro -f ISO-8859-15 fr_FR@euro
+localedef -i fr_FR -f UTF-8 fr_FR.UTF-8
+localedef -i it_IT -f ISO-8859-1 it_IT
+localedef -i ja_JP -f EUC-JP ja_JP
+localedef -i tr_TR -f UTF-8 tr_TR.UTF-8
+localedef -i zh_CN -f GB18030 zh_CN.GB18030
+}}}
+
+
+== 安装GCC的的TEST SUITE ==
+在最后安装GCC的的TEST SUITE过程中，并不是完全正确，最后错误的输出如下：
+libgomp Summary
+{{{
+# of expected passes            1009
+# make[4]: Leaving directory `/sources/gcc-build/i686-pc-linux-gnu/libgomp/testsuite'
+# make[3]: Leaving directory `/sources/gcc-build/i686-pc-linux-gnu/libgomp/testsuite'
+# make[3]: Entering directory `/sources/gcc-build/i686-pc-linux-gnu/libgomp'
+# true  DO=all multi-do # make
+# make[3]: Leaving directory `/sources/gcc-build/i686-pc-linux-gnu/libgomp'
+# make[2]: Leaving directory `/sources/gcc-build/i686-pc-linux-gnu/libgomp'
+# make[1]: Target `check-target' not remade because of errors.
+# make[1]: Leaving directory `/sources/gcc-build'
+# make: *** [do-check] Error 2
+# make: Target `check' not remade because of errors.
+# root:/sources/gcc-build# echo $?
+# 2
+#
+#
+#
+# mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
+# mv -v /usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
+# mv -v /usr/bin/{rmdir,stty,sync,true,uname} /bin
+# mv -v /usr/bin/chroot /usr/sbin
+#
+#
+#
+#
+# sed -i -e  "s|BUILD_ZLIB\s*= True|BUILD_ZLIB = False|"  \
+# -e  "s|INCLUDE\s*= ./zlib-src|INCLUDE = /usr/include|"   \
+# -e  "s|LIB\s*= ./zlib-src|LIB = /usr/lib|"   \
+# ext/Compress-Raw-Zlib/config.in
+#
+#
+# sh Configure -des -Dprefix=/usr \
+# -Dvendorprefix=/usr \
+# -Dman1dir=/usr/share/man/man1 \
+# -Dman3dir=/usr/share/man/man3 \
+# -Dpager="/usr/bin/less -isR"
+}}}
+
+== perl的test ==
+在运行perl的test的时候，出现的错误提示。由此可见，在perl的配置过程中，还存在几个没有解决的问题。
+{{{
+Failed 1 test out of 1606, 99.94% okay.
+     op/alarm.t
+     ### Since not all tests were successful, you may want to run some of
+     ### them individually and examine any diagnostic messages they produce.
+     ### See the INSTALL document's section on "make test".
+     ### You have a good chance to get more inf
+}}}
+
+== 英文术语 ==
+* rationale and technical details 原理和技术细节
