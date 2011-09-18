@@ -95,6 +95,28 @@ alternatives --install /etc/X11/xinit/xinput.d/zh_CN xinput-zh_CN /etc/X11/xinit
 <p>
 alternatives 还有一些功能，包括删除一个可选项等等。同样，这个设置应该由输入法的安装程序 rpm 来做。有关alternatives命令配置java的实例，参考<a href="Android tool chain.html">Android tool chain</a>。
 </p>
+
+<h2 id="toc_0.2">du命令</h2>
+<p>
+在查看目录的使用情形时，我们可以将输出结果导到 sort 指令进行排序，以了解哪个档案用了最多的空间：
+</p>
+<blockquote>
+du /etc | sort -nr | more
+</blockquote>
+
+<h2 id="toc_0.3">tar命令</h2>
+<p>
+将当前路径下的所有网页打包压缩：
+</p>
+<blockquote>
+tar cjf test.tar.bz2 *.html
+</blockquote>
+<p>
+查看某个压缩包中的所有文件，以.tar.bz2压缩包为例：
+</p>
+<blockquote>
+tar tjf test.tar.bz2
+</blockquote>
 </div>
 <div id="footer">
     <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>

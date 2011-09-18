@@ -49,5 +49,10 @@ alternatives 还有一些功能，包括删除一个可选项等等。同样，�
 
 == du命令 ==
 在查看目录的使用情形时，我们可以将输出结果导到 sort 指令进行排序，以了解哪个档案用了最多的空间：
+    du /etc | sort -nr | more
 
-# du /etc | sort -nr | more
+== tar命令 ==
+将当前路径下的所有网页打包压缩：
+    tar cjf test.tar.bz2 *.html
+查看某个压缩包中的所有文件，以.tar.bz2压缩包为例：
+    tar tjf test.tar.bz2
