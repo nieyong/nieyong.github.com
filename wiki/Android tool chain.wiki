@@ -52,3 +52,9 @@ alternatives --config java
 java -version
 }}}
 这里有一个很重要的命令alternatives，如果你对该命令还比较陌生，点击[[linux command]]。
+
+
+
+问题二 横竖屏切换
+
+关于emulator横竖屏切换 很简单 左下Ctrl+F11 或者 Ctrl+F12

@@ -46,3 +46,8 @@ alternatives --install /etc/X11/xinit/xinput.d/zh_CN xinput-zh_CN /etc/X11/xinit
 需要注意的是，这样做不会修改当前的默认值，只有再运行 alternatives --auto 才会做出选择。或者，用 alternatives --config 也可以。
 
 alternatives 还有一些功能，包括删除一个可选项等等。同样，这个设置应该由输入法的安装程序 rpm 来做。有关alternatives命令配置java的实例，参考[[Android tool chain]]。
+
+== du命令 ==
+在查看目录的使用情形时，我们可以将输出结果导到 sort 指令进行排序，以了解哪个档案用了最多的空间：
+
+# du /etc | sort -nr | more
