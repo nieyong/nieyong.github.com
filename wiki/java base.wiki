@@ -22,3 +22,7 @@ Invalid project description
 public的类必须放在单独的文建里，且文件名必须与public类名相同，一个文件里只能有一个public类。
 
 把public去掉或者改成内部类。
+
+
+== 参考资料 ==
+* Java_Program_in_Action_20110727-撒迦.pdf

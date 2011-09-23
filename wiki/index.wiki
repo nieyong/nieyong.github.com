@@ -8,6 +8,7 @@
 * [[java base]]
 * [[ADW launcher]]
 * [[Android tool chain]]
+* [[Android UI]]
 * [[Android]]
 
 == 要补充的 ==
