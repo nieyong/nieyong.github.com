@@ -1,4 +1,4 @@
-== 按照文章内容进行分类  点击[[ContentIndex|这里]]进入按照内容分类页面 ==
+本页的wiki条目是按照内容进行的手动分类，可能并不是所有的wiki条目都在本页中。如果想查看所有的wiki条目，请点击[[wikiword|这里]]（由wikiword.py脚本自动生成）。
 
 == Linux Config系列文章 ==
 本人使用的Linux发行版本为Fedora 12，同时也尝试过Suse和Ubuntu，还一边在使用LFS（linux from sctrach）。下面就是记录在使用Linux的过程中的基本配置。Linux技术类文章，例如Linux内核，驱动，SHELL脚本等。
