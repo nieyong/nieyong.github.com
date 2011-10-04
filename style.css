@@ -278,7 +278,10 @@ pre {
     padding: 5px 5px 5px 5px;
 }
 table {margin-left: 2em;}
-blockquote {padding: 0.4em; background-color: #f6f5eb;}
+blockquote {
+    padding: 0.2em; 
+    border-left: 2px solid #ffa500;
+}
 th, td {border: 1px solid #ccc; padding: 0.3em;}
 th {background-color: #f0f0f0;}
 
