@@ -56,9 +56,20 @@ alternatives 还有一些功能，包括删除一个可选项等等。同样，�
     tar cjf test.tar.bz2 *.html
 查看某个压缩包中的所有文件，以.tar.bz2压缩包为例：
     tar tjf test.tar.bz2
-我想把一个文件abc.txt和一个目录dir1压缩成为yasuo.zip：
-    zip -r yasuo.zip abc.txt dir1
 
+把一个文件abc.txt和一个目录dir1压缩成为yasuo.zip：
+{{{
+# zip -r yasuo.zip abc.txt dir1  //压缩的是个文件夹，则要加上-r参数，表示调用递归压缩
+# zip -r yasuo abc.txt dir1	//不许要增加.zip后缀，也可以达到同样压缩成yasuo.zip文件的目的
+}}}
+查看某个zip包中的内容，但是不解压缩：
+    unzip -t test.zip
+
+在zip命令中，压缩某个目录下的所有文件，但是不包含某种类型的 *文件* ，使用-x选项：
+    zip -r test.zip dir1 -x \*.o	//压缩dir1目录下所有的文件，除去所有的.o文件。其中\的目的是排除所有子目录下的.o文件。这个解释好像不完全，理解得不够，查看man zip。
+
+在zip命令中，压缩某个目录下的所有文件，但是不包含某个子目录，这次应该怎么写呢？
+    zip -r test6 test3 -x ./test3/bin/\* -x ./test3/.git/\*	//压缩test3目录为test6.zip文件，但是不包含./test3/bin/目录下的所有文件（包括路径），也不包括./test3/.git/目录下的所有文件和目录。这里，如果将反斜杠去掉，则不能够达到去除目录的作用，则只会不包括./test3/bin/目录下的所有文件（注意，不包括目录）。
 
 == 内存检查命令 ==
 * free

@@ -1,0 +1,6 @@
+记录平时github使用问题。
+
+== github和轻量标记语言 ==
+github支持的轻量标记语言有reStructuredText和markdown，能够直接渲染这两种语言。reStructuredText是python文档的专用语法。[https://github.com/gotgit/gotgithub gotgithub]这本书就是使用reStructuredText系统写作的。
+
+如果使用vimwiki的语法，那么是否一定需要转换为html才行呢，如何将vimwiki编辑的文章放到网上，然后大家一起协同工作呢？或者说，能否使用github作为一个团队的wiki呢？

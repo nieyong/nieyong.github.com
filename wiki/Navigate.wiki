@@ -14,13 +14,15 @@
 * [[linux rpm]]
 * [[linux app]]
 * [[linux command]]
+* [[linux from scratch]]
 
 == Others ==
 * [[wordpress theme]]
 * [[git使用笔记]]
 * [[git使用思考]]
+* [[github使用笔记]]
 * [[SSH]]
-* [[linux from scratch]]
+* [[Vim]]
 
 == 嵌入式开发 ==
 * [[LCD wiki]]
