@@ -1,2 +1,6 @@
 == gmlive ==
 可以看电视，不过效果一直不怎么好，和网速有关。
+
+== Linux的pdf阅读器 ==
+Foxit Reader 速度最快，如果KDE用 okular。
+至于 Adobe 的，支持加密文件，但是速度很慢，而且安全问题多多。
