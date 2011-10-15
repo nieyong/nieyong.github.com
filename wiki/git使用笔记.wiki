@@ -138,3 +138,19 @@ git clone git@github.com:nieyong/android_packages_apps_Launcher-1.git
 == git diff的用法 ==
 查看使用命令git add加载到暂存区的文件所做的修改，使用命令：
     git diff --cached
+
+== git分支与合并 ==
+git分支与合并主要阅读了《pro git》一书的分支一章，强烈建议。
+
+查看现在所有分支
+    #git branch
+创建一个新的分支
+    #git branch hotfix	//hotfix为新创建分支名
+切换到另外一个分支
+    #git checkout hotfix	//hotfix为已经创建的分支
+创建一个新的分支并且同时切换到该分支
+    #git checkout -b 'hotfix'  //hotfix为新创建分支名
+删除一个分支
+    #git branch -d hotfix	//删除hotfix分支
+合并某一个分支到本身所在的分支
+    #git merge hotfix		//合并hotfix分支的修改到本身所在的分支

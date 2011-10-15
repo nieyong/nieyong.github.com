@@ -186,6 +186,57 @@ export LESS=FRX
 <p>
 git clone git@github.com:nieyong/android_packages_apps_Launcher-1.git 
 </p>
+
+
+<h2 id="toc_0.6">git diff的用法</h2>
+<p>
+查看使用命令git add加载到暂存区的文件所做的修改，使用命令：
+</p>
+<blockquote>
+git diff --cached
+</blockquote>
+
+<h2 id="toc_0.7">git分支与合并</h2>
+<p>
+git分支与合并主要阅读了《pro git》一书的分支一章，强烈建议。
+</p>
+
+<p>
+查看现在所有分支
+</p>
+<blockquote>
+#git branch
+</blockquote>
+<p>
+创建一个新的分支
+</p>
+<blockquote>
+#git branch hotfix	//hotfix为新创建分支名
+</blockquote>
+<p>
+切换到另外一个分支
+</p>
+<blockquote>
+#git checkout hotfix	//hotfix为已经创建的分支
+</blockquote>
+<p>
+创建一个新的分支并且同时切换到该分支
+</p>
+<blockquote>
+#git checkout -b 'hotfix'  //hotfix为新创建分支名
+</blockquote>
+<p>
+删除一个分支
+</p>
+<blockquote>
+#git branch -d hotfix	//删除hotfix分支
+</blockquote>
+<p>
+合并某一个分支到本身所在的分支
+</p>
+<blockquote>
+#git merge hotfix		//合并hotfix分支的修改到本身所在的分支
+</blockquote>
 </div>
 <div id="footer">
     <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
