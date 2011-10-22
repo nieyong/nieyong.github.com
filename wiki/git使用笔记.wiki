@@ -127,7 +127,13 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 查看文件的修改情况，使用命令 git diff src。
 
 使用git log时要实现自动换行，不要长行截断模式，可以设置LESS环境变量（分页器）：
-    export LESS=FRX
+    #export LESS=FRX
+或者，你可以配置git的分页器（pager）配置文件为-FRX。如果你想使用原来的长行截断模式，那么就使用-FRSX选项。
+    #git config --global core.pager 'less -+$LESS -FRX'
+
+
+中文无法显示，使用8进制字符编码来显示的问题：
+    #git config --global core.quotepath false
 
 == 扩展阅读 ==
 http://zhwen.org/?p=articles/git
