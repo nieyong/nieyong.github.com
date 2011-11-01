@@ -129,3 +129,23 @@ Now, follow directions above to install gstreamer.
 Fedora 10安装amarok中文乱码解决办法 
 http://kpjack.blog.51cto.com/627289/128145
 
+编写一个MPlayer的基本的方法，就是重定向MPlayer的标准输入输出到管道，通过读取MPlayer的输出来分析MPlayer的信息和状态，通过向MPlayer的标准输入发送命令来控制播放。	
+
+和VLC、Xine不太一样，MPlayer采用控制台的输入输出来和外壳程序打交道。而VLC和Xine则提供了一堆API，相对比较容易一些。 
+
+
+MPlayer的命令行参数相当复杂，需要仔细阅读其文档和代码。
+    向MPlayer发送的命令可以参考 http://www.mplayerhq.hu/DOCS/tech/slave.txt
+    MPlayer的man page看这里     http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.html
+    SMplayer的源代码                https://smplayer.svn.sourceforge.net/svnroot/smplayer
+
+
+
+    最开始的想法是问答式的，在需要某个状态时向MPlayer发命令，然后阻塞等待MPlayer返回，这样效率比较低，就改成了现在这样子，有一个后台线程负责接收
+
+Mplayer的输出并进行分析，状态变量都在类实例里面保存一份，这样就不必等待，比较快一点。
+    在编写中遇到的一些问题：
+    1. 显示到某个窗口上，-wid 窗口句柄值 -vo directx:noaccel，如果不禁用加速则显示不出来；但是smplayer不禁用也可以，真神奇。
+    2. -identify可以让MPlayer在开始播放之后显示一堆信息，很方便
+    3. 似乎没有办法获取音量？于是自己维护了一个，每次启动后设置一下
+    4. 设置MPlayer的working dir很重要，一方面截屏的图片保存在那里，另外像-vo jpeg:outdir=这样的选项Windows下没法设全路径，也要靠当前目录。

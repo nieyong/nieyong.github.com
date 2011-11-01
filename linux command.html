@@ -155,6 +155,155 @@ free
 top
 </li>
 </ul>
+
+
+<h2 id="toc_0.5">dmidecode</h2>
+<p>
+dmidecode(DMI table decoder)。它可以全面的显示你系统的信息，包括bios、cpu、内存等信息。
+</p>
+
+
+<h2 id="toc_0.6">我喜欢直接把用的用户提升为root</h2>
+<p>
+netseek ALL=(ALL) NOPASSWD: ALL
+</p>
+
+
+<h2 id="toc_0.7">文件拷贝</h2>
+<p>
+[ny@localhost Templates]$ cp -v test.c{,.tmp}
+<code>test.c' -&gt; </code>test.c.tmp'
+文件的拷贝，文件名添加扩展
+</p>
+
+
+<h2 id="toc_0.8">patch  命令</h2>
+<p>
+使用专门格式的补丁文件进行修改
+-i
+</p>
+
+<h2 id="toc_0.9">nmap</h2>
+<p>
+导读：nmap是Linux下最常使用的安全扫描工具，经典中的经典。以下是正文：
+</p>
+
+<p>
+这里是 10 条 nmap 的技巧，运行于 CLI 环境下，如果你更喜欢用 GUI 工具的话，请用 Zenmap 。
+</p>
+
+<p>
+1) 获取远程主机的系统类型及开放端口
+</p>
+
+<p>
+nmap -sS -P0 -sV -O &lt;target&gt;
+</p>
+
+<p>
+这里的 &lt; target &gt; 可以是单一 IP, 或主机名，或域名，或子网
+</p>
+
+<p>
+-sS TCP SYN 扫描 (又称半开放,或隐身扫描)
+-P0 允许你关闭 ICMP pings.
+-sV 打开系统版本检测
+-O 尝试识别远程操作系统
+其它选项:
+</p>
+
+<p>
+-A 同时打开操作系统指纹和版本检测
+-v 详细输出扫描情况.
+</p>
+
+<p>
+nmap -sS -P0 -A -v &lt; target &gt;
+</p>
+
+<p>
+2) 列出开放了指定端口的主机列表
+</p>
+
+<p>
+nmap -sT -p 80 -oG – 192.168.1.* | grep open
+</p>
+
+<p>
+3) 在网络寻找所有在线主机
+</p>
+
+<p>
+nmap -sP 192.168.0.*
+</p>
+
+<p>
+或者也可用以下命令：
+</p>
+
+<p>
+nmap -sP 192.168.0.0/24
+</p>
+
+<p>
+指定 subnet
+</p>
+
+<p>
+4) Ping 指定范围内的 IP 地址
+</p>
+
+<p>
+nmap -sP 192.168.1.100-254
+</p>
+
+<p>
+5) 在某段子网上查找未占用的 IP
+</p>
+
+<p>
+nmap -T4 -sP 192.168.2.0/24 &amp;&amp; egrep "00:00:00:00:00:00" /proc/net/arp
+</p>
+
+<p>
+6) 在局域网上扫找 Conficker 蠕虫病毒
+</p>
+
+<p>
+nmap -PN -T4 -p139,445 -n -v --script=smb-check-vulns --script-args safe=1 192.168.0.1-254
+</p>
+
+<p>
+7) 扫描网络上的恶意接入点 （rogue APs）.
+</p>
+
+<p>
+nmap -A -p1-85,113,443,8080-8100 -T4 --min-hostgroup 50 --max-rtt-timeout 2000 --initial-rtt-timeout 300 --max-retries 3 --host-timeout 20m --max-scan-delay 1000 -oA wapscan 10.0.0.0/8
+</p>
+
+<p>
+8 ) 使用诱饵扫描方法来扫描主机端口
+</p>
+
+<p>
+sudo nmap -sS 192.168.0.10 -D 192.168.0.2
+</p>
+
+<p>
+9) 为一个子网列出反向 DNS 记录
+</p>
+
+<p>
+nmap -R -sL 209.85.229.99/27 | awk '{if($3=="not")print"("$2") no PTR";else print$3" is "$2}' | grep '('
+</p>
+
+<p>
+10) 显示网络上共有多少台 Linux 及 Win 设备?
+</p>
+
+<p>
+sudo nmap -F -O 192.168.0.1-255 | grep "Running: " &gt; /tmp/os; echo "$(cat /tmp/os | grep Linux | wc -l) Linux device(s)"; echo "$(cat /tmp/os | grep Windows | wc -l) Window(s) device" 
+</p>
 </div>
 <div id="footer">
     <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>

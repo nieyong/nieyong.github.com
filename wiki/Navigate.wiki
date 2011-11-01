@@ -15,6 +15,10 @@
 * [[linux app]]
 * [[linux command]]
 * [[linux from scratch]]
+* [[linux games]]
+* [[linux version]]
+* [[linux samba]]
+
 
 == Others ==
 * [[wordpress theme]]

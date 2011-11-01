@@ -4,3 +4,16 @@ plasca workplace
 
   The System Tray
   ksystraycmd
+
+kdm  KDE Desktop Manager   配置文件是kdmrc
+kdm provides a graphical interface that allows you to log in to a system.
+xdm   X Desktop Manager
+
+
+kde的路径
+find / -name greeter.dtd
+/usr/share/kde4/apps/doc/kdm/greeter.dtd
+
+
+kdm主题的存放路径
+/usr/share/kde4/apps/kdm/themes

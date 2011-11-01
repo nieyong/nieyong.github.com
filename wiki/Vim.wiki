@@ -8,3 +8,7 @@ autocmd BufNewFile      *.java  0r ~/.vim/files/skeletons/java.skel
 autocmd BufNewFile      *.java  normal gnp
 以上这条命令让我在新建 java 文件时自动运行 gnp 命令, 这个命令进行一些特殊化
 处理, 比如将新 java 文件中的 __date__ 替换成今天的日期什么的.
+
+== vim常用命令 ==
+去掉一段中的空行：
+:g/^$/d 
