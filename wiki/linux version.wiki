@@ -1,0 +1,26 @@
+== Puppy Linux ==
+Puppy Linux是由Barry Kauler主导开发的一个以体积小、速度快闻名的小型Linux发行版。
+* 官方网址：http://www.puppylinux.org/
+* 下载：http://www.puppylinux.org/downloads
+* 中文论坛：http://puppy.cnbits.com/
+
+== Debian ==
+Debian的介绍见百度百科：http://baike.baidu.com/view/40687.htm
+官方网址：http://www.debian.org
+
+== Ubuntu == 
+Ubuntu 是基于 Debian 之上，旨在创建一个可以为桌面和服务器提供一个最新且一贯的 Linux 系统。Ubuntu 囊括了大量从 Debian 发行版精挑细选的软件包，同时保留了 Debian 强大的软件包管理系统，以便简易的安装或彻底的删除程序。
+* 官方网址：http://www.ubuntu.com/
+* 下载地址：http://www.ubuntu.com.cn/getubuntu/download
+
+== CentOS ==
+CentOS计划所推出──全名为"社区企业操作系统"（Community Enterprise Operating System）的这个计划是在2003年红帽决定不再提供免费的技术支持及产品认证之后的部份"红帽重建者"（Red Hat rebuilders）之一。
+
+== openSUSE ==
+openSUSE 原名 SUSE Linux，10.2版本以后的 SUSE Linux 改名 openSUSE。
+
+== Mandriva Linux ==
+Mandriva Linux是一个以桌面应用为主的Linux操作系统，使用RPM为基础的套件和KDE（目前也提供GNOME）桌面环境，并且又添加了轻巧便捷的LXDE桌面环境。Mandriva 是来自浪漫之国--法国的 Linux 发行套件之一。
+
+== CRUX ==
+CRUX 是一款为 i686 优化的轻量级的 Linux 发行版，提供特别精简过最新软件，同时提供 Port 架构来管理软件。arch的理念源于crux。ports没有什么不好。要我划分，deb、rpm、arch pkg都是一类，ebuilds和ports才是另一类。

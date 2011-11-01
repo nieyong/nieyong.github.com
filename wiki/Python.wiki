@@ -1,0 +1,11 @@
+== 如何查看Python的工作路径 ==
+可以用调Python出来查看，在终端输入python，然后
+{{{
+import os
+os.getcwd()
+}}}
+你就可以看见了，getcwd()得到的是工作目录。查看Python的安装路径
+{{{
+import sys
+print sys.path
+}}}
