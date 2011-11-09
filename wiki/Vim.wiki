@@ -1,14 +1,29 @@
 == autocmd的使用 ==
 :autocmd!               删除所有之前的自动命令.
+{{{
 autocmd FileType        java  source ~/.vim/files/java.vim
 autocmd FileType        java  source ~/.vim/files/jcommenter.vim
+}}}
 以上两条命令让我在打开 java 文件时才应用后面提到的两个配置文件.
+{{{
 autocmd BufNewFile      *.java  0r ~/.vim/files/skeletons/java.skel
+}}}
 以上这条命令让我在新建 java 文件时自动加入 java.skel 文件的内容.
+{{{
 autocmd BufNewFile      *.java  normal gnp
-以上这条命令让我在新建 java 文件时自动运行 gnp 命令, 这个命令进行一些特殊化
-处理, 比如将新 java 文件中的 __date__ 替换成今天的日期什么的.
+}}}
+以上这条命令让我在新建 java 文件时自动运行 gnp 命令, 这个命令进行一些特殊化处理, 比如将新 java 文件中的 __date__ 替换成今天的日期什么的.
 
 == vim常用命令 ==
 去掉一段中的空行：
-:g/^$/d 
+    :g/^$/d 
+查看文件的类型，例如是C文件，CPP文件，Python文件等
+    :set filetype
+一般经常和autocmd FileType xxx使用
+
+== vim错误查找办法 ==
+例如有下面这样一个错误，如何找到帮助文档呢？
+{{{
+E122: Function SearchWiki already exists, add ! to replace it
+}}}
+你可以直接在输入:help e122就可以。

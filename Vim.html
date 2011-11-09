@@ -1,0 +1,80 @@
+<html>
+<head>
+	<link rel="Stylesheet" type="text/css" href="style.css" />
+        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
+        <title>Vim</title>
+</head>
+<body>
+	<div id="header"> 
+	    <div id="headerlogo">
+		<h1><a href="index.html">NieNet 知识库</a></h1>
+		<p>Edit by Vimwiki--Powered by Github Pages</p>
+	    </div>
+
+	    <div id="headernav">
+		<ul id="nav">
+		    <li><a href="index.html">首页</a></li>
+		    <li><a href="Navigate.html">本站导图</a> </li>
+		    <li><a href="AboutMe.html">关于</a> </li>
+		    <li><a href="http://nienet.com">返回NieNet</a></li>
+		</ul>
+	    </div>
+	</div> 
+        <div id="wrap">
+<h2 id="toc_0.1">autocmd的使用</h2>
+<p>
+:autocmd!               删除所有之前的自动命令.
+</p>
+<pre>
+autocmd FileType        java  source ~/.vim/files/java.vim
+autocmd FileType        java  source ~/.vim/files/jcommenter.vim
+</pre>
+<p>
+以上两条命令让我在打开 java 文件时才应用后面提到的两个配置文件.
+</p>
+<pre>
+autocmd BufNewFile      *.java  0r ~/.vim/files/skeletons/java.skel
+</pre>
+<p>
+以上这条命令让我在新建 java 文件时自动加入 java.skel 文件的内容.
+</p>
+<pre>
+autocmd BufNewFile      *.java  normal gnp
+</pre>
+<p>
+以上这条命令让我在新建 java 文件时自动运行 gnp 命令, 这个命令进行一些特殊化处理, 比如将新 java 文件中的 _<em>date</em>_ 替换成今天的日期什么的.
+</p>
+
+<h2 id="toc_0.2">vim常用命令</h2>
+<p>
+去掉一段中的空行：
+</p>
+<blockquote>
+:g/^$/d 
+</blockquote>
+<p>
+查看文件的类型，例如是C文件，CPP文件，Python文件等
+</p>
+<blockquote>
+:set filetype
+</blockquote>
+<p>
+一般经常和autocmd FileType xxx使用
+</p>
+
+<h2 id="toc_0.3">vim错误查找办法</h2>
+<p>
+例如有下面这样一个错误，如何找到帮助文档呢？
+</p>
+<pre>
+E122: Function SearchWiki already exists, add ! to replace it
+</pre>
+<p>
+你可以直接在输入:help e122就可以。
+</p>
+</div>
+<div id="footer">
+    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+</div>
+</body>
+</html>
