@@ -21,13 +21,12 @@
 	    </div>
 	</div> 
         <div id="wrap">
-<p>
-install gstreamer-plugins-good
+<h2 id="toc_0.1">gstreamer</h2>
+<pre>
+yum install gstreamer-plugins-good
 yum install gstreamer-plugins-bad
 yum install gstreamer-plugins-ugly
-</p>
 
-<p>
 [root@localhost yum.repos.d]# rpm -qa |grep gstreamer
 gstreamer-0.10.28-2.fc12.i686
 phonon-backend-gstreamer-4.4.0-3.fc12.i686
@@ -39,92 +38,107 @@ gstreamer-plugins-ugly-0.10.13-1.fc12.i686
 gstreamer-plugins-base-0.10.25-5.fc12.i686
 gstreamer-plugins-good-0.10.21-1.fc12.i686
 gstreamer-tools-0.10.28-2.fc12.i686
-</p>
+</pre>
 
-
-
-
-<p>
-Getting mp3 support for RhythmBox by Roger Ignazio, III 6/18/05
-</p>
-
+<h2 id="toc_0.2">mp3 and RhythmBox</h2>
 <p>
 To enable mp3 support in RhythmBox, follow these directions:
 </p>
-
-<p>
+<pre>
 su -
 &lt;root password&gt;
-</p>
-
-<p>
 yum -y install gstreamer gstreamer-plugins-mp3
+</pre>
+<p>
+When installed, as root run: gst-register-0.8.Then type exit and run gst-register-0.8 as yourself.A huge list will go flying by, then it will end and return you to a [user@hostname dir]# prompt.When done, open RhythmBox. Nothing will appear different, but mp3 support IS there.
 </p>
 
 <p>
-When installed, as root run: gst-register-0.8
-Then type exit and run gst-register-0.8 as yourself.
-A huge list will go flying by, then it will end and return you to a [user@hostname dir]# prompt.
-When done, open RhythmBox. Nothing will appear different, but mp3 support IS there.
+NOTICE: to do the above process, you NEED livna repos. If you do not have livna repos set up, follow these directions:
 </p>
-
-
-<p>
-***NOTICE: to do the above process, you NEED livna repos. If you do not have livna repos set up, follow these directions:
-</p>
-
-<p>
+<pre>
 su -
 &lt;root password&gt;
-</p>
 
-<p>
-rpm --import <a href="http://rpm.livna.org/RPM-LIVNA-GPG-KEY">http://rpm.livna.org/RPM-LIVNA-GPG-KEY</a>
-</p>
+rpm --import http://rpm.livna.org/RPM-LIVNA-GPG-KEY
 
-<p>
 Copy and paste this into your /etc/yum.conf file:
 [livna]
 name=Livna.org Fedora Compatible Packages
-baseurl=<a href="http://rpm.livna.org/fedora/$releasever/$basearch/RPMS.lvn">http://rpm.livna.org/fedora/$releasever/$basearch/RPMS.lvn</a>
+baseurl=http://rpm.livna.org/fedora/$releasever/$basearch/RPMS.lvn
 gpgcheck=1
 enabled=1
+</pre>
+<p>
+OK. livna repos is now a part of yum.Now, follow directions above to install gstreamer.
+</p>
+
+
+<h2 id="toc_0.3">Fedora 10安装amarok中文乱码解决办法</h2>
+<p>
+<a href="http://kpjack.blog.51cto.com/627289/128145">Fedora 10安装amarok中文乱码解决办法</a>
+</p>
+
+<h2 id="toc_0.4">mplayer GUI</h2>
+<p>
+觉得 mplayer 自带那个 GUI 程序用着别扭（操作不便、中文支持不好之类），还不想装 nogui 版本的可以看看这个：gnome-mplayer，并不依赖任何gnome组件，gconf都可以不要Linux下我是Mplayer+Realplay用了一年 smplayer，换回来了。就那么几个需要配置的地方和几个常用快捷键，smplayer 弄得复杂了。
 </p>
 
 <p>
-OK. livna repos is now a part of yum.
-Now, follow directions above to install gstreamer.
+<a href="http://shareitem.org/archive/gmplayer-skill.html">gmplayer 设置</a>
+</p>
+
+<p>
+<a href="http://blog.sina.com.cn/s/blog_5392989a0100aj0q.html">安装GMplayer网络电视软件</a>
 </p>
 
 
 <p>
-Fedora 10安装amarok中文乱码解决办法 
-<a href="http://kpjack.blog.51cto.com/627289/128145">http://kpjack.blog.51cto.com/627289/128145</a>
-</p>
-
-
-
-
-<p>
-觉得 mplayer 自带那个 GUI 程序用着别扭（操作不便、中文支持不好之类），还不想装 nogui 版本的可以看看这个：
-gnome-mplayer，并不依赖任何gnome组件，gconf都可以不要
-Linux下我是Mplayer+Realplay
-用了一年 smplayer，换回来了。就那么几个需要配置的地方和几个常用快捷键，smplayer 弄得复杂了。
-</p>
-
-
-<p>
-gmplayer 设置
-<a href="http://shareitem.org/archive/gmplayer-skill.html">http://shareitem.org/archive/gmplayer-skill.html</a>
+编写一个MPlayer的基本的方法，就是重定向MPlayer的标准输入输出到管道，通过读取MPlayer的输出来分析MPlayer的信息和状态，通过向MPlayer的标准输入发送命令来控制播放。	
 </p>
 
 <p>
-安装GMplayer网络电视软件
-<a href="http://blog.sina.com.cn/s/blog_5392989a0100aj0q.html">http://blog.sina.com.cn/s/blog_5392989a0100aj0q.html</a>
+和VLC、Xine不太一样，MPlayer采用控制台的输入输出来和外壳程序打交道。而VLC和Xine则提供了一堆API，相对比较容易一些。 
 </p>
 
+<p>
+MPlayer的命令行参数相当复杂，需要仔细阅读其文档和代码。
+</p>
+<ul>
+<li>
+<a href="http://www.mplayerhq.hu/DOCS/tech/slave.txt">向MPlayer发送的命令可以参考</a>
+</li>
+<li>
+<a href="http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.html">MPlayer的man page看这里</a>
+</li>
+<li>
+<a href="https://smplayer.svn.sourceforge.net/svnroot/smplayer">SMplayer的源代码</a>
+</li>
+</ul>
 
+<p>
+最开始的想法是问答式的，在需要某个状态时向MPlayer发命令，然后阻塞等待MPlayer返回，这样效率比较低，就改成了现在这样子，有一个后台线程负责接收
+</p>
 
+<p>
+Mplayer的输出并进行分析，状态变量都在类实例里面保存一份，这样就不必等待，比较快一点。在编写中遇到的一些问题：
+</p>
+<ol>
+<li>
+显示到某个窗口上，-wid 窗口句柄值 -vo directx:noaccel，如果不禁用加速则显示不出来；但是smplayer不禁用也可以，真神奇。
+</li>
+<li>
+-identify可以让MPlayer在开始播放之后显示一堆信息，很方便
+</li>
+<li>
+似乎没有办法获取音量？于是自己维护了一个，每次启动后设置一下
+</li>
+<li>
+设置MPlayer的working dir很重要，一方面截屏的图片保存在那里，另外像-vo jpeg:outdir=这样的选项Windows下没法设全路径，也要靠当前目录。
+</li>
+</ol>
+
+<h2 id="toc_0.5">終端模擬器</h2>
 <p>
 這些都是所謂的「終端模擬器」,這是一些可以讓您的計算機界面變得易於操作，並解可以幫助您和對話的程序。現在有很多的終端模擬器供我們使用。一般的Linux系統通常包含多種終端模擬器，就像:xterm、rxvt、konsole、kvt、gnome-terminal、nxterm、 eterm. 
 </p>

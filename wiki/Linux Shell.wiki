@@ -48,13 +48,14 @@ cd /home/winter
 例如：您用命令 mkdir peter/pan/documents/tinkerbell 新建了一个目录，现在您向用命令'cd'进入该目录，您可以用 cd !$，shell 将把前一个命令'mkdir'的参数添加到现在的'cd'后面。当您更深入了解Linux后，将看到这些快捷方式在其他应用程序下输入时，有时也有效，比如，在浏览器中的输入框中。
 
 == LD_LIBRARY_PATH ==
-Linux环境变量名，该环境变量主要用于指定查找共享库(动态链接库)时除了默认路径之外的其他路径。(该路径在默认路径之前查找)当执行函数动态链接.so时，如果此文件不在缺省目录下‘/usr/local/lib’ and ‘/usr/lib’.  那么就需要指定环境变量LD_LIBRARY_PATH 假如现在需要在已有的环境变量上添加新的路径名，则采用如下方式：
+Linux环境变量名，该环境变量主要用于指定查找共享库(动态链接库)时除了默认路径之外的其他路径。(该路径在默认路径之前查找)当执行函数动态链接.so时，如果此文件不在缺省目录下‘/usr/local/lib’ and ‘/usr/lib’.  那么就需要指定环境变量LD_LIBRARY_PATH。假如现在需要在已有的环境变量上添加新的路径名，则采用如下方式：
 
-LD_LIBRARY_PATH=NEWDIRS:$LD_LIBRARY_PATH.（newdirs是新的路径串）
-（注：gnu系统可以自动添加在 /etc/ld.so.conf文件中来实现环境变量的设置）
+LD_LIBRARY_PATH=NEWDIRS:$LD_LIBRARY_PATH.（newdirs是新的路径串）（注：gnu系统可以自动添加在 /etc/ld.so.conf文件中来实现环境变量的设置）
 
+{{{
 [root@localhost etc]# ls /etc/ld.so*
 /etc/ld.so.cache  /etc/ld.so.conf
 
 kernel-2.6.31.5-127.fc12.i686.PAE.conf  qt-i386.conf   xulrunner-32.conf
 mysql-i386.conf                         tix-i386.conf
+}}}

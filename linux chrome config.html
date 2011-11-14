@@ -2,7 +2,7 @@
 <head>
 	<link rel="Stylesheet" type="text/css" href="style.css" />
         <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>linux samba</title>
+        <title>linux chrome config</title>
 </head>
 <body>
 	<div id="header"> 
@@ -21,14 +21,26 @@
 	    </div>
 	</div> 
         <div id="wrap">
-<h2 id="toc_0.1">列出全部的共享</h2>
+<h2 id="toc_0.1">Linux Software Repositories</h2>
 <p>
-#smbclient -L 机器IP -U 用户名%密码
+<a href="http://www.google.com/linuxrepositories/index.html">Linux Software Repositories</a>
 </p>
 
-<h2 id="toc_0.2">看到共享目录后</h2>
 <p>
-#smbclient //机器IP/共享目录 -U 用户名称
+As root, add the following to a file called google.repo in /etc/yum.repos.d/:
+</p>
+<pre>
+[google]
+name=Google - i386
+baseurl=http://dl.google.com/linux/rpm/stable/i386
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub  
+</pre>
+
+<h2 id="toc_0.2">chrome &amp; IBus</h2>
+<p>
+Chrome中一旦退格IBus无法输入，一旦按了backspace删除之前输入的文字，就要重新启动ibus才能输入，不然输入什么都是不能显示的，已经证实是iBus的key snooper特性导致了这个问题。可以考虑将iBus升级到1.3.5以上（添加PPA）
 </p>
 </div>
 <div id="footer">
