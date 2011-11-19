@@ -136,10 +136,7 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
     #git config --global core.quotepath false
 
 == 扩展阅读 ==
-http://zhwen.org/?p=articles/git
-
-git clone git@github.com:nieyong/android_packages_apps_Launcher-1.git 
-
+[http://zhwen.org/?p=articles/git git使用总结 作者：许振文]
 
 == git diff的用法 ==
 查看使用命令git add加载到暂存区的文件所做的修改，使用命令：

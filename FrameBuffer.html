@@ -53,12 +53,18 @@ GUI程序对LCD的操作是通过内存映射mmap()的机制来往LCD屏上写�
 期待你的回音,谢谢!!!
 </p>
 
-
-
+<ul>
+<li>
+Linux下的驱动程序常见的有char,block和net三种，但是还有其他的种类，比如usb等。这在ldd一书中也有讲述。framebuffer也是一种特殊情况。 
+</li>
+<li>
+fbmem.c不是用来修改的，而是一个基础的文件，用户的驱动要使用它。应该修改的是skeletonfb.c 
+</li>
+<li>
+fb.h,fbmem.c,skeletonfb.c,再看一个具体的驱动。如果都能看懂，大概就会写LDD驱动了：） 
+</li>
+</ul>
 <p>
-1 Linux下的驱动程序常见的有char,block和net三种，但是还有其他的种类，比如usb等。这在ldd一书中也有讲述。framebuffer也是一种特殊情况。 
-2 fbmem.c不是用来修改的，而是一个基础的文件，用户的驱动要使用它。应该修改的是skeletonfb.c 
-3 fb.h,fbmem.c,skeletonfb.c,再看一个具体的驱动。如果都能看懂，大概就会写LDD驱动了：） 
 我也正在看：） 
 </p>
 
@@ -74,16 +80,25 @@ GUI程序对LCD的操作是通过内存映射mmap()的机制来往LCD屏上写�
 </p>
 
 
+<h3 id="toc_0.3.1">Frame buffer与console</h3>
 <p>
-Frame buffer与console
 Framebuffer作为显卡在内核中的注册设备，为了满足应用需要，通常还要为console操作提供专用操作函数。Console是系统提供的一种特殊的文本输出终端，如图所示。常用的console已经不再是从前的单色显示，而是16色或者更多颜色显示。根据文本的代表的不同属性，显示不同的颜色。
 </p>
 
+<h3 id="toc_0.3.2">console和fb的高层理解</h3>
 <p>
-console和fb的高层理解
 当我们在fb中引入console后，就相当于把一张白纸变成了一个日记本。本来对于fb来说只有颜色和位置的关系，引入console后，首先就是console的描述。
+</p>
+
+<p>
 每个console相当于日记本的一页，不同的console可以切换。Console因为是要显示文本，又和字体联系到一起。Console的管理是十分复杂的，远远超过了framebuffer本身。在RH9中，我们可以自己体验一下console和fb的协调问题。
+</p>
+
+<p>
 使用Init3多用户模式登陆，这里是没有X server支持的。所有的输入输出都是基于console的。Framebuffer就相当于你的显示器。通过ALT+CTRL+F*，我们可以切换到不同的console，而每个console的设置都可以很独立的完成。每隔console会在自己的数据区记录历史命令，在不同的console可以登陆不同的用户到系统。但是，因为只有一个屏幕，所以当前可视的console只有一个。Frame buffer驱动程序要能够根据ALT+CTRL+F*切换命令去完成console的切换显示。
+</p>
+
+<p>
 这样大家应该明白frame buffer和console的关系了吧。后续我们会具体讲述fb对console的支持。但是对console本身不会设计太多，具体参考tty或console的设计。当完成了fb对console的支持，frame buffer device driver设计就完了：）
 </p>
 </div>

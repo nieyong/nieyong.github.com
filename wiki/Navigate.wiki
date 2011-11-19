@@ -27,6 +27,7 @@
 * [[github使用笔记]]
 * [[SSH]]
 * [[Vim]]
+* [[vimwiki-HTML站点]]
 
 == 嵌入式开发 ==
 * [[LCD wiki]]
@@ -34,10 +35,7 @@
 * [[FrameBuffer]]
 * [[LCD 驱动调试]]
 * [[嵌入式Linux的启动过程]]
+* [[PFN]]
 
 == CPU体系架构 ==
 * [[温故知新-x86体系架构]]
-
-== 较新编辑 ==
-* [[PFN]]
-* [[vimwiki-HTML站点]]
