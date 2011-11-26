@@ -1,5 +1,9 @@
 记录平时github使用问题。
 
+== 将github上的一个项目下载到本地 ==
+    git clone git@github.com:androidtv/android-xbmcremote.git
+使用git clone命令。
+
 == github和轻量标记语言 ==
 github支持的轻量标记语言有reStructuredText和markdown，能够直接渲染这两种语言。reStructuredText是python文档的专用语法。[https://github.com/gotgit/gotgithub gotgithub]这本书就是使用reStructuredText系统写作的。
 

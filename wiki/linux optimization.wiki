@@ -1,3 +1,9 @@
+== 常用命令 ==
+    ntsysv - simple interface for configuring runlevels
+ntsysv命令使用的是图形界面的配置方式，另外命令行的可以使用chkconfig命令。
+    ps -aux|grep sendmail
+其中,-aux选项的含义是输出所有的进程。
+
 == 内存占用多的程序 ==
 下面这些程序，在系统启动的时候就已经启动，占用了不少的内存，设置为手动启动。
 

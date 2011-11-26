@@ -21,7 +21,21 @@
 	    </div>
 	</div> 
         <div id="wrap">
-<h2 id="toc_0.1">内存占用多的程序</h2>
+<h2 id="toc_0.1">常用命令</h2>
+<blockquote>
+ntsysv - simple interface for configuring runlevels
+</blockquote>
+<p>
+ntsysv命令使用的是图形界面的配置方式，另外命令行的可以使用chkconfig命令。
+</p>
+<blockquote>
+ps -aux|grep sendmail
+</blockquote>
+<p>
+其中,-aux选项的含义是输出所有的进程。
+</p>
+
+<h2 id="toc_0.2">内存占用多的程序</h2>
 <p>
 下面这些程序，在系统启动的时候就已经启动，占用了不少的内存，设置为手动启动。
 </p>
@@ -32,7 +46,7 @@ kPackageKit:系统update，进行软件包的管理，每次启动，都会自�
 </p>
 
 
-<h2 id="toc_0.2">开机启动速度的优化。</h2>
+<h2 id="toc_0.3">开机启动速度的优化。</h2>
 <p>
 开机启动主要浪费时间的就集中在三个服务模块：cups、kudzu、network，分别为UNIX打印服务、自动检测新硬件、激活网络。经本人实机测试，发现针对性的经过一些配置后，系统启动速度提高非常多。方法如下：
 </p>
@@ -52,7 +66,7 @@ kPackageKit:系统update，进行软件包的管理，每次启动，都会自�
 </ul>
 
 
-<h2 id="toc_0.3">NFS导致启动慢的问题</h2>
+<h2 id="toc_0.4">NFS导致启动慢的问题</h2>
 <p>
 发现有几台redhat机器启动的时候，在启动NFS的时候停留很长时间。 于是google一把，发现解决方法如下：
 </p>
@@ -61,7 +75,7 @@ kPackageKit:系统update，进行软件包的管理，每次启动，都会自�
 用linux开发的朋友对这个问题一定很有体会，有时候开机时在start NFS这一步会停很长的时间，这个问题困扰了我很长的时间，今天终于忍不住上google搜索了一把，答案是因为每次客户端mount过NFS而又没有正常umount后，在/var/lib/nfs/rmtab里会留下记录，每次NFS启动的时候都会去check以前的IP，如果不通，要等到timeout才行。我cat rmtab看了一下，hoho，从上海，konka，TCL，Changhong用过的IP都在里面记着，难怪慢的象蜗牛一样！删了后试了一下，马上就起来了！ 
 </p>
 
-<h2 id="toc_0.4">FF的Flash插件</h2>
+<h2 id="toc_0.5">FF的Flash插件</h2>
 <p>
 npviewer.bin文件的CPU占有率很高，这个应该是 firefox 的 flash 插件弄的。安装个 flashblock 插件。
 </p>
@@ -71,7 +85,7 @@ Flashblock 扩展可以阻止网页上那些让人讨厌的 Flash。它将会阻
 </p>
 
 
-<h2 id="toc_0.5">KDE性能提升建议</h2>
+<h2 id="toc_0.6">KDE性能提升建议</h2>
 <p>
 <a href="http://www.linuxfans.org/bbs/thread-43317-1-1.html">http://www.linuxfans.org/bbs/thread-43317-1-1.html</a>
 </p>
