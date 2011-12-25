@@ -42,3 +42,108 @@ class 子类名 extends 父类名 implenments 接口名
 implements一般是实现接口。extends 是继承类。接口一般是只有方法声明没有定义的，那么java特别指出实现接口是有道理的，因为继承就有感觉是父类已经实现了方法，而接口恰恰是没有实现自己的方法，仅仅有声明，也就是一个方法头没有方法体。因此你可以理解成接口是子类实现其方法声明而不是继承其方法。
 
 但是一般类的方法可以有方法体，那么叫继承比较合理。引入包可以使用里面非接口的一切实现的类。那么是不是实现接口，这个你自己决定，如果想用到那么你不是实现，是不能调用这个接口的，因为接口就是个规范，是个没方法体的方法声明集合。我来举个例子吧：接口可以比作协议，比如我说 一个协议是“杀人”那么这个接口你可以用 砍刀去实现，至于怎么杀砍刀可以去实现，当然你也可以用抢来实现杀人接口，但是你不能用杀人接口去杀人，因为杀人接口只不过是个功能说明，是个协议，具体怎么干，还要看他的实现类。
+
+
+== 查看jar文件包 ==
+有些时候，我们需要查看一个jar文件中是否包含了某个方法，这个在linux下可以通过下面的命令来查询。
+    grepjar methodName class.jar 
+
+在linux下如何查看一个jar文件中有哪些类呢？如下命令查看的是test.jar中的class文件。
+    jar tf test.jar
+
+
+我在linux下安装了j2sdk-1_4_2_08-linux-i586.bin。但是为什么我没有JAR命令呢？显示-bash: jar: command not found
+jdk安装过程如下：
+{{{
+# ./j2sdk-1_4_2_08-linux-i586.bin
+# mv j2sdk1.4.2_08 /usr/local
+# ln -s /usr/local/j2sdk1.4.2_08 /usr/local/j2sdk
+}}}
+
+环境变量如下：
+{{{
+# /etc/profile
+
+# System wide environment and startup programs, for login setup
+# Functions and aliases go in /etc/bashrc
+
+pathmunge () {
+if ! echo $PATH | /bin/egrep -q "(^|:)$1($|:)" ; then
+if [ "$2" = "after" ] ; then
+PATH=$PATH:$1
+else
+PATH=$1:$PATH
+fi
+fi
+}
+
+# Path manipulation
+if [ `id -u` = 0 ]; then
+pathmunge /sbin
+pathmunge /usr/sbin
+pathmunge /usr/local/sbin
+fi
+
+pathmunge /usr/X11R6/bin after
+
+
+# No core files by default
+ulimit -S -c 0 > /dev/null 2>&1
+
+USER="`id -un`"
+LOGNAME=$USER
+MAIL="/var/spool/mail/$USER"
+
+HOSTNAME=`/bin/hostname`
+HISTSIZE=1000
+
+if [ -z "$INPUTRC" -a ! -f "$HOME/.inputrc" ]; then
+INPUTRC=/etc/inputrc
+fi
+
+export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE INPUTRC
+
+for i in /etc/profile.d/*.sh ; do
+if [ -r "$i" ]; then
+. $i
+fi
+done
+
+unset i
+unset pathmunge
+
+JAVA_HOME=/usr/local/j2sdk
+PATH=$PATH:JAVA_HOME/bin:JAVA_HOME/jre/bin
+CLASSPATH=.:JAVA_HOME/lib
+export PATH JAVA_HOME CLASSPATH
+}}}
+请问这是什么原因呢？我是初学者，希望各位达人指点下。
+
+
+
+
+
+
+
+
+
+
+
+
+环境变量没有设置对
+
+
+QUOTE:
+JAVA_HOME=/usr/local/j2sdk
+PATH=$PATH:JAVA_HOME/bin:JAVA_HOME/jre/bin
+CLASSPATH=.:JAVA_HOME/lib
+
+
+红色部分都是字符串，不是变量
+改成这样，然后执行一下profile或者重新登录一下，然环境变量起作用。
+JAVA_HOME=/usr/local/j2sdk
+PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
+CLASSPATH=.:$JAVA_HOME/lib
+复制代码
+
+如果还不行，你就到/usr/local/j2sdk/bin下面看看有有没有jar的命令了

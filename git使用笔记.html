@@ -246,6 +246,28 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 <blockquote>
 #git merge hotfix		//合并hotfix分支的修改到本身所在的分支
 </blockquote>
+
+<h2 id="toc_0.8">git log的用法</h2>
+<p>
+以适当的形式显示整个工程，或者多个文件，整个目录等的log信息。
+</p>
+<pre>
+[ny@localhost android-xbmcremote]$ git log --pretty=format:"%h - %ar : %s"
+3dc5868 - 3 months ago : New release: v0.8.7 beta1
+3dc5868 - 3 months ago : New release: v0.8.7 beta1
+aebb506 - 4 months ago : Changed: Set network location as non-required for better tablet3dc5868 - 3 months ago : New release: v0.8.7 beta1
+
+[ny@localhost android-xbmcremote]$ git log --date=short --pretty=format:"%h - %ad : %s"
+3dc5868 - 2011-08-28 : New release: v0.8.7 beta1
+aebb506 - 2011-08-14 : Changed: Set network location as non-required for better tablet support.
+ced6d79 - 2011-08-14 : Changed: New icon for text entry
+
+[ny@localhost android-xbmcremote]$ git log --date=short --pretty=format:"%ad : %s" --stat ./src/  ./res/layout/
+</pre>
+
+<p>
+详细的显示某次提交的log信息。
+</p>
 </div>
 <div id="footer">
     <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>

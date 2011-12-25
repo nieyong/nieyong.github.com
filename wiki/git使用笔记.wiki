@@ -157,3 +157,21 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
     #git branch -d hotfix	//删除hotfix分支
 合并某一个分支到本身所在的分支
     #git merge hotfix		//合并hotfix分支的修改到本身所在的分支
+
+== git log的用法 ==
+以适当的形式显示整个工程，或者多个文件，整个目录等的log信息。
+{{{
+[ny@localhost android-xbmcremote]$ git log --pretty=format:"%h - %ar : %s"
+3dc5868 - 3 months ago : New release: v0.8.7 beta1
+3dc5868 - 3 months ago : New release: v0.8.7 beta1
+aebb506 - 4 months ago : Changed: Set network location as non-required for better tablet3dc5868 - 3 months ago : New release: v0.8.7 beta1
+
+[ny@localhost android-xbmcremote]$ git log --date=short --pretty=format:"%h - %ad : %s"
+3dc5868 - 2011-08-28 : New release: v0.8.7 beta1
+aebb506 - 2011-08-14 : Changed: Set network location as non-required for better tablet support.
+ced6d79 - 2011-08-14 : Changed: New icon for text entry
+
+[ny@localhost android-xbmcremote]$ git log --date=short --pretty=format:"%ad : %s" --stat ./src/  ./res/layout/
+}}}
+
+详细的显示某次提交的log信息。
