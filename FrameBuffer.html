@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>FrameBuffer</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>FrameBuffer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,7 +21,8 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
+    <div id="wrap">
+	
 <h2 id="toc_0.1">Frame buffer</h2>
 <p>
 Linux的LCD驱动通常是以Framebuffer的方式工作的，不管是何种LCD控制器，其驱动结构和使用接口都是一样的，比如说一个字符设备接口"/dev/fb0"。 
@@ -43,7 +45,7 @@ GUI程序对LCD的操作是通过内存映射mmap()的机制来往LCD屏上写�
 </p>
 
 
-<h2 id="toc_0.2">Frame buffer 设备驱动的特殊之处</h2>
+<h2 id="toc_0.2">Frame buffer 设备驱动的特殊之处 </h2>
 <p>
 对于三楼的Samuel_Teng,你的说法我很理解,因为我最近在看标准内核中LCD驱动的例子,但是在读这个驱动的过程中,有一些地方我还不是很明白,希望你能指点. 
 首先,对于drivers/video/下的fbmem.c文件,在它里面虽然提供了register_framebuffer()等接口,这个函数中只有一个参数: *fb_info,这与我们看到的一般驱动不一样,一般的驱动利用register_chrdev()函数注册设备,在register_chrdev()中包括三个参数:主设备号,设备名和一个对设备操作的结构. 
@@ -56,13 +58,13 @@ GUI程序对LCD的操作是通过内存映射mmap()的机制来往LCD屏上写�
 <ul>
 <li>
 Linux下的驱动程序常见的有char,block和net三种，但是还有其他的种类，比如usb等。这在ldd一书中也有讲述。framebuffer也是一种特殊情况。 
-</li>
+
 <li>
 fbmem.c不是用来修改的，而是一个基础的文件，用户的驱动要使用它。应该修改的是skeletonfb.c 
-</li>
+
 <li>
 fb.h,fbmem.c,skeletonfb.c,再看一个具体的驱动。如果都能看懂，大概就会写LDD驱动了：） 
-</li>
+
 </ul>
 <p>
 我也正在看：） 
@@ -85,7 +87,7 @@ fb.h,fbmem.c,skeletonfb.c,再看一个具体的驱动。如果都能看懂，大
 Framebuffer作为显卡在内核中的注册设备，为了满足应用需要，通常还要为console操作提供专用操作函数。Console是系统提供的一种特殊的文本输出终端，如图所示。常用的console已经不再是从前的单色显示，而是16色或者更多颜色显示。根据文本的代表的不同属性，显示不同的颜色。
 </p>
 
-<h3 id="toc_0.3.2">console和fb的高层理解</h3>
+<h3 id="toc_0.3.2">console和fb的高层理解 </h3>
 <p>
 当我们在fb中引入console后，就相当于把一张白纸变成了一个日记本。本来对于fb来说只有颜色和位置的关系，引入console后，首先就是console的描述。
 </p>
@@ -101,9 +103,10 @@ Framebuffer作为显卡在内核中的注册设备，为了满足应用需要，
 <p>
 这样大家应该明白frame buffer和console的关系了吧。后续我们会具体讲述fb对console的支持。但是对console本身不会设计太多，具体参考tty或console的设计。当完成了fb对console的支持，frame buffer device driver设计就完了：）
 </p>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

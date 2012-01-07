@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>LCD Driver IC</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>LCD Driver IC</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,7 +21,8 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
+    <div id="wrap">
+	
 <h2 id="toc_0.1">LG LGDP4551 Smart LCD panel</h2>
 <p>
 config JZ_SLCD_LGDP4551, bool "LG LGDP4551 Smart LCD panel",Driver for Smart LCD LGDP4551, 8-bit sytem interface, 16BPP.
@@ -32,22 +34,22 @@ LGDP4551驱动在make menucofig中的配置位置：
 <ul>
 <li>
 -&gt; Device Drivers
-</li>
+
 <li>
 -&gt; Graphics support 
-</li>
+
 <li>
 -&gt; Support for frame buffer devices (FB [=y])
-</li>
+
 <li>
 -&gt; JZSOC LCD controller support (FB_JZSOC [=y])
-</li>
+
 <li>
 -&gt; JZ4740 Smart LCD controller support (FB_JZ4740_SLCD [=y])
-</li>
+
 <li>
 -&gt; SLCD Panel (&lt;choice&gt; [=y])
-</li>
+
 </ul>
 
 <p>
@@ -56,26 +58,26 @@ LGDP4551驱动在make menucofig中的配置位置：
 <ul>
 <li>
 SPFD5420A Smart LCD panel
-</li>
+
 <li>
 RULY Smart LCD panel (MAX Pixels 400x240) 
-</li>
+
 </ul>
 
-<h2 id="toc_0.2">LCD屏常用参数</h2>
+<h2 id="toc_0.2">LCD屏常用参数 </h2>
 <ol>
 <li>
 BPP：图像像素值的位数叫做图像的像素深度，又称为位/像素（BPP）
-</li>
+
 <li>
 玻璃：LG liquid crystal panel 
-</li>
+
 <li>
 Driver IC：R61509/SPFD5420A 可以互相替代 
-</li>
+
 <li>
 通讯：并行16bit命令 并行18bit数据 
-</li>
+
 </ol>
 
 <h2 id="toc_0.3">其它</h2>
@@ -107,13 +109,13 @@ Driver IC：R61509/SPFD5420A 可以互相替代
 <ol>
 <li>
 <a href="http://bbs.21ic.com/icview-213425-1-1.html">http://bbs.21ic.com/icview-213425-1-1.html</a>
-</li>
+
 <li>
 <a href="http://club.noahedu.com/thread-99852-1-1.html">http://club.noahedu.com/thread-99852-1-1.html</a>
-</li>
+
 <li>
 <a href="http://apps.hi.baidu.com/share/detail/23512369">http://apps.hi.baidu.com/share/detail/23512369</a>
-</li>
+
 </ol>
 
 <pre>
@@ -134,9 +136,10 @@ LCD_WR_REG(0x0001,0x0100);//S
 <p>
 你的屏，我们早就在用了。直接下载ALIENTEK MiniSTM32开发板的任何一个含液晶驱动的代码，里面就支持你的4531了的。偷偷的告诉你，代码同时兼容：9320，9325，4531，4558，5408，68021等这些型号的液晶...
 </p>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

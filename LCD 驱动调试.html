@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>LCD 驱动调试</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>LCD ��������</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,26 +21,27 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
+    <div id="wrap">
+	
 <p>
 为一块新的LCD屏编写了驱动，然后编译进内核，下载到开发板上，这时候，屏幕也许除了背光，没有其它任何的显示，这个时候，我们应该怎么进行调试呢？下面是几个最基本的问题：
 </p>
 <ul>
 <li>
 如何确定LCD驱动加载了呢？
-</li>
+
 <li>
 LCD驱动的基本信息是否正确呢，如何检查？
-</li>
+
 <li>
 能否通过应用程序来对LCD屏幕进行控制呢？这里的FrameBuffer的应用程序如何编写呢？
-</li>
+
 </ul>
 <p>
 下面是一些我现在用到的办法：
 </p>
 
-<h2 id="toc_0.1">命令行查看FrameBuffer的信息</h2>
+<h2 id="toc_0.1">命令行查看FrameBuffer的信息 </h2>
 <pre>
 # cat /proc/fb		//在/proc目录，查看当前系统中的帧缓冲设备
 0 jz-lcd
@@ -82,7 +84,7 @@ register_framebuffer()函数就是将LCD控制器（jz-lcd）的驱动注册到f
 在刚开始的时候，由于没有在.config文件中将jz-lcd驱动选项去掉，所以加载了两个帧缓冲设备，如上面所示。
 </p>
 
-<h2 id="toc_0.2">命令行查看FrameBuffer的中断信息</h2>
+<h2 id="toc_0.2">命令行查看FrameBuffer的中断信息 </h2>
 <p>
 查看到帧设备之后，那么帧设备有没有工作呢？我们可以通过产看中断的办法，大概的看到帧设备是否工作。
 </p>
@@ -196,9 +198,10 @@ DMA channel 0 is requested by SLCD!
 <p>
 至于添加答应操作，那么就使用dprintk()函数就可以了，用法和printf()类似。
 </p>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

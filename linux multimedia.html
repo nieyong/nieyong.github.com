@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>linux multimedia</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>linux multimedia</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,7 +21,8 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
+    <div id="wrap">
+	
 <h2 id="toc_0.1">gstreamer</h2>
 <pre>
 yum install gstreamer-plugins-good
@@ -106,14 +108,14 @@ MPlayer的命令行参数相当复杂，需要仔细阅读其文档和代码。
 </p>
 <ul>
 <li>
-<a href="http://www.mplayerhq.hu/DOCS/tech/slave.txt">向MPlayer发送的命令可以参考</a>
-</li>
+[<a href="http://www.mplayerhq.hu/DOCS/tech/slave.txt">http://www.mplayerhq.hu/DOCS/tech/slave.txt</a> 向MPlayer发送的命令可以参考]
+
 <li>
-<a href="http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.html">MPlayer的man page看这里</a>
-</li>
+[<a href="http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.html">http://www.mplayerhq.hu/DOCS/man/en/mplayer.1.html</a> MPlayer的man page看这里]
+
 <li>
 <a href="https://smplayer.svn.sourceforge.net/svnroot/smplayer">SMplayer的源代码</a>
-</li>
+
 </ul>
 
 <p>
@@ -126,25 +128,26 @@ Mplayer的输出并进行分析，状态变量都在类实例里面保存一份�
 <ol>
 <li>
 显示到某个窗口上，-wid 窗口句柄值 -vo directx:noaccel，如果不禁用加速则显示不出来；但是smplayer不禁用也可以，真神奇。
-</li>
+
 <li>
 -identify可以让MPlayer在开始播放之后显示一堆信息，很方便
-</li>
+
 <li>
 似乎没有办法获取音量？于是自己维护了一个，每次启动后设置一下
-</li>
+
 <li>
 设置MPlayer的working dir很重要，一方面截屏的图片保存在那里，另外像-vo jpeg:outdir=这样的选项Windows下没法设全路径，也要靠当前目录。
-</li>
+
 </ol>
 
-<h2 id="toc_0.5">終端模擬器</h2>
+<h2 id="toc_0.5">終端模擬器 </h2>
 <p>
 這些都是所謂的「終端模擬器」,這是一些可以讓您的計算機界面變得易於操作，並解可以幫助您和對話的程序。現在有很多的終端模擬器供我們使用。一般的Linux系統通常包含多種終端模擬器，就像:xterm、rxvt、konsole、kvt、gnome-terminal、nxterm、 eterm. 
 </p>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>git使用笔记</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>gitʹ�ñʼ�</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,7 +21,8 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
+    <div id="wrap">
+	
 <h2 id="toc_0.1">git管理仓库</h2>
 <p>
 如无特别说明，下面的git命令都是在git的版本库目录下执行的。所谓的git的版本库目录，就是管理的文件所在的目录。如何确定是否是git管理的版本库呢？在该目录下，使用命令ls -a，如果有.git这样一个文件夹，那么就说明该目录是git的版本库目录。而.git这个文件夹下，就是存放着该版本库的版本信息等，所以，.git文件夹又叫做该git版本库的git管理仓库。
@@ -65,14 +67,14 @@ user.email=nieyong_1947@126.com
 这是为什么呢？
 </p>
 
-<h2 id="toc_0.3">git状态查看</h2>
+<h2 id="toc_0.3">git状态查看 </h2>
 <p>
 查看一个git源的状态，使用命令git status。命令很简单，关键是要能够明白命令输出的各种状态代表什么含义。下面列举出几种常用的状态。
 </p>
 <ul>
 <li>
 受管理的文件没有被修改（增删改），和git管理仓库（就是当前路径下的隐形文件夹.git）中的记录是一致的。
-</li>
+
 </ul>
 
 <pre>
@@ -83,7 +85,7 @@ nothing to commit (working directory clean)
 <ul>
 <li>
 删除了一个文件/文件夹。下面就以删除版本库中一个已经受控的文件nieyong.c为例，说明在各个阶段git状态的含义。重点是区分Changed but not updated和Changes to be committed的异同。
-</li>
+
 </ul>
 
 <pre>
@@ -162,7 +164,7 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 ***************/
 </pre>
 
-<h2 id="toc_0.4">git使用小技巧</h2>
+<h2 id="toc_0.4">git使用小技巧 </h2>
 <p>
 将修改添加到版本库中，使用git add .命令，而不要使用git add *命令。因为*代表所有的文件，那么别.gitignore文件忽略的文件（或者文件夹）也会被添加。
 </p>
@@ -194,10 +196,10 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 
 <h2 id="toc_0.5">扩展阅读</h2>
 <p>
-<a href="http://zhwen.org/?p=articles/git">git使用总结 作者：许振文</a>
+[<a href="http://zhwen.org/?p=articles/git">http://zhwen.org/?p=articles/git</a> git使用总结 作者：许振文]
 </p>
 
-<h2 id="toc_0.6">git diff的用法</h2>
+<h2 id="toc_0.6">git diff的用法 </h2>
 <p>
 查看使用命令git add加载到暂存区的文件所做的修改，使用命令：
 </p>
@@ -205,7 +207,7 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 git diff --cached
 </blockquote>
 
-<h2 id="toc_0.7">git分支与合并</h2>
+<h2 id="toc_0.7">git分支与合并 </h2>
 <p>
 git分支与合并主要阅读了《pro git》一书的分支一章，强烈建议。
 </p>
@@ -247,7 +249,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 #git merge hotfix		//合并hotfix分支的修改到本身所在的分支
 </blockquote>
 
-<h2 id="toc_0.8">git log的用法</h2>
+<h2 id="toc_0.8">git log的用法 </h2>
 <p>
 以适当的形式显示整个工程，或者多个文件，整个目录等的log信息。
 </p>
@@ -268,9 +270,10 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 <p>
 详细的显示某次提交的log信息。
 </p>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

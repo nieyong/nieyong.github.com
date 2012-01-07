@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>linux fonts</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>linux fonts</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,7 +21,8 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
+    <div id="wrap">
+	
 <h2 id="toc_0.1">关于Linux字体</h2>
 <p>
 以前一直没有关注Linux的字体。最近遇到好几个关于字体的问题，特地了解了以下Linux下字体的相关知识。下面，首先列出遇到的问题：
@@ -29,10 +31,10 @@
 <ul>
 <li>
 在fedora下，中文字体在很多地方表现得很糟糕，很不美观。一个最大的问题，就是在chrome浏览器下的中文字体表现的很差，笔画不清晰，很多字体发虚（网上很多文章都用这个词，我只是借用过来，至于是否和最先想表达的想法相同，也就不追究了）。
-</li>
+
 <li>
 IDE工具NetBeans文件中的中文无法显示，现象为用“口”字代替。这里，首先得明白一点，NetBeans这个IDE是使用JAVA开发的，也就是说NetBeans是一个JAVA应用程序。
-</li>
+
 </ul>
 
 <p>
@@ -78,7 +80,7 @@ netbeans_jdkhome="/usr/lib/jvm/jre"
 下面你需要作的，就是配置好这个JRE中的字体，让这个JRE支持中文字体。那么，怎么让jre支持中文字体，或者说找到系统中的中文字体呢？
 </p>
 
-<h3 id="toc_0.3.1">jrd的中文支持</h3>
+<h3 id="toc_0.3.1">jrd的中文支持 </h3>
 <p>
 按Sun的文档描述，jre在一个操作系统的字体配置文件，根据下列信息来确定。jre 使用按下列顺序第一个找到的文件作为系统的字体配置文件：
 </p>
@@ -109,7 +111,7 @@ JavaHome/lib/fontconfig.bfc
 /etc/turbolinux-release =&gt; Turbo
 /etc/SuSE-release =&gt; SuSE
 </pre>
-</li>
+
 </ol>
 <p>
 按这种判断方法，Fedora 等发源于 RedHat 的发布版都属于 RedHat 类。如果 /etc 目录下不存在上面 4 个文件的任何一个，则 OS 为空。
@@ -121,7 +123,7 @@ JavaHome/lib/fontconfig.bfc
 <pre>
 cp fontconfig.RedHat.properties.src fontconfig.RedHat.properties
 </pre>
-</li>
+
 </ol>
 <p>
 对于不属于上面 4 类的发布版，不妨拷贝 RedHat 的配置文件为 fontconfig.properties：
@@ -135,7 +137,7 @@ cp fontconfig.RedHat.properties.src fontconfig.properties
 <pre>
 filename.-misc-zysong18030-medium-r-normal--*-%d-*-*-c-*-iso10646-1=/usr/share/fonts/chinese/TrueType/zysong.ttf
 </pre>
-</li>
+
 </ol>
 <p>
 将“=”号以后的中文字体文件名，改为本系统上存在的一个中文字体文件名。您如果愿意，可以修改其他几行，为繁体中文、日语、韩语等您可能用到的语言设置合适的字体。
@@ -163,9 +165,10 @@ JavaHome/lib/fonts/fallback/
 <p>
 我在linux中双击字体文件名就看到了, 包括几乎所有字体格式, 如pfb, ttf, otf, pfa, pcf等, 但无法看到afm, 和tfm格式的.
 </p>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

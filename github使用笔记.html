@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>github使用笔记</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>githubʹ�ñʼ�</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,22 +21,56 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
+    <div id="wrap">
+	
 <p>
 记录平时github使用问题。
 </p>
 
-<h2 id="toc_0.1">github和轻量标记语言</h2>
+<h2 id="toc_0.1">github创建工程标准过程</h2>
 <p>
-github支持的轻量标记语言有reStructuredText和markdown，能够直接渲染这两种语言。reStructuredText是python文档的专用语法。<a href="https://github.com/gotgit/gotgithub">gotgithub</a>这本书就是使用reStructuredText系统写作的。
+直接从github上拷贝如下，备忘：
+</p>
+<pre>
+Global setup:
+Set up git
+git config --global user.name "Yong Nie"
+git config --global user.email nieyong_1947@126.com
+
+Next steps:
+mkdir upnpbrowser_cling
+cd upnpbrowser_cling
+git init
+touch README
+git add README
+git commit -m 'first commit'
+git remote add origin git@github.com:androidtv/upnpbrowser_cling.git
+git push -u origin master
+
+Existing Git Repo?
+cd existing_git_repo
+git remote add origin git@github.com:androidtv/upnpbrowser_cling.git
+git push -u origin master
+</pre>
+
+<h2 id="toc_0.2">将github上的一个项目下载到本地</h2>
+<p>
+git clone git@github.com:androidtv/android-xbmcremote.git
+使用git clone命令。
+</p>
+
+<h2 id="toc_0.3">github和轻量标记语言</h2>
+<p>
+github支持的轻量标记语言有reStructuredText和markdown，能够直接渲染这两种语言。reStructuredText是python文档的专用语法。[<a href="https://github.com/gotgit/gotgithub">https://github.com/gotgit/gotgithub</a> gotgithub]这本书就是使用reStructuredText系统写作的。
 </p>
 
 <p>
 如果使用vimwiki的语法，那么是否一定需要转换为html才行呢，如何将vimwiki编辑的文章放到网上，然后大家一起协同工作呢？或者说，能否使用github作为一个团队的wiki呢？
 </p>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

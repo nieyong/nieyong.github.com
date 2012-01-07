@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>Linux Shell</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>Linux Shell</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,7 +21,8 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
+    <div id="wrap">
+	
 <h2 id="toc_0.1">shell脚本用户切换密码输入</h2>
 <p>
 想在shell脚本中实现用户切换，如下：
@@ -69,41 +71,41 @@ cd /home/winter
 通常，当你执行一个shell script时，shell会重新运行一个新的shell来执行，而你执行cd xxx, 只是那个新的shell cd到xxx, 执行完退出，原本的shell当然没有变化，但有另一种执行方式, 可以让当前的shell直接执行命令, 这样就可以达到你要的效果了，将./shell_script.sh 改为 source ./shell_script.sh 
 </p>
 
-<h2 id="toc_0.3">shell编辑命令行</h2>
+<h2 id="toc_0.3">shell编辑命令行 </h2>
 <p>
 通过光标和功能键（Home、End 等键），您可以浏览并编辑命令行，如果您需要，还可以用键盘的快捷方式来完成一般的编辑：
 </p>
 <ul>
 <li>
 &lt;CTRL k&gt;：删除从光标到行尾的部分
-</li>
+
 <li>
 &lt;CTRL u&gt;：删除从光标到行首的部分
-</li>
+
 <li>
 &lt;ALT d&gt;：删除从光标到当前单词结尾的部分
-</li>
+
 <li>
 &lt;CTRL w&gt;：删除从光标到当前单词开头的部分
-</li>
+
 <li>
 &lt;CTRL a&gt;：将光标移到行首
-</li>
+
 <li>
 &lt;CTRL e&gt;：将光标移到行尾
-</li>
+
 <li>
 &lt;ALT a&gt;：将光标移到当前单词头部
-</li>
+
 <li>
 &lt;ALT e&gt;：将光标移到当前单词尾部
-</li>
+
 <li>
 &lt;CTRL y&gt;：插入最近删除的单词
-</li>
+
 <li>
 &lt;!$&gt;：重复前一个命令最后的参数。
-</li>
+
 </ul>
 
 <p>
@@ -126,9 +128,10 @@ LD_LIBRARY_PATH=NEWDIRS:$LD_LIBRARY_PATH.（newdirs是新的路径串）（注�
 kernel-2.6.31.5-127.fc12.i686.PAE.conf  qt-i386.conf   xulrunner-32.conf
 mysql-i386.conf                         tix-i386.conf
 </pre>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

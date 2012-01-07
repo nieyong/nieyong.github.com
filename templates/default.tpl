@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="Stylesheet" type="text/css" href="style.css">
-<title>s5</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="Stylesheet" type="text/css" href="%root_path%%css%">
+<title>%title%</title>
+<meta http-equiv="Content-Type" content="text/html; charset=%encoding%">
 </head>
 <body>
 	<div id="header"> 
@@ -22,15 +22,7 @@
 	    </div>
 	</div> 
     <div id="wrap">
-	
-<p>
-记录S5制作过程中遇到的一些问题。
-</p>
-
-<p>
-使用rst结构化文本撰写，然后使用docutil中的rst2s5脚本将rst文本文件转化为html文件。
-</p>
-
+	%content%
 	</div>
 	<div id="footer">
 		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>

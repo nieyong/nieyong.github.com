@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>linux patition and grub</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>linux patition and grub</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,7 +21,8 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
+    <div id="wrap">
+	
 <h2 id="toc_0.1">硬盘分区情况分析</h2>
 <pre>
 [root@localhost grub]# fdisk -l
@@ -116,16 +118,17 @@ initrd  /boot/initrd.img-2.6.28-11-generic
 </pre>
 
 <p>
-参考文章<a href="http://www.fedoraforum.org/forum/showthread.php?t=252004">What eats my disk space</a>。
+参考文章[<a href="http://www.fedoraforum.org/forum/showthread.php?t=252004">http://www.fedoraforum.org/forum/showthread.php?t=252004</a> What eats my disk space]。
 </p>
 
-<h2 id="toc_0.3">开机分区自动挂载</h2>
+<h2 id="toc_0.3">开机分区自动挂载 </h2>
 <p>
 开机启动时自动挂载某个分区，需要修改文件：/etc/fstab则可。
 </p>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

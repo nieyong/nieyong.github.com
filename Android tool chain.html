@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>Android tool chain</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>Android tool chain</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,45 +21,46 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
-<h2 id="toc_0.1">ADP的安装</h2>
+    <div id="wrap">
+	
+<h2 id="toc_0.1">ADP的安装 </h2>
 <p>
-启动eclipse，点击window——&gt;preferences——&gt;install/update——&gt;available software sites，点击Add，把如下几个网址添加过去
+启动eclipse，点击window——>preferences——>install/update——>available software sites，点击Add，把如下几个网址添加过去
 </p>
 <ul>
 <li>
 Eclipse GEF <a href="http://download.eclipse.org/tools/gef/updates/releases/">http://download.eclipse.org/tools/gef/updates/releases/</a>
-</li>
+
 <li>
 Eclipse EMF <a href="http://download.eclipse.org/modeling/emf/updates/releases/">http://download.eclipse.org/modeling/emf/updates/releases/</a>
-</li>
+
 <li>
 Eclipse GMF <a href="http://download.eclipse.org/modeling/gmf/updates/releases">http://download.eclipse.org/modeling/gmf/updates/releases</a>
-</li>
+
 <li>
 Eclipse Webtools <a href="http://download.eclipse.org/webtools/updates/">http://download.eclipse.org/webtools/updates/</a>
-</li>
+
 <li>
 Google eclipse Plugin <a href="http://dl.google.com/eclipse/plugin/3.5">http://dl.google.com/eclipse/plugin/3.5</a>
-</li>
+
 </ul>
 
 
-<h2 id="toc_0.2">Android Source的获取</h2>
+<h2 id="toc_0.2">Android Source的获取 </h2>
 <ul>
 <li>
 Step 1. 编辑 /home/username/bin/repo文件
-</li>
+
 </ul>
 <p>
 REPO_URL='git://android.git.kernel.org/tools/repo.git' 
-修改为REPO_URL='<a href="http://android.git.kernel.org/tools/repo.git">http://android.git.kernel.org/tools/repo.git</a>'
+修改为REPO_URL='<a href="http://android.git.kernel.org/tools/repo.git'">http://android.git.kernel.org/tools/repo.git'</a>
 </p>
 
 <ul>
 <li>
 Step 2. 运行新的命令
-</li>
+
 </ul>
 <p>
 $ repo init -u <a href="http://android.git.kernel.org/platform/manifest.git">http://android.git.kernel.org/platform/manifest.git</a> -b gingerbread
@@ -67,24 +69,24 @@ $ repo init -u <a href="http://android.git.kernel.org/platform/manifest.git">htt
 <ul>
 <li>
 Step 3. 修改文件.repo/manifests/default.xml
-</li>
+
 </ul>
 <p>
 将fetch="git://android.git.kernel.org/"
-改成fetch="<a href="http://android.git.kernel.org/">http://android.git.kernel.org/</a>"
+改成fetch="<a href="http://android.git.kernel.org/"">http://android.git.kernel.org/"</a>
 </p>
 
 <ul>
 <li>
 Step 4. 运行命令
-</li>
+
 </ul>
 <p>
 repo sync
 </p>
 
 
-<h2 id="toc_0.3">JDK的安装</h2>
+<h2 id="toc_0.3">JDK的安装 </h2>
 <p>
 如果你的电脑上已经安装了JDK，请确认它的版本符合需求。JDK 1.4或者GCJ(Gnu Compiler for Java) 均不支持Android开发。推荐安装最新的JDK 6。如果你需要在Fedora上安装Sun JDK 6，可以参考这篇日志。
 </p>
@@ -117,9 +119,18 @@ java -version
 <p>
 这里有一个很重要的命令alternatives，如果你对该命令还比较陌生，点击<a href="linux command.html">linux command</a>。
 </p>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+
+
+<h2 id="toc_0.4">问题二 横竖屏切换 </h2>
+
+<p>
+关于emulator横竖屏切换 很简单 左下Ctrl+F11 或者 Ctrl+F12
+</p>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

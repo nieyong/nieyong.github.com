@@ -1,8 +1,9 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<link rel="Stylesheet" type="text/css" href="style.css" />
-        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
-        <title>linux from scratch</title>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>linux from scratch</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<div id="header"> 
@@ -20,7 +21,8 @@
 		</ul>
 	    </div>
 	</div> 
-        <div id="wrap">
+    <div id="wrap">
+	
 <h1 id="toc_1" class="justcenter">LFS笔记</h1>
 <h2 id="toc_1.1">LFS LiveCD</h2>
 <p>
@@ -50,26 +52,26 @@ The newest package versions may also have problems that require work-arounds
 <ol>
 <li>
 用su - oracle切换到oracle用户，那么使用的是login shell，登录进程或者说shell会重新读取/etc/profile和~/.bash_profile来应用新的环境变量。login shell 也会读取.bashrc文件。login shell启动时并不执行.bashrc,但是惯例上在.bash_profile显示调用.bashrc。
-</li>
+
 <li>
 用su oracle切换到oracle用户，那么使用的是non-login shell，此时shell不会读取/etc/profile和~/.bash_profile，而是读取~/.bashrc来应用新的环境变量。
-</li>
+
 </ol>
 
-<h2 id="toc_1.6">制作交叉编译器</h2>
+<h2 id="toc_1.6">制作交叉编译器 </h2>
 <p>
 做交叉编译器要弄清楚3个概念：host, build, target：
 </p>
 <ul>
 <li>
 build – 你在什么平台上编译的这个编译器
-</li>
+
 <li>
 host – 这个编译器将来要在什么平台上运行
-</li>
+
 <li>
 target – 编译器最终会生成在哪个平台上执行的可执行代码
-</li>
+
 </ul>
 
 <p>
@@ -85,7 +87,7 @@ target – 编译器最终会生成在哪个平台上执行的可执行代码
 
 
 
-<h2 id="toc_1.9">安装LINUX API的执行结果</h2>
+<h2 id="toc_1.9">安装LINUX API的执行结果 </h2>
 <pre>
 root:/sources/linux-2.6.32.8# make INSTALL_HDR_PATH=dest headers_install
 CHK     include/linux/version.h
@@ -122,7 +124,7 @@ INSTALL include/asm (54 files)
 </pre>
 
 
-<h2 id="toc_1.10">安装man-pages执行的结果</h2>
+<h2 id="toc_1.10">安装man-pages执行的结果 </h2>
 <p>
 可以看到，manual的相关文档，都放置在/usr/share/man路径下。
 </p>
@@ -135,7 +137,7 @@ done; \
 </pre>
 
 
-<h2 id="toc_1.11">字符集，字体的安装</h2>
+<h2 id="toc_1.11">字符集，字体的安装 </h2>
 <p>
 路径/usr/lib/locale下面。
 </p>
@@ -219,11 +221,12 @@ Failed 1 test out of 1606, 99.94% okay.
 <ul>
 <li>
 rationale and technical details 原理和技术细节
-</li>
+
 </ul>
-</div>
-<div id="footer">
-    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-</div>
+
+	</div>
+	<div id="footer">
+		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+	</div>
 </body>
 </html>
