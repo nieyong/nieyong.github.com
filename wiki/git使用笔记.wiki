@@ -175,3 +175,16 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 }}}
 
 详细的显示某次提交的log信息。
+
+== msysGit使用笔记 ==
+在Windows下使用git，然后和Linux下进行写作开发，最让我恼火的是编码的问题。下面记录在msysGit配置过程中的一些知识点。
+
+虽然使用了日本人改进的sysGit，在Windows下完全使用utf-8进行编码，在使用git log命令时，中文还是现实为乱码（注意，不是中文显示为反斜杠加数字的问题）。提交到github上又是OK的，这是问什么呢？
+
+原来，git log是使用的LESS输出log信息的，而Windows下的bash只能够输出gbk格式的中文。这就说明，在git中，log信息是使用utf-8存放的，需要使用git log命令输出到bash终端，需要转化为gbk格式。在gitconfig文件中加入：
+{{{
+[i18n]
+	logoutputencoding = gbk
+}}}
+测试一下，确实中文就能够正常输出。但是，使用git diff命令，还是有着个问题。
+
