@@ -135,8 +135,6 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 中文无法显示，使用8进制字符编码来显示的问题：
     #git config --global core.quotepath false
 
-== 扩展阅读 ==
-[http://zhwen.org/?p=articles/git git使用总结 作者：许振文]
 
 == git diff的用法 ==
 查看使用命令git add加载到暂存区的文件所做的修改，使用命令：
@@ -145,7 +143,7 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 == git分支与合并 ==
 git分支与合并主要阅读了《pro git》一书的分支一章，强烈建议。
 
-查看现在所有分支
+查看现在所有分支，分支前带有*号，表示现在所在分支
     #git branch
 创建一个新的分支
     #git branch hotfix	//hotfix为新创建分支名
@@ -157,6 +155,32 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
     #git branch -d hotfix	//删除hotfix分支
 合并某一个分支到本身所在的分支
     #git merge hotfix		//合并hotfix分支的修改到本身所在的分支
+
+== detached HEAD ==
+使用下面的命令，会出现该情况：
+    git checkout master~2
+
+== git revert 和 git reset的区别 == 
+# git revert是用一次新的commit来回滚之前的commit，git reset是直接删除指定的commit。 
+# 在回滚这一操作上看，效果差不多。但是在日后继续merge以前的老版本时有区别。因为git revert是用一次逆向的commit“中和”之前的提交，因此日后合并老的branch时，导致这部分改变不会再次出现，但是git reset是之间把某些commit在某个branch上删除，因而和老的branch再次merge时，这些被回滚的commit应该还会被引入。 
+# git reset 是把HEAD向后移动了一下，而git revert是HEAD继续前进，只是新的commit的内容和要revert的内容正好相反，能够抵消要被revert的内容。 
+
+3.14. Git reset 
+库的逆转与恢复除了用来进行一些废弃的研发代码的重置外，还有一个重要的作用。比如我们从远程clone了一个代码库，在本地开发后，准备提交回远程。但是本地代码库在开发时，有功能性的commit，也有出于备份目的的commit等等。总之，commit的日志中有大量无用log，我们并不想把这些 log在提交回远程时也提交到库中。 因此，就要用到git reset。 
+       git reset的概念比较复杂。它的命令形式：git reset [--mixed | --soft | --hard] [<commit-ish>] 
+命令的选项： 
+       --mixed 这个是默认的选项。如git reset [--mixed] dev^(dev^的定义可以参见2.6.5)。它的作用仅是重置分支状态到dev1^, 但是却不改变任何工作文件的内容。即，从dev1^到dev1的所有文件变化都保留了，但是dev1^到dev1之间的所有commit日志都被清除了， 而且，发生变化的文件内容也没有通过git add标识，如果您要重新commit，还需要对变化的文件做一次git add。 这样，commit后，就得到了一份非常干净的提交记录。 （回退了index和仓库中的内容） 
+       --soft相当于做了git reset –mixed，后，又对变化的文件做了git add。如果用了该选项， 就可以直接commit了。（回退了仓库中的内容） 
+       --hard这个命令就会导致所有信息的回退， 包括文件内容。 一般只有在重置废弃代码时，才用它。 执行后，文件内容也无法恢复回来了。（回退了工作目录、index和仓库中的内容） 
+例如： 
+切换到使用的分支上； 
+       git reset HEAD^ 回退第一个记录 
+       git reset HEAD~2 回退第二个记录 
+如果想把工作目录下的文件也回退，则使用git reset - - hard HEAD^ 回退第一个记录 
+       git reset - - hard HEAD~2 回退第二个记录 
+还可以使用如下方法： 
+将当前的工作目录完全回滚到指定的版本号，假设如下图，我们有A-G五次提交的版本，其中C的版本号是 bbaf6fb5060b4875b18ff9ff637ce118256d6f20，我们执行了'git reset bbaf6fb5060b4875b18ff9ff637ce118256d6f20'那么结果就只剩下了A-C三个提交的版本 
+
 
 == git log的用法 ==
 以适当的形式显示整个工程，或者多个文件，整个目录等的log信息。
@@ -177,14 +201,18 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 详细的显示某次提交的log信息。
 
 == msysGit使用笔记 ==
-在Windows下使用git，然后和Linux下进行写作开发，最让我恼火的是编码的问题。下面记录在msysGit配置过程中的一些知识点。
+在Windows下使用git，然后和Linux下进行协作开发，最让我恼火的是编码的问题。下面记录在msysGit配置过程中的一些知识点。
 
-虽然使用了日本人改进的sysGit，在Windows下完全使用utf-8进行编码，在使用git log命令时，中文还是现实为乱码（注意，不是中文显示为反斜杠加数字的问题）。提交到github上又是OK的，这是问什么呢？
+虽然使用了日本人改进的sysGit，在Windows下完全使用utf-8进行编码，在使用git log命令时，中文还是显示为乱码（注意，不是中文显示为反斜杠加数字的问题，如果中文显示为反斜杠加数字，那是因为终端不支持中文显示）。提交到github上显示又是OK的，这是问什么呢？
 
-原来，git log是使用的LESS输出log信息的，而Windows下的bash只能够输出gbk格式的中文。这就说明，在git中，log信息是使用utf-8存放的，需要使用git log命令输出到bash终端，需要转化为gbk格式。在gitconfig文件中加入：
+原来，git log是使用的LESS输出log信息的，而Windows下的bash只能够输出gbk格式的中文。这就说明，在git中，log信息是使用utf-8存放的，需要使用git log命令输出到bash终端，需要将log信息由utf-8编码转化为gbk编码。在gitconfig文件中加入：
 {{{
 [i18n]
 	logoutputencoding = gbk
 }}}
 测试一下，确实中文就能够正常输出。但是，使用git diff命令，还是有着个问题。
 
+== 参考资料 ==
+[http://zhwen.org/?p=articles/git git使用总结 作者：许振文]
+[http://www.worldhello.net/gotgithub/index.html GotGitHub 作者：蒋鑫]
+[http://progit.org/ Pro Git]
