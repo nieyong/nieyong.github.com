@@ -13,6 +13,7 @@ remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
 remote.origin.url=git@github.com:jzcode/jzcode-x11.git
 branch.master.remote=origin
 branch.master.merge=refs/heads/master
+
 [root@localhost jzcode]# exit
 [ny@localhost jzcode]$ git config --list
 user.name=Yong Nie
@@ -33,6 +34,11 @@ user.name=Yong Nie
 user.email=nieyong_1947@126.com
 }}}
 这是为什么呢？
+
+在使用git链接到github之前，必须先配置好git的用户名和邮箱。否则，虽然ssh密码配对成功，也是不能够从github获取代码的。
+{{{
+
+}}}
 
 == git状态查看 ==
 查看一个git源的状态，使用命令git status。命令很简单，关键是要能够明白命令输出的各种状态代表什么含义。下面列举出几种常用的状态。

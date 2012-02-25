@@ -18,6 +18,7 @@
 * [[linux games]]
 * [[linux version]]
 * [[linux samba]]
+* [[linux apt]]
 
 
 == Others ==
