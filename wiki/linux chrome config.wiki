@@ -13,3 +13,10 @@ gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
 
 == chrome & IBus ==
 Chrome中一旦退格IBus无法输入，一旦按了backspace删除之前输入的文字，就要重新启动ibus才能输入，不然输入什么都是不能显示的，已经证实是iBus的key snooper特性导致了这个问题。可以考虑将iBus升级到1.3.5以上（添加PPA）
+
+== chromium & fcitx ==
+在使用fcitx在chromium下面进行中文拼音输入的时候，如果敲击的速度快，那么本来还没有敲击空格键确认输入的文字，这些文字就会已经输入了。主要是在编辑麦库的资料的时候出现该问题。
+
+在其他地方没有发现这个问题。
+
+下面是fcitx在github上的一个站点。[http://fcitx.github.com/handbook/index.html fcitx说明]。

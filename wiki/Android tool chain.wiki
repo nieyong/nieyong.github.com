@@ -6,6 +6,12 @@
 * Eclipse Webtools http://download.eclipse.org/webtools/updates/
 * Google eclipse Plugin http://dl.google.com/eclipse/plugin/3.5
 
+[http://stackoverflow.com/questions/4249695/adt-requires-org-eclipse-wst-sse-core-0-0-0-but-it-could-not-be-found ADT requires 'org.eclipse.wst.sse.core 0.0.0' but it could not be found]
+# help->install new software
+# click on "available software sites"
+# select all entries (CTRL-A) and remove them
+# add new entry at location http://download.eclipse.org/releases/indigo/
+# now add again the ADT location http://dl-ssl.google.com/android/eclipse/
 
 == Android Source的获取 ==
 * Step 1. 编辑 /home/username/bin/repo文件
