@@ -1,9 +1,8 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="Stylesheet" type="text/css" href="style.css">
-<title>linux command</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="Stylesheet" type="text/css" href="style.css" />
+        <meta http-equiv="Content-Type" content="text/html,charset=utf-8" />
+        <title>linux command</title>
 </head>
 <body>
 	<div id="header"> 
@@ -21,8 +20,7 @@
 		</ul>
 	    </div>
 	</div> 
-    <div id="wrap">
-	
+        <div id="wrap">
 <h2 id="toc_0.1">alternatives 命令</h2>
 <p>
 这是一个只有 root 才能执行的命令。alternatives 的意思是 “可选择的内容”。假如你的系统中有几个命令功能十分类似，却又不能随意删除，那么可以用 alternatives 来指定一个全局的设置。在 FC3 中，全局默认输入法和 java 系统等等都是用它来进行设置的。它有几种功能，可以用命令行参数来指定。alternatives --install &lt;link&gt; &lt;name&gt; &lt;path&gt; &lt;priority&gt; 意思是在 alternatives 数据库中添加一个 &lt;path&gt;，使它成为 &lt;link&gt; 的可选项，优先级是 &lt;priority&gt;。而 &lt;name&gt; 则是一个中转站。这样说似乎有些抽象 所以，执行一下看看
@@ -95,7 +93,7 @@ alternatives --install /etc/X11/xinit/xinput.d/zh_CN xinput-zh_CN /etc/X11/xinit
 </p>
 
 <p>
-alternatives 还有一些功能，包括删除一个可选项等等。同样，这个设置应该由输入法的安装程序 rpm 来做。有关alternatives命令配置java的实例，参考[[Android tool chain]]。
+alternatives 还有一些功能，包括删除一个可选项等等。同样，这个设置应该由输入法的安装程序 rpm 来做。有关alternatives命令配置java的实例，参考<a href="Android tool chain.html">Android tool chain</a>。
 </p>
 
 <h2 id="toc_0.2">du命令</h2>
@@ -104,6 +102,13 @@ alternatives 还有一些功能，包括删除一个可选项等等。同样，�
 </p>
 <blockquote>
 du /etc | sort -nr | more
+</blockquote>
+
+<p>
+下面的命令能够递归查找所有文件，并且把其中所有大于50M的文件都找出来。
+</p>
+<blockquote>
+find . -type f -size +1000000k 
 </blockquote>
 
 <h2 id="toc_0.3">压缩解压缩命令(tar,zip,unzip)</h2>
@@ -148,14 +153,14 @@ zip -r test.zip dir1 -x \*.o	//压缩dir1目录下所有的文件，除去所有
 zip -r test6 test3 -x ./test3/bin/\* -x ./test3/.git/\*	//压缩test3目录为test6.zip文件，但是不包含./test3/bin/目录下的所有文件（包括路径），也不包括./test3/.git/目录下的所有文件和目录。这里，如果将反斜杠去掉，则不能够达到去除目录的作用，则只会不包括./test3/bin/目录下的所有文件（注意，不包括目录）。
 </blockquote>
 
-<h2 id="toc_0.4">内存检查命令 </h2>
+<h2 id="toc_0.4">内存检查命令</h2>
 <ul>
 <li>
 free
-
+</li>
 <li>
 top
-
+</li>
 </ul>
 
 
@@ -189,10 +194,9 @@ netseek ALL=(ALL) NOPASSWD: ALL
 <p>
 nmap是Linux下最常使用的安全扫描工具，经典中的经典。
 </p>
-
-	</div>
-	<div id="footer">
-		<p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
-	</div>
+</div>
+<div id="footer">
+    <p id="legal">Copyright &copy; 2012 &middot;<a href="http://nienet.com">NIENET</a>. All Rights Reserved.</p>
+</div>
 </body>
 </html>
