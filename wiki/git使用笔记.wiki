@@ -137,7 +137,7 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 
 
 == git diff的用法 ==
-查看使用命令git add加载到暂存区的文件所做的修改，使用命令：
+git diff命令没有选项，不会去比较已经位于暂存区（staged）的文件和上次提交的文件的区别。所以，查看使用命令git add加载到暂存区的文件（staged）所做的修改，使用命令：
     git diff --cached
 
 == git分支与合并 ==
@@ -213,6 +213,7 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 测试一下，确实中文就能够正常输出。但是，使用git diff命令，还是有着个问题。
 
 == 参考资料 ==
-[http://zhwen.org/?p=articles/git git使用总结 作者：许振文]
-[http://www.worldhello.net/gotgithub/index.html GotGitHub 作者：蒋鑫]
-[http://progit.org/ Pro Git]
+
+* [http://zhwen.org/?p=articles/git git使用总结 作者：许振文]
+* [http://www.worldhello.net/gotgithub/index.html GotGitHub 作者：蒋鑫]
+* [http://progit.org/ Pro Git]

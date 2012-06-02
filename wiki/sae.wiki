@@ -1,0 +1,5 @@
+你是说, saeimage 的crop函数吧?
+http://apidoc.sinaapp.com/__file ... class.php.html#a260
+
+推荐你使用GD库来实现这个功能.便于移植.
+

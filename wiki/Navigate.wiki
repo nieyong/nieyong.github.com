@@ -2,6 +2,8 @@
 
 == Linux Config系列文章 ==
 本人使用的Linux发行版本为Fedora 12，同时也尝试过Suse和Ubuntu，还一边在使用LFS（linux from sctrach）。下面就是记录在使用Linux的过程中的基本配置。Linux技术类文章，例如Linux内核，驱动，SHELL脚本等。
+
+最近发现一个记录Linux基本配置的网站，几乎有所有最新版本Linux发行版的配置过程，非常实用，相当于一个网络Linux Config记事本。[http://www.server-world.info/en/ | server-world]。
 * [[linux yum manual]]
 * [[linux fonts]]
 * [[linux patition and grub]]
