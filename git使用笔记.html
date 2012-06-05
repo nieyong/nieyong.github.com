@@ -2,7 +2,7 @@
 <html>
 <head>
 <link rel="Stylesheet" type="text/css" href="style.css">
-<title>gitʹ�ñʼ�</title>
+<title>git使用笔记</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
@@ -42,6 +42,7 @@ remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
 remote.origin.url=git@github.com:jzcode/jzcode-x11.git
 branch.master.remote=origin
 branch.master.merge=refs/heads/master
+
 [root@localhost jzcode]# exit
 [ny@localhost jzcode]$ git config --list
 user.name=Yong Nie
@@ -67,7 +68,14 @@ user.email=nieyong_1947@126.com
 这是为什么呢？
 </p>
 
-<h2 id="toc_0.3">git状态查看 </h2>
+<p>
+在使用git链接到github之前，必须先配置好git的用户名和邮箱。否则，虽然ssh密码配对成功，也是不能够从github获取代码的。
+</p>
+<pre>
+
+</pre>
+
+<h2 id="toc_0.3">git状态查看</h2>
 <p>
 查看一个git源的状态，使用命令git status。命令很简单，关键是要能够明白命令输出的各种状态代表什么含义。下面列举出几种常用的状态。
 </p>
@@ -164,7 +172,7 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 ***************/
 </pre>
 
-<h2 id="toc_0.4">git使用小技巧 </h2>
+<h2 id="toc_0.4">git使用小技巧</h2>
 <p>
 将修改添加到版本库中，使用git add .命令，而不要使用git add *命令。因为*代表所有的文件，那么别.gitignore文件忽略的文件（或者文件夹）也会被添加。
 </p>
@@ -195,7 +203,7 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 </blockquote>
 
 
-<h2 id="toc_0.5">git diff的用法 </h2>
+<h2 id="toc_0.5">git diff的用法</h2>
 <p>
 查看使用命令git add加载到暂存区的文件所做的修改，使用命令：
 </p>
@@ -203,7 +211,7 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 git diff --cached
 </blockquote>
 
-<h2 id="toc_0.6">git分支与合并 </h2>
+<h2 id="toc_0.6">git分支与合并</h2>
 <p>
 git分支与合并主要阅读了《pro git》一书的分支一章，强烈建议。
 </p>
@@ -253,7 +261,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 git checkout master~2
 </blockquote>
 
-<h2 id="toc_0.8">git revert 和 git reset的区别 </h2>
+<h2 id="toc_0.8">git revert 和 git reset的区别</h2>
 <ol>
 <li>
 git revert是用一次新的commit来回滚之前的commit，git reset是直接删除指定的commit。 
@@ -266,21 +274,30 @@ git reset 是把HEAD向后移动了一下，而git revert是HEAD继续前进，�
 
 </ol>
 
+<h2 id="toc_0.9">Git reset</h2>
 <p>
-3.14. Git reset 
 库的逆转与恢复除了用来进行一些废弃的研发代码的重置外，还有一个重要的作用。比如我们从远程clone了一个代码库，在本地开发后，准备提交回远程。但是本地代码库在开发时，有功能性的commit，也有出于备份目的的commit等等。总之，commit的日志中有大量无用log，我们并不想把这些 log在提交回远程时也提交到库中。 因此，就要用到git reset。 
 </p>
-<blockquote>
+
+<p>
 git reset的概念比较复杂。它的命令形式：git reset [--mixed | --soft | --hard] [&lt;commit-ish&gt;] 
-</blockquote>
+</p>
+
 <p>
 命令的选项： 
 </p>
-<blockquote>
+<ul>
+<li>
 --mixed 这个是默认的选项。如git reset [--mixed] dev<sup><small>(dev</small></sup>的定义可以参见2.6.5)。它的作用仅是重置分支状态到dev1<sup><small>, 但是却不改变任何工作文件的内容。即，从dev1</small></sup>到dev1的所有文件变化都保留了，但是dev1^到dev1之间的所有commit日志都被清除了， 而且，发生变化的文件内容也没有通过git add标识，如果您要重新commit，还需要对变化的文件做一次git add。 这样，commit后，就得到了一份非常干净的提交记录。 （回退了index和仓库中的内容） 
+
+<li>
 --soft相当于做了git reset –mixed，后，又对变化的文件做了git add。如果用了该选项， 就可以直接commit了。（回退了仓库中的内容） 
+
+<li>
 --hard这个命令就会导致所有信息的回退， 包括文件内容。 一般只有在重置废弃代码时，才用它。 执行后，文件内容也无法恢复回来了。（回退了工作目录、index和仓库中的内容） 
-</blockquote>
+
+</ul>
+
 <p>
 例如： 
 切换到使用的分支上； 
@@ -297,11 +314,14 @@ git reset - - hard HEAD~2 回退第二个记录
 </blockquote>
 <p>
 还可以使用如下方法： 
+</p>
+
+<p>
 将当前的工作目录完全回滚到指定的版本号，假设如下图，我们有A-G五次提交的版本，其中C的版本号是 bbaf6fb5060b4875b18ff9ff637ce118256d6f20，我们执行了'git reset bbaf6fb5060b4875b18ff9ff637ce118256d6f20'那么结果就只剩下了A-C三个提交的版本 
 </p>
 
 
-<h2 id="toc_0.9">git log的用法 </h2>
+<h2 id="toc_0.10">git log的用法</h2>
 <p>
 以适当的形式显示整个工程，或者多个文件，整个目录等的log信息。
 </p>
@@ -323,7 +343,7 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 详细的显示某次提交的log信息。
 </p>
 
-<h2 id="toc_0.10">msysGit使用笔记</h2>
+<h2 id="toc_0.11">msysGit使用笔记</h2>
 <p>
 在Windows下使用git，然后和Linux下进行协作开发，最让我恼火的是编码的问题。下面记录在msysGit配置过程中的一些知识点。
 </p>
@@ -343,6 +363,7 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 测试一下，确实中文就能够正常输出。但是，使用git diff命令，还是有着个问题。
 </p>
 
+<<<<<<< HEAD
 <h2 id="toc_0.11">参考资料 </h2>
 
 <ul>
@@ -350,6 +371,11 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 [<a href="http://zhwen.org/?p=articles/git">http://zhwen.org/?p=articles/git</a> git使用总结 作者：许振文]
 
 <li>
+=======
+<h2 id="toc_0.12">参考资料</h2>
+<p>
+<a href="http://zhwen.org/?p=articles/git">git使用总结 作者：许振文</a>
+>>>>>>> 2c3041321f2eb5638d9697bf0bfb52141c5eb647
 <a href="http://www.worldhello.net/gotgithub/index.html">GotGitHub 作者：蒋鑫</a>
 
 <li>

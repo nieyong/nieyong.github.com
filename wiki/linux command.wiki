@@ -51,6 +51,9 @@ alternatives 还有一些功能，包括删除一个可选项等等。同样，�
 在查看目录的使用情形时，我们可以将输出结果导到 sort 指令进行排序，以了解哪个档案用了最多的空间：
     du /etc | sort -nr | more
 
+下面的命令能够递归查找所有文件，并且把其中所有大于50M的文件都找出来。
+    find . -type f -size +1000000k 
+
 == 压缩解压缩命令(tar,zip,unzip) ==
 将当前路径下的所有网页打包压缩：
     tar cjf test.tar.bz2 *.html
