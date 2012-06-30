@@ -22,6 +22,7 @@
 * [[linux samba]]
 * [[linux apt]]
 * [[linux ubuntu]]
+* [[linux vim]]
 
 
 == Others ==
