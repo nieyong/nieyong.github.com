@@ -17,7 +17,6 @@
 		    <li><a href="index.html">首页</a></li>
 		    <li><a href="Navigate.html">本站导图</a> </li>
 		    <li><a href="AboutMe.html">关于</a> </li>
-		    <li><a href="http://nienet.com">返回NieNet</a></li>
 		</ul>
 	    </div>
 	</div> 
@@ -205,7 +204,7 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 
 <h2 id="toc_0.5">git diff的用法</h2>
 <p>
-查看使用命令git add加载到暂存区的文件所做的修改，使用命令：
+git diff命令没有选项，不会去比较已经位于暂存区（staged）的文件和上次提交的文件的区别。所以，查看使用命令git add加载到暂存区的文件（staged）所做的修改，使用命令：
 </p>
 <blockquote>
 git diff --cached
@@ -363,23 +362,17 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 测试一下，确实中文就能够正常输出。但是，使用git diff命令，还是有着个问题。
 </p>
 
-<<<<<<< HEAD
-<h2 id="toc_0.11">参考资料 </h2>
+<h2 id="toc_0.12">参考资料</h2>
 
 <ul>
 <li>
 [<a href="http://zhwen.org/?p=articles/git">http://zhwen.org/?p=articles/git</a> git使用总结 作者：许振文]
 
 <li>
-=======
-<h2 id="toc_0.12">参考资料</h2>
-<p>
-<a href="http://zhwen.org/?p=articles/git">git使用总结 作者：许振文</a>
->>>>>>> 2c3041321f2eb5638d9697bf0bfb52141c5eb647
-<a href="http://www.worldhello.net/gotgithub/index.html">GotGitHub 作者：蒋鑫</a>
+[<a href="http://www.worldhello.net/gotgithub/index.html">http://www.worldhello.net/gotgithub/index.html</a> GotGitHub 作者：蒋鑫]
 
 <li>
-<a href="http://progit.org/">Pro Git</a>
+[<a href="http://progit.org/">http://progit.org/</a> Pro Git]
 
 </ul>
 

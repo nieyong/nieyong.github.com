@@ -2,7 +2,7 @@
 <html>
 <head>
 <link rel="Stylesheet" type="text/css" href="style.css">
-<title>LCD ��������</title>
+<title>LCD 驱动调试</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
@@ -17,7 +17,6 @@
 		    <li><a href="index.html">首页</a></li>
 		    <li><a href="Navigate.html">本站导图</a> </li>
 		    <li><a href="AboutMe.html">关于</a> </li>
-		    <li><a href="http://nienet.com">返回NieNet</a></li>
 		</ul>
 	    </div>
 	</div> 
@@ -41,7 +40,7 @@ LCD驱动的基本信息是否正确呢，如何检查？
 下面是一些我现在用到的办法：
 </p>
 
-<h2 id="toc_0.1">命令行查看FrameBuffer的信息 </h2>
+<h2 id="toc_0.1">命令行查看FrameBuffer的信息</h2>
 <pre>
 # cat /proc/fb		//在/proc目录，查看当前系统中的帧缓冲设备
 0 jz-lcd
@@ -84,7 +83,7 @@ register_framebuffer()函数就是将LCD控制器（jz-lcd）的驱动注册到f
 在刚开始的时候，由于没有在.config文件中将jz-lcd驱动选项去掉，所以加载了两个帧缓冲设备，如上面所示。
 </p>
 
-<h2 id="toc_0.2">命令行查看FrameBuffer的中断信息 </h2>
+<h2 id="toc_0.2">命令行查看FrameBuffer的中断信息</h2>
 <p>
 查看到帧设备之后，那么帧设备有没有工作呢？我们可以通过产看中断的办法，大概的看到帧设备是否工作。
 </p>
