@@ -17,13 +17,12 @@
 		    <li><a href="index.html">首页</a></li>
 		    <li><a href="Navigate.html">本站导图</a> </li>
 		    <li><a href="AboutMe.html">关于</a> </li>
-		    <li><a href="http://nienet.com">返回NieNet</a></li>
 		</ul>
 	    </div>
 	</div> 
     <div id="wrap">
 	
-<h2 id="toc_0.1">关于源（仓库，repository） </h2>
+<h2 id="toc_0.1">关于源（仓库，repository）</h2>
 <p>
 仓库(repository)是一个预备好的目录（安装镜像文件iso就可以作为这样一个仓库，下面有如何把安装镜像iso文件作为一个仓库，安装我们在安装系统的时候没有安装的一些工具），或是一个网站，包含了软件包（RPM 软件包）和索引文件。
 </p>
@@ -45,7 +44,7 @@ yum的宗旨是自动化地升级，安装/移除rpm包，收集rpm包的相关�
 首 先，yum update，这一步是必须的，yum会从服务器的header目录下载rpm的header，放在本地的缓存中，这可能会花费一定的时间，但比起yum 给我们带来方便，这些时间的花费又算的了什么呢？header下载完毕，yum会判断是否有可更新的软件包，如果有，它会询问你的意见，是否更新，还是说 y吧，把系统始终up to date总是不错的，这时yum开始下载软件包并使用调用rpm安装，这可能要一定时间，取决于要更新软件的数目和网络状况，万一网络断了，也没关系，再 进行一次就可以了。升级完毕，以后每天只要使用yum check-update检查一下有无跟新，如果有，就用yum update进行跟新，时刻保持系统为最新，堵住一切发现的漏洞。
 </p>
 
-<h2 id="toc_0.3">添加新的源 </h2>
+<h2 id="toc_0.3">添加新的源</h2>
 <p>
 有一系列的服务器，为每个版本的 Fedora 分别提供了一些仓库。常用的这样的服务器有：
 </p>
@@ -160,7 +159,7 @@ yum就是根据存放在这里的这些rpm的header来检测系统中安装的�
 命令：yum clean, yum clean all (= yum clean packages; yum clean oldheaders) 
 </pre>
 <p>
-*注意，在这个cache文件夹下，其实，对应这/etc/yum.repo.d/下面的每一个仓库描述文件（或者叫做源描述文件），如果你修改或者删除了了/etc/yum.repo.d/下面的这些文件，这yum clean 就没办法清除这些文件了。*
+<strong>注意，在这个cache文件夹下，其实，对应这/etc/yum.repo.d/下面的每一个仓库描述文件（或者叫做源描述文件），如果你修改或者删除了了/etc/yum.repo.d/下面的这些文件，这yum clean 就没办法清除这些文件了。</strong>
 </p>
 
 <p>
@@ -170,7 +169,7 @@ yum makecache就是把服务器的包header信息下载到本地电脑缓存起�
   -C                    run entirely from cache, don't update cache
 </pre>
 
-<h3 id="toc_0.5.2">查看和跟新某个软件 </h3>
+<h3 id="toc_0.5.2">查看和跟新某个软件</h3>
 <p>
 查看系统中安装的某个包的版本以及现在可以跟新的最新版本：
 </p>
@@ -287,7 +286,7 @@ Description: The web browser from Google
 ……
 </pre>
 
-<h2 id="toc_0.6">gpg的问题 </h2>
+<h2 id="toc_0.6">gpg的问题</h2>
 <p>
 如果你下载了一个rpm包到本地，然后要用yum命令来安装（当然，你也可以用rpm命令安装）。绝大部分时候，用yum install xxx.rpm时会提示"Package xxx.rpm is not signed"而使安装中断，有两种解决方法：
 </p>

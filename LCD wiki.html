@@ -17,7 +17,6 @@
 		    <li><a href="index.html">首页</a></li>
 		    <li><a href="Navigate.html">本站导图</a> </li>
 		    <li><a href="AboutMe.html">关于</a> </li>
-		    <li><a href="http://nienet.com">返回NieNet</a></li>
 		</ul>
 	    </div>
 	</div> 
@@ -51,7 +50,7 @@ Super Twisted Nematic。过去使用的灰阶手机的屏幕都是STN 的。STN�
 在没有LCD控制器的SOC上，也可能用GPIO口模拟控制器。这某些没有使用MCU的场合，或者有特殊要求的场合，可以使用FPGA来当作控制器；
 </p>
 
-<h3 id="toc_0.2.1">驱动器 </h3>
+<h3 id="toc_0.2.1">驱动器</h3>
 <ul>
 <li>
 LCD Single Chip Driver
@@ -77,7 +76,7 @@ LCD Panel
 都是指LCD模组，LCD模块。将LCD屏幕和LCD驱动芯片作成一个完整的模块，只需要LCD控制器这边匹配该LCD模组的接口，就可以使用。在做开发的时候，买到的LCD模块就是这个模组。
 </p>
 
-<h3 id="toc_0.2.3">控制器 </h3>
+<h3 id="toc_0.2.3">控制器</h3>
 <ul>
 <li>
 MCU LCD Controller
@@ -94,10 +93,10 @@ MCU Smart LCD Controller
 正如前面所说，在没有LCD控制器的MCU上（例如普通的8051单片机），也可能用GPIO口模拟控制器。在某些没有使用MCU的场合，或者有特殊要求的场合（例如在安防上将视屏推送到屏幕的实时性要求很高），可以使用FPGA来当作控制器；
 </p>
 
-<h2 id="toc_0.3">LCD接口技术 </h2>
+<h2 id="toc_0.3">LCD接口技术</h2>
 <p>
 上面说的LCD的驱动电路的发展，而接口都是一直是CPU接口。因为这个发展的方向是：LCD driver作为MCU的一片协处理芯片，接受MCU发过来的command/data，而可以相对独立的处理显示工作。而怎么处理显示工作的过程，对于MCU和程序员来说，都是透明的。
-后来为什么出现了RGB的接口电路，小弟真的还不知道为什么。但是有两点很清楚：一是用RGB接口的MCU/Backend IC一般都更加的强大，有专门的接口电路来配合RGB显示。一是一般用RGB接口的LCD driver都没有GRAM，这大大的降低了LCD driver的成本，而将这些成本转移到更大的液晶显示区域去。所以不难看出，高端的显示屏（>=2.2"，QCIFF）的一般都会选用RGB接口。想想吧，26w色的QCIFF的显示屏至少需要多少GRAM啊，这都是钱啊！
+后来为什么出现了RGB的接口电路，小弟真的还不知道为什么。但是有两点很清楚：一是用RGB接口的MCU/Backend IC一般都更加的强大，有专门的接口电路来配合RGB显示。一是一般用RGB接口的LCD driver都没有GRAM，这大大的降低了LCD driver的成本，而将这些成本转移到更大的液晶显示区域去。所以不难看出，高端的显示屏（&gt;=2.2"，QCIFF）的一般都会选用RGB接口。想想吧，26w色的QCIFF的显示屏至少需要多少GRAM啊，这都是钱啊！
 其实RGB接口的LCD也很简单了，甚至比CPU接口的LCD还要简单。和CPU接口的LCD driver相比，RGB接口的driver去掉了一个接口电路，就是去掉了CPU接口中的一个处理COMMAND/DATA数据的IO电路。（这个我光用语言说不大清楚，等小弟有空做一个ppt再放上来）这样的话，就需要MCU提供两个场同步信号（H,V），无疑提高了对MCU的要求，而且，LCD的帧率唯一受MCU/Backend IC的接口速度限制，所以如果MCU足够nb的话，LCD的刷新速度还是很不错的。还有就是有的GRB接口的driver做得还不是很nb，需要用SPI来传输一些少量的命令，而很多MCU没有这么一个专用的SPI，所以要用GPIO来模拟SPI。呵呵，看看也是够麻烦的。而且最郁闷的是，因为考虑到很多MCU/Backend IC芯片的接口速度还不是足够的快，所以很多厂家在LCD driver里还是放了部分或者是整个显示内存——唉，还是没有达到省钱的目的啊！
 </p>
 
@@ -170,7 +169,7 @@ MCU Smart LCD Controller
 除了上述接口模式外，不同的控制器也会支持一些特有的接口模式。另外，不同的控制器其提供的接口的名称可能不一样。下面以i.MX233为例，讲述LCD驱动原理。
 </p>
 
-<h3 id="toc_0.3.1">i.MX233 LCD控制器 </h3>
+<h3 id="toc_0.3.1">i.MX233 LCD控制器</h3>
 <p>
 i.MX233 LCD控制器提供了四种接口模式：System Interface(MCU)、VSYNC Interface、DOTCLK Interface(RGB)、ITU-R BT.656 Digital Video Interface(DVI)。
 </p>
@@ -187,7 +186,7 @@ i.MX233 LCD控制器提供了四种接口模式：System Interface(MCU)、VSYNC 
 另一种方式是通过AXI总线，首先将要传送的数据存储在外部存储器(EMI)中，然后通过特定的寄存器保存数据在EMI中的首地址一次将数据传送到控制器的FIFO中。
 </p>
 
-<h3 id="toc_0.3.2">Smart LCD控制器 </h3>
+<h3 id="toc_0.3.2">Smart LCD控制器</h3>
 <p>
 Smart LCD一般自带buffer，外部没有了信号时，仍然能够自己进行刷新。普通LCD所有信号全部由外部驱动，一旦没有了信号，就完了。Smart LCD就是不需要主控这边给LCD panel送行、帧同步信号。
 </p>
@@ -196,7 +195,7 @@ Smart LCD一般自带buffer，外部没有了信号时，仍然能够自己进�
 Smart LCD直接集成了LCD大部分驱动，点频时钟，行、帧同步信号，还有buffer信号转换，无信号时的刷屏。 比如外部输入R8 G8 B8，连续串行数据，会在Smart LCD驱动电路里面转换成R8G8B8的并行24bit信号，然后放在LCD的buffer中，进行显示。
 </p>
 
-<h3 id="toc_0.3.3">LCD设备驱动的作用 </h3>
+<h3 id="toc_0.3.3">LCD设备驱动的作用</h3>
 <p>
 要将LCD设备驱动起来，最终在液晶屏上能够显示图像，我们要做的工作就是确定LCD控制器和驱动器之间的连接方式，然后根据这种连接方式，配置对应的可编程寄存器，让用于图像显示的数据发送到LCD驱动器中。以i.MX233为例：
 </p>

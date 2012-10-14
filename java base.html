@@ -17,7 +17,6 @@
 		    <li><a href="index.html">首页</a></li>
 		    <li><a href="Navigate.html">本站导图</a> </li>
 		    <li><a href="AboutMe.html">关于</a> </li>
-		    <li><a href="http://nienet.com">返回NieNet</a></li>
 		</ul>
 	    </div>
 	</div> 
@@ -63,7 +62,7 @@ public的类必须放在单独的文建里，且文件名必须与public类名�
 </p>
 
 
-<h2 id="toc_0.5">参考资料 </h2>
+<h2 id="toc_0.5">参考资料</h2>
 <ul>
 <li>
 Java_Program_in_Action_20110727-撒迦.pdf
@@ -71,7 +70,7 @@ Java_Program_in_Action_20110727-撒迦.pdf
 </ul>
 
 
-<h2 id="toc_0.6">extends与implements的不同 </h2>
+<h2 id="toc_0.6">extends与implements的不同</h2>
 <p>
 extends是继承父类，只要那个类不是声明为final或者那个类定义为abstract的就能继承，JAVA中不支持多重继承，但是可以用接口来实现，这样就要用到implements，继承只能继承一个类，但implements可以实现多个接口，用逗号分开就行了。比如 class A extends B implements C,D,E。
 </p>
@@ -95,7 +94,7 @@ implements一般是实现接口。extends 是继承类。接口一般是只有�
 </p>
 
 
-<h2 id="toc_0.7">查看jar文件包 </h2>
+<h2 id="toc_0.7">查看jar文件包</h2>
 <p>
 有些时候，我们需要查看一个jar文件中是否包含了某个方法，这个在linux下可以通过下面的命令来查询。
 </p>
@@ -212,7 +211,7 @@ CLASSPATH=.:JAVA_HOME/lib
 红色部分都是字符串，不是变量
 改成这样，然后执行一下profile或者重新登录一下，然环境变量起作用。
 JAVA_HOME=/usr/local/j2sdk
-PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/jre/bin
+PATH=\(PATH:\)JAVA_HOME/bin:$JAVA_HOME/jre/bin
 CLASSPATH=.:$JAVA_HOME/lib
 复制代码
 </p>

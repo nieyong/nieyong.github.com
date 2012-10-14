@@ -17,7 +17,6 @@
 		    <li><a href="index.html">首页</a></li>
 		    <li><a href="Navigate.html">本站导图</a> </li>
 		    <li><a href="AboutMe.html">关于</a> </li>
-		    <li><a href="http://nienet.com">返回NieNet</a></li>
 		</ul>
 	    </div>
 	</div> 

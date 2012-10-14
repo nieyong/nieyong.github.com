@@ -1,5 +1,5 @@
-ÄãÊÇËµ, saeimage µÄcropº¯Êı°É?
+ä½ æ˜¯è¯´, saeimage çš„cropå‡½æ•°å§?
 http://apidoc.sinaapp.com/__file ... class.php.html#a260
 
-ÍÆ¼öÄãÊ¹ÓÃGD¿âÀ´ÊµÏÖÕâ¸ö¹¦ÄÜ.±ãÓÚÒÆÖ².
+æ¨èä½ ä½¿ç”¨GDåº“æ¥å®ç°è¿™ä¸ªåŠŸèƒ½.ä¾¿äºç§»æ¤.
 

@@ -17,7 +17,6 @@
 		    <li><a href="index.html">首页</a></li>
 		    <li><a href="Navigate.html">本站导图</a> </li>
 		    <li><a href="AboutMe.html">关于</a> </li>
-		    <li><a href="http://nienet.com">返回NieNet</a></li>
 		</ul>
 	    </div>
 	</div> 
@@ -43,7 +42,7 @@
 
 </ul>
 
-<h2 id="toc_0.2">SSH是什么 </h2>
+<h2 id="toc_0.2">SSH是什么</h2>
 <p>
 SSH为Secure Shell的缩写，由IETF的网络工作小组（Network Working Group）所制定；SSH为创建在应用层和传输层基础上的安全协议。传统的网络服务程序，如FTP、POP和Telnet其本质上都是不安全的；而SSH是目前较可靠，专为远程登录会话和其他网络服务提供安全性的协议。SSH之另一项优点为其传输的数据是经过压缩的，所以可以加快传输的速度。SSH有很多功能，它既可以代替Telnet，又可以为FTP、POP、甚至为PPP提供一个安全的“通道”。
 </p>
@@ -58,7 +57,7 @@ SSH为Secure Shell的缩写，由IETF的网络工作小组（Network Working Gro
 （摘自《维基百科》）
 </p>
 
-<h2 id="toc_0.3">SSH远程登录服务器 </h2>
+<h2 id="toc_0.3">SSH远程登录服务器</h2>
 <p>
 在搭建自己的网站，博客的时候，可能你想远程登录到服务器上，向管理自己电脑上的文件一样管理服务器上的文件（增删该）。可能你还想把其它地方的文件（例如自己本地电脑上，或者其它服务器上）拷贝到服务器上，或者把服务器上的文件拷贝下来。这个时候，你就可以使用SSH。
 </p>
@@ -105,7 +104,7 @@ SSH传送文件
 如何将本地的文件传送到主机上呢?由于使用SSH，我们需要用到scp命令对本地计算机和SSH服务器上的文件进行交流。
 </p>
 <pre>
-scp &lt;本地文件名> &lt;用户名>@&lt;ssh服务器地址&gt;:&lt;上传保存路径即文件名&gt;
+scp &lt;本地文件名&gt; &lt;用户名&gt;@&lt;ssh服务器地址&gt;:&lt;上传保存路径即文件名&gt;
 例如：
 [ny@localhost ~]$ scp -r vimwiki_linux nieyong@72.10.38.50:/httpdocs/
 nieyong@72.10.38.50's password: 
@@ -139,7 +138,7 @@ id_rsa  id_rsa.pub  known_hosts
 如果你只建立一对密钥，那么另外一个用户肯定找不到私钥的位置（因为不是默认路径下了），这样使用git push提交的时候，会出现权限不够的提示。
 </p>
 
-<h3 id="toc_0.4.1">其它参考 </h3>
+<h3 id="toc_0.4.1">其它参考</h3>
 <ul>
 <li>
 <a href="http://www.pureweber.com/article/git-and-github/">http://www.pureweber.com/article/git-and-github/</a>
