@@ -22,7 +22,7 @@
 # [[ADW launcher]]
 # [[LCD Driver IC]]
 # [[wordpress theme]]
-# [[AboutMe]]
+# [[about]]
 # [[linux command]]
 # [[温故知新-x86体系架构]]
 # [[LCD 驱动调试]]

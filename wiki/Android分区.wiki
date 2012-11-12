@@ -1,0 +1,12 @@
+所谓的刷机我们可以简单的理解成把软件安装在手机的某些分区中。
+
+== bootloader ==
+当按下电源键手机上电启动后，首先从bootloader 分区中一个固定的地址开始执行指令，bootloader 分区分成两个部分，分别叫做primary bootloader 和secondary stage bootloader。Primary bootloader 主要执行硬件检测，确保硬件能正常工作后将secondary stage bootloader拷贝到内存(RAM)开始执行。Secondary stage bootloader 会进行一些硬件初始化工作，获取内存大小信息等，然后根据用户的按键进入到某种启动模式。比如说大家所熟知的通过电源键和其它一些按键的组合，可以进入到recovery，fastboot 或者选择启动模式的启动界面等。我们在论坛上看到的bootloader 通常指的就是secondary stage bootloader。不过我们不需要关心太多的细节，可以简单的理解为bootloader 就是一段启动代码，根据用户按键有选择的进入某种启动模式。
+
+=== fastboot 模式 ===
+fastboot是android 定义的一种简单的刷机协议，用户可以通过fastboot命令行工具来进行刷机。比如说fastboot flash boot boot.img 这个命令就是把boot.img 的内容刷写到boot 分区中。 *一般的手机厂商不直接提供fastboot模式刷机，而是为了显示他们的牛B 之处，总是会提供自己专有的刷机工具和刷机方法。* 比如说三星的Odin，摩托的RSD，华为的粉屏等等。但是其本质实际上是相同的，都是将软件直接flash 到各个分区中。
+
+=== recovery 模式 ===
+当进入recovery 模式时，secondary stage bootloader 从recovery 分区开始启动，recovery 分区是一个独立的Linux 系统，当recovery 分区上的Linux 内核启动完毕后，开始执行第一个程序init(init 程序是Linux 系统所有程序的老祖宗)。init 会启动一个叫做recovery 的程序（recovery 模式的名称也由此而来）。通过recovery 程序，用户可以执行清除数据，安装刷机包等操作。一般的手机厂商都提供一个简单的recovery 程序，而大名鼎鼎的CWM Recovery 就是一个加入了很多增强功能的recovery 程序，要想用上CWM Recovery 前提是recovery 分区可以被刷写。大家在论坛上看到的解锁bootloader，通常指的就是解锁recovery 或fastboot，允许刷写recovery 分区，这样大家就可以用上喜爱的CWM Recovery了。
+
+手机除了普通的CPU 芯片以外，还有MODEM 处理器芯片。该芯片的功能就是实现手机必需的通信功能，大家通常所的刷RADIO 就是刷写modem 分区。
