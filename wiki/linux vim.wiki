@@ -1,1 +1,6 @@
+== 插件 ==
+vimwiki
+bufexplorer	:查看buffer中打开的文件列表
+
+== 命令 ==
 :g/^$/d

@@ -54,6 +54,15 @@ alternatives 还有一些功能，包括删除一个可选项等等。同样，�
 下面的命令能够递归查找所有文件，并且把其中所有大于50M的文件都找出来。
     find . -type f -size +1000000k 
 
+== find命令 ==
+find命令-name选项后面的参数，最好使用双引号，否则，回出现些异常问题。
+
+查找目录（包括子目录）下所有的.DS_Store文件，并且每个文件使用`git rm`命令删除。
+    find . -name ".DS_Store" -exec git rm --cached -f {} \;.
+
+查找目录（包括子目录）下的所有后缀为.m的文件，并且将所有这些文件一次输入给`genstrings`命令，生成I18N文件（iphone开发中）。
+    find . -name "*.m" | xargs genstrings -o en.lproj
+
 == 压缩解压缩命令(tar,zip,unzip) ==
 将当前路径下的所有网页打包压缩：
     tar cjf test.tar.bz2 *.html

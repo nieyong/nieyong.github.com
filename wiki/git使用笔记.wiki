@@ -191,6 +191,15 @@ git reset的概念比较复杂。它的命令形式：git reset [--mixed | --sof
 
 将当前的工作目录完全回滚到指定的版本号，假设如下图，我们有A-G五次提交的版本，其中C的版本号是 bbaf6fb5060b4875b18ff9ff637ce118256d6f20，我们执行了'git reset bbaf6fb5060b4875b18ff9ff637ce118256d6f20'那么结果就只剩下了A-C三个提交的版本 
 
+== git ignore ==
+The idea is to keep locally your ".DS_Store", while removing them from the git repo.
+
+The .gitignore will work only if those ".DS_Store" are first removed from the index, hence the "git rm --cached -f" (see git rm).
+{{{
+find . -name ".DS_Store" -exec git rm --cached -f {} \;.
+git commit -m "delete files"
+git push
+}}}
 
 == git log的用法 ==
 以适当的形式显示整个工程，或者多个文件，整个目录等的log信息。
