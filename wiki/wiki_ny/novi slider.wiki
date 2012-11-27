@@ -1,0 +1,26 @@
+* effect: 'random',// 过渡效果
+* slices: 15,
+* boxCols: 8,
+* boxRows: 4,
+* animSpeed: 500,
+* pauseTime: 3000,
+* startSlide: 0, // 第几张开始，从0开始计算
+* directionNav: true, // 是否显示上一张下一张按钮
+* directionNavHide: true, // 是否只在经过时显示
+* controlNav: true, // 序列导航：1、2、3、4...
+* controlNavThumbs: false, // 图片导航
+* controlNavThumbsFromRel: false, // 使用img的rel属性作为缩略图地址
+* controlNavThumbsSearch: '.jpg', // 查找这个字符串...然后...
+* controlNavThumbsReplace: '_thumb.jpg', // ...然后用这个字符串代替于缩略图的src
+* keyboardNav: true, // 键盘控制（左右箭头）
+* pauseOnHover: true, // 鼠标经过时暂停轮播
+* manualAdvance: false, // 强制手动转换
+* captionOpacity: 0.8,
+* prevText: 'Prev',
+* nextText: 'Next',
+* beforeChange: function(){},
+* afterChange: function(){},
+* slideshowEnd: function(){}, // 所有显示完毕后触发
+* lastSlide: function(){}, // 最后一张图显示时触发
+* afterLoad: function(){} // 加载完毕时出发
+

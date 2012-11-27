@@ -1,0 +1,9 @@
+reStructuredText is an easy-to-read, what-you-see-is-what-you-get plaintext markup syntax and parser system. 
+
+What You See Is What You Get
+富文本格式编辑
+排版设计者+内容撰写者
+
+What You Think Is What You Get
+结构化文本编辑
+内容撰写者

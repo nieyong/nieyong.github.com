@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>系统管理模块</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h1 id="toc_1">系统管理模块</h1>
+
+<h2 id="toc_1.1">系统配置</h2>
+<p>
+1.系统信息
+2.设备描述（硬件、软件版本号，机型文件switch.tp）
+涉及文件：
+<strong>httpSystemInfo.c,httpSystemDescri.c,swSystemManage.c,ucSystemDescri.c</strong>
+</p>
+
+<h2 id="toc_1.2">用户管理</h2>
+<p>
+1.用户列表
+2.用户配置（管理员和受限用户，系统最多支持16个用户）
+涉及文件：
+<strong>httpUserManage.c,swUser.c和ucUser.c</strong>
+</p>
+
+<h2 id="toc_1.3">系统工具</h2>
+<p>
+1.配置导入、导出
+2.软件升级
+3.系统重启、复位
+</p>
+
+<h2 id="toc_1.4">安全配置</h2>
+<p>
+1.身份限制
+设置对访问交换机WEB页面的用户进行限制，只有符合我们设置条件的用户才可以访问WEB页面。该功能的底层是通过TPCL模块来实现的。
+涉及文件：
+<strong>httpUserSecurity.c,swUserSecurity.c ucUserSecurity.c</strong>
+2.超时配置和管理人数限制功能
+通过在WEBSERVER 系统RPM函数中增加一个SESSION层
+涉及文件：
+<strong>httpRpmSession.c,swSession.c,httpLogon.c</strong>
+</p>
+
+<h2 id="toc_1.5">主要需要阅读的代码</h2>
+<p>
+flashUtil.c：		系统升级，Flash布局，升级文件解析等
+swSystemManage.c：	系统管理的封装
+swUserSecurity.c：	用户安全设置，是重点和难点
+swSession.c：		登录用户的数目管理等 
+</p>
+
+<p>
+对应的配置文件有：
+</p>
+
+<p>
+ucUserSecurity.c：	关于用户权限的配置管理模块文件
+ucUser.c：		关于用户信息的配置管理模块文件
+ucSystemDescri.c:	关于机型描述的配置管理模块文件
+</p>
+
+<p>
+uc模块的上层文件为：
+Usrconf.c		UC模块的上层文件，会调用每一个模块的uc部分
+ucUtil.c		UC模块的函数实现
+</p>
+
+<h2 id="toc_1.6">问题总结</h2>
+<h3 id="toc_1.6.1">系统信息页面端口图标问题</h3>
+<p>
+系统信息页面SystemInfoRpm.htm的端口图标是由port_config.js来控制显示的。在制作webImage时，工具RC Maker会找到机型对应的port_config_xxxx.js。对于不同机型，需要修改的只有port_config_xxx.js文件，然后就是RC Maker使用的机型文件。
+</p>
+
+<p>
+Web页面错误的调试（例如端口图标不显示），在FF下，工具-》web开发者-》错误控制台，就可以查看到出现错误的位置。
+</p>
+
+
+<h2 id="toc_1.7">新版本无法升级回旧版本</h2>
+<p>
+在修改了Profile文件的内容和flash的布局之后，旧版本无法从新版本升级。主要原因是profile文件的大小改变了，旧的up.bin文件中profile的大小不再符合新的设计。调试如下：
+</p>
+
+<p>
+升级旧版本时打印如下：
+</p>
+<pre>
+BCM.0&gt; MallocJumboMem() user:1
+itemCount = 6
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 1137
+itemInfo = 48
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 1138
+itemType = 0x1  1
+maxSize = 0x80000
+itemSize = 0x640d4
+flashOffset = 0x0
+fileOffset = 0x158
+padding = 0x0
+fillByte = 0xff
+
+itemType = 0x28  40
+maxSize = 0x2000
+itemSize = 0x2c
+flashOffset = 0x3fe000
+fileOffset = 0x6422c
+padding = 0x2
+fillByte = 0xff
+
+itemType = 0x40  64
+maxSize = 0xf0
+itemSize = 0x24
+flashOffset = 0x3fe006
+fileOffset = 0x64258
+padding = 0x0
+fillByte = 0xff
+
+itemType = 0x20  32
+maxSize = 0x4000
+itemSize = 0x14e8
+flashOffset = 0x400000
+fileOffset = 0x6427c
+padding = 0x1
+fillByte = 0xff
+
+itemType = 0x18  24
+maxSize = 0x7a000
+itemSize = 0x49fdc
+flashOffset = 0x404000
+fileOffset = 0x65764
+padding = 0x1
+fillByte = 0xff
+
+itemType = 0x30  48
+maxSize = 0x380000
+itemSize = 0x3046d4
+flashOffset = 0x47e000
+fileOffset = 0xaf740
+padding = 0x0
+fillByte = 0xff
+
+bootromSize = 640c0
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 1274
+########################################################################################profileSize = 16
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 1287
+error size &lt; FLASH_PUBLICKEY_OFFSET
+write Profile error
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 1290
+FreeJumboMem()
+</pre>
+
+<p>
+升级新版本时打印信息：
+</p>
+<pre>
+BCM.0&gt; MallocJumboMem() user:1
+itemCount = 6
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 
+1137
+itemInfo = 48
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 
+1138
+itemType = 0x1  1
+maxSize = 0x80000
+itemSize = 0x642f4
+flashOffset = 0x0
+fileOffset = 0x158
+padding = 0x0
+fillByte = 0xff
+
+itemType = 0x28  40
+maxSize = 0x2000
+itemSize = 0x1a4
+flashOffset = 0x3fe000
+fileOffset = 0x6444c
+padding = 0x0
+fillByte = 0xff
+
+itemType = 0x40  64
+maxSize = 0xf0
+itemSize = 0x24
+flashOffset = 0x3fe006
+fileOffset = 0x645f0
+padding = 0x0
+fillByte = 0xff
+
+itemType = 0x20  32
+maxSize = 0x4000
+itemSize = 0x160c
+flashOffset = 0x400000
+fileOffset = 0x64614
+padding = 0x0
+fillByte = 0xff
+
+itemType = 0x18  24
+maxSize = 0x7a000
+itemSize = 0x4c380
+flashOffset = 0x404000
+fileOffset = 0x65c20
+padding = 0x3
+fillByte = 0xff
+
+itemType = 0x30  48
+maxSize = 0x380000
+itemSize = 0x30f594
+flashOffset = 0x47e000
+fileOffset = 0xb1fa0
+padding = 0x0
+fillByte = 0xff
+
+bootromSize = 642e0
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 
+1274
+########################################################################################profileSize = 
+190
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 
+1287
+######################ImageSize = 30f580
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 
+1297
+######################################################################################################
+######################################################################################################
+######################################################################################################
+######################################################################################################
+######################################################################################################
+##############################################################webImageSize = 4c369
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 
+1307
+########################################################################################switchTpSize = 
+15f8
+ ../../../../../SDK/sdk-5.6.2/systems/vxworks/raptor/vxworks5x/bcm56218/flashUtil.c sysUpgradeFirmware 
+1318
+############################################
+FreeJumboMem()
+MallocJumboMem() user:1
+
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

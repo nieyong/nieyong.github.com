@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>js常用代码段</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">对象初始化，并且设置默认值</h2>
+<p>
+一个对象作为参数传入时，可能有该对象也可能没有。而且，对象内的属性个数也是不确定的。
+</p>
+<pre name="code" class="js">
+    var ripStTemp = {};
+    
+    /* 如果全局变量ripSt未提供，则设置默认值 */
+    ripSt = window.ripSt || {};
+    ripStTemp.enable = (ripSt.enable === undefined)? false : ripSt.enable ;
+    ripStTemp.autoSum = (ripSt.autoSum === undefined)? false : ripSt.autoSum ;
+    ripStTemp.distStatic = (ripSt.distStatic === undefined)? false : ripSt.distStatic ;
+    ripStTemp.updateTimer = (ripSt.updateTimer === undefined)? 30 : ripSt.updateTimer ;
+    ripStTemp.timeOutTimer = (ripSt.timeOutTimer === undefined)? 120 : ripSt.timeOutTimer ;
+    ripStTemp.garbageTimer = (ripSt.garbageTimer === undefined)? 300 : ripSt.garbageTimer ;
+    ripStTemp.distance = (ripSt.distance === undefined)? 12 : ripSt.distance ;
+    ripStTemp.metric = (ripSt.metric === undefined)? 8 : ripSt.metric ;
+    ripStTemp.version = (ripSt.version === undefined)? 'ripV1' : ripSt.version ;
+
+</pre>
+
+<p>
+参考iscroll.js代码的实现，上面的代码写成这样更加简洁。
+</p>
+<pre name="code" class="js">
+    var i;
+    /* 默认选项 */
+    var ripStOption = {
+	    enable: false,
+	    version: 'ripV1',
+	    distance: 120,
+	    autoSum: true,
+	    metric: 12,
+	    distStatic: false,
+	    updateTimer: 30,
+	    timeOutTimer: 180,
+	    garbageTimer: 300
+    };
+    
+    /* ripSt为全局变量，window.ripSt为rpm函数生成。
+     * 设置rpm函数传入的数据
+     */
+    ripSt = window.ripSt || {};
+    for (i in ripSt) that.ripStOption[i] = ripSt[i];
+</pre>
+
+<p>
+参考toast.js代码的实现，如果使用了jquery库，那么可以使用jquery.extend()函数实现以上代码。
+</p>
+<pre name="code" class="js">
+    
+    /* ripSt为全局变量，window.ripSt为rpm函数生成。
+     * 设置rpm函数传入的数据
+     */
+    ripSt = window.ripSt || {};
+    $.extend(ripStOption,ripSt);
+</pre>
+
+<h2 id="toc_0.2">对象的遍历，并且转化为数组</h2>
+<p>
+使用for in结构，使用[]操作而不是.操作访问对象的属性值。
+</p>
+<pre name="code" class="js">
+    var rtArray = [];
+    
+    /* just for test */
+    /* rtTable对象的demo：*/
+    rtTable = {
+	    rt1:{dst:"192.168.0.0/24",gateway:"192.168.0.1",metric:1,intf:"sc1",time:23},
+	    rt2:{dst:"192.168.2.0/24",gateway:"192.168.2.1",metric:2,intf:"lo3",time:2},
+	    rt3:{dst:"192.168.3.0/24",gateway:"192.168.3.1",metric:2,intf:"sc4",time:122}
+	    };
+    
+    /* 将rtTable对象转化为rtArray数组 */
+    /* rtArray数组的结构demo：
+    var rtArray = [
+	    ["192.168.1.0/24","192.168.1.1","1","sc1","1"],
+	    ["192.168.2.0/24","192.168.2.1","2","sc2","3"],
+	    ["192.168.3.0/24","192.168.3.1","3","sc3","4"],
+	    ["192.168.4.0/24","192.168.4.1","4","sc4","16"]
+	    ];
+    */
+    for ( var key in rtTable ){
+	    rtArray.push(new Array(rtTable[key].dst,rtTable[key].gateway,rtTable[key].metric,rtTable[key].intf,rtTable[key].time));
+    }
+
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

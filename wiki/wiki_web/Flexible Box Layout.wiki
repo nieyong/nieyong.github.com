@@ -1,0 +1,26 @@
+流体盒模型，W3C草案（http://www.w3.org/TR/css3-flexbox/）的描述 如下：
+    a CSS box model optimized for interface design. It provides an additional layout system alongside the ones already in CSS. [CSS21] In this new box model, the children of a box are laid out either horizontally or vertically, and unused space can be assigned to a particular child or distributed among the children by assignment of “flex” to the children that should expand. Nesting of these boxes (horizontal inside vertical, or vertical inside horizontal) can be used to build layouts in two dimensions. This model is based on the box model in the XUL user-interface language used for the user interface of many Mozilla-based applications (such as Firefox).
+
+* 之前要实现横列的web布局，通常就是float或者display：inline-block; 但是都不能做到真正的流体布局。至少width要自己去算百分比。
+* flexible box 就可以实现真正意义上的流体布局。只要给出相应属性，浏览器会帮我们做额外的计算。
+
+
+In order to initiate the Flex Box layo ut mode, you must specify a containing element, whether the document body or child element within it. You do this by using the existing display  property with a new value:
+
+When this declaration is set on an element, all of its immediate child ele-ments are subject to Flex Box layout rules.  
+
+{{{name="code" class="css"
+E  { display: box; }
+E  { display: inline-box; }
+}}}
+
+提供的关于盒模型的几个属性：
+| box-orient     | 子元素排列 vertical or horizontal                   |
+| box-flex       | 兄弟元素之间比例，仅作一个系数                                |
+| box-align      | box 排列                                         |
+| box-direction  | box 方向，默认为normal值，按照box中子div的顺序排列，reverse为反向排列 |
+| box-flex-group | 以组为单位的流体系数                                     |
+|box-lines            ||
+| box-ordinal-group | 以组为单位的子元素排列方向 |
+|box-pack||
+

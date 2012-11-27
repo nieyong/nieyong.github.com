@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>思科和华为的OS</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">Cisco IOS/IOS  &amp; 华为 VRP</h2>
+<p>
+与大多数通信网络公司一样，华为的主要研发人员投入是在其软件方面。Cisco的系统软件命名为IOS和IOX。华为的系统软件为VRP。VRP是Versatile Routing Platform的缩写。VRP主要是用在华为的路由器(Router)和交换机(Switch)平台(Platform)上。关于VRP的体系结构的资料在网络上基本上不存在。基本上我们知道VRP是一个基于美国Windriver公司提供的Vxworks操作系统的一个网络监控软件系统。2003年1月23日，Cisco正式控告华为的VRP系统软件侵权。侵权行为包含四大部分：
+</p>
+
+<ul>
+<li>
+Copying of IOS source code（抄袭IOS的原代码）: Cisco alleges that Huawei has copied portions of the Cisco IOS source code and included the technology in its operating system for its Quidway routers and switches. Huawei’s operating system contains a number of text strings, file names, and bugs that are identical to those found in Cisco’s IOS source code.
+
+<li>
+Copying of Cisco’s technical documentation（抄袭思科的技术文档）: Cisco alleges that Huawei has copied extensively from Cisco’s copyrighted technical documentation and included whole portions of Cisco’s text in Huawei’s user manuals for Quidway routers and switches.
+
+<li>
+Copying of Command Line Interface（抄袭思科的命令行界面）: Cisco alleges that Huawei has copied Cisco’s Command Line Interface (CLI) and corresponding screen displays. CLI, a key component of Cisco’s copyrighted IOS software, is the user interface that enables users to communicate with the routers. Extensive portions of Cisco’s CLI and help screens appear verbatim in Huawei’s operating system for its Quidway routers and switches.
+
+<li>
+Patent infringement（违反专利保护）: Cisco alleges that Huawei is infringing at least five Cisco patents related to proprietary routing protocols and has included these technologies in its Quidway routers and switches.
+
+</ul>
+
+<p>
+Cisco当天的原始新闻如下：<a href="http://newsroom.cisco.com/dlls/corp_012303.html">http://newsroom.cisco.com/dlls/corp_012303.html</a>
+</p>
+
+<p>
+Cisco提交的原始法律诉讼文件链接如下：<a href="http://newsroom.cisco.com/dlls/filing.pdf">http://newsroom.cisco.com/dlls/filing.pdf</a>
+</p>
+
+<p>
+这场官司在中美高科技领域得到了广泛的关注。众说纷纭……
+</p>
+
+<p>
+2004年7月28日，结果终于出台。简单的说，通过第3方独立调查的结果，华为，作为一个公司，并没有有计划的抄袭Cisco的IOS系统软件。但是确实在某部分的代码中，以非预料性的加入了IOS软件相关的部分代码。法庭上最后双方达成的协议是：华为将立刻停止相关产品在美国的销售。华为要修改相关其VRP系统的CLI(用户命令界面)，用户使用手册和相关的原代码等等。Cisco将停止对华为在专利方面的诉讼。双方各自付自己的法院和律师费用。
+</p>
+
+<p>
+华为是如下介绍VRP系统的：
+</p>
+
+<p>
+VRP (Versatile Routing Platform)“The VRP (Versatile Routing Platform),a fruit of Huawei’s many years of research and application experience in the field of network, is a network OS incorporating Huawei’s proprietary intellectual properties and capable of supporting various network systems of Huawei.  It features a powerful IP forwarding engine as its core, and a perfect integration of real time OS technology, equipment and network management technology and various network application technologies through an advanced architectural design. As a scalable platform capable of sustained evolution with open interfaces, it supports a large number of protocols and features with great flexibility. With this platform, you can build an end-end, secure network of high efficiency, great intelligence, and easy manageability. Huawei has obtained a lot of experience in network running through the massive application of its network products and gained sufficient knowledge of various customer requirements. Such experience and knowledge serve as the basis for the design of the VRP so that the platform can adapt to most of the application environments through its support of diverse protocols and features.
+</p>
+
+<p>
+The VRP mainly has the following features:
+</p>
+
+<p>
+Comprehensively protecting user resources, and guaranteeing reliability, high efficiency, and security of user networks. The VRP provides a large number of security and backup protocols, including access control, authentication, firewall, encapsulation encryption, log function, backup center function, route backup, and load balance. The powerful security encryption function can effectively control user authority and monitor the activities of users. Its simple and practical backup functions ensure the smoothness of communications on the network and the uninterrupted transmission of data. And the load balance function can optimize your use of the network resources and get you the maximum bandwidth.
+</p>
+
+<p>
+Providing simple, diverse, and highly efficient configuration, management, and monitoring means. By these means, you can conveniently configure and effectively control network equipment so that you can keep ahead in the time of network and information. With the network management function, you can monitor and manage the running of the whole network simply and effectively. With the command lines configured in a popular worldwide style, you will feel easy in your application. The graphic configuration interface to be implemented soon will enable you to make network configurations in a direct, visual manner. In addition, the platform provides the remote configuration function so that you can remotely configure the router by logging in through TELNET or dialing up via the modem. This facilitates the working for the network management people. Providing a highly effective forward engine Through such advanced technologies as high-speed switching and buffer, the platform improves the packet transfer rate.
+</p>
+
+<p>
+Its numerous management policies enable you to manage the routing topology of the whole network. Supporting multicast forward, it enables you to adapt to the future requirements for new services, and get you prepared for such applications as voice and IP conferencing applications.  Providing voice over IP unit The VRP provides voip unit to introduce enterprise voice capabilities via existing network infrastuctures at extremely-low increment cost with various of interface types, AL,AT0, E&amp;M and E1 in the future.”
+</p>
+
+<h2 id="toc_0.2">系统软件的版本控制问题</h2>
+<p>
+一般而言，结果是这样的：由于为了对付特殊客户/订单，大量的CVS Branch的飘在主Release之外，同时主Release又必须在Internal R&amp;D的定义下不断发布新的Release，整个代码的Feature Merge, Bug Duplicate, Bug Sync将成为不可控制，或将需要非常巨大的代价。代码管理者，包括研发人员，有时将不知道一个Bug Fix应该往那个子节点上放。然后，只能等待客户出一件事情，解决一件。疲于奔命。整个研发队伍将不得不花费巨大人力物力在售后技术维护上。其结果体现在CVS节点上是，在每个Tree_Data_ti_j下面还会有Tree_Data_ti_j_patchk。每个patch是为了解决某个特定用户遇到的解决方案。
+</p>
+
+<p>
+现在，让我们忘掉华为技术管理在整个华为体系中的被动，来看看那么华为的研发结构是如何的呢？来考察一下华为从IBM学的IPD。
+</p>
+
+<p>
+一方面由于《基本法》达不到预期的效果，而华为的人员规模，销售额更加庞大，1998年，华为与IBM公司合作启动了《IT策略与规划（IT S&amp;P）》项目，开始规划华为未来3-5年需要开展的业务变革和IT项目，其中包括IPD（Integrated Product Development，集成产品开发）、ISC（Integrated Supply Chain，集成供应链）、IT系统重整、财务四统一等8个项目，IPD和ISC是其中的重点。2003年上半年，数十位IBM专家撤离华为，业务变革项目暂告一个段落。此次业务流程变革历时5年，耗资数亿元，涉及公司价值链的各个环节，是华为有史以来影响最为广泛、深远的一次管理变革。理论上，IPD能够在研发前期就避免以前需要投入市场后才会暴露的重大问题。以前华为的产品开发都在中研部(中央研究部)，现在改由PDT(产品开发团队)来承担。每个产品都有各自的PDT，每一个PDT团队由研发、市场、财务、采购、用户服务、生产等各部门抽调的代表组建，像一个个创业型小企业，从研发开始，对市场、利润、产品生命周期等全程负全部责任，共同协作完成一个产品从概念、研发，到生产、上市的全过程，从而真正实现产品研发和市场的同步进行。
+</p>
+
+<p>
+中研部是华为头一个面临IPD挑战的部门。以前中研部全权负责研发，市场部门负责销售，中研部做什么，市场部门就卖什么。现在，产品做成什么样完全由不得研发人员，别人都得参与，而这些人以前都是和研发根本不搭界的人。新的运作流程变为，市场代表带着产品规格、技术参数等信息到市场上搜集客户反馈，据此考虑市场空间、客户需求的排序，哪些需求会对未来产品的市场潜力和竞争力产生重大影响等等。在市场人员的强烈参与下，产品的概念得以形成。接着，财务代表根据市场代表提供的市场数据算账：需投入多少研发工程师、仪器设备成本、制造成本、物料成本、产品生命周期内销售额、利润等，一份企业业计划书产生了，用以说服IPMT(投资管理委员会，分产品线设立，共有9个)同意为该产品投资。
+</p>
+
+<p>
+摘自《对华为系统软件的战略思考》 陈怀临
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

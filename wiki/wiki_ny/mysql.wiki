@@ -1,0 +1,16 @@
+== mysql基本操作 ==
+# show databases;	//查看有哪些数据库
+# use database_name;	//切换都database_name中
+# show tables;		//查看有哪些表项
+下面就可以使用sql语言进行操作。
+
+== mysql密码设置 ==
+* /etc/init.d/mysql start	//启动mysql
+* /usr/bin/mysqladmin -u root password 'new-password'
+
+* >select 'host' from user where user='root';
+* >update user set host='%' where user='root';
+
+== mysql的基本配置 ==
+* 防火墙是否打开了3306端口。否则，在连接时可能不成功。
+* 必须赋予mysql任何机器访问数据库的权限。

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Linux Shell Command</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<ul>
+<li>
+挂载ISO文件
+
+</ul>
+<p>
+#mount -o loop xxx.iso /mnt/media
+</p>
+
+<ul>
+<li>
+创建一个用户
+
+</ul>
+<p>
+#useradd ny
+#passwd ny
+</p>
+
+<ul>
+<li>
+查找包含某字符串的文件
+
+</ul>
+<p>
+#find . -type f -name "*"|xargs grep help
+在当前路径下的所有文件中查找包含help字符的文件。
+</p>
+
+<ul>
+<li>
+批量文件编码转化
+
+</ul>
+<p>
+使用find命令找到所有需要转换的文件，然后使用-exec执行iconv命令单个转化。
+</p>
+<pre name="code" class="c">
+#!/bin/bash
+find . -type f -name "*.wiki" \
+-exec ls '{}' \; \
+-exec iconv -f gb2312 -t utf8 '{}' -o ../webutf/tmp.wiki \; \
+-exec mv ../webutf/tmp.wiki ../webutf/'{}' \;
+</pre>
+
+<ul>
+<li>
+对C文件进行排版，在拷贝代码错乱的时候很有用。但是kr风格的C语言可能我们还有些不习惯，并不是公司的C语言规范标准。
+
+</ul>
+<p>
+#indent -kr main.c
+</p>
+
+
+<h2 id="toc_0.1">grep，egrep命令</h2>
+<ul>
+<li>
+grep NW datafile
+
+</ul>
+<p>
+解释：打印datafile中包含NW的行
+</p>
+
+<ul>
+<li>
+grep -i 'define END_RCV_RTN_CALL' -r  ./h/*
+
+</ul>
+<p>
+解释：递归查找h目录下含有所示字符串的文件，忽略大小写
+</p>
+
+
+<ul>
+<li>
+grep -i -F 'void * muxDevLoad' -r  ./src/*
+
+</ul>
+<p>
+解释：-F选项表示使用普通字符串匹配，不使用正则表达式
+</p>
+
+<ul>
+<li>
+grep -R "whatever you like" * |grep -v ".svn/*" 
+
+</ul>
+<p>
+解释： GNU Grep含有--exclude-dir选项，如果使用Unix Grep，没有该选项，则使用以上命令。这种方式是使用管道进行双层“过滤”，其中第二次grep使用了-v选项，即逆向匹配，打印出不匹配的行。
+</p>
+
+<ul>
+<li>
+grep '^[we]' datafile
+
+</ul>
+<p>
+打印datafile中以w或者e开头的行
+</p>
+
+<ul>
+<li>
+egrep '2\.?[0-9]' datafile
+
+</ul>
+<p>
+解释：打印所有这样的行：它包含一个2，后跟0个或者一个句号，然后跟一个数字。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

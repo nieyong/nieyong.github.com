@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>BOOL数据类型定义</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+在文件wmData.h和tlSystem.h文件中，都有BOOL数据类型的定义，定义为int类型。并且定义了TRUE为1，FALSE为0。
+</p>
+<pre name="code" class="c">
+typedef int     BOOL;
+
+#ifndef TRUE
+#define TRUE   1
+#endif
+#ifndef FALSE
+#define FALSE  0
+#endif
+
+</pre>
+
+<p>
+在ospf协议代码中，对BOOL类型使用自定义的枚举类型BOOLEAN，在ospfCommonUtils.h文件中。
+</p>
+<pre name="code" class="c">
+
+#if !defined BOOLEAN
+typedef enum BOOLEAN
+{
+	 _FALSE = 0 		/* FALSE and TRUE are already defined here */
+	,_TRUE = 1
+} BOOLEAN;
+#endif
+
+</pre>
+
+<p>
+对于某些ospf协议层的函数，如果输入参数中有BOOLEAN类型，在调用时就需要注意类型转化。
+</p>
+<pre name="code" class="c">
+/* ospf协议层函数定义 */
+void ospf_no_asbr_routing_aggregate(OSPF_CLASS *ospf, ULONG network, ULONG mask, 
+			ULONG restore_tag, BOOLEAN restore_notAdvertise, BOOLEAN restore_nssaOnly)
+{
+	if(restore_notAdvertise)
+	{
+		//TO DO
+	}
+}
+
+typedef enum OSPF_IMPORT_PARA_MASK
+{
+	OSPF_IMPORT_PARA_MASK_COST = (1&lt;&lt;0),
+	OSPF_IMPORT_PARA_MASK_TYPE = (1&lt;&lt;1),
+	OSPF_IMPORT_PARA_MASK_TAG= (1&lt;&lt;2),
+	OSPF_IMPORT_PARA_MASK_NSSAONLY = (1&lt;&lt;3),
+	OSPF_IMPORT_PARA_MASK_ALWAYS = (1&lt;&lt;4),
+	OSPF_IMPORT_PARA_MASK_NOTADV = (1&lt;&lt;5)
+}OSPF_IMPORT_PARA_TYPE;
+
+
+/* sw层函数调用上面的函数 */
+STATUS swOspfAsbrAggregateDestroy(ULONG pID,ULONG ipNum,ULONG maskNum,UINT32 paraMask)
+{
+
+
+	ospf_no_asbr_routing_aggregate(ospf,ipNum,maskNum,
+				(paraMask &amp; OSPF_IMPORT_PARA_MASK_TAG)? TRUE : FALSE,
+				(paraMask &amp; OSPF_IMPORT_PARA_MASK_NOTADV)? TRUE : FALSE, 
+				(paraMask &amp; OSPF_IMPORT_PARA_MASK_NSSAONLY)? TRUE : FALSE);
+
+}
+
+</pre>
+
+<p>
+原来犯得错误是，在sw层调用时，写成如此：
+</p>
+<pre name="code" class="c">
+/* sw层函数调用上面的函数 */
+STATUS swOspfAsbrAggregateDestroy(ULONG pID,ULONG ipNum,ULONG maskNum,UINT32 paraMask)
+{
+
+
+	ospf_no_asbr_routing_aggregate(ospf,ipNum,maskNum,
+				paraMask &amp; OSPF_IMPORT_PARA_MASK_TAG,
+				paraMask &amp; OSPF_IMPORT_PARA_MASK_NOTADV, 
+				paraMask &amp; OSPF_IMPORT_PARA_MASK_NSSAONLY);
+
+}
+
+</pre>
+
+<p>
+按照上面的代码，将导致传入的参数不对。例如，如果paraMask为0x0000,0008，那么这个参数将不能够被识别为BOOLEAN中定义的TRUE。
+</p>
+
+<p>
+如果函数ospf_no_asbr_routing_aggregate()中的参数使用BOOL类型，则可以这么传入参数。因为如果把BOOL定义为int类型，则任何不为0的整数都可以被解释为TRUE，即判断if(a)是为TRUE。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

@@ -1,0 +1,37 @@
+== 优秀的wordpress网站 ==
+下面是 rubiqube 收集并推荐的20个做得比较成功且设计十分优秀的CMS型WordPress网站，希望能给使用WordPress来做CMS站点的朋友一些有用的参考：
+# ubicle Ninjas
+# ord Auto Shows
+# risk Design
+# aijin Film and Sound
+# uck Magazine
+# uasar Software
+# id – Sri Lanka
+# im Wilson
+# P Hire
+# Executive Warfare
+# Feedback Audio
+# fraai
+# Future Snowboarding Magazine
+# Ginger Restaurant
+# Inbound Pass
+# International Screening Solutions
+# kineda
+# Little White Lies
+# Miami Dating Coach
+# ten24media
+
+== 主题定制 ==
+新建一个page，如果page有定制模板，而你又想把在新建page中的内容显示出来，需要在定制模板前面添加如下代码：
+{{{
+	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+
+	<?php the_content(__('Read more'));?><div style="clear:both;"></div>
+
+	<?php endwhile; else: ?>
+
+	<p><?php _e('Sorry, no posts matched your criteria.'); ?></p><?php endif; ?>
+}}}
+
+== jquery slider ==
+[[novi slider]]

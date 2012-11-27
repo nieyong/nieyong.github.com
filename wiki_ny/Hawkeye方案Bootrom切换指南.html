@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Hawkeye方案Bootrom切换指南</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+这里介绍一下Hawkeye平台交换机的Bootrom，以及如何在各种Bootrom之间切换。
+</p>
+
+<h2 id="toc_0.1">Bootrom位置</h2>
+<p>
+Bootrom位于SVN的trunk\Bootrom\Hawkeye目录下，使用hawkeye方案的交换机主要有以下三款机型：TL-SG3216，TL-SG3424，TL-SG3210。有且仅有这三款机器。
+</p>
+
+<p>
+[[image\bootrom\Bootrom_hawkeye.gif]]
+</p>
+
+<h2 id="toc_0.2">Bootrom的分类</h2>
+<p>
+按照硬件上是否实现看门狗电路，Bootrom分为两类，如图所示。以上三款机器，只有比较旧的调试用样机没有硬件看门狗，从工厂出货的新样机都有看门狗。没有看门狗的样机烧入了带看门狗的Bootrom，影响不大，只是无法软件重启；带看门狗的样机烧入了不带看门狗的Bootrom，后果严重， <strong>系统不断重启，无法使用</strong> 。
+</p>
+
+<p>
+每一类Bootrom又有四个不同的文件，如图所示。下面以不带看门狗的Bootrom为例说明。下面摘自目录下的readme文件。
+</p>
+<pre>
+hawkeye_bootrom_debug.bin				不带看门狗的调试型Bootrom
+hawkeye_bootrom_download.bin				不带看门狗的发布型Bootrom
+hawkeye_bootrom_release.bin				不带看门狗的下载型Bootrom
+hawkeye_bootrom_vxWokrs					不带看门狗的Bootrom可执行文件
+</pre>
+<p>
+下面简要的说明以上四个文件：
+</p>
+<ul>
+<li>
+调试型Bootrom：不能够通过ftp下载host机上的vxWorks镜像，只能够启动已经烧写在Flash上的vxWorks镜像。是发布型Bootrom的增强版，增加了bootrom，product，webImage，switchTp这四个命令。
+
+<li>
+发布型Bootrom：同调试型的Bootrom，买个消费者的产品中使用的就是该Bootrom。删除了bootrom，product，webImage，switchTp这四个命令。
+
+<li>
+下载型Bootrom：能够通过ftp下载host机上的vxWorks镜像，不能够启动已经烧写在Flash上的vxWorks镜像。该Bootrom主要用于下载调试。
+
+<li>
+Bootrom可执行文件：调试型Bootrom的内存下载可执行版本，可被下载型Bootrom通过ftp下载到内存直接运行，命令和调试型Bootrom完全相同。
+
+</ul>
+
+<h2 id="toc_0.3">Bootrom的切换</h2>
+<ul>
+<li>
+由调试型Bootrom切换为下载型Bootrom或者发布型Bootrom
+
+</ul>
+<p>
+在BOOTROM菜单中输入bootrom hawkeye_bootrom_download.bin命令或者bootrom hawkeye_bootrom_download.bin命令
+</p>
+
+<ul>
+<li>
+由下载型Bootrom切换为调试型Bootrom或者发布型Bootrom
+
+</ul>
+<p>
+将hawkeye_bootrom_vxWorks下载到内存中，然后进入BOOTROM菜单中，输入bootrom hawkeye_bootrom_debug.bin命令或者bootrom hawkeye_bootrom_release.bin命令
+</p>
+
+
+<ul>
+<li>
+由发布型Bootrom切换为调试型Bootrom或者下载型Bootrom
+
+</ul>
+<p>
+在Bootrom下面没有办法，必须使用升级包up.bin模式，up.bin文件位于目录./release2download/下。注意一定要使用ftp命令[file]选项修改为对应的up.bin文件。
+</p>
+
+<h2 id="toc_0.4">Bootrom的判断</h2>
+<p>
+如何判断当前使用的是哪种类型的Bootrom呢？下载型Bootrom使用的是BCM原始的界面，如下所示：
+</p>
+
+<p>
+[[image\bootrom\bootrom_download.gif]]
+</p>
+
+<p>
+调试型Bootrom和发布型Bootrom都是使用TL-LINK自定义的界面，如下所示：
+</p>
+
+<p>
+[[image\bootrom\Bootrom_start.gif]]
+</p>
+
+<p>
+如何判断调试型Bootrom和发布型Bootrom呢？有bootrom，product，webImage，switchTp这四个命令的就是调试型Boorom，否则就是发布型的Bootrom。
+</p>
+
+<h2 id="toc_0.5">再说调试型Bootrom</h2>
+<p>
+调试型Bootrom最大的特点就是能够查看机器的产品ID，修改机型配置文件，Web页面，烧写Bootrom。
+</p>
+
+<p>
+<strong>如何更新switch.tp和webImage文件</strong>
+将hawkeye_bootrom_vxWorks或者hawkeye_bootrom_watchdog_vxWorks下载到内存中（下载型Bootrom前提下），然后按住CRTL-B进入BOOTROM菜单中，通过ftp命令修改用户名和密码，然后通过下面命令就可以更新相应的文件了，
+</p>
+<pre>
+switchTp 文件名
+webImage 文件名
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

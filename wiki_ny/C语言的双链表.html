@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>C语言的双链表</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+将OSPF PNE代码中的链表的基本操作函数提取出来，并且进行了一些测试的实验。详细的测试文件位于./code/list.c中。下面将各个函数总结如下：
+</p>
+
+<h2 id="toc_0.1">链表结构体</h2>
+<p>
+下面是链表结构体的定义。两个通用的链表结构体LINK和OSPF_GENERIC_NODE是所有链表操控函数的输入参数，其他链表结构体，例如OSPF，都需要强制类型转化为上面两个通用结构体，才能够作为参数传入链表操作函数。
+</p>
+<pre name="code" class="c">
+typedef struct LINK {
+    struct LINK *sptr_forward_link;
+    struct LINK *sptr_backward_link;
+} LINK;
+
+
+/* used for pointer manipulation when inserting and removing nodes in a list */
+typedef struct OSPF_GENERIC_NODE {
+    struct OSPF_GENERIC_NODE *sptr_forward_link;
+    struct OSPF_GENERIC_NODE *sptr_backward_link;
+} OSPF_GENERIC_NODE;
+
+
+
+typedef struct OSPF {
+    struct OSPF *sptr_forward_link;
+    struct OSPF *sptr_backward_link;
+    int cnt;
+} OSPF;
+
+</pre>
+
+<h2 id="toc_0.2">链表操作函数</h2>
+<p>
+下面是链表通用操作函数。注意，删除链表中的节点函数，形参链表首头位指针的指针，为什么需要这样呢？删除的节点，也许就是链表头所指的节点。也就是说，该形参不仅是输入参数，而且也可能是输出参数（在删除的节点为头节点时）。在测试函数main()中就有这样的一个实例，需要特别注意。
+</p>
+<pre name="code" class="c">
+
+/*************************************************************************/
+void ospf_add_entry_to_list(LINK * sptr_link, LINK * sptr_link_to_add)
+{
+    if (sptr_link == NULL) {
+	return;
+    }
+
+    if (sptr_link_to_add == NULL) {
+	return;
+    }
+
+    sptr_link_to_add-&gt;sptr_backward_link = sptr_link-&gt;sptr_backward_link;
+
+    if (sptr_link-&gt;sptr_backward_link != NULL) {
+	sptr_link-&gt;sptr_backward_link-&gt;sptr_forward_link =
+	    sptr_link_to_add;
+    } else {
+	sptr_link-&gt;sptr_forward_link = sptr_link_to_add;
+    }
+
+    sptr_link-&gt;sptr_backward_link = sptr_link_to_add;
+
+    sptr_link_to_add-&gt;sptr_forward_link = NULL;
+}
+
+
+/************************************************************************/
+void ospf_delete_entry_from_list
+    (
+    LINK *sptr_list_link,
+    LINK *sptr_link_to_delete
+    )
+    {
+    if (sptr_list_link == NULL)
+        {
+        return;
+        }
+
+    if (sptr_link_to_delete == NULL)
+        {
+        return;
+        }
+
+    if ((sptr_link_to_delete-&gt;sptr_forward_link == NULL) &amp;&amp;
+        (sptr_link_to_delete-&gt;sptr_backward_link == NULL)) /* 1 entry in list */
+        {
+        sptr_list_link-&gt;sptr_forward_link = NULL;
+        sptr_list_link-&gt;sptr_backward_link = NULL;
+        return;
+        }
+
+    if (sptr_link_to_delete-&gt;sptr_backward_link == NULL)
+        {
+        /* first entry in list */
+        sptr_list_link-&gt;sptr_forward_link =
+            sptr_link_to_delete-&gt;sptr_forward_link;
+        }
+    else
+        {
+        sptr_link_to_delete-&gt;sptr_backward_link-&gt;sptr_forward_link =
+            sptr_link_to_delete-&gt;sptr_forward_link;
+        }
+
+    if (sptr_link_to_delete-&gt;sptr_forward_link == NULL) /* last entry in list */
+        {
+        sptr_list_link-&gt;sptr_backward_link =
+            sptr_link_to_delete-&gt;sptr_backward_link;
+        }
+    else
+        {
+        sptr_link_to_delete-&gt;sptr_forward_link-&gt;sptr_backward_link =
+            sptr_link_to_delete-&gt;sptr_backward_link;
+        }
+
+    sptr_link_to_delete-&gt;sptr_forward_link = NULL;
+    sptr_link_to_delete-&gt;sptr_backward_link = NULL;
+    }
+
+/******************************************************************************/
+void ospf_insert_node_in_list(OSPF_GENERIC_NODE * sptr_node,
+			      OSPF_GENERIC_NODE * sptr_previous_node)
+{
+    sptr_node-&gt;sptr_backward_link = sptr_previous_node;
+    sptr_node-&gt;sptr_forward_link = NULL;	/* always added at end */
+    sptr_previous_node-&gt;sptr_forward_link = sptr_node;
+
+    return;
+}
+
+
+/******************************************************************************/
+void ospf_add_node_to_end_of_list(OSPF_GENERIC_NODE * sptr_node,
+				  OSPF_GENERIC_NODE *
+				  sptr_first_node_in_list)
+{
+    if (sptr_first_node_in_list-&gt;sptr_forward_link == NULL) {
+	sptr_first_node_in_list-&gt;sptr_forward_link = sptr_node;
+
+	sptr_first_node_in_list-&gt;sptr_backward_link = sptr_node;
+
+	sptr_node-&gt;sptr_backward_link = sptr_first_node_in_list;
+
+	sptr_node-&gt;sptr_forward_link = NULL;
+
+	return;
+    }
+
+    ospf_add_entry_to_list((LINK *) sptr_first_node_in_list,
+			   (LINK *) sptr_node);
+
+    return;
+}
+
+/******************************************************************************/
+void ospf_remove_node_from_list(OSPF_GENERIC_NODE ** ptr_sptr_first_node, OSPF_GENERIC_NODE * sptr_node)
+{
+    OSPF_GENERIC_NODE *sptr_previous_node;
+    OSPF_GENERIC_NODE *sptr_next_node;
+
+
+    sptr_previous_node = NULL;
+    sptr_next_node = NULL;
+
+    if ((*ptr_sptr_first_node == NULL) || (sptr_node == NULL))
+	return;
+
+    if (*ptr_sptr_first_node == sptr_node)
+    {
+        if (sptr_node-&gt;sptr_forward_link != NULL)
+	{
+            *ptr_sptr_first_node = sptr_node-&gt;sptr_forward_link;
+			/* Mistral Added on July 25th */
+	    if(*ptr_sptr_first_node) 
+	    {
+                (*ptr_sptr_first_node)-&gt;sptr_backward_link = 
+                    sptr_node-&gt;sptr_backward_link;
+	    }
+	}
+        else
+	{
+            *ptr_sptr_first_node = NULL;
+	}
+
+        sptr_node-&gt;sptr_forward_link = NULL;
+        sptr_node-&gt;sptr_backward_link = NULL;
+
+        return;
+    }
+
+    if ( *ptr_sptr_first_node != NULL )
+    {
+        ospf_delete_entry_from_list 
+            ((LINK *) *ptr_sptr_first_node, (LINK *) sptr_node);
+    }
+
+
+    return;
+}
+
+/******************************************************************************/
+OSPF_GENERIC_NODE *ospf_free_entire_list(OSPF_GENERIC_NODE * sptr_first_node_in_list)
+{
+    OSPF_GENERIC_NODE *sptr_node;
+    OSPF_GENERIC_NODE *sptr_next_node;
+
+
+    for (sptr_node = sptr_first_node_in_list; sptr_node != NULL;
+	 sptr_node = sptr_next_node) {
+	sptr_next_node = sptr_node-&gt;sptr_forward_link;
+
+	ospf_remove_node_from_list((OSPF_GENERIC_NODE **) &amp;sptr_first_node_in_list, sptr_node);
+
+	free((void *) sptr_node);
+
+	sptr_node = NULL;
+    }
+
+    return (NULL);
+}
+
+</pre>
+
+<h2 id="toc_0.3">链表测试用例</h2>
+<p>
+下面为测试函数，用于测试上面的链表操作函数。有一个地方没有明白，销毁整个链表时，使用的是free((void *) sptr_node)，指针的类型都改变了，free函数还知道我真正的链表结构体（本例中的OSPF结构体）大小吗？
+</p>
+<pre name="code" class="c">
+
+void printList(OSPF* ptr)
+{
+    OSPF* ptr_node;
+
+    printf("the list node: ");
+
+    for(ptr_node = ptr;ptr_node != NULL; ptr_node = ptr_node-&gt;sptr_forward_link)
+    {
+	printf("%d-&gt;",ptr_node-&gt;cnt);
+    }
+    printf("NULL\n");
+
+    return;
+}
+
+
+int main(int argc,char** argv)
+{
+    OSPF* ptr = NULL;
+    OSPF* ptr_node = NULL;
+    OSPF* ptr_node_del = NULL;
+
+    /* init the list */
+    if(NULL == (ptr_node = malloc(sizeof(OSPF))))
+    {
+	printf("malloc memory failed\n");
+	return 0;
+    }
+
+    ptr_node-&gt;cnt = 0;
+    ptr = ptr_node;
+    printList(ptr);
+
+    /* add test */
+    if(NULL == (ptr_node = ptr_node_del = malloc(sizeof(OSPF))))
+    {
+	printf("malloc memory failed\n");
+	return 0;
+    }
+
+    ptr_node-&gt;cnt = 1;
+    ospf_add_node_to_end_of_list((OSPF_GENERIC_NODE *)ptr_node,(OSPF_GENERIC_NODE *)ptr);
+    printList(ptr);
+
+    /* add another */
+    if(NULL == (ptr_node = malloc(sizeof(OSPF))))
+    {
+	printf("malloc memory failed\n");
+	return 0;
+    }
+
+    ptr_node-&gt;cnt = 2;
+    ospf_add_node_to_end_of_list((OSPF_GENERIC_NODE *)ptr_node,(OSPF_GENERIC_NODE *)ptr);
+    printList(ptr);
+
+    /* delete test */
+    ospf_remove_node_from_list((OSPF_GENERIC_NODE **)&amp; ptr,(OSPF_GENERIC_NODE *)ptr_node_del);
+    free(ptr_node_del);
+    ptr_node_del = NULL;
+    printList(ptr);
+
+    /* delete the first node test */
+    /* the first node of the list is deleted,ptr is pointed to another head address of the list.
+     * at this moment,we lost the address of the first node we deleted,so how to free this node ? */
+    /*
+    ospf_remove_node_from_list((OSPF_GENERIC_NODE **)&amp; ptr,(OSPF_GENERIC_NODE *)ptr);
+    */
+
+    /* just the resean above,we should rewrite the code as below */
+    ptr_node_del = ptr;
+    ospf_remove_node_from_list((OSPF_GENERIC_NODE **)&amp; ptr,(OSPF_GENERIC_NODE *)ptr_node_del);
+    free(ptr_node_del);
+    ptr_node_del = NULL;
+    printList(ptr);
+
+    /* free the all list */
+    ospf_free_entire_list((OSPF_GENERIC_NODE *)ptr);
+    ptr = NULL;
+    printList(ptr);
+
+
+    return 0;
+}
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

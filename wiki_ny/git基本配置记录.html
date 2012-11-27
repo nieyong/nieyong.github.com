@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>git基本配置记录</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">git配置文件</h2>
+<ul>
+<li>
+/etc/gitconfig文件，对应MS下的安装路径下的gitconfig文件。命令<code>git config</code>的--system选项就是配置该文件，例如：<code>git config --system i18n.logOutputEncoding gbk</code>。
+
+<li>
+~/.gitconfig文件，对应于MS下的当前用户目录（例如C:\Documents and Settings\Administrator）下的.gitconfig文件。命令<code>git config</code>的--global选项就是配置该文件，例如：<code>git config --global user.name "nieyong"</code>。
+
+</ul>
+
+<p>
+查看现在git的配置结果，命令<code>git config --list</code>。
+</p>
+
+
+<h2 id="toc_0.2">git使用外部的diff或者merge工具</h2>
+<p>
+git可以配置使用外部的diff或者merge工具，例如使用p4merge工具。
+</p>
+
+<p>
+git有一些默认支持的外部merge工具，在文件libexec/git-core/git-mergetool--lib文件中。
+</p>
+
+<pre>
+git config --global merge.tool p4merge
+git config --global mergetool.p4merge.cmd  'p4merge \"$BASE\" \"$LOCAL\"
+
+但是对不git默认支持p4merge的情况，使用
+
+git config --global mergetool.p4merge.path "C:/Progra~1/Perfoce/p4merge.exe"
+
+</pre>
+
+<p>
+最后实验的结果，不需要配置也没有关系，在安装了p4merge之后，直接使用命令<code>git difftool 232e 21dk</code>就可以切换到p4merge查看。但是如果使用<code>git diff 232e 21dk</code>，则无论配置与否，都不能够切换到p4merge查看。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>RIP协议中套接字的使用</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+RIP协议中使用了两种套接字，分别来接受RIP数据报文和RIP相关消息。
+</p>
+
+<h2 id="toc_0.1">RIP套接字的注册</h2>
+<p>
+RIP数据报文套接字的注册如下所示。
+</p>
+<pre name="code" class="c">
+void ripTask()
+{
+    /* ... */
+
+    ripState.s = getsocket (AF_INET, SOCK_DGRAM, &amp;ripState.addr);
+    if (ripState.s &lt; 0)
+    {
+        log_err (RIP_V4_LOG, "Unable to get input/output socket.");
+        priv_ripInitFlag = INIT_FAILED;
+        return (ERROR);
+    }
+    /* ... */
+}
+
+LOCAL int getsocket (domain, type, sin)
+	int domain, type;
+	struct sockaddr_in *sin;
+{
+	int sock, on = 1;
+
+	if ((sock = socket (domain, type, 0)) &lt; 0) {
+                log_err (RIP_V4_LOG, "Error creating socket.");
+		return (-1);
+	}
+#ifdef SO_BROADCAST
+	if (setsockopt (sock, SOL_SOCKET, SO_BROADCAST, (char *)&amp;on, 
+                        sizeof (on)) &lt; 0) {
+                log_err (RIP_V4_LOG, "error setting SO_BROADCAST option");
+		close (sock);
+		return (-1);
+	}
+#endif
+#ifdef SO_RCVBUF
+	for (on = BUFSPACE; ; on -= 1024) {
+		if (setsockopt (sock, SOL_SOCKET, SO_RCVBUF, 
+                                (char *)&amp;on, sizeof (on)) == 0)
+			break;
+		if (on &lt;= 8*1024) {
+                        log_debug (RIP_V4_LOG, "unable to set SO_RCVBUF option");
+			break;
+		}
+	}
+        log_debug (RIP_V4_LOG, "Receive buffer size %d.", on);
+#endif
+	if (bind (sock, (struct sockaddr *)sin, sizeof (*sin)) &lt; 0) {
+                log_err (RIP_V4_LOG, "error binding socket.");
+		close (sock);
+		return (-1);
+	}
+        on = 1;
+	if (ioctl (sock, FIONBIO, (int) &amp;on) == -1)
+                log_err (RIP_V4_LOG, "error setting O_NONBLOCK option.");
+
+	return (sock);
+}
+
+</pre>
+
+<p>
+RIP消息套接字的注册如下所示：
+</p>
+<pre name="code" class="c">
+void ripTask()
+{
+    /* ... */
+    ripState.routeSocket = socket (AF_ROUTE, SOCK_RAW, 0);
+    if (ripState.routeSocket &lt; 0)
+        {
+        log_err (RIP_V4_LOG, "Unable to get route socket.");
+        close (ripState.s); 
+        priv_ripInitFlag = INIT_FAILED;
+        return (ERROR);
+        }
+    
+    /* ... */
+}
+
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

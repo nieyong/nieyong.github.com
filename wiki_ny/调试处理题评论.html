@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>调试处理题评论</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">总结</h2>
+<p>
+就本次作业中的几个问题说明如下：
+</p>
+<ol>
+<li>
+readme的要求在题目中明确给出，但是很多同事还是没有能够做好。另外，多看看一些开源代码，能够帮助大家理解如何写好readme；readme的作用：不是说明实现原理，技术细节，而是使用步骤，编译步骤等。
+
+<li>
+可执行文件的问题。提交的作业，点击exe基本上不可执行。有两位同事基本考虑到这个问题，一位是余海，一位是王焕林，但是做的还不够好；
+
+<li>
+关于“错误码的定义和错误信息的定义必须一一对应”问题，有方桂烽、潘唐磊两位同事有这个问题，这里应该是可以优化的；
+
+<li>
+关于“Debug和warning级别也使用错误码的形式实现”问题，有李泽奇、彭京思、王焕林、阎煦洲四位同事是这样实现的，这和题目的要求不明确可能有问题，但是我们不建议，也不欣赏这样的实现。因为debug和warning级别的信息输出，一般是工程师为了调试代码，跟踪流程时候使用的，最后这部分代码都不会被编辑到可执行文件中。在调试开发中，如何还要先定义枚举值，再定义错误信息，使用起来会特别麻烦。所以debug和warning部分应该像使用printf一般方便。而error的信息一般会编译到我们发布的可执行文件中，记录产品在使用过程中特殊情况下出现的重大错误，并且以文件的信息保存下来。这部分信息一般会对信息进行编号，也就是大家熟悉的error Number。
+
+<li>
+关于“大量使用对TRUE，FALSE值的封装。使用的这种封装值得商榷”问题，有李泽奇、万义康两位同事这样实现，但是我个人是不建议如此。原因有一下两点：1.影响代码阅读的连贯性，有时候，还真不好理解，让代码晦涩；2.调试起来并不方便，例如我在知道了<code>ipVersion</code>的值不正确之后，我最想知道的就是这个值现在是什么，那么，怎么调试呢？
+
+<li>
+关于“大片调试信息的输出问题，例如使用for循环输出packet的内容”。建议单独使用函数输出，这一点彭京思做的很好。彭彬可以参考他的实现。
+
+</ol>
+
+<p>
+这次主要是看过大家的readme和源代码。对大家的完成情况作一个评比：
+</p>
+
+<p>
+优秀：钟奕涛
+</p>
+
+<p>
+良好：余海、彭彬、付大军、陈可
+</p>
+
+<p>
+其他未上榜的同事的就是属于一般。
+</p>
+
+<h2 id="toc_0.2">周川添</h2>
+<ul>
+<li>
+readme写得不够好
+
+<li>
+很奇怪，在test.c文件和getTcpHeader.c文件中没有使用封装的调试函数
+
+<li>
+printf函数的封装考虑太复杂，其实无需考虑每个级别的信息输出是什么，什么时候应该用哪个级别，这在实际代码中由编程人员决定
+
+</ul>
+
+
+<h2 id="toc_0.3">钟奕涛</h2>
+<ul>
+<li>
+readme写的不错
+
+<li>
+基本上完全符合题目要求，并且将三个调试宏进行了合并，在代码中使用更加方便，这一点在题目中没有给出明确要求。可见钟仔细的阅读了所有资料。
+<pre name="code" class="c">
+/*将三个级别的调试信息封装成统一的形式*/
+#define DebugPrintf(DebugType, Message, args...) \
+do{\
+	switch(DebugType)\
+	{\
+	case DEBUGTYPE:\
+		DEBUG_M(Message, ##args);\
+		break;\
+	case WARNINGTYPE:\
+		WARNING_M(Message, ##args);\
+		break;\
+	case ERRORTYPE:\
+		ERROR_M(Message, ##args);\
+		break;\
+	default:\
+		break;\
+	}\
+}while(0)
+</pre>
+
+<li>
+代码中还有许多printf未被替换掉，最好替换
+
+<li>
+错误码使用到了c99中的规则实现
+
+</ul>
+
+<h2 id="toc_0.4">余海</h2>
+<ul>
+<li>
+readme的编译部分未做详细说明
+
+<li>
+将cygwin1.dll文件放置到了exe的当前路径，但是没有考虑程序结束信息显示问题
+
+<li>
+宏定义时最好使用大写
+
+</ul>
+
+
+<h2 id="toc_0.5">阎煦洲</h2>
+<ul>
+<li>
+readme的编译部分未做详细说明
+
+<li>
+Debug和warning级别也使用错误码的形式实现，其实这是没有必要的。因为debug和warning级别的信息输出，一般是工程师为了调试代码，跟踪流程时候使用的，最后这部分代码都不会被编辑到可执行文件中。在调试开发中，如何还要先定义枚举值，再定义错误信息，使用起来会特别麻烦。所以debug和warning部分应该像使用printf一般方便。而error的信息一般会编译到我们发布的可执行文件中，记录产品在使用过程中特殊情况下出现的重大错误，并且以文件的信息保存下来。这部分信息一般会对信息进行编号，也就是大家熟悉的error Number。
+
+</ul>
+
+<h2 id="toc_0.6">王焕林</h2>
+<ul>
+<li>
+readme的编译部分未做详细说明
+
+<li>
+Debug和warning级别也使用错误码的形式实现，道理同上。并且，还使用了些复杂的结构，使用起来会特别麻烦。
+
+</ul>
+
+<h2 id="toc_0.7">万义康</h2>
+<ul>
+<li>
+readme的编译部分未做详细说明
+
+<li>
+使用数据代替输入参数，稍稍有点儿不那么好
+
+<li>
+大量使用对TRUE，FALSE值的封装。使用的这种封装值得商榷，有些老同事也比较喜欢使用这种封装，例如水哥。好处不用再说了，封装的好处。但是又下面几点我使用过程中遇到的问题：1.影响代码阅读的连贯性，有时候，还真不好理解，让代码晦涩；2.调试起来并不方便，例如我在知道了<code>ipVersion</code>的值不正确之后，我最想知道的就是这个值现在是什么，那么，怎么调试呢？
+<pre name="code" class="c">
+    /* 求得IP Version */
+    ipVersion = ((UINT)(ipHeadLen &amp; 0xF0) &gt;&gt; 4);
+    TH_CHK_VAL_RET_NULL(IP_VERSION4 != ipVersion);
+    
+    TH_CHK_VAL_RET_NULL((IP_PROTO_TYPE_ICMP == ipProtoType) || \
+					    (IP_PROTO_TYPE_IGMP == ipProtoType) || \
+					    (IP_PROTO_TYPE_UDP == ipProtoType));
+</pre>
+
+<li>
+使用了下面这样的封装，能够有出处吗？
+<pre name="code" class="c">
+#define TH_DB_DEBUG(fmt, ...) \
+	do {\
+		if (1 == (debugLevel &amp; DEBUG_LEVEL_DEBUG)) \
+		{ \
+			printf(fmt, ##__VA_ARGS__); \
+		} \
+	} while (0)
+</pre>
+
+</ul>
+
+<h2 id="toc_0.8">彭京思</h2>
+<ul>
+<li>
+readme太多，写的不怎么好，应当简单明了
+
+<li>
+单独看readme，为什么“#为个人设置结束标识符”？
+
+<li>
+Debug和warning级别也使用错误码的形式实现，道理同上。
+
+<li>
+对一些特殊的调试信息，例如报文内容的输出，使用了单独的调试函数printFile，printDebug实现，这一点很好。但是这命名确实不明确。
+
+</ul>
+
+<h2 id="toc_0.9">彭彬</h2>
+<ul>
+<li>
+readme的编译部分未做详细说明
+
+<li>
+出现了下面的情况，这种情况其实在代码中我们大家都没有好的处理方式，如果还用封装的宏去处理，总觉得不伦不类。一般这个情况下，最好是使用单独的函数进行处理，参考彭京思的实现。
+
+</ul>
+
+<pre name="code" class="c">
+	int i;
+	for (i = 0; i &lt; 6; i ++)
+	{
+		DEBUG_PRINTF("%02x ", frameHeader-&gt;MAC_dst[i] &amp; 0xff);
+	}
+	DEBUG_PRINTF("\nMAC source: ");
+	for (i = 0; i &lt; 6; i ++)
+	{
+		DEBUG_PRINTF("%02x ", frameHeader-&gt;MAC_src[i] &amp; 0xff);
+	}
+	DEBUG_PRINTF("\nType: %04x\n", frameHeader-&gt;type);
+</pre>
+
+<h2 id="toc_0.10">潘唐磊</h2>
+<ul>
+<li>
+错误码部分是硬伤，错误码的定义和错误信息的定义必须一一对应。这样使用起来会很不方便。
+
+</ul>
+
+<h2 id="toc_0.11">李泽奇</h2>
+<ul>
+<li>
+使用了和万义康一样的封装，道理同上。
+<pre name="code" class="c">
+    #define TH_CHK_VAL(flag, v) 
+    #define TH_API_CALL(f) 	
+    #define TH_API_CALL_RV(r, f)
+</pre>
+
+<li>
+Debug和warning级别也使用错误码的形式实现，道理同上。
+
+</ul>
+
+<h2 id="toc_0.12">付大军</h2>
+<ul>
+<li>
+readme的编译部分未做详细说明
+
+<li>
+错误码使用到了c99中的规则实现
+
+</ul>
+
+<h2 id="toc_0.13">方桂烽</h2>
+<ul>
+<li>
+readme的编译部分未做详细说明
+
+<li>
+错误码部分是硬伤，错误码的定义和错误信息的定义必须一一对应。这样使用起来会很不方便。
+<pre name="code" class="c">
+#define PRIN_ERR(type,fmt,args...) \
+	do{\
+		if (tcpErrorOn)\
+		{\
+            printf("%s:%d:%s:"fmt"\n",__FUNCTION__,__LINE__,tcpErrorDescription[type],##args);\
+		}\
+	}while(0);
+</pre>
+
+</ul>
+
+
+<h2 id="toc_0.14">陈可</h2>
+<ul>
+<li>
+无
+
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

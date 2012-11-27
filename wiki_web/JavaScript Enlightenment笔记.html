@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>JavaScript Enlightenment笔记</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">The JavaScript native/built-in object constructors</h2>
+<p>
+The JavaScript language contains nine native (or built-in) object constructors. These objects are used by JavaScript to construct the language, and by "construct" I mean these objects are used to express object values in JavaScript code, as well as orchestrate several features of the language. Thus, the native object constructors are multifaceted in that they produce objects, but are also leveraged in facilitating many of the language's programming conventions.  For example, functions are objects created from the  Function() constructor, but are also used to create other objects when called as constructor functions using the  new  keyword.
+</p>
+
+<p>
+Below, I list the 9 native object constructors that come pre-packaged with JavaScript:
+</p>
+<ul>
+<li>
+Number()
+
+<li>
+String()
+
+<li>
+Boolean()
+
+<li>
+Object()
+
+<li>
+Array()
+
+<li>
+Function()
+
+<li>
+Date()
+
+<li>
+RegExp()
+
+<li>
+Error()
+
+</ul>
+
+<p>
+JavaScript is mostly constructed from just these nine objects (as well as string, number, and boolean primitive values). Understanding these objects in detail is key to taking advantage of JavaScript's unique programming power and language flexibility. 
+</p>
+
+<ul>
+<li>
+The Math object is the oddball here. It's a static object, rather than a constructor function, meaning you can't do this: var x = new Math(). But you can use it as if it has already been instantiated (e.g.  Math.PI). Truly,  Math is a just an object namespace set up by JavaScript to house math functions.
+
+<li>
+The native objects are sometimes referred to as "global objects" since they are the objects that JavaScript has made natively available for use. Do not confuse the term global object  with the "head" global object that is the topmost level of the scope chain, for example, the window object in all web browsers.
+
+<li>
+The Number(),  String(), and  Boolean() constructors not only construct objects; they also provide a primitive value for a string, number and boolean, depending upon how the constructor is leveraged. If you called these constructors directly, then a complex object is returned. If you simply express a number, string, or boolean value in your code (primitive values like 5, "foo" and  true ), then the constructor will return a primitive value instead of a complex object value.
+
+</ul>
+
+<h2 id="toc_0.2">primitive value and native constructors Number(), String(), Boolean()</h2>
+<p>
+JavaScript provides shortcuts ― called "literals" ― for manufacturing most of the native object values without having to use new Foo() or  new Bar(). For the most part, the literal syntax accomplishes the same thing as using the  new  operator. The exceptions are:  Number() ,  String() , and  Boolean() ― see notes below.
+</p>
+
+<p>
+things are a little more complicated with respect to the primitive string, number, and boolean values. In these cases, literal values take on the characteristics of primitive values rather than complex object values. See my notes below. 
+</p>
+
+<p>
+When using literal values for string, number, and boolean, an actual complex object is never created until the value is treated as an object. In other words, you are dealing with a primitive datatype until you attempt to use methods or retrieve properties associated with the constructor (e.g.  var charactersInFoo = 'foo'.length ). When this happens, JavaScript creates a wrapper object for the literal value behind the scenes, allowing the value to be treated as an object. Then, after the method is called, JavaScript discards the wrapper object and the value returns to a literal type. This is why string, number, and boolean are considered primitive (or simple) datatypes.  I hope this clarifies the misconception that "everything in JavaScript is an object" with the concept that "everything in JavaScript can act like an object".  
+</p>
+
+<p>
+As opposed to creating values with literal syntax, when a String(),  Number(), or  Boolean() value is created using the  new  keyword, the object created is actually a complex object.
+</p>
+
+<p>
+It's critical that you understand the fact that the String(),  Number(), and  Boolean() constructors are dual-purpose constructors used to create literal/primitive values as well as complex values. These constructors do not always return objects, but instead, when used without the "new " operator, can return a primitive representation of the actual complex object value
+</p>
+
+<pre name="code" class="js">
+// no object is created when producing primitive values, notice no use of the "new" keyword
+var primitiveString1 =  "foo";
+var primitiveString2 =  String('foo') ;
+var primitiveNumber1 =  10;
+var primitiveNumber2 =  Number('10');
+var primitiveBoolean1 = true;
+var primitiveBoolean2 = Boolean('true');
+// confirm the typeof is not object
+console.log(typeof primitiveString1, typeof primitiveString2);  // logs 'string,string'
+console.log(typeof primitiveNumber1, typeof primitiveNumber2);  // logs 'number,number,
+console.log(typeof primitiveBoolean1, typeof primitiveBoolean2); // logs 'boolean,boolean'
+// versus the usage of a constructor and new keyword for creating objects
+var myNumber = new Number(23);
+var myString = new String('male');
+var myBoolean = new Boolean(false);
+var myObject = new Object();
+var myArray = new Array('foo', 'bar');
+var myFunction = new Function("x", "y", "return x * y");
+var myDate = new Date();
+var myRegExp = new RegExp('\\bt[a-z]+\\b');
+var myError = new Error('Crap    ');
+// logs 'object object object object object function object function object'
+console.log(
+typeof myNumber,
+typeof myString,
+typeof myBoolean,
+typeof myObject,
+typeof myArray,
+typeof myFunction, // BE AWARE typeof returns function for all function objects
+typeof myDate,
+typeof myRegExp, // BE AWARE typeof returns function for RegExp()
+typeof myError
+);
+
+
+var price1 = 10;
+var price2 = 10;
+var price3 = new Number('10');  // a complex numeric object because new was used
+var price4 = price3;
+console.log(price1 === price2); // logs true
+/*  logs  false  because  price3  contains  a  complex  number  object  and  price  1  is  a  primitive 
+value */
+console.log(price1 === price3); 
+// logs true because complex values are equal by reference, not value
+console.log(price4 === price3);
+// what if we update the price4 variable to contain a primitive value?
+price4 = 10;
+console.log(price4 === price3);  // logs false: price4 is now primitive rather than complex
+
+
+// Produce primitive values
+var myNull = null;
+var myUndefined = undefined;
+var primitiveString1 = "foo";
+var primitiveString2 = String('foo'); // did not use new, so we get primitive
+var primitiveNumber1 = 10;
+var primitiveNumber2 = Number('10'); // did not use new, so we get primitive
+var primitiveBoolean1 = true;
+var primitiveBoolean2 = Boolean('true');  // did not use new, so we get primitive
+/*  Access  the  toString()  property  method  (inherited  by  objects  from  object.prototype)  to 
+demonstrate that the primitive values are converted to objects when treated like objects. */
+// logs "string string"
+console.log(primitiveString1.toString(),?primitiveString2.toString()); 
+// logs "number number"
+console.log(primitiveNumber1.toString(), primitiveNumber2.toString());
+// logs "boolean boolean"
+console.log(primitiveBoolean1.toString() , primitiveBoolean2.toString() ); 
+/*  This will throw an  error and not show up  in firebug  lite,  as null and undefined  do not 
+convert to objects and do not have constructors. */
+console.log(myNull.toString()); 
+console.log(myUndefined.toString());
+</pre>
+
+<p>
+When accessing a property on a primitive number directly (not stored in a variable), you have to first evaluate the number before the value is treated as an object (e.g.  (1).toString();  or 1..toString(); ). Why two dots?  The first dot is considered a numeric decimal, not an operator for accessing object properties.  
+</p>
+
+<h2 id="toc_0.3">Complex object</h2>
+<p>
+The term "complex object" has also been expressed in other writings as "composite objects" or "reference types". If it's not obvious all these names describe the nature of a JavaScript value excluding primitive values. Primitive values are not "referenced by value" and can not represent a composite (i.e. A thing made up of several parts or elements) of other values. While complex objects are "referenced by value" and can contain or encapsulate other values.
+</p>
+
+<p>
+It is extremely important to grok that complex values are stored and manipulated by reference.
+</p>
+
+<p>
+What you need to realize is that, unlike primitive values that would copy a value, objects (aka complex values) are stored by reference. As such, the reference (aka address) is copied, but not the actual value. This means that objects are not copied at all. 
+</p>
+
+<pre name="code" class="js">
+var myObject = {};
+var copyOfMyObject = myObject; // not copied by value, just the reference is copied
+myObject.foo = 'bar'; // manipulate the value stored in myObject
+/*  Now  if  we  log  myObject  &amp;  copyOfMyObject,  they  will  have  a  foo  property  because  they 
+reference the same object. */
+console.log(myObject, copyOfMyObject); // logs 'Object { foo="bar"} Object { foo="bar"}'
+</pre>
+
+<p>
+When comparing complex objects, they are equal only when they reference the same object (i.e. have 
+the same address).
+</p>
+
+<p>
+When any object is instantiated, the <strong>constructor property</strong> is created behind the scenes as a property of that object/instance. This points to the constructor function that created the object. 
+</p>
+
+<pre name="code" class="js">
+var foo = {};
+console.log(foo. constructor  === Object)  // logs true, because object() constructed foo
+console.log(foo. constructor ) // points to the Object() constructor function
+</pre>
+
+<p>
+Verify that an object is an instance of a particular constructor function.The instanceof  operator will return false when dealing with primitive values that leverage object wrappers.
+</p>
+
+<p>
+One thing to watch out for when dealing with the instanceof  operator is that it will return true any time you ask if an object is an instance of Object since all objects inherit from the Object() Constructor.
+</p>
+
+<pre name="code" class="js">
+// user-defined object constructor
+var CustomConstructor = function() {this.foo = 'bar';};
+// instantiate an instance of CustomConstructor
+var instanceOfCustomObject = new CustomConstructor(); 
+console.log(instanceOfCustomObject instanceof CustomConstructor);  // logs true
+// works the same as a native object
+console.log(new Array('foo') instanceof Array)  // logs true
+</pre>
+
+<h2 id="toc_0.4">Object and Property</h2>
+<p>
+下面是一些对象的Property操作方法，可以参考 <a href="js对象是否存在的判断.html">js对象是否存在的判断</a>这个实例。
+</p>
+
+<ul>
+<li>
+hasOwnProperty函数，查看对象是否拥有某个property
+
+</ul>
+
+<ul>
+<li>
+Delete函数，删除某个对象的Property
+
+</ul>
+<p>
+Delete will not delete properties that are found on the prototype chain.Deleting is the only way to actually remove a property from an object. Setting the property to  undefined or  null   only changes the value of a property. It does not remove the property from the object.
+</p>
+
+<ul>
+<li>
+in操作符，查看某个Property是否属于某个对象
+
+</ul>
+<p>
+While the in operator can check for properties of an object, including properties from the prototype chain, the  hasOwnProperty method can check an object for a property that is not from the prototype chain.  
+</p>
+
+<ul>
+<li>
+for in操作符，遍历整个对象的所有property
+
+</ul>
+<p>
+the in operator is used to verify (true or false) if an object contains a given property. The for in loop has a drawback. It will not only access the properties of the specific object being looped over. It will also include in the loop any properties inherited (via the prototype chain) by the object. 
+</p>
+
+<pre name="code" class="js">
+var cody = {
+    age : 23, 
+    gender : 'male'
+};
+
+for  (var key in cody) { // key is a variable used to represent each property name 
+     // avoid properties inherited from the prototype chain 
+    if(cody.hasOwnProperty(key)) {
+        console.log(key);
+    }
+}
+</pre>
+
+
+<h2 id="toc_0.5">Host objects vs. native objects</h2>
+<p>
+You should be aware that the environment (e.g. a web browser) in which JavaScript is executed typically contains what are known as  host objects. Host objects are not part of the ECMAScript implementation, but are available as objects during execution.  
+</p>
+
+<p>
+For example, in the web browser environment the window/head object and all of its containing objects (excluding what JavaScript provides) are considered host objects.  
+</p>
+
+<p>
+The host environment (e.g. a web browser) that runs JavaScript code typically provides the head object (e.g. window object in web browser) where the native portions of the language are stored along with host objects (e.g. window.location in web browser) and user-defined objects (e.g. the code your write to run in the web browser).  
+</p>
+
+<h2 id="toc_0.6">Enhancing &amp; extending objects with Underscore.js</h2>
+<p>
+todo
+</p>
+
+
+<h2 id="toc_0.7">Object() properties and methods</h2>
+<p>
+<strong>The Object()  object</strong> has the following properties (not including inherited properties and methods): 
+</p>
+<ul>
+<li>
+Properties (e.g.  Object.prototype;): 
+    prototype
+
+</ul>
+
+<p>
+<strong>Object()  object instances</strong> have the following properties and methods (does not include inherited properties and methods): 
+</p>
+
+<p>
+Instance Properties  (e.g.  var myObject = {}; myObject.constructor; ): 
+</p>
+<ul>
+<li>
+constructor
+
+</ul>
+<p>
+Instance Methods  (e.g.  var myObject = {}; myObject.toString();): 
+</p>
+<ul>
+<li>
+hasOwnProperty()
+
+<li>
+isPrototypeOf()
+
+<li>
+propertyIsEnumerable()
+
+<li>
+toLocaleString()
+
+<li>
+toString()
+
+<li>
+valueOf()
+
+</ul>
+
+<p>
+All objects inherit from  Object.prototype. The Object()  constructor function in JavaScript is special, as its  prototype property is the last stop in the prototype chain. 
+</p>
+
+<pre name="code" class="js">
+Object.prototype.foo = 'foo';
+var myString = 'bar';
+
+// logs 'foo', being found at Object.prototype.foo via prototype chain
+console.log(myString.foo);
+</pre>
+
+<h2 id="toc_0.8">Function() properties and methods</h2>
+<p>
+<strong>The function object</strong> has the following properties (not including inherited properties and methods):
+</p>
+<ul>
+<li>
+Properties (e.g.  Function.prototype;):
+    prototype
+
+</ul>
+
+<p>
+<strong>Function object instances</strong> have the following properties and methods (not including inherited properties and methods): 
+</p>
+
+<p>
+Instance Properties  (e.g. var myFunction = function(x, y, z) {}; myFunction.length;): 
+</p>
+<ul>
+<li>
+arguments
+
+<li>
+constructor
+
+<li>
+length
+
+</ul>
+
+<p>
+Instance Methods  (e.g. var myFunction = function(x, y, z) {}; myFunction.toString(); ): 
+</p>
+<ul>
+<li>
+apply()
+
+<li>
+call()
+
+<li>
+toString()
+
+</ul>
+
+<p>
+If a function does not specify a return value, then  undefined is returned.
+</p>
+
+<p>
+<strong>first-class citizens</strong> , Functions are first-class citizens (not just syntax, but values).
+</p>
+
+<p>
+In JavaScript, functions are objects. This means that a function can be stored in a variable, array, or object. Also, a function can be passed to, and returned from, a function. A function has properties because it is an object. All of these factors make functions first-class citizens in JavaScript.
+</p>
+
+
+<h2 id="toc_0.9">arguments values of functions</h2>
+<p>
+The arguments object is an array-like object containing all of the parameters being passed to the function.
+</p>
+
+<pre name="code" class="js">
+    var add = function() {
+	     return arguments[0] +  arguments[1];
+    };
+
+    console.log(add(4, 4)); // returns 8
+</pre>
+
+<p>
+The arguments object has a property called  callee  which is a reference to the function currently executing. The arguments object has a unique length  property.
+</p>
+
+<h2 id="toc_0.10">Define and invocation of function</h2>
+<p>
+Defining a function (statement, expression, or constructor).
+</p>
+
+<pre name="code" class="js">
+    /* function constructor: the last parameter is the function logic, 
+       everything before it is a parameter */
+    var addConstructor = new Function('x', 'y', 'return x + y');
+
+    // function statement
+    function addStatement(x, y) {
+         return x + y;
+    }
+
+    // function expression
+    var addExpression = function(x, y) {
+	return x + y;
+    };
+
+    console.log(addConstructor(2,2), addStatement (2,2), addExpression (2,2)); // logs '4 4 4'
+</pre>
+
+<p>
+Functions are invoked using four different scenarios or patterns.
+</p>
+<ul>
+<li>
+As a function
+
+<li>
+As a method
+
+<li>
+As a constructor
+
+<li>
+Using  apply() or  call()
+
+</ul>
+
+<pre name="code" class="js">
+// function pattern
+var myFunction = function(){return 'foo'};
+console.log(myFunction());  // log 'foo'
+
+// method pattern
+var myObject = {myFunction: function(){return 'bar';}}
+console.log(myObject.myFunction());  // log 'bar'
+
+// constructor pattern
+var Cody = function(){
+    this.living = true;
+    this.age = 33;
+    this.gender = 'male';
+    this.getGender = function() {return this.gender;};
+}
+var cody =  new Cody(); // invoke via Cody constructor
+console.log(cody); // logs cody object and properties
+
+// apply() and call() pattern
+var greet = {
+    runGreet: function(){
+	console.log(this.name,arguments[0],arguments[1]);
+    }
+}
+var cody = {name:'cody'};
+var lisa = {name:'lisa'};
+
+// invoke the runGreet function as if it were inside of the cody object
+greet.runGreet.call(cody,'foo','bar');  // logs 'cody foo bar'
+
+// invoke the runGreet function as if it were inside of the lisa object
+greet.runGreet.apply(lisa, ['foo','bar']); // logs 'lisa foo bar'
+
+/*  Notice  the  difference  between  call()  and  apply()  in  how  parameters  are  sent  to  the 
+function being invoked */
+</pre>
+
+<h2 id="toc_0.11">The Head/Global Object</h2>
+<p>
+This window  object is considered to be the "head object," or sometimes confusingly referred to as "the global object." All implementations of JavaScript require the use of a single head object.
+</p>
+
+<p>
+JavaScript ships with some predefined functions. The following native functions are considered methods of the head object (e.g. in a web browser window.parseInt('500') ). You can think of these as ready-to-use functions/methods (of the head object) provided by JavaScript.
+</p>
+<ul>
+<li>
+decodeURI()
+
+<li>
+decodeURIComponent()
+
+<li>
+encodeURI()
+
+<li>
+encodeURIComponent()
+
+<li>
+eval()
+
+<li>
+isFinite()
+
+<li>
+isNaN()
+
+<li>
+parseFloat()
+
+<li>
+parseInt()
+
+</ul>
+
+
+<h2 id="toc_0.12">The this Keyword</h2>
+<p>
+The value of  this, passed to all functions, is based on the context in which the function is called at runtime .
+</p>
+
+<pre name="code" class="js">
+var foo = 'foo';
+var myObject = {foo: 'I am myObject.foo'};
+var sayFoo = function() {
+     console.log(this['foo']);
+};
+
+// give myObject a sayFoo property and have it point to sayFoo function
+myObject.sayFoo = sayFoo;
+myObject.sayFoo();  // logs 'I am myObject.foo' 
+sayFoo(); // logs 'foo'
+</pre>
+
+<p>
+You might be wondering what happens to  this when it is used inside of a function that is contained inside of another function. The bad news is in ECMA 3, this loses its way and refers to the head object (window  object in browsers), instead of the object within which the function is defined.
+</p>
+
+<p>
+In the code below,  this inside of  func2  and func3  loses its way and refers not to  myObject but instead to the head object.
+</p>
+
+<pre name="code" class="js">
+var myObject = {
+     func1: function() {
+        console.log(this);  // logs myObject
+        var func2 = function() {
+            console.log(this) // logs window, and will do so from this point on
+            var func3 = function() {
+                console.log(this);  // logs window, as it’s the head object
+            }();
+        }();
+     }  
+}
+myObject.func1();
+</pre>
+
+<p>
+<strong>The good news is that this will be fixed in ECMAScript 5.</strong>
+</p>
+
+<pre name="code" class="js">
+var myObject = {
+     myProperty: 'I can see the light', 
+     myMethod : function(){
+        var that = this; // store a reference to this (i.e. myObject) in myMethod scope
+        var helperFunction function() { // child function
+            // logs 'I can see the light' via scope chain because that = this
+            console.log(that.myProperty); // logs 'I can see the light'
+            console.log(this); // logs window object, if we don't use "that"
+        }();
+     }
+}
+myObject.myMethod();  // invoke myMethod
+</pre>
+
+<p>
+When used in functions added to a constructor's prototype property, this refers to the instance on which the method is invoked. 
+</p>
+
+<pre name="code" class="js">
+var Person = function(x){
+    if(x){this.fullName = x};
+};
+
+Person.prototype.whatIsMyFullName = function(){
+    return  this.fullName; // 'this' refers to the instance created from Person()
+}
+
+var cody = new Person('cody lindley');
+var lisa = new Person('lisa lindley');
+
+// call the inherited whatIsMyFullName method, which uses this to refer to the instance
+console.log(cody.whatIsMyFullName(),lisa.whatIsMyFullName());
+
+/*  The prototype chain is still in effect, so if the instance does not have a fullName 
+property, it will look for it in the prototype chain. Below, we add a fullName property  to 
+both the Person prototype and the Object prototype. See notes. */
+Object.prototype.fullName = 'John Doe';
+var john = new Person(); // no argument is passed so fullName is not added to instance
+console.log(john.whatIsMyFullName());  // logs 'John Doe'
+</pre>
+
+
+<h2 id="toc_0.13">scope &amp; closures</h2>
+<p>
+参考<a href="php变量作用域.html">php变量作用域</a>。
+</p>
+
+<p>
+In JavaScript, scope is the context in which code is executed, and there are three types of scope: 
+global scope, local scope (sometimes referred to as "function scope"), and eval scope.
+</p>
+
+<pre name="code" class="js">
+var myFunction = function() {
+	var foo  = 1;  // local scope
+	console.log(foo);  // logs 1
+	
+	var myNestedFunction = function() {
+		var foo  = 2;  // local scope
+		console.log(foo);  // logs 2
+	}();
+	
+	console.log(foo);  // logs 1
+}();
+
+
+var myFunction = function() {
+	var foo  = 1;  // local scope
+	console.log(foo);  // logs 1
+	
+	var myNestedFunction = function() {
+		foo  = 2;  // local scope
+		console.log(foo);  // logs 2
+	}();
+	
+	console.log(foo);  // logs 2
+}();
+</pre>
+
+<p>
+JavaScript does not have block scope, Since logic statements (e.g. if) and looping statements (e.g.  for ) do not create a scope, variables can overwrite each other.  
+</p>
+
+<p>
+There is a lookup chain that is followed when JavaScript looks for the value associated with a variable. This chain is based on the hierarchy of scope. 
+</p>
+
+<p>
+The scope chain lookup returns the first found value.
+</p>
+
+<pre name="code" class="js">
+var parentFunction = function() {
+    var foo = 'foo';
+    return function() { // anonymous function being returned
+	console.log(foo);  // logs 'foo'
+    }
+}
+
+// nestedFunction refers to the nested function returned from parentFunction
+var nestedFunction = parentFunction();
+nestedFunction();  // logs foo because the returned function accesses foo via the scope chain
+
+var countUpFromZero = function() {
+    var count = 0;
+    return function() { // return nested child function when countUpFromZero is invoked
+	return ++count; // count is defined up the scope chain, in parent function
+    };
+}(); // invoke immediately, return nested function
+
+console.log(countUpFromZero()); // logs 1
+console.log(countUpFromZero()); // logs 2
+console.log(countUpFromZero()); // logs 3
+</pre>
+
+
+<h2 id="toc_0.14">Function prototype property</h2>
+<p>
+The prototype property is an object created by JavaScript for every  Function() instance. Specifically, it links object instances created with the  new  keyword back to the constructor function that created them.  
+</p>
+
+<p>
+When a function instance is created, it is always given a prototype property, which is an empty object. 
+</p>
+
+<pre name="code" class="js">
+    var myFunction = function() {};
+    console.log(myFunction.prototype);  // logs object{}
+    console.log(typeof myFunction.prototype);  // logs 'object'
+
+    var myFunction = function() {};
+    myFunction.prototype = {}; // add the prototype property and set it to an empty object
+    console.log(myFunction.prototype);  // logs an empty object
+</pre>
+
+
+<p>
+While prototype property is only an object,  prototype is special because the <strong>prototype chain links every instance to its constructor function's prototype property</strong> . This means that any time an object is created from a constructor function using the new  keyword (or when an object wrapper is created for a primitive value), it adds a hidden link between the object instance created and the prototype property of the constructor function used to create it. This link is known inside the instance as  _<em>proto</em>_  (though it is only exposed/supported via code in Firefox 2+, Safari, Chrome, and Android). 
+</p>
+
+<pre name="code" class="js">
+/* this code only works in browsers that supports __proto__ access */
+Array.prototype.foo = 'foo';
+var myArray = new Array();
+console.log(myArray.__proto__.foo); // logs foo, because myArray.__proto__ = Array.prototype
+</pre>
+
+<p>
+Since accessing _<em>proto</em>_ is not part of the official ECMA standard, there is a more universal way to trace the link from an object to the prototype object it inherits, and that is by using the  constructor property.  
+</p>
+
+<pre name="code" class="js">
+Array.prototype.foo = 'foo'; // all instances of Array() now inherit a foo property
+
+var myArray = new Array();
+
+// trace foo in a verbose way leveraging *.constructor.prototype
+console.log(myArray.constructor.prototype .foo); // logs foo
+
+// or, of course, leverage the chain
+console.log(myArray.foo) // logs foo
+// uses prototype chain to find property at Array.prototype.foo
+</pre>
+
+
+
+<pre name="code" class="js">
+var Foo = function Foo(){};
+Foo.prototype = {}; // replace prototype property with an empty object
+
+var FooInstance = new Foo();
+console.log(FooInstance.constructor === Foo);  // logs false, we broke the reference
+console.log(FooInstance.constructor); // logs Object(), not Foo()
+
+// compare to code where we do not replace the prototype value
+var Bar = function Bar(){};
+var BarInstance = new Bar();
+console.log(BarInstance.constructor === Bar);  // logs true
+console.log(BarInstance.constructor);  // logs Bar()
+
+// 函数的原型属性和该函数实例化之后该实例的构造属性到底是什么关系？
+var Foo = function Foo(){};
+Foo.prototype = {constructor:Foo};	//这里似乎形成了一个环
+var FooInstance = new Foo();
+
+console.log(FooInstance.constructor === Foo);  // logs true
+console.log(FooInstance.constructor); // logs Foo()
+</pre>
+
+<p>
+You might think that you can replace the prototype property entirely anytime and that all instances will be updated, but this is not correct. When you create an instance, that instance will be tied to the prototype that was "minted" at the time of instantiation. Providing a new object as the prototype property does not update the connection between instances already created and the new  prototype.  But remember, as I stated above, you can  <strong>update or add to the originally created  prototype object</strong> and those values remain connected to the first instance(s).
+</p>
+
+<pre name="code" class="js">
+var Foo = function Foo(){};
+Foo.prototype.x =  1;
+
+var FooInstance = new Foo();
+console.log(FooInstance.x);  // logs 1, as you think it would
+
+// now let’s replace/override the prototype object with a new Object() object
+Foo.prototype =  {x:2};
+console.log(FooInstance.x);  // logs 1, WHAT? Shouldn't it log 2, we just updated prototype
+
+/* FooInstance still references the same state of the prototype object that 
+was there when it was instantiated. */
+// create a new instance of Foo()
+var NewFooInstance = new Foo();
+
+// the new instance is now tied to the new prototype object value (i.e. {x:2};)
+console.log(NewFooInstance.x);  // logs 2 
+</pre>
+
+<pre name="code" class="js">
+var Person = function(legs, arms) {
+    // shadow prototype value
+    if (legs !== undefined) {this.legs = legs;}
+    if (arms !== undefined) {this.arms = arms;}
+};
+
+Person.prototype.legs = 2;
+Person.prototype.arms = 2;
+Person.prototype.countLimbs = function() {return this.legs + this.arms;};
+
+var chuck = new Person( 0, 0);
+console.log(chuck.countLimbs());  // logs 0
+</pre>
+
+<p>
+Creating inheritance chains (the original intention).
+</p>
+
+<p>
+Prototypal inheritance was conceived to allow inheritance chains that mimic the inheritance patterns found in traditional  object oriented programming  languages. In order for one object to inherit from another object in JavaScript all you have to do is instantiate an instance of the object you want to inherit from as the value for the prototype property of the function that creates the objects that is doing the inheriting.
+</p>
+
+<pre name="code" class="js">
+var Person = function(){this.bar = 'bar'};
+Person.prototype.foo = 'foo';
+
+var Chef = function(){this.goo = 'goo'};
+Chef.prototype = new Person();
+
+var cody = new Chef();
+console.log(cody.foo);  // logs 'foo'
+console.log(cody.goo);  // logs 'goo'
+console.log(cody.bar);  // logs 'bar'
+</pre>
+
+<h2 id="toc_0.15">Array</h2>
+<p>
+if only one parameter is sent to the Array() constructor, and that value is a integer (e.g. '1', '123', or '1.0'), then it will be used to setup the  length  of the array, and will not be used as a value contained within the array.
+</p>
+
+<pre name="code" class="js">
+var foo = new Array(1, 2, 3);
+var bar = new Array(100 );
+
+console.log(foo[0], foo[2]); // logs '1 3'
+console.log(bar[0], bar.length);  // logs 'undefined 100'
+</pre>
+
+
+<p>
+The <strong>Array() object</strong> has the following properties (not including inherited properties and methods: Properties (e.g. Array.prototype): 
+</p>
+<ul>
+<li>
+prototype
+
+</ul>
+
+<p>
+<strong>Array object instances</strong> have the following properties and methods (not including inherited properties and methods): 
+</p>
+
+<p>
+Instance Properties  (e.g. var myArray = ['foo', 'bar']; myArray.length;): 
+</p>
+<ul>
+<li>
+constructor
+
+<li>
+index
+
+<li>
+input
+
+<li>
+length
+
+</ul>
+
+<p>
+Instance Methods  (e.g. var myArray = ['foo']; myArray.pop();): 
+</p>
+<ul>
+<li>
+pop()
+
+<li>
+push()
+
+<li>
+reverse()
+
+<li>
+shift()
+
+<li>
+sort()
+
+<li>
+splice()
+
+<li>
+unshift()
+
+<li>
+concat()
+
+<li>
+join()
+
+<li>
+slice()
+
+</ul>
+
+<p>
+Looping over an array, backwards and forwards.
+</p>
+<pre name="code" class="js">
+var myArray = ['blue', 'green', 'orange', 'red'];
+var myArrayLength = myArray.length;  // cache array length, to avoid unnecessary lookup
+var counter = 0; // setup counter
+
+while (counter &lt; myArrayLength) {  // run if counter is less than array length
+    console.log(myArray[counter]);  // logs 'blue', 'green', 'orange', 'red'
+    counter++;  // add 1 to the counter
+}
+
+
+var myArray = ['blue', 'green', 'orange', 'red'];
+var myArrayLength = myArray.length;
+
+while (myArrayLength--) {                 // if length is not zero, loop and subtract 1
+    console.log(myArray[myArrayLength]);   // logs 'red', 'orange', 'green', 'blue'
+}
+
+</pre>
+
+
+<h2 id="toc_0.16">String()</h2>
+<p>
+Instances from the  String() constructor, when used with the  new  keyword, produce an actual complex object. You should avoid doing this (use literal/primitive numbers) due to the potential problems associated with the  typeof  operator. The  typeof operator reports complex string objects as 'object' instead of the primitive label ('string') you might expect. Additionally, the literal/primitive value is just faster to write and is more concise.  
+</p>
+
+<p>
+<strong>The string object</strong> has the following properties and methods (not including inherited properties and methods):
+</p>
+
+<p>
+Properties (e.g. String.prototype;): 
+</p>
+<ul>
+<li>
+prototype
+
+</ul>
+
+<p>
+Methods (e.g. String.fromCharChode(); ): 
+</p>
+<ul>
+<li>
+fromCharCode()
+
+</ul>
+
+<p>
+<strong>String object instances</strong> have the following properties and methods (not including inherited properties and methods):
+</p>
+
+<p>
+Instance Properties  (e.g. var myString = 'foo'; myString.length; ): 
+</p>
+<ul>
+<li>
+constructor
+
+<li>
+length
+
+</ul>
+
+<p>
+Instance Methods  (e.g. var myString = 'foo'; myString.toLowerCase();): 
+</p>
+<ul>
+<li>
+charAt()
+
+<li>
+charCodeAt()
+
+<li>
+concat()
+
+<li>
+indexOf()
+
+<li>
+lastIndexOf()
+
+<li>
+localeCompare()
+
+<li>
+match()
+
+<li>
+quote()
+
+<li>
+replace()
+
+<li>
+search()
+
+<li>
+slice()
+
+<li>
+split()
+
+<li>
+substr()
+
+<li>
+substring()
+
+<li>
+toLocaleLowerCase()
+
+<li>
+toLocaleUpperCase()
+
+<li>
+toLowerCase()
+
+<li>
+toString()
+
+<li>
+toUpperCase()
+
+<li>
+valueOf()
+
+</ul>
+
+
+<h2 id="toc_0.17">Number()</h2>
+<p>
+<strong>The Number()  object</strong> has the following properties:
+Properties (e.g. Number.prototype;): 
+</p>
+<ul>
+<li>
+MAX_VALUE
+
+<li>
+MIN_VALUE
+
+<li>
+NaN
+
+<li>
+NEGATIVE_INFINITY
+
+<li>
+POSITIVE_INFINITY
+
+<li>
+prototype
+
+</ul>
+
+
+<p>
+Number object instances have the following properties and methods (not including inherited properties and methods): 
+Instance Properties  (e.g. var myNumber = 5; myNumber.constructor;): 
+</p>
+<ul>
+<li>
+constructor
+
+</ul>
+
+<p>
+Instance Methods  (e.g. var myNumber = 1.00324; myNumber.toFixed(); ): 
+</p>
+<ul>
+<li>
+toExponential()
+
+<li>
+toFixed()
+
+<li>
+toLocaleString()
+
+<li>
+toPrecision()
+
+<li>
+toString()
+
+<li>
+valueOf()
+
+</ul>
+
+<h2 id="toc_0.18">Boolean()</h2>
+<p>
+If a value is  0,  -0,  null,  false,  NaN ,  undefined, or an empty string( ""), it is  false. Any value in JavaScript except the aforementioned values will be converted to true if used in a boolean context (i.e.  if (true) {};).
+</p>
+
+<p>
+<strong>The Boolean() object</strong> has the following properties: Properties (e.g. Boolean.prototype; ):
+</p>
+<ul>
+<li>
+prototype
+
+</ul>
+
+<p>
+<strong>Boolean object instances</strong> have the following properties and methods (not including inherited properties and methods):
+Instance Properties  (e.g. var myBoolean = false; myBoolean.constructor;): 
+</p>
+<ul>
+<li>
+constructor
+
+</ul>
+
+<p>
+Instance Methods  (e.g. var myNumber = false; myBoolean.toString(); ):
+</p>
+<ul>
+<li>
+toSource()
+
+<li>
+toString()
+
+<li>
+valueOf()
+
+</ul>
+
+<p>
+If you need to convert a non-boolean value into a boolean, just use the  Boolean() constructor without the  new  keyword and the value returned will be a primitive value instead of a boolean object.  
+</p>
+
+
+<h2 id="toc_0.19">NULL &amp; undefined</h2>
+<p>
+Don't confuse null  with  undefined. Undefined is used by JavaScript to tell you that something is missing. Null is provided so you can determine when a value is expected but just not available yet.
+</p>
+
+<p>
+When verifying a null  value, always use  ===  because  == does not distinguish between  null  and undefined.
+</p>
+
+<p>
+The undefined value is used by JavaScript in two slightly different ways.
+</p>
+
+<p>
+The first way it's used is to indicate that a declared variable (e.g.  var foo) has no  assigned value. The second way it's used is to indicate that an object property you? re trying to access is not defined (i.e. it has not even been named), and is not found in the prototype chain.
+</p>
+
+<h2 id="toc_0.20">Math properties and methods</h2>
+<p>
+The Math object has the following properties and methods:Properties (e.g. Math.PI; ): 
+</p>
+<ul>
+<li>
+E
+
+<li>
+LN2
+
+<li>
+LN10
+
+<li>
+LOG2E
+
+<li>
+LOG10E
+
+<li>
+PI
+
+<li>
+SQRT1_2
+
+<li>
+SQRT2
+
+</ul>
+
+
+<p>
+Methods (e.g. Math.random();): 
+</p>
+<ul>
+<li>
+abs ()
+
+<li>
+acos()
+
+<li>
+asin ()
+
+<li>
+atan ()
+
+<li>
+anat.()
+
+<li>
+ceil ()
+
+<li>
+cos ()
+
+<li>
+exp ()
+
+<li>
+floor ()
+
+<li>
+log ()
+
+<li>
+max ()
+
+<li>
+min()
+
+<li>
+pow ()
+
+<li>
+random ()
+
+<li>
+round ()
+
+<li>
+sin()
+
+<li>
+sort ()
+
+<li>
+tan ()
+
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

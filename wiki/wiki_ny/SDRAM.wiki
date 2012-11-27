@@ -1,0 +1,4 @@
+== RAM ==
+SRAM和SDRAM的区别
+SRAM不需要刷新电路，一般用来做Cache。
+SDRAM需要刷新电路才能够保存数据，造价便宜，在嵌入式产品上一般用来做内存。例如交换机5428上的32M的SDRAM。这里的刷新电路由soc提供，也就是bcm5836的SDR/DDR SDRAM Interface。

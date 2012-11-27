@@ -1,0 +1,106 @@
+== Response Web Design ==
+《Dive_into_Responsive_Web_Design_lisongfeng.pdf》
+* 媒体查询
+* 弹性布局
+* 弹性媒体
+* 弹性字体
+
+
+=== 媒体查询 ===
+媒体查询由一个媒体类型和零或多个表达式组成，其中的表达式用于检测特定的媒体特性。
+
+{{{name="code" class="css"
+@media (orientation: portrait) and (min-width:768px) and (…) { … }
+
+@media all and (min-width: 1200px){ ... }
+}}}
+
+多数特性带min-或max-前缀，表示“大于等于”或“小于等于”，以免与HTML或XML中的“<”和“>”冲突。可以带前缀的特性使用时通常带前缀，比如max-width。
+
+
+媒体查询是一个逻辑表达式，它值要么为true，要么为false。如果媒体查询的媒体类型与运行用户代理的设备的媒体类型匹配，并且媒体查询中的所有表达式返回true，则媒体查询返回true。
+
+
+* 为不同媒体及特性指定样式有两种方式（一）
+
+{{{name="code" class="html"
+<head>
+    <link rel="stylesheet" 
+    href="wide.css" 
+    media="screen and (min-width:1024px)" 
+    />
+
+    <link rel="stylesheet" 
+    href="mobile.css"
+    media="screen and (max-width:320px)" 
+    />
+</head>
+}}}
+
+
+* 为不同媒体及特性指定样式有两种方式（二）
+
+{{{name="code" class="html"
+<style>
+    @media all and (min-width:500px) { … }
+    @media (orientation: portrait) { … }
+</style>
+}}}
+
+
+
+多个媒体查询可以组合成媒体查询列表，以逗号分隑。列表中的一或多个媒体查询返回true，列表返回true，否则返回false。列表中用逗号表示逻辑或，用and关键字表示逻辑与。
+
+
+{{{name="code" class="css"
+@media screen and (color), projection and (color) { … }
+}}}
+
+
+
+=== 弹性布局 ===
+在css中，对width/height都使用百分比，不使用绝对数值。
+
+
+=== 弹性媒体 ===
+不父元素共舞。
+
+{{{name="code" class="css"
+img,
+object,
+embed,
+video {
+    max-width: 100%;
+}
+}}}
+
+不限制图片一样，max-width会限制视频窗口宽度不会超过父元素的宽度。
+
+=== 弹性字体 ===
+用em代替px。
+ 
+{{{name="code" class="css"
+html, body {
+    font-size:14px; 
+    /* 1em = 14px */
+}
+header {
+    font-size:18px;
+}
+header h1 {
+    font-size:28px;
+}
+}}}
+
+== 视口 ==
+{{{name="code" class="css"
+<meta 
+name="viewport"
+content= "initial-scale=1.0"
+/>
+
+<meta 
+name="viewport"
+content= "width=device-width"
+/>
+}}}

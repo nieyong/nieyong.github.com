@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>套接字地址数据结构</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">struct sockaddr和struct sockaddr_in</h2>
+<p>
+Socket.h文件中<code>struct sockaddr</code>的定义如下所示：
+</p>
+<pre name="code" class="c">
+/*
+ * Structure used by kernel to store most
+ * addresses.
+ */
+struct sockaddr {
+	u_char		sa_len;		/* total length */
+	sa_family_t	sa_family;	/* address family */
+	char		sa_data[14];	/* actually longer; address value */
+};
+</pre>
+
+<p>
+In.h文件中<code>struct sockaddr_in</code>的定义如下所示：
+</p>
+<pre name="code" class="c">
+struct in_addr {
+	in_addr_t s_addr;	//in_addr_t为无符号int类型，4个字节
+};
+
+/*
+ * Socket address, internet style.
+ */
+struct sockaddr_in {
+	u_char	sin_len;
+	u_char	sin_family;
+	u_short	sin_port;
+	struct	in_addr sin_addr;
+	char	sin_zero[8];
+};
+</pre>
+
+<p>
+可以看到<code>struct sockaddr</code>和<code>struct sockaddr_in</code>都是16个字节，而且是一一对应的关系。所以，这两个结构体的转化使用强制类型转化就可以。
+</p>
+
+<p>
+在堆叠项目的rpc设计中，则可以使用<code>char tmp[16]</code>的字符数组存放这两个结构体，用于rip路由表的同步。
+</p>
+
+<p>
+下面是结构体<code>struct in_addr</code>的应用实例，一个UINT32的IP地址，需要转化为a.b.c.d的字符串格式。
+</p>
+<pre name="code" class="c">
+	UINT32 ip = 0x010101010;
+	char ipAddr[20] = {0};
+	struct in_addr iaddr;
+	
+	iaddr.s_addr = ip;
+	inet_ntoa_b (iaddr, ipAddr);
+</pre>
+
+
+<h2 id="toc_0.2">OSPF中字符串转化为IP地址或者数字</h2>
+<p>
+OSPF中的区域ID既可以是数字，又可以是IP地址形式（a.b.c.d）。cli输入该字符串之后，需要获取其数值，存放到UINT 32的整型变量中。
+</p>
+
+<p>
+第一次撰写的代码如下，IP地址字符串和数字字符串全部手动解析。
+</p>
+<pre name="code" class="c">
+/*!
+ *\fn			STATUS ospfStr2int()
+ *\brief		convert the string to int
+ *\details		the string must be ip address or pure int string
+ *\param[in]	
+ *
+ *\note		
+ *\author	NieYong &lt;NieYong@tp-link.net&gt;
+ */
+STATUS ospfStr2int(char* p,UINT32 * ipAddr)
+{
+	UINT8 flg = 0;
+	UINT8 nLen;
+	INT16 nTemp = 0;
+	UINT8 nPosition = 0;
+	UINT8 cIp[4];
+	char *pszIp;
+	UINT32 num = 0;
+
+	if (NULL != p)
+    { 
+		while (*p != '\0' &amp;&amp; isspace((int)*p) != 0) 
+		{
+			p++; 
+		}
+	}
+
+	/* printf("ospfStr2int:%s\n",p); */
+
+	pszIp = p;
+	nLen = strlen(pszIp);
+	if((NULL == pszIp) ||(nLen &gt; IP_ADDRESS_LENGTH))
+	{
+		return ERROR;
+	}
+
+	/* first,we check if the string is int number string */
+	while(flg != 1 &amp;&amp; *pszIp != '\0')
+	{
+		switch(*pszIp)
+		{
+			case '0':		
+			case '1':
+			case '2':		
+			case '3':
+			case '4':		
+			case '5':
+			case '6':		
+			case '7':
+			case '8':		
+			case '9':
+				num = num * 10 + *pszIp - '0';
+				break;
+			default:
+				flg = 1;
+				break;
+		}
+		pszIp++;
+	}
+
+	if(flg != 1)
+	{
+		/* we're here,meant the ip address string is right */
+		* ipAddr = num;
+		/* printf("ospfStr2int:%d\n",* ipAddr); */
+		return OK;
+	}
+
+	/* if the check above failed,we should check if the string is 
+	   ip address sting secondly */
+   pszIp = p;
+	while(*pszIp != '\0')
+	{
+		switch(*pszIp)
+		{
+			case '0':		
+			case '1':
+			case '2':		
+			case '3':
+			case '4':		
+			case '5':
+			case '6':		
+			case '7':
+			case '8':		
+			case '9':
+				nTemp = nTemp * 10 + *pszIp - '0';
+				if(nTemp &gt; 255)
+				{
+					return ERROR;
+				}
+				break;
+			case '.':
+
+				/* except case :  192..0.1 */
+				if( '.' == *(pszIp + 1))
+				{
+					return ERROR;
+				}
+
+				/* except case : 192.168.0.1.5 */
+				if(3 == nPosition)
+				{
+					return ERROR;
+				}
+				
+				//store the ipaddress
+				cIp[nPosition] = nTemp; 
+				nPosition ++;
+				nTemp = 0;
+				break;
+			default:
+				return ERROR;
+				break;
+		}
+		pszIp++;
+	}
+
+	if(nPosition == 3)
+	{
+		/* we're here,meant the ip address string is right */
+		cIp[nPosition] = nTemp;
+		*ipAddr = (cIp[0]&lt;&lt;24) + (cIp[1]&lt;&lt;16) + (cIp[2]&lt;&lt;8) + cIp[3];
+		/* printf("ospfStr2int:%d\n",* ipAddr); */
+		return OK;
+	}
+	else
+	{
+		return ERROR;
+	}
+}
+</pre>
+
+
+<p>
+修改之后，对于ip地址类型字符串的解析直接使用函数inet_aton()，这样可以避免不少问题。代码如下：
+</p>
+<pre name="code" class="c">
+/*!
+ *\fn			STATUS swOspfStr2int()
+ *\brief		convert the string to int
+ *\details		the string must be ip address or pure int string
+ *\param[in]	
+ *
+ *\note		
+ *\author	NieYong &lt;NieYong@tp-link.net&gt;
+ */
+STATUS swOspfStr2int(char* p,UINT32 * ipAddr)
+{
+	UINT8 flg = 0;
+	UINT8 nLen;
+	INT16 nTemp = 0;
+	UINT8 nPosition = 0;
+	UINT8 cIp[4];
+	char *pszIp;
+	UINT32 num = 0;
+
+	struct in_addr inAddr;
+
+	if (NULL != p)
+    { 
+		while (*p != '\0' &amp;&amp; isspace((int)*p) != 0) 
+		{
+			p++; 
+		}
+	}
+
+	OSPF_DBG_PRINT("swOspfStr2int:%s\n",p);
+
+	pszIp = p;
+	nLen = strlen(pszIp);
+	if((NULL == pszIp) ||(nLen &gt; IP_ADDRESS_LENGTH))
+	{
+		return ERROR;
+	}
+
+	/* first check if the string is ip dot notation style */
+	if(inet_aton(pszIp,&amp;inAddr))
+	{
+		/* the string is dot notation style */
+		ipAddr = inAddr.s_addr;
+		return OK;
+	}
+
+	/* if the string is not dot notation,we should check if 
+	 * the string is int number string.
+	 */
+	while(flg != 1 &amp;&amp; *pszIp != '\0')
+	{
+		switch(*pszIp)
+		{
+			case '0':		
+			case '1':
+			case '2':		
+			case '3':
+			case '4':		
+			case '5':
+			case '6':		
+			case '7':
+			case '8':		
+			case '9':
+				num = num * 10 + *pszIp - '0';
+				break;
+			default:
+				flg = 1;
+				break;
+		}
+		pszIp++;
+	}
+
+	if(flg != 1)
+	{
+		/* we're here,meant the ip address string is right */
+		* ipAddr = num;
+		OSPF_DBG_PRINT("ospfStr2int:%d\n",* ipAddr);
+		return OK;
+	}
+	else
+	{
+		return ERROR;
+	}
+}
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

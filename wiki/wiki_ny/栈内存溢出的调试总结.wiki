@@ -1,0 +1,68 @@
+== 转自李铁辉： ==
+SSH移植IPv6的问题我弄了好久了，都没弄明白错误出在哪里，今天在邝工的帮助下问题得到了解决，在此深表感谢。在此贴出，以供大家参考。
+
+问题描述：在将SSH移植到IPv6的时候，添加了定义IPv6的宏后，编译调试代码，发现程序死在clt_sock = ipcom_accept(lst_sock[i], IP_NULL, IP_NULL);这一句，函数的内容如下：
+{{{
+    struct sockaddr tmp_addr;
+    int tmp_len;
+    int tmp_sock;
+    if (addr && addrlenp)
+        tmp_sock = (int)accept((int)sock, (struct sockaddr *)addr, (int *)addrlenp);
+    else
+        tmp_sock = (int)accept((int)sock, &tmp_addr, &tmp_len);
+}}}
+不知出错的原因所在。
+
+问题解决：通过邝工的反汇编调试，发现是内存越界的问题。通过代码可以看出函数是执行了else这一句，虽然他传进来的地址是NULL，当使用的地址结构仍然是IPv4的地址结构，当传进来IPv6的空地址时导致内存越界，从而导致程序死掉。
+
+反省：移植的一开始我只是关注与socket以及shell start有关的地址结构的修改，accept的地址选项一直赋为NULL，就忽略它了，这才导致后面调试的时候出现内存越界，导致调试了2周左右，在此贴出代码及分析，供大家参考。
+
+
+
+== 转自邝国燊: ==
+大致讲一下本次调试的流程（调试过程中，某些地址的具体值已经记不起了，姑且用符号代替，例如AddrExc表示发生异常的指令的地址）。
+
+首先，SSH移植模块到IPv6后，出现问题的现象是每次进行认证，ipsshd任务就会被Suspend，根据过往的经验，一个任务被系统Suspend是通常是因为它发生了异常。为了确定异常的原因，在ipsshd被Suspend时，通过shell下的i命令（当然ti也可以）查看到ipsshd任务被挂起时，pc（程序计数器）的值为AddrExc，然后反汇编vxWorks镜像，发现发生异常的地址是ipssh函数中的如下几句指令中的最后一句：
+{{{
+jal AddrIpcomAccept /*这里的AddrIpcomAccept表示ipcom_accept函数的入口地址*/
+nop
+sw $v0, $s8(40)
+}}}
+其实上面三条指令就是李铁辉所发现的程序死掉的地方，即ipssh函数中的“clt_sock = ipcom_accept(lst_sock[i], IP_NULL, IP_NULL);”这一个语句，第一个语句通过jal指令调用ipcom_accept函数，第二个语句是由于MIPS体系结构具有分支延迟槽而插入的空操作指令，第三个语句就是将返回值保存到clt_sock局部变量中（MIPS体系结构的约定是，用v0和v1寄存器保存程序调用时的返回值）。
+
+一开始有点怀疑是nop指令的问题，觉得可能将nop指令换成ssnop（super-scalar nop）可能可以解决问题（本人有一段时间没看过MIPS的东西了，对nop和ssnop的区别和应用场合已经颇为生疏），但是看了一下反汇编代码的其它函数调用都是使用nop解决分支延迟问题，因此觉得应该不是nop指令导致问题。
+
+于是将目光转向sw $v0, $s8(40)，这条指令涉及内存访问，因此很可能是访问了非法的内存地址而导致异常。在ipsshd任务被挂起的时候，通过ti查看任务寄存器的值，发现$s8寄存器的值为2，也即，上面发生异常的指令尝试将调用函数的返回值写入地址42，这个地址在MIPS体系架构里面属于kuseg段，在没有使用MMU的时候，一般不应该使用这个段中的地址（参见《MIPS体系架构透视》，基于这个原因，我们交换机的地址空间是从0x80000000开始的）。因此很明显是非法内存访问导致了任务被挂起。
+
+为了再确定这一点，使用了下面的方式：在clt_sock = ipcom_accept(lst_sock[i], IP_NULL, IP_NULL);语句前面添加一句嵌入汇编“__asm__("sw $30, 0x80000004");”（$30就是$8寄存器的编号，这句汇编在调用ipcom_accept之前将$s8寄存器的值存入地址为0x80000004的内存空间，这种方法可能有一些问题，因为它覆盖了0x80000004的内存空间），重新编译，并下载到机器上，再次进行认证过程，在任务ipsshd被挂起后，通过d命令查看内存0x80000004的值，该值不为2。因此，显然在调用了ipcom_accept函数的过程中，$s8的值被破坏了。
+
+再次反汇编vxWorks镜像，这次查看ipcom_accept的反汇编代码，从表面上看，ipcom_accept的反汇编代码似乎没有什么问题，一开始就是将$s8保存到堆栈中，在返回前也有对应的汇编代码将$s8的值恢复：
+{{{
+addui $sp, $sp, -48
+sw $s8, (40)$sp
+......
+lw $s8, (40)$sp
+addui $sp, $sp, 48
+为了确认堆栈中的内容，在ipcom_accept的代码中添加一句汇编代码：
+struct sockaddr tmp_addr;
+int tmp_len;
+int tmp_sock;
+if (addr && addrlenp)
+tmp_sock = (int)accept((int)sock, (struct sockaddr )addr, (int *)addrlenp);
+else
+tmp_sock = (int)accept((int)sock, &tmp_addr, &tmp_len);
+asm("sw $29, 0x80000008"); /*添加的代码，将堆栈指针寄存器sp的值存放到0x80000008/
+}}}
+再次编译，下载，运行认证过程，在ipsshd被挂起后，查看内存0x80000008的值，为AddrStack，因此，根据上面的ipcom_accept函数的反汇编代码，AddrStack+40就是ipcom_accept返回前一刻，要恢复的$s8的值，通过d命令看AddrStack+40的内容，该内存的内容确实已经被修改为2，因此，问题应该出在函数ipcom_accept内部。
+
+ipcom_accept内部只有一个accept函数的调用，该函数属于协议栈，应该不会出什么问题。accept函数有三个参数，最后两个参数一个是指向一个sockaddr结构的指针，一个是指向int类型的指针，前一个参数都是输出参数，后一个参数同时用作输入输出参数。这两个参数用于返回accept成功的时候，客户端的地址信息（由于sockaddr结构的长度实际上是不定的，即，IPv4和IPv6的sockaddr的长度是不同的，因此，需要最后一个参数来确定实际返回的sockaddr的长度）。到了这里，大概可以猜到出现问题的原因：由于调用ipcom_accept时，最后两个参数都是NULL，因此，ipcom_accept走的是else分支，该分支使用了在堆栈上的临时变量tmp_addr，而我们的$s8又是被保存在堆栈上的，因此，很可能是accept函数在向tmp_addr写入的时候越界访问，将保存$s8的堆栈内容覆盖了。
+
+其实，ipcom_accept函数存在两个问题，一个是sockaddr不能存放一个IPv6的对应数据结构sockaddr_in6，另一个问题是，在调用accept函数之前，必须将第三个参数指向的整数tmp_len赋值为第二个参数指向的内存空间的大小，因此，只需将这两个问题修复即可。
+
+其实本次调试确实可以完全不使用反汇编，只需仔细观察ipcom_accept函数即可，本人的做法有点复杂和多余。
+
+== 转自宁一冰： ==
+主题改为“栈内存越界的调试总结”会更确切些
+
+反汇编是必要的调试手段，仅观察ipcom_accept真的是很难发现问题的
+

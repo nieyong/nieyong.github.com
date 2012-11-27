@@ -1,0 +1,73 @@
+== MIPS,PowerPC和ARM访问I/O方式的比较 ==
+*MIPS* ：
+由于MIPS的地址空间映射机制比较特殊，kernel在访问kseg0和kseg1段时，根本不需要经过MMU，虚拟地址直接减去一个偏移就是物理地址（虽说PowerPC和ARM看起来也是虚拟地址减一个偏移，但是实际上都是经过TLB，TLB就是MMU）。MIPS处理器一般把外设映射到虚拟地址0xA0000000-0xBFFFFFFF之间的512MB地址空间中，而且不通过Cache（通过cache的地址空间为0x80000000-0x9FFFFFFF）。
+
+所以只要知道外设的物理地址，则只需在代码中直接加上0xA0000000就是外设的虚拟地址，这样访问起来速度比较快。但是，缺点是灵活性比较差，主内存和外设都只能映射在512MB的地址空间中，限制比较多。
+
+“主内存和外设都只能映射在512MB的地址空间中”的解释：主内存一般映射到0x80000000-0x9FFFFFFF的通过cache的512M空间中，外设则是映射到0xA0000000-0xBFFFFFFF的不通过cache的512M空间中。当然，上面说的两个512M空间都是MIPS的虚拟内存空间，它们的虚拟地址直接减去一个偏移得到的物理地址，是指向同一块512M的物理空间。所以说“主内存和外设都只能映射在512MB的地址空间中”这句话是没有错的，只是说的比较隐晦。
+
+ps:MIPS has no dedicated input/output instructions,so all device registers must be mapped somewhere in the address space,and every strange things will happen if you accidentally let them be cached.《See MIPS Run》page-299
+
+*PowerPC（E500）* ：
+对于E500来说，不管访问什么地址都是要通过MMU的。kernel启动的时候，已经把kernel的虚拟地址空间的kmalloc区域在TLB1中建立了直接映射。而访问I/O则需要通过ioremap()函数，在页表中建立虚拟地址和物理地址的映射后才能正常访问。范围一般是ioremap_base（一般是0xFE000000）到ioremap_bot。这里需要注意的是，ioremap_bot是小于ioremap_base的。而这会影响vmalloc区域的使用，这段区域是从VMALLOC_START到ioremap_bot，也就是说PowerPC的vmalloc区域是随着ioremap_bot的变化而变化的。所以PowerPC访问外设要先建立页表（在TLB0中），比较麻烦，访问速度比较慢。访问结束后要使用iounmap()撤销映射。当然PowerPC也提供另外一种访问I/O的方式――io_block_mapping()。可以在TLB1中建立永久的块映射，最大可以到256MB，这样访问的时候就不需要调用ioremap()临时分配虚拟地址，并建立页表了。不过Linux PowerPC的maintainer并不推荐这种方式，原因是滥用io_block_mapping会破坏PowerPC内核虚拟地址空间的布局。
+
+*ARM* ：
+ARM有点类似于PowerPC，访问任何地址都要通过MMU。但是ARM Linux的做法是为每一个平台定义一个静态数组standard_io_desc[]，其中定义了每一个外设的物理地址和对应的虚拟地址，这是由程序员自己根据需要分配的，一般来讲是分配在虚拟地址的高端部分，比如在0xF0000000以上，并且不与vmalloc区域重叠（对于ARM来说，vmalloc区域在kmalloc区域+8MB――I/O区域之间，不同的平台地址不太一样）。然后调用xxx_map_io()函数建立页表，一般会根据不同设备的地址范围的大小使用1MB或者4KB的页，这样就建立了外设的物理地址和内核虚拟地址的映射关系。然后，一般还会在头文件中定义外设的各个寄存器的虚拟地址，在操作外设时就直接读写这些宏所定义的虚拟地址就可以了，不需要调用ioremap动态的建立页表。这种方法类似于PowerPC的io_block_mapping()。所以ARM访问外设的速度要比PowerPC快一点，因为省去了动态建立页表的步骤。
+
+总得来说，MIPS，PowerPC和ARM访问I/O的方式各有千秋，MIPS是速度较快，操作简单，但是灵活性较差；PowerPC是灵活性大但是速度较慢；ARM算是在二者之间取了一个平衡。
+
+
+== ARM 与 MIPS 比较 ==
+[前言］
+这是一个几年以来我一直想做的“功课”，之所以称之为“功课”，而不能说是“文章”，是因为我觉得自己的知识还远远不够，不管是深度还是广度，也不管是全 面性还是透彻性，我都不敢。但是我实在是很想把我的一些理解写出来，然后能和其他朋友一起探讨，纠正错误，补充完善，最终目的就是要加深对ARM和 MIPS 这两种CPU架构的认识。
+
+[正文]
+1.流水线结构 pipeline
+    - MIPS 是最简单的体系结构之一，所以使大学喜欢选择 MIPS 体系结构来介绍计算体系结构课程。
+    - ARM has barrel shifter
+        shifter是两面性的，一方面它可以提高数学逻辑运算速度，另一方面它也增加了硬件的复杂性。所以和可以完成同样功能的adder/shift register相比，效率更高，但是也     占用更多的芯片面积。
+       
+    - MIPS have "branch delay slot" and "load delay slot"
+        MIPS使用编译器来解决上面的两个问题。因为MIPS最初的设计思想就是使用简单的RISC硬体，然后靠编译器及其他软体技术，来达成RISC的完整概 念。
+2.指令结构 instruction
+    - MIPS have 32bit and 64bit architecture,but ARM only have 32bit architecture
+       ARM11 局部64位
+    - MIPS是开放式的架构,用户可以在开发的内核中加入自己的指令，
+    - ARM has 4-bit condition code in every instruction
+      ARM 在这一点很像x86。MIPS在MIPS IV也加入"conditional move"指令，来提高pipeline的效率。
+    - ARM has pre- and post-increment addressing modes
+        auto-increment/decrement on load/store instructions
+    - 在节省代码空间方面，MIPS16 很类似ARM Thumb
+3.寄存器 register
+    -  由于MIPS内核中有32个注册器（Register），而ARM只有16个，这种结构设计上的先天优势，决定了在同等性能表现下，MIPS的芯片面积和 功耗会更小。
+    -  ARM 有一组特殊用途寄存器cp0-cp15,可以使用MCR,MRC等指令控制; 相对应的，MIPS也有cp0 0-30,使用mfc0,mtc0 指令控制。
+    -  Register banking in ARM.  r8-r12 FIQ mode;r13:SP r14 R
+       感觉不出banked register有什么好处。
+    -  MIPS has a hard-wired-to-zero register ,but ARM not
+       MIPS use register $0 for Zero
+4.地址空间 address space
+    -  MIPS 起始地址是0xbfc00000,会有4Mbyte的大小限制，但一般MIPS芯片都会采取一些方法解决这个问题。
+       ARM没有这种问题。
+       MIPS24K 起始地址改到了0xbf000000,现在有16Mbyte的空间了。
+    -   MIPS don't have to turn paging on to enable the cache.
+        MIPS have the address space for both cache and un-cache
+        but ARM need enable/disable cache
+5.功能 function
+    -   Float point: MIPS64 has.
+        ARM's support for FP is limited, and usually not included, and it is a 32 bit architecture
+    -   ARM use JTAG,MIPS use EJTAG。Debug工具一般两种都支持。使用起来感觉差不多。
+6.性能 performance
+    -  具体性能比较，因为差异性太大，所以很难分出谁好谁坏。从个人经验来讲 MIPS4k和ARM9基本上是同一个级别的,但ARM9性能似乎要比MIPS4K好。
+       同样是32bit的MIPS24K性能上比MIPS4K有很大提升，也应该比ARM9要好些。
+       因为没有用过ARM11和MIPS34K的芯片，没法比较，但感觉这两个似乎是一个级别的。
+7.应用
+    -  在1000MHz以上的应用,很难找到采用ARM架构的产品。
+       MIPS架构用在200MHz或者是266MHz以下的应用比较少,而这恰恰是ARM的主攻市场。
+    -  ARM 在手机等便携式领域,MIPS 在住宅网关、线缆调制解调器、线缆机顶盒等
+    -  ARM 采用硬核授权;MIPS 采用软核授权，用户可以自己配置，做自己的产品。
+8.未来发展
+    -  ARM的下一代走向多内核结构，而MIPS公司的下一代核心则转向硬件多线程功能(multithreading)
+       MIPS 的multithreading 很类似Intel 的 HyperThreading技术。从现在的发展来看，多内核占上风。
+9.总结
+自己感觉ARM和MIPS在一开始的RISC的设计上有很多不同，但随着技术的发展，各自扬长避短，好的技术大家都会使用。比如ARM11和MIPS R1000就使用了很多一样的技术。感觉RISC做到了极至就都一样了。
+

@@ -1,0 +1,10 @@
+记录一种应用场景。在Linux和MS下协作编写vimwiki，其中vimwiki全部使用utf-8编码，在MS下应该如何配置vim，使新建的文件和保存的文件等都使用utf-8编码？MS系统的$LANG为cp936。
+
+== fenc ==
+Sets the character encoding for the file of this buffer.When 'fileencoding' is different from 'encoding', conversion will be done when reading and writing the file.
+
+那么具体是如何转化的呢？
+
+首先是写操作，当前文件的fenc设置为何种编码，那么在写的时候，就会把文件按照该编码写入。这个时候，不要考虑enc的值。例如，有一个cp936编码的文件，使用vim打开，查看fenc为cp936，然后设置fenc为utf-8，然后再写入文件，那么该文件的编码就变为了utf-8，再次用vim打开就可以看到fenc为utf-8。
+
+然后是读操作，读操作vim会使用fencs中配置的编码来检测文件的编码，直到成功，然后就会设置fenc的值为现在成功时使用的编码值。如果fencs未设置，或者尝试了所有的编码都不正确，那么就以enc的编码来打开该文件，fenc的值为空。当然，如果文件的编码和enc的值不一样，那么就会出现乱码的现象。

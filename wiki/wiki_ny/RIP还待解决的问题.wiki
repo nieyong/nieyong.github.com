@@ -1,0 +1,13 @@
+* 什么是主机路由？禁止RIP 接收主机路由
+在某些特殊情况下，路由器会收到大量来自同一网段的主机路由，这些路由对于路由寻址没有多少作用，却占用了大量网络资源。配置了禁止主机路由功能后，路由器将拒绝它所收到的主机路由。
+
+== IGP ==
+The Routing Information Protocol (RIP) is an interior gateway protocol (IGP)
+
+== IP Routing Fundamentals ==
+You can find detailed information about RIP in IP Routing Fundamentals,  published by  Cisco Press.
+
+== default network path ==
+If the router has a default network path, RIP advertises  a route that links the router to the pseudonetwork 0.0.0.0. The 0.0.0.0 network does not exist; it is treated by RIP as a network to implement the default routing feature. The switch  advertises the default network if a default was learned by RIP or if the router has a gateway of last resort and RIP is configured  with a default metric. RIP sends updates to the interfaces in specified networks. If an interface’s network is not specified, it is not advertised in any RIP  update.
+
+wildcard-mask，接下来我们应输入wildcard-mask，即为子网掩码的反码，但我司的实现却是输入子网掩码

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>NOR Flash的驱动</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">NOR Flash</h2>
+<p>
+Nor Flash与Nand flash的不同之处在于Nor Flash的地址和数据线是不共用的，所以Nor Flash比较象ROM,是可以按地址随机读取的，这样就非常适合存储代码，在开机时从Nor Flash中取代码来执行。在我的板子上有16M的Intel的Nor Flash E28F128J3A150，以此为例来研究一下Nor Flash的一些常用操作。E28F128J3A150每个扇区（sector）是128k，擦除是按扇区操作。
+</p>
+
+<p>
+首先来看下E28F128J3A150与s3c2410的接口吧。
+</p>
+
+<p>
+一般情况下ROM与s3c2410的接口我们可以在s3c2410的手册上看到，如下图所示
+</p>
+
+<p>
+<a href="image/nor flash driver/nor flash.jpg.html">image/nor flash driver/nor flash.jpg</a>
+</p>
+
+<p>
+仔细看下16位和8位数据接口在地址线连接上的区别吧，16位的地址线是要移位的，A1接到A0上，这当然是比较容易理解的，位宽大了一倍，地址就少了一条。对于E28F128J3A150其实也是这样，不过又有点不一样，仔细看看E28F128J3A150的手册吧。下面给出接线图。
+</p>
+
+<p>
+<a href="image/nor flash driver/flash connect.jpg.html">image/nor flash driver/flash connect.jpg</a>
+</p>
+
+<p>
+不同之处E28F128J3A150貌似并没有移位，其实只是因为E28F128J3A150的A1就相对于别的16位ROM的A0，其A0就相当于他们的A(-1)是用来指示8位地址的，所以还是一样的。
+</p>
+
+<p>
+来看看Flash操作的命令集吧
+</p>
+
+<p>
+<a href="image/nor flash driver/nor flash cmd.jpg.html">image/nor flash driver/nor flash cmd.jpg</a>
+</p>
+
+<p>
+以几个比较重要的操作来说明比较容易懂
+</p>
+
+<p>
+首先就是Read Identifier Codes
+</p>
+
+<p>
+先给定我们的flash开始的地址吧，flash_addr=ioremap(0x0,0x1000000); 物理地址从0x0开始的0x1000000（16M）地址空间，这样得到了可访问的虚拟地址flash_addr
+</p>
+
+<p>
+很简单，看命令表,先写一个命令      writew(0x90,flash_addr);
+</p>
+
+<p>
+然后把Manufacture Code读回来              readw(flash_addr)；
+</p>
+
+<p>
+接着再读Device Code                      readw(flash_addr+2);
+</p>
+
+<p>
+细节部分还是参考手册吧。 其实内核已经MTD驱动完全支持Nor Flash的操作，所以不必要自己再写了。 不过在JTAG烧写flash的程序中可以加入对我们自己的flash的支持。
+</p>
+
+<p>
+来看看其中对E28F128J3A150的烧写代码，分析一下。
+</p>
+<pre>
+int Strata_CheckID(int targetAddr)             //返回Manufacture Code
+{
+    _WR(targetAddr, 0x0090);   
+    return _RD(targetAddr);                      //_WR和_RD都是半字操作
+}
+int Strata_CheckDevice(int targetAddr)       //返回Device Code
+{
+    _WR(targetAddr, 0x0090);
+    return _RD(targetAddr+0x2);
+}
+</pre>
+<p>
+看着Block Erase Flowchart再对照着Block Erase的函数看就比较能完全看懂了
+</p>
+<pre>
+void Strata_EraseSector(int targetAddress)
+{
+    unsigned long ReadStatus;
+    unsigned long bSR5;
+    unsigned long bSR7;
+    _WR(targetAddress, 0x0020);      //擦除命令first cycle
+    _WR(targetAddress, 0x00d0);    //擦除命令second cycle
+    _WR(targetAddress, 0x0070);      //读状态寄存器命令
+    ReadStatus=_RD(targetAddress);  //读状态寄存器
+    bSR7=ReadStatus &amp; (1&lt;&lt;7);
+    while(!bSR7 )       //需要判断状态寄存器的第７位
+	{
+	    _WR(targetAddress, 0x0070);
+	    ReadStatus=_RD(targetAddress);
+	    bSR7=ReadStatus &amp; (1&lt;&lt;7);
+	}
+	_WR(targetAddress, 0x0070);
+	ReadStatus=_RD(targetAddress); 
+    bSR5=ReadStatus &amp; (1&lt;&lt;5);          
+    if (bSR5==0)
+	{
+	    printf("Block @%xh Erase O.K. "n",targetAddress);
+	}
+	else
+	{
+	    _WR(targetAddress, 0x0050);      //// Clear Status Register
+	    error_erase=1;  
+	}
+    _RESET(); //就相当于_WR(targetAddress, 0x00ff)，回到Read Array的状态。
+}
+</pre>
+<p>
+很清晰的流程吧。
+Byte/Word Program Flowchart
+</p>
+
+ 
+<p>
+共两种Program方式可以把数据写到Flash中，一般也只用到这种就可以了
+</p>
+<pre>
+int Strata_ProgFlash(U32 realAddr,U16 data)
+{
+    unsigned long ReadStatus;
+    unsigned long bSR4; 
+    unsigned long bSR7;   
+    _WR(realAddr, 0x0040);
+    _WR(realAddr, data);
+    _WR(realAddr, 0x0070);
+    ReadStatus=_RD(realAddr);
+    bSR7=ReadStatus &amp; (1&lt;&lt;7);
+    while(!bSR7)
+    {
+        _WR(realAddr, 0x0070);
+        ReadStatus=_RD(realAddr);
+        bSR7=ReadStatus &amp; (1&lt;&lt;7);
+    }
+    _WR(realAddr, 0x0070);
+    ReadStatus=_RD(realAddr);
+    bSR4=ReadStatus &amp; (1&lt;&lt;4);
+    if (bSR4==0)
+    {
+        //printf("Successful Program!!"n");
+    }
+    else
+    {
+        _WR(realAddr, 0x0050);      // Clear Status Register
+        error_program=1;        
+    }
+    _RESET();
+    return 0;
+}
+</pre>
+<p>
+以上这种写会很慢，以致于JTAG烧写相当得慢。
+</p>
+
+<pre>
+int Strata_unprotect_sector(int targetAddr)         //去除sector的写保护
+{ 
+   int SR7,SR3,SR4,SR5,ReadStatus; 
+   int res=0; 
+   _WR(targetAddr,0x0050); //Clear Status Register 
+   _WR(targetAddr,0x0060); //First bus cycle 
+   _WR(targetAddr,0x00D0); //Second bus cycle 
+   _WR(targetAddr,0x0070); 
+   ReadStatus=_RD(targetAddr); 
+   SR7=ReadStatus &amp; (1&lt;&lt;7); 
+   while(!SR7) 
+   { 
+     _WR(targetAddr,0x0070); 
+     ReadStatus=_RD(targetAddr); 
+     SR7=ReadStatus &amp; (1&lt;&lt;7); 
+   }                                                                       
+     _WR(targetAddr,0x0070); 
+     ReadStatus=_RD(targetAddr); 
+     SR3=ReadStatus &amp; (1&lt;&lt;3); 
+     SR4=ReadStatus &amp; (1&lt;&lt;4); 
+     SR5=ReadStatus &amp; (1&lt;&lt;5); 
+     if(SR3) {printf("Voltage Range Error"); res=-1;} 
+     if(SR4 &amp;&amp; SR5) {printf("Command Sequence Error"); res=-2;} 
+     if(SR5) {printf("Clear Block Lock-Bits Error"); res=-3;} 
+     _RESET(); 
+     return res; 
+}
+</pre>
+<p>
+另外按照write to buffer的流程自己写了一个函数，没有test，不想再去烧写了，太烦了，就这样好了。
+</p>
+<pre>
+void Strata_buffer_program(int blockAddress,int tagetAddress,U16* buf)
+{
+    unsigned long ReadStatus;
+    unsigned long bSR4;    
+    unsigned long bSR7;
+    int i;
+       do {
+              _WR(blockAddress, 0x00E8);
+        _WR(blockAddress, 0x0070);
+        ReadStatus=_RD(blockAddress);
+        bSR7=ReadStatus &amp; (1&lt;&lt;7);
+       } while(!bSR7);
+    _WR(blockAddress, 0x001F);
+       for(i=0;i&lt;=0x1F;i++)
+              _WR(targetAddress+2*i, *(buf+i));
+       _WR(blockAddress, 0x00D0);
+       do {
+        _WR(blockAddress, 0x0070);
+        ReadStatus=_RD(blockAddress);
+        bSR7=ReadStatus &amp; (1&lt;&lt;7);
+       } while(!bSR7);
+    _WR(blockAddress, 0x0070);
+    ReadStatus=_RD(blockAddress); 
+    bSR4=ReadStatus &amp; (1&lt;&lt;4); 
+    if (bSR4==0)
+    {
+        //printf("Successful Program!!"n");
+    }
+    else
+    {
+        _WR(blockAddress, 0x0050);
+        error_program=1;
+    }
+    _RESET(); 
+}
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

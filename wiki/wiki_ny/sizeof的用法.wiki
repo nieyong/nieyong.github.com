@@ -1,0 +1,77 @@
+在cli_ospf.c文件中，曾经有这么一段代码：
+{{{name="code" class="c"
+    char* pAreaDecp
+
+    if(sizeof(pAreaDecp) > OSPF_AREA_DESCRIPTION_SIZE)
+    {
+	    RCC_EXT_WriteStrLine(pCliEnv, "Bad parameter.");
+	    return OK;
+    }
+
+}}}
+
+pAreaDecp是字符串指针，sizeof(pAreaDecp)的目的是为了求得这个字符串的长度。
+
+== sizeof运算符 ==
+sizeof是一个很特殊的运算符，它有两种形式：sizeof 表达式和sizeof(类型名) 。它的特殊之处在于，sizeof 表达式中的表达式并不求值，只是 *根据类型转换规则求得该表达式的类型，然后把这种类型所占的字节数作为sizeof 表达式这整个表达式的值。* 有些人喜欢写成sizeof(表达式) 的形式也可以，这里的括号和return(1);的括号一样，没有任何作用。但另外一种形式sizeof(类型名) 的括号则是必须写的，整个表达式的值也是这种类型所占的字节数。
+
+比如用sizeof 运算符求一个数组的长度：
+{{{name="code" class="c"
+int a[12];
+printf("%d\n", sizeof a/sizeof a[0]);
+/* sizeof a这是一个“sizeof 表达式”的形式，只是我们常常写作sizof(a)的形式。 */
+}}}
+
+在上面这个例子中，由于sizeof 表达式中的表达式不需要求值，所以不需要到运行时才计算，事实上，在编译时就知道sizeof a 的值是48，sizeof a[0] 的值是4 ，所以在编译时就已经把sizeof a/sizeof a[0]替换成常量12了，这是一个常量表达式。
+
+准确地说，sizeof 表达式的值是size_t 类型的，这个类型定义在stddef.h 头文件中，不过你的代码中只要不出现size_t 这个类型名就不用包含这个头文件，比如像上面的例子就不用包含这个头文件。size_t 这个类型是我们讲过的整型中的某一种，编译器可能会用typedef做一个类型声明：
+    typedef unsigned long size_t;
+那么size_t 类型就是unsigned long 类型。之所以不直接规定sizeof 的值是unsigned long 型的，而要规定一个size_t 类型，是为了允许不同的编译器根据自己平台的情况定义size_t 为不同的类型，这样使用size_t 类型的代码就具有很好的可移植性，但不管编译器怎么实现，C 标准明确规定sizeof 的值是无符号整型的。
+
+
+== sizeof类型还是变量（表达式） ==
+许多程序员在使用 sizeof 中，喜欢sizeof 变量名，例如：  
+{{{name="code" class="c"
+int score[100]; 
+char filename[20]; 
+struct UserInfo usr[100]; 
+}}}
+在sizeof 这三个的变量名时，都会返回正确的结果，于是许多程序员就开始sizeof变量名。这个习惯很虽然没有什么不好，但我还是建议 sizeof 类型。 
+
+我看到过这个的程序：
+{{{name="code" class="c"
+   pScore = (int*) malloc( SUBJECT_CNT ); 
+   memset( pScore, 0, sizeof(pScore) ); 
+   ... 
+}}}
+
+此时，sizeof(pScore) 返回的就是4 （指针的长度），不会是整个数组，于是，memset就不能对这块内存进行初始化。为了程序的易读和易维护，我强烈建议使用类型而不是变量，如：  
+{{{name="code" class="c"
+对于 score：     sizeof(int) * 100    /* 100 个int */ 
+对于 filename ：  sizeof(char) * 20    /* 20 个char */ 
+对于 usr：       sizeof(struct UserInfo) * 100    /* 100 个UserInfo */ 
+}}}
+
+这样的代码是不是很易读？一眼看上去就知道什么意思了。  
+另外一点，sizeof 一般用于分配内存，这个特性特别在多维数组时，就能体现出其优点了。如，给一个字符串数组分配内存， 
+{{{name="code" class="c"
+/* 
+*  分配一个有20 个字符串， 
+*  每个字符串长 100 的内存 
+*/ 
+char* *p; 
+/* 
+*  错误的分配方法  
+*/ 
+p = (char**)calloc( 20*100, sizeof(char) ); 
+/* 
+*  正确的分配方法  
+*/ 
+p = (char**) calloc ( 20, sizeof(char*) ); 
+for ( i=0; i<20; i++){ 
+   /*p = (char*) calloc ( 100, sizeof(char) );*/ 
+   p[i] = (char*) calloc ( 100, sizeof(char) ); 
+} 
+}}}
+（注：上述语句被注释掉的是原来的，是错误的，由dasherest 朋友指正，谢谢）为了代码的易读，省去了一些判断，请注意这两种分配的方法，有本质上的差别。
+

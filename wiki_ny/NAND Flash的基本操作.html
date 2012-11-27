@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>NAND Flash的基本操作</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+
+
+<p>
+Nand flash芯片工作原理 
+------------------------------------ 
+Nand flash芯片型号为Samsung K9F1208U0B,数据存储容量为64MB,采用块页式存储管理。8个I/O 
+引脚充当数据、地址、命令的复用端口。 
+芯片内部存储布局及存储操作特点: 
+一片Nand flash为一个设备(device), 其数据存储分层为: 
+1 (Device) = 4096 (Blocks) 
+1 (Block) -= 32 (Pages/Rows) 页与行是相同的意思,叫法不一样 
+1 (Page) = 528 (Bytes) = 数据块大小(512Bytes) + OOB 块大小(16Bytes) 
+在每一页中,最后16个字节(又称OOB)用于Nand Flash命令执行完后设置状态用,剩余512个字节又 
+分为前半部分和后半部分。可以通过Nand Flash命令00h/01h/50h分别对前半部、后半部、OOB进行定位通过 
+Nand Flash内置的指针指向各自的首地址。 
+</p>
+
+<p>
+存储操作特点: 
+1. 擦除操作的最小单位是块。 
+2. Nand Flash芯片每一位(bit)只能从1变为0,而不能从0变为1,所以在对其进行写入操作之前要一定将相应块擦除(擦除即是将相应块得位全部变为1). 
+3. OOB部分的第六字节(即517字节)标志是否是坏块,如果不是坏块该值为FF,否则为坏块。 
+4. 除OOB第六字节外,通常至少把OOB的前3个字节存放Nand Flash硬件ECC码 
+------------------------------------ 
+下面对nand flash的初始化代码nand_init()进行分析： 
+1.如果定义(CONFIG_COMMANDS &amp; CFG_CMD_NAND)没定义(CFG_NAND_LEGACY) 则start_armboot()调用driver/nand/nand.c中的nand_init()，否则如果定义(CONFIG_COMMANDS &amp; CFG_CMD_NAND)并且有定义了CFG_NAND_LEGACY，则调用自己定义的nand_init()。在我当前的情景中是使用driver/nand/nand.c中的nand_init()。 
+2.nand_init()调用本文件中的nand_init_chip()对nand进行初始化。 
+3.nand_init_chip()首先调用board_nand_init()。 
+4.board_nand_init()是需要自己添加的函数，这个函数的主要功能是对struct nand_chip结构体的函数指针赋值，让它们指向自己为nand驱动编写的一些函数，对未赋值的指针，uboot会在后面为其赋上通用nand驱动函数指针。 
+5.nand_init_chip()接着调用nand_scan(). 
+6.nand_scan()定义在drivers/nand/nand_base.c文件中。它首先对struct nand_chip结构体中在board_nand_init()函数中未赋值的指针赋上通用nand驱动函数指针。 
+7.通用nand驱动函数nand_select_chip()赋值给struct nand_chip结构体的函数指针用于打开或关闭nand芯片，0为打开，1为关闭。在这个函数中会调用nand_chip结构体中的hwcontrol函数指针，这个指针指向的函数是需要自己编写的。这个函数指针在board_nand_init()函数中被赋值。主要作用是向nand flash发送一些nand flash开启与关闭命令。 
+8.nand_scan()剩余部分初始化nand_chip和mtd_info结构体。 
+9.nand_scan()最后在返回时调用drivers/nand/nand_bbt.c文件中的nand_default_bbt()。 
+10.nand_default_bby()选择一个坏块描述表，返回时调用本文件中的nand_scan_bbt()。 
+11.nand_scan_bbt()寻找建立一个坏块描述表。 
+12.最后返回到nand_init()，这样nand驱动的初始化完成了。 
+  NAND Flash 在嵌入式系统中的地位与PC机上的硬盘是类似的。用于保存系统运行所必需的操作系统，应用程序，用户数据，运行过程中产生的各类数据，系统掉电后数据不会护丢失。现在的Flash主要有两咱，一种是NAND Flash 一种是Nor Flash。NOR Flash是由Intel公司于1988年发明的，用以代替EERPOM，NAND Flash由Toshiba 公司在1989年发明的。
+</p>
+<blockquote>
+网上有很多介绍两者区别的文章，在此就不做介绍了，主要介绍关于NAND Flash的组织结构和编写程序的方法。
+在三星的NAND Flash 中，当CPU从NAND Flash开始启动时，CPU会通过内部的硬件将NAND Flash开始的4KB数据复制到称为“Steppingstone”的4KB的内部RAM中，起始地址为0，然后跳到地址0处开始执行。这也就是我们为什么可以把小于4KB的程序烧到NAND Flash中，可以运行，而当大于4KB时，却没有办法运行，必须借助于NAND Flash的读操作，读取4KB以后的程序到内存中。
+NAND Flash的寻址方式和NAND Flash的memory组织方式紧密相关。NAND Flash的数据是以bit的方式保存在 memory cell（存储单元）。一般情况下，一个cell中只能存储一个bit。这些cell以8个或者16个为单位，连成 bit line ,形成所谓的byte(x8)/word(x16),这就是NAND Flash的位宽。
+这些Line会再组成Pape（页）。然后是每32个page形成一个Block，所以一个Block（块）大小是16k.Block是NAND Flash中最大的操作单元，其中的擦除操作是以Block为单位进行擦除的，而读写和编程是以page为单位进行操作的，并且读写之前必须进行flash的擦写。我们这里以三星K9F1208U0M的NAND Flash 为例，它的大小是64MB的。
+</blockquote>
+<p>
+1block = 32page
+1page = 512bytes(datafield) + 16bytes(oob)
+</p>
+<blockquote>
+K9F1208U0B总共有4096 个Blocks，故我们可以知道这块flash的容量为4096 *(32 *528)= 69206016 Bytes = 66 MB
+</blockquote>
+<p>
+   但事实上每个Page上的最后16Bytes是用于存贮检验码用的，并不能存放实际的数据，所以实际上我们可以操作的芯片容量为
+4096 *(32 *512) = 67108864 Bytes = 64 MB
+</p>
+<blockquote>
+Nand Flash 物理结构图
+</blockquote>
+<blockquote>
+在NAND Flash中有8个I/O引脚（IO0―IO7）、5个全能信号（nWE ALE CLE nCE nRE）、一个引脚，1个写保护引脚。操作NAND Flash时，先传输命令，然后传输地址，最后读写数据。对于64MB的NAND Flash，需要一个26位的地址。只能8个I/O引脚充当地址、数据、命令的复用端口，所以每次传地址只能传8位。这样就需要4个地址序列。因此读写一次nand flash需要传送4次（A[7:0] A[16:9] A[24:17] A[25]）。64M的NAND Flash的地址范围为0x00000000―0x03FFFFFF。128M的NAND Flash的地址范围为0x00000000---0x07FFFFFF。1KB = 0x000-0x3FF.128字节=0x00H--7FH。
+一页有528个字节，而在前512B中存放着用户的数据。在后面的16字节中（OOB）中存放着执行命令后的状态信息。主要是ECC校验的标识。列地址A0-A7可以寻址的范围是256个字节，要寻址528字节的话，将一页分为了A.（1 half array）B(2 half array) C(spare array)。A区0―255字节，B区 256-511 字节C区512―527字节。访问某页时必须选定特定的区。这可以使地址指针指向特定的区实现。
+在NAND Flash 中存在三类地址，分别为Block Address 、Column Address Page Address.。
+Column Address 用来选择是在上半页寻址还是在下半页寻址A[0]―A[7].也就相当于页内的偏移地址。在进行擦除时不需要列地址，因为擦除是以块为单位擦除。32个Page需要5bit来表示。也就是A[13:9];也就是页在块内的相对地址。A8这一位用来设置512字节的上半页，还是下半页，1表示是在上半页，而2表示是在下半页。Block的地址有A[25:14]组成。
+</blockquote>
+ 
+<p>
+存储操作特点：
+1.擦除操作的最小单位是块
+2.Nand Flash芯片每一位只能从1变为0，而不能从0变为1，所以在对其进行写入操作之前一定要将相应块擦除（擦除就是将相应块的位全部变为1
+3 OOB部分的第六字节（即517字节）标志是否坏块，如果不是坏块该值为FF，否则为坏块
+4 除OOB第六字节外，通常至少把OOB前3字节存放Nand Flash硬件ECC码
+</p>
+<blockquote>
+一个容量为64M(512Mbit)的NAND Flash,分为131072页，528列。（实际中由于存在spare area,故都大于这个值），有4096块，需要12bit来表示即A[25:14].如果是128M（1Gbit）的话，blodk Address为A[26:14].由于地址只能在IO0―IO7上传送。编程时通常通过移位来实现地址的传送。传送过程如下：
+</blockquote>
+<p>
+第1个地址序列：传递column address，也就是NAND Flash[7:0],这一周期不需要移位即可传递到I/O[7:0]上，而half page pointer 即A8是由操作指令决定，00h，在A区，01h在B区，指令决定在哪个half page上进行读写，而真正A8的值是不需要程序员关心的；
+第2个地址序列：就是将NAND_ADDR 右移9位，而不是8位，将NAND_ADDR[16:9]传递到I/O[7:0]上；
+第3个地址序列：将NAND_ADDR[24:17] 传递到I/O[7:0]上；
+第4个地址序列：将NAND_ADDR[25]传送到I/O上。
+</p>
+<blockquote>
+整个地址的传送过程需要4步才能完成。如果NAND Flash 的大小是32MB的以下的话，那么block address 最高位只到bit24,因此寻址只需要3步，就可以完成。
+在进行擦除操作时由于是以块进行擦除，所以只需要3个地址序列，也就是只传递块的地址，即A[14:25]。
+</blockquote>
+ 
+<p>
+NAND Flash地址的计算：
+</p>
+<blockquote>
+Column Address 翻译过来是列地址，也就是在一页里的偏移地址。其实是指定Page上的某个Byte，指定这个Byte，其实也就是指定此页的读写起始地址。
+Page Address:页地址。页的地址总是以512Bytes对齐的，所以它的低9位问题0，确定读写操作在NAND Flash中的哪个页进行。
+当我们得到一个Nand Flash地址addr时，我们可以这样分解出Column Address和Page Address。
+</blockquote>
+<p>
+Columnaddr = addr % 512   // column address
+Pageaddr = addr&gt;&gt;9            // page address
+</p>
+<blockquote>
+也就是一个Nand Flash地址的A0-A7是它的column address ,A9―A25是它的Page Address，地址A8被忽略。
+</blockquote>
+<p>
+现在假设我要从Nand Flash中的第5000字节处开始读取1024个字节到内存的0x30000000处，我们这样调用read函数
+</p>
+ 
+<p>
+NF_Read(5000, 0x30000000,1024);
+我们来分析5000这个src_addr.
+根据   
+column_addr=src_addr%512;       
+page_address=(src_addr&gt;&gt;9);     
+我们可得出column_addr=5000%512=392
+page_address=(5000&gt;&gt;9)=9
+于是我们可以知道5000这个地址是在第9页的第392个字节处，于是我们的NF_read函数将这样发送命令和参数
+column_addr=5000%512;
+page_address=(5000&gt;&gt;9);
+NF_CMD=0x01;                                          //要从2nd half开始读取 所以要发送命令0x01
+NF_ADDR= column_addr &amp;0xff;                     //1st Cycle A[7:0]
+NF_ADDR=page_address&amp; 0xff
+NF_ADDR=(page_address&gt;&gt;8)&amp;0xff;                 //3rd.Cycle   A[24:17]
+NF_ADDR=(page_address&gt;&gt;16)&amp;0xff;              //4th.Cycle   A[25]
+</p>
+<blockquote>
+向NandFlash的命令寄存器和地址寄存器发送完以上命令和参数之后,我们就可以从rNFDATA寄存器(NandFlash数据寄存器)读取数据了.
+</blockquote>
+<p>
+我用下面的代码进行数据的读取.
+for(i=column_addr;i&lt;512;i++)
+{
+</p>
+<blockquote>
+*buf++=NF_RDDATA();
+</blockquote>
+<p>
+}
+每当读取完一个Page之后,数据指针会落在下一个Page的0号Column(0号Byte).
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

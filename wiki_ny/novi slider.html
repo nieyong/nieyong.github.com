@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>novi slider</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<ul>
+<li>
+effect: 'random',// 过渡效果
+
+<li>
+slices: 15,
+
+<li>
+boxCols: 8,
+
+<li>
+boxRows: 4,
+
+<li>
+animSpeed: 500,
+
+<li>
+pauseTime: 3000,
+
+<li>
+startSlide: 0, // 第几张开始，从0开始计算
+
+<li>
+directionNav: true, // 是否显示上一张下一张按钮
+
+<li>
+directionNavHide: true, // 是否只在经过时显示
+
+<li>
+controlNav: true, // 序列导航：1、2、3、4...
+
+<li>
+controlNavThumbs: false, // 图片导航
+
+<li>
+controlNavThumbsFromRel: false, // 使用img的rel属性作为缩略图地址
+
+<li>
+controlNavThumbsSearch: '.jpg', // 查找这个字符串...然后...
+
+<li>
+controlNavThumbsReplace: '_thumb.jpg', // ...然后用这个字符串代替于缩略图的src
+
+<li>
+keyboardNav: true, // 键盘控制（左右箭头）
+
+<li>
+pauseOnHover: true, // 鼠标经过时暂停轮播
+
+<li>
+manualAdvance: false, // 强制手动转换
+
+<li>
+captionOpacity: 0.8,
+
+<li>
+prevText: 'Prev',
+
+<li>
+nextText: 'Next',
+
+<li>
+beforeChange: function(){},
+
+<li>
+afterChange: function(){},
+
+<li>
+slideshowEnd: function(){}, // 所有显示完毕后触发
+
+<li>
+lastSlide: function(){}, // 最后一张图显示时触发
+
+<li>
+afterLoad: function(){} // 加载完毕时出发
+
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

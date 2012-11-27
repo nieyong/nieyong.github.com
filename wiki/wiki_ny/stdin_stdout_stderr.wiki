@@ -1,0 +1,233 @@
+hawkeye方案下，TL-SG3424机型：
+{{{
+-> iosDevShow
+drv name
+  0 /null
+  1 /tyCo/0
+  1 /tyCo/1
+  3 flash:
+  5 :
+  2 tracertPipe
+  2 /pipe/1
+  3 ram:
+value = 25 = 0x19
+-> iosDrvShow
+drv    create     delete       open      close       read      write      ioctl
+  1  806dfe24          0   806dfe24   806dfe74   806e02f4   806e0fd0   806dfec8
+  2         0          0   806da690   806da6e8   806da718   806da770   806da8f4
+  3  806c1a88   806c1f2c   806c16a8   806c1b3c   806c2a3c   806c2ae4   806c3690
+  4         0          0          0   806a2e6c   806a2eb4   806a2e90   806a2ed8
+  5  806910e0   80691350   8069164c   80691884   80692cb8   80692fe8   8069321c
+value = 80 = 0x50 = 'P'
+-> iosFdShow
+ fd name                 drv
+  3 /tyCo/0                1 in out err
+  4 (socket)               4
+  5 (socket)               4
+  6 (socket)               4
+  7 tracertPipe            2
+  8 tracertPipe            2
+  9 (socket)               4
+ 10 (socket)               4
+ 11 /pipe/1                2
+ 12 (socket)               4
+ 13 (socket)               4
+ 14 (socket)               4
+ 15 (socket)               4
+ 16 /pipe/1                2
+ 17 (socket)               4
+ 18 (socket)               4
+ 19 /tyCo/0                1
+ 20 (socket)               4
+value = 32 = 0x20 = ' '
+}}}
+
+ponCat方案，TL-SG5428机型：
+{{{
+-> iosDevShow
+drv name
+  0 /null
+  1 /tyCo/0
+  1 /tyCo/1
+  4 host:
+  1 /tyCo/serial0
+  5 flash:
+  2 tracertPipe
+  2 /pipe/1
+  5 ram:
+value = 25 = 0x19
+-> iosDrvShow
+drv    create     delete       open      close       read      write      ioctl
+  1    4fad94          0     4fad94     4fadd4     4fb1c0     4fbd04     4fae18
+  2         0          0     4f6a44     4f6a88     4f6ab0     4f6ae8     4f6c28
+  3         0          0          0     4d1d4c     4d1d74     4d1d60     4d1d88
+  4    4d7b5c     4d7e74     4d8174     4d83a0     4d9990     4d9c7c     4d9e58
+  5    4e5c28     4e5bdc     4e58ac     4e52d8     4e66fc     4e677c     4e6fd8
+value = 80 = 0x50 = 'P'
+-> iosFdShow
+ fd name                 drv
+  3 /tyCo/0                1
+  4 (socket)               3
+  5 /tyCo/serial0          1 in out err
+  6 (socket)               3
+  7 (socket)               3
+  8 (socket)               3
+  9 (socket)               3
+ 10 (socket)               3
+ 11 (socket)               3
+ 12 (socket)               3
+ 13 tracertPipe            2
+ 14 tracertPipe            2
+ 15 /pipe/1                2
+ 16 (socket)               3
+ 17 (socket)               3
+ 18 (socket)               3
+ 19 (socket)               3
+ 20 /pipe/1                2
+ 21 (socket)               3
+ 22 (socket)               3
+ 23 (socket)               3
+value = 32 = 0x20 = ' '
+}}}
+
+A file descriptor is global to a system. For example, a task, A, that performs a write( ) on fd 7 will write to the same file (and device) as a task, B, that performs a write( ) on fd 7.
+
+These standard fds are used to make tasks and modules independent of their actual I/O assignments. If a module sends its output to standard output (fd = 1), then its output can be redirected to any file or device, without altering the module.
+
+The implementation of printf( ), sprintf( ), and sscanf( ), traditionally considered part of the stdio package, is part of a different package in VxWorks.
+
+Most commonplace uses of I/O in VxWorks are completely source-compatible with I/O in UNIX and Windows. However, note the following differences:
+
+* Device Configuration..   
+In VxWorks, device drivers can be installed and removed dynamically.
+
+* File Descriptors..   
+In UNIX and Windows, fds are unique to each process. In VxWorks, fds are global entities, accessible by any task, except for standard input, standard output, and standard error (0, 1, and 2), which can be task specific.
+
+* I/O Control..   
+The specific parameters passed to ioctl( ) functions can differ between UNIX and VxWorks.
+
+* Driver Routines..   
+In UNIX, device drivers execute in system mode and cannot be preempted. In VxWorks, driver routines can be preempted because they execute within the context of the task that invoked them.
+
+错误流 stderr 是非缓冲的。输出流 stdout是行缓冲的，如果它指向一个终端。注意当 stdin 与一个终端关联时，也许终端驱动中存在输入缓冲，与stdio 缓冲完全无关。(确实如此，一般的终端输入在内核中是行缓冲的。)
+
+命令行下直接执行函数adsysReboot()
+{{{
+-> adsysReboot()
+fdStdin:0x0000000,fdStdout:0x0000000,fdStderr:0x0000000
+[tShell]Rebooting...[tShell]
+}}}
+
+web页面点击reset按钮
+{{{
+-> fdStdin:0x0000000,fdStdout:0x0000000,fdStderr:0x0000000
+[tSysTimer]Rebooting...[tSysTimer]
+}}}
+
+命令行下执行命令reset
+{{{
+TP-LINK#reset
+ System software reset, are you sure? (Y/N)Y
+
+ Operation OK!Now rebooting system...fdStdin:0x0000000,fdStdout:0x0000000,fdStderr:0x0000000
+[tConsole]Rebooting...[tConsole]
+TP-LINK#
+TP-LINK#
+}}}
+
+再次执行reset命令
+{{{
+TP-LINK#reset
+ System software reset, are you sure? (Y/N)Y
+
+ Operation OK!Now rebooting system...
+TP-LINK#
+TP-LINK#
+}}}
+
+
+== vxWorks中何时printf函数可用 ==
+在usrConfig.c文件，usrRoot()函数中，有I/O系统的初始化。首先，函数iosInit()初始化vxworks的I/O系统。然后，安装了console的驱动（也就是串口驱动程序），在vxworks的I/O系统中注册了设备/tyCo/0和/tyCo/1。再然后，使用函数open()打开该console设备，获得描述符。最后，使用函数ioGlobalStdSet()将标准输入、输出、错误输出映射到该设备。
+{{{name="code" class="c"
+#ifdef  INCLUDE_IO_SYSTEM
+    iosInit (NUM_DRIVERS, NUM_FILES, "/null");
+
+    consoleFd = NONE;                           /* assume no console device */
+
+#ifdef  INCLUDE_TYCODRV_5_2
+#ifdef  INCLUDE_TTY_DEV
+    if (NUM_TTY > 0)
+	{
+	tyCoDrv ();				/* install console driver */
+
+	for (ix = 0; ix < NUM_TTY; ix++)	/* create serial devices */
+	    {
+	    sprintf (tyName, "%s%d", "/tyCo/", ix);
+
+	    (void) tyCoDevCreate (tyName, ix, 512, 512);
+
+	    if (ix == CONSOLE_TTY)
+		strcpy (consoleName, tyName);	/* store console name */
+	    }
+
+	consoleFd = open (consoleName, O_RDWR, 0);
+
+	/* set baud rate */
+
+	(void) ioctl (consoleFd, FIOBAUDRATE, CONSOLE_BAUD_RATE);
+	(void) ioctl (consoleFd, FIOSETOPTIONS, OPT_TERMINAL);
+	}
+#endif	/* INCLUDE_TTY_DEV */
+
+#else   /* !INCLUDE_TYCODRV_5_2 */
+#ifdef  INCLUDE_TTY_DEV
+    if (NUM_TTY > 0)
+	{
+	ttyDrv();				/* install console driver */
+
+	for (ix = 0; ix < NUM_TTY; ix++)	/* create serial devices */
+	    {
+#if     (defined(INCLUDE_WDB) && (WDB_COMM_TYPE == WDB_COMM_SERIAL))
+	    if (ix == WDB_TTY_CHANNEL)		/* don't use WDBs channel */
+		continue;
+#endif
+	    sprintf (tyName, "%s%d", "/tyCo/", ix);
+	    (void) ttyDevCreate (tyName, sysSerialChanGet(ix), 512, 512);
+
+	    if (ix == CONSOLE_TTY)		/* init the tty console */
+		{
+		strcpy (consoleName, tyName);
+		consoleFd = open (consoleName, O_RDWR, 0);
+		(void) ioctl (consoleFd, FIOBAUDRATE, CONSOLE_BAUD_RATE);
+		(void) ioctl (consoleFd, FIOSETOPTIONS, OPT_TERMINAL);
+		}
+	    }
+	}
+#endif  /* INCLUDE_TTY_DEV */
+
+
+#ifdef INCLUDE_PC_CONSOLE
+    pcConDrv ();
+    for (ix = 0; ix < N_VIRTUAL_CONSOLES; ix++)
+	{
+	sprintf (tyName, "%s%d", "/pcConsole/", ix);
+	(void) pcConDevCreate (tyName,ix, 512, 512);
+	if (ix == PC_CONSOLE)		/* init the console device */
+	    {
+	    strcpy (consoleName, tyName);
+	    consoleFd = open (consoleName, O_RDWR, 0);
+	    (void) ioctl (consoleFd, FIOBAUDRATE, CONSOLE_BAUD_RATE);
+	    (void) ioctl (consoleFd, FIOSETOPTIONS, OPT_TERMINAL);
+	    }
+	}
+#endif	/* INCLUDE_PC_CONSOLE */
+
+
+#endif  /* !INCLUDE_TYCODRV_5_2 */
+
+    ioGlobalStdSet (STD_IN,  consoleFd);
+    ioGlobalStdSet (STD_OUT, consoleFd);
+    ioGlobalStdSet (STD_ERR, consoleFd);
+#endif  /* INCLUDE_IO_SYSTEM */
+}}}

@@ -1,0 +1,38 @@
+=== 获取jquery对象的子元素 ===
+find()方法，搜索所有与指定表达式匹配的元素。这个函数是找出正在处理的元素的后代元素的好方法。所有搜索都依靠jQuery表达式来完成。这个表达式可以使用CSS1-3的选择器语法来写。
+
+`$("p").find("span")`相当于`$("p span")`。
+
+下面是一个实际问题的概括，html文件和js脚本如下：
+{{{name="code" class="html"
+<a onclick="click(this)">
+    = <span>text</sapn> =
+</a>
+}}}
+
+{{{name="code" class="js"
+function click(e){
+    $(e).find('span').text('hello world');
+}
+}}}
+
+
+== show()和hide()函数 ==
+CSS里设置了display:none。
+
+== fadeIn()和fadeOut()函数 ==
+
+== animate()函数 ==
+用于创建自定义动画的函数。堆叠平台的网页中的tip就是使用这个函数实现的动画效果。
+
+
+== toggleClass()函数 ==
+如果存在（不存在）就删除（添加）一个类。也可以通过可变参数强制删除或者添加某个类。
+
+在jqm的list filter中有使用，用于list的过滤，用于添加或者删除相关的类。
+
+== hasClass()函数 ==
+判断是否存在某个类，返回值为true或者false。
+
+== remove()函数 ==
+直接将某个节点删除掉。在jqm的button制作过程中，使用图片替换，需要删除jqm自带的css效果，直接删除掉节点，很有作用的。

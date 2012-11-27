@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>工作总结</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">研究内容总结</h2>
+<p>
+已经研究的知识点：
+</p>
+<ol>
+<li>
+启动的整个过程
+
+<li>
+sdram初始化的初步
+
+<li>
+cache,网络驱动的一部分
+
+<li>
+编译链接的相关知识
+
+</ol>
+
+
+<p>
+尚未研究的知识点：
+</p>
+<ol>
+<li>
+异常和中断
+
+<li>
+文件系统，flashFs，dosFs等
+
+<li>
+SiliconBackplane的相关知识，例如总线的设置，时钟的配置，为什么不能够读取某些core中的寄存器值等
+
+<li>
+MMU部分的硬件（在BSP中没有使用到MMU）
+
+</ol>
+
+<h2 id="toc_0.2">遇到的问题</h2>
+<ul>
+<li>
+网口没有配置好，无法实现网络功能 11.8
+
+<li>
+后期文档的整理工作
+
+<ul>
+<li>
+解压缩过程文档的书写。  完成
+
+<li>
+usrInit()函数中cache部分的整理
+
+<li>
+DMA工作过程文档
+
+<li>
+网络驱动部分的文档
+
+</ul>
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

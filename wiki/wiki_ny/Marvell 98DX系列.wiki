@@ -1,0 +1,31 @@
+TCAM:Ternary Content Addressable Memory
+
+Lookup Translation Table
+
+Router Next-Hop
+
+ARP/Tunnel Start Table
+
+General Trigger:Routing Trigger ,Special Router Service
+
+Pre-routing exception checking:路由异常检查
+
+Special Router Service:
+* Bridged packets
+
+Router security features:
+* SCT Secure Control Technology
+* Network Shield Technology(NST) router mechanisms
+
+SIP/SA Check:to prevent spoofing(欺骗)
+
+== L3 Access Matrix ==
+
+Routed Packet MAC SA:modified to reflect the Router's MAC address(configurable bits+value mode bits)
+
+Routed Packet MAC DA:modified to reflect the Next hop MAC address(Unicast to ARP entry,MC to DIP)
+
+Routed Counters
+
+* 《5 Cheetah2 Router.pdf》-98DX255/265/275/285/804 Router
+* 《Datasheet.pdf》98DX255/265/275/285/804 Functional Specifications  -2.10 IPv4/6 Routing Features(P28)

@@ -1,0 +1,93 @@
+== php概念 ==
+PHP 是一种创建动态交互性站点的强有力的服务器端脚本语言。
+PHP 是一种服务器端的脚本语言，类似 ASP。
+PHP 脚本在服务器上执行，这也是为什么浏览器上看不到php源代码。
+
+
+== php项目开发工具 ==
+在其支持的主要平台（如Windows、Linux和Mac OS X）上安装该版本NetBeans是一个非常简单易懂的过程，不过要使它用于PHP开发还需要你具有一点初级的设置。你需要安装运行一个PHP 5.x，一个PHP调试器（强烈推荐使用XDebug），一个Web服务器（例如Apache）和一个数据库服务器（很明显MySQL具有比较大的优势）。 
+
+=== 1、EditPlus === 
+编写PHP时使用最多的文本编辑器之一
+
+=== 2、Zend Studio === 
+Zend Studio 是专业开发人员在使用PHP整个开发周期中唯一的集成开发环境 (IDE)
+
+=== 3、Norepad++ === 
+Notepad++是一款非常有特色的编辑器，是开源软件，可以免费使用。
+
+=== 4、PDT=== 
+Eclipse PHP Development Tools 
+
+== 动态网站开发 ==
+动态网站都是基于数据库的，网站上的数据都需要长久保存在数据库中，再通过PHP程序去连接，并进行对数据表的添加、修改、删除和查看。PHP程序程序员的课程，包括数库的安装、优化、环境介绍，重点是设计出一个项目中所需要的数据表，以及表之间的关系，并通过PHP程序对数据表进行管理。
+
+本模块除了包括数据库的管理、开发、优化之外，还有PHP处理数据库的三种方式，除了常见的过程化编程的mysql模块的方式，还有mysql扩展模块，这个模块是对mysql扩展进行的改进，还有连接各种数据库都可以使用的数据库抽象层PDO，它包含了处理各种数据库的统一的API接口。
+
+
+== cookie ==
+cookie 常用于识别用户。cookie 是服务器留在用户计算机中的小文件。每当相同的计算机通过浏览器请求页面时，它同时会发送 cookie。通过 PHP，您能够创建并取回 cookie 的值。
+
+
+
+== PHP Frameworks == 
+Symfony Framework 
+Zend Framework
+thinkPhp -- 国内一个维护的很好的php框架，魏水锋介绍
+
+== PHP学习笔记 ==
+php文件组成：
+* 文本
+* HTML标签
+* php脚本
+
+php输出文本函数
+* echo
+* print
+
+
+变量前面是$符号
+
+字符串运算符：并置
+
+strlen()函数
+strpos()函数，检索匹配
+
+php数组：
+* 数值数组
+* 关联数组
+* 多维数组
+循环使用foreach()
+
+php函数，拥有700多个内建函数
+
+function()
+
+php中关于时间的函数：date()/mktime()
+
+include()	产生warning
+require()	产生fatal error
+
+php中操作文件的函数：
+* fopen()
+* fclose()
+* feof()
+* fgets()	逐行读取
+* fgetc()	逐字符读取
+
+
+php中对cookie的操作：
+* setcookie()		//设置cookie
+* $_COOKIE		//取回cookie变量
+
+php与session变量
+* session_start()
+* $_SESSION变量
+* unset()函数、session_destroy()函数
+
+php对于错误的处理
+* die()
+* 自定义错误处理器（函数）
+* set Error Handler
+* exception:异常	filter:过滤
+

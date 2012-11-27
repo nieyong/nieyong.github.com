@@ -1,0 +1,21 @@
+= 知识点 =
+
+== MIPS语录 ==
+MIPS体系结构设计哲学就是能让软件做的事，尽可能让软件做。例如Cache的初始化
+
+Yamon是由MIPS公司开发和维护的boot loader。
+
+== MIPS处理器架构 == 
+结合X86,ARM等处理器，从CPU的架构方面了解MIPS。请点击[[mips cpu|这里]]。 
+
+== MIPS处理器知识 ==
+主要涉及到处理器的寄存器，指令系统等方面的知识。请点击[[mips knowledge|这里]]。
+
+== MIPS异常中断 ==
+主要涉及MIPS的异常，中断机制。请点击[[MIPS EXCEPTION|这里]]。
+
+== MIPS Cache ==
+记录我学习cache中遇到的问题，主要是cache的基本概念，MIPS cache的相关特性。请点击[[mips cache|这里]]。
+
+
+《计算机组织与系统结构》	这是北京大学程旭的课件，对于学习MIPS有帮助

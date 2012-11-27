@@ -1,0 +1,3 @@
+RFC: Internet Request for Comment
+
+An autonomous system (AS) is a collection of routers that are controlled by a single administrative entity.

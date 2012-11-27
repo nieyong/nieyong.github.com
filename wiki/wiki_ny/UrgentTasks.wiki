@@ -1,0 +1,5 @@
+= Nieyong's Knowledge Base =
+    * MyUrgentTasks -- things to be done _yesterday_!!!
+    * [[MIPS BSP 前期研究]] -- good books are power.
+    * TechNotes -- good books are power.
+    * ScratchPad -- various temporary stuff.

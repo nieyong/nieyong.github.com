@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>jquery</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h3 id="toc_0.0.1">获取jquery对象的子元素</h3>
+<p>
+find()方法，搜索所有与指定表达式匹配的元素。这个函数是找出正在处理的元素的后代元素的好方法。所有搜索都依靠jQuery表达式来完成。这个表达式可以使用CSS1-3的选择器语法来写。
+</p>
+
+<p>
+<code>\(("p").find("span")</code>相当于<code>\)("p span")</code>。
+</p>
+
+<p>
+下面是一个实际问题的概括，html文件和js脚本如下：
+</p>
+<pre name="code" class="html">
+&lt;a onclick="click(this)"&gt;
+    = &lt;span&gt;text&lt;/sapn&gt; =
+&lt;/a&gt;
+</pre>
+
+<pre name="code" class="js">
+function click(e){
+    $(e).find('span').text('hello world');
+}
+</pre>
+
+
+<h2 id="toc_0.1">show()和hide()函数</h2>
+<p>
+CSS里设置了display:none。
+</p>
+
+<h2 id="toc_0.2">fadeIn()和fadeOut()函数</h2>
+
+<h2 id="toc_0.3">animate()函数</h2>
+<p>
+用于创建自定义动画的函数。堆叠平台的网页中的tip就是使用这个函数实现的动画效果。
+</p>
+
+
+<h2 id="toc_0.4">toggleClass()函数</h2>
+<p>
+如果存在（不存在）就删除（添加）一个类。也可以通过可变参数强制删除或者添加某个类。
+</p>
+
+<p>
+在jqm的list filter中有使用，用于list的过滤，用于添加或者删除相关的类。
+</p>
+
+<h2 id="toc_0.5">hasClass()函数</h2>
+<p>
+判断是否存在某个类，返回值为true或者false。
+</p>
+
+<h2 id="toc_0.6">remove()函数</h2>
+<p>
+直接将某个节点删除掉。在jqm的button制作过程中，使用图片替换，需要删除jqm自带的css效果，直接删除掉节点，很有作用的。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

@@ -1,0 +1,39 @@
+== MoinMoin ==
+许多知名网站使用了 MoinMoin，比如 Fedora 项目 Wiki、Ubuntu 社区 Wiki、Gnome Live 等。
+
+可以看到 MoinMoin Wiki 引擎默认被安装在 /usr/lib/python2.x/site-packages/MoinMoin 目录下，MoinMoin Wiki 模板文件被安装在 /usr/share/moin 目录下。
+
+/usr/share/moin 目录下有这样一些重要目录：
+* /usr/share/moin/data：存放WiKi Pages,Users,etc。只能被MoinMoin访问。
+* /usr/share/moin/underlay：存放默认的WiKi Pages，有多种语言版本的帮助文档、默认页面文档等。只能被MoinMoin访问。
+* /usr/share/moin/htdocs：存放网页元素，如图片、主题风格等。可被Web Server（Apache、IIS等）访问。
+* /usr/share/moin/server：存放服务器启动脚本示例。
+* /usr/share/moin/config：存放配置文件示例。
+通过拷贝模板文件，就可生成不同的 Wiki 实例（即多个 Wiki 站点，Wiki Farm）。另外，MoinMoin 的软件升级也很简单，只需用新版本的模板文件覆盖旧的就可以了。
+
+== vimwiki ==
+和其他wiki的比较，像wikimedia那种太大了，个人用起来比较费劲；像tiddlywiki太小了，单文件也不够靠谱。 
+
+=== vimWiki的配置 ===
+* WikiWord是给多人协作的wiki设计的,对于个人wiki的WikiWord功能有些多余，并且这功能让用中文的人很无奈。 解决办法是在vimrc中添加let g:vimwiki_camel_case = 0
+* 配置多个wiki项目
+
+=== HTML的定制 ===
+今天在CSS的定制方面终于迈出了艰难的第一步。这要得益于firefox的firebug插件，通过不断的尝试，定能够制作出自己的页面。
+
+=== 关于备份 ===
+* Dropbox ：国外的优秀网络空间
+* 数据银行而且数据银行是中国企业巨头“华为”推出的，所以可以安心地把文件放在上面。 
+* 快盘简介 可以参考：金山快盘初体验
+* 文件夹同步工具帮你自动搬文件 SyncToy
+
+=== 系统优化软件 ===
+Advanced SystemCare 是一个著名的系统优化软件，它不仅可以自动优化你的系统，还提供了一系列免费软件让你在使用 Windows 的时候更加舒心。这些套件包括了：磁盘碎片整理、注册表优化、优化网络速度、游戏模式、查找重复文件、磁盘医生、备份、管理右键菜单、管理自动启动程序等等。
+
+=== 文件管理软件 ===
+如今电脑的磁盘容量越来越大，我们如饥似渴地到处搜刮着各种“有用”的资料：学习、电影、音乐、软件、图片……习惯于把一切好的东西都据为己有，总嫌自己的硬盘空间不够庞大。但自己电脑上的资料却是一团乱麻，要找个东西半天都回忆不起来放在那个文件夹下面，于是一个一个去翻阅，我们在找资料上面浪费的时间比看资料要多得多大家对这种窘境有什么良策呢？如何建立一个属于自己的高效文件系统？
+
+推荐你使用一些文件管理软件，比如TotalCommander
+
+=== HTML字符编码和浏览器字符编码（文本编码） ===
+能否在html文件中设置，使得浏览器打开网页时使用我设定的字符编码呢？

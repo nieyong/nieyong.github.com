@@ -1,0 +1,33 @@
+在三层路由功能开发的过程中，经常会没有报文接收到，这时候就需要查找其原因。其中，报文是否由MAC芯片送入了CPU中，是由TPCL，CPU防护等模块控制的。下面以rip模块为例，记录其中的一些基本知识点。
+
+== TRAP_TO_CPU & COPY_TO_CPU ==
+在swTpcl.h文件中，有如下定义。其中，TRAP_TO_CPU是指该报文会被送到CPU去，同时不会从MAC芯片的其他端口被转发除去；而COPY_TO_CPU这该报文会被拷贝一份送到CPU，然后从MAC芯片的其它端口转发出去。例如，RIPv1的response广播报文，就应该是COPY_TO_CPU，这样整个网段中的三层交换机才能够都接收到该报文。
+{{{
+typedef enum
+{
+	TPCL_ACTION_SECURITY_ACCEPT = 0,
+    TPCL_ACTION_SECURITY_DENY,
+    TPCL_ACTION_SECURITY_TRAP_TO_CPU,
+    TPCL_ACTION_SECURITY_COPY_TO_CPU,
+    TPCL_ACTION_SECURITY_TRAP_TO_MASTER_CPU,
+    TPCL_ACTION_SECURITY_COPY_TO_MASTER_CPU,    
+    TPCL_ACTION_SECURITY_REDIRECT_TO_PORT,
+    TPCL_ACTION_SECURITY_COPY_TO_PORT,
+    TPCL_ACTION_SECURITY_FLOOD,
+    
+}TPCL_ACTION_SECURITY;
+
+}}}
+
+== 调试信息 ==
+* 开启end层的调试信息，用于查看end层是否有收到数据报文
+BCM.0> debug end packet rx
+
+* 打印mac信息的收包信息统计，执行该命令之后，统计信息被清零。连续两次使用，用于查看mac芯片是否收到数据报文
+BCM.0> show c
+
+* 显示l2的mac地址表
+BCM.0> l2 show
+
+* 清空tpcl 
+BCM.0>fp init		

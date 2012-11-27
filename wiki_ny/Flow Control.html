@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Flow Control</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+TL-SG3210机型的SFP端口一直不存在流控功能，在调试这个问题的时候，遇到了很多疑惑。大家如能够给予帮助，新手感激不尽。
+</p>
+ 
+<h2 id="toc_0.1">端口连接类型：SGMII or GMII</h2>
+<p>
+TL-SG3210的SFP端口(ge8,ge9)是由SGMII接口直接连接到SFP模块，在MAC芯片和SFP模块直接没有PHY芯片，所以不是combo端口。关于这种连接方式，有下面一段描述：
+</p>
+<pre>
+SGMII links also can be configured in SerDes mode, which also operates at 1.25 Gbps: again, with 8b/10b encoding, the actual data throughput is 1 Gbps. Therefore, a typical application using this interface is fiber and can be connected directly to an optical module with an option of DC-coupled or AC-coupled for 1000BASE-X application.
+</pre>
+ 
+<p>
+但是，在BCM&gt;下却看到，ge8和ge9的端口却是GMII，如下所示：
+</p>
+<pre>
+BCM.0&gt; port ge9
+
+PORT: Status (* indicates PHY link up)
+
+ *ge9     LS(SW) Auto(1GFD,pause) Ability (fd = 100MB,1000MB hd =  intf = gmii medium =  pause = pause_tx,pause_rx,pause_asymm lb = none,MAC,PHY flags = autoneg )Local (fd = 1000MB hd =  intf = medium =  pause = pause_rx lb =  flags =  )Remote (fd = 1000MB hd =  intf =  medium =  pause =  lb =  flags =  )STP(Forward) Lrn(ARL,FWD) UtPri(0) Pfm(FloodNone) IF(GMII) Max_frame(10240) MDIX(ForcedNormal, Normal) Medium(Fiber)
+</pre>
+
+<p>
+<strong>问题：为什么端口的连接类型都不一样呢？是不是我对SGMII和GMII的理解有误？是不是驱动都加载错误了呢？</strong>
+</p>
+
+<h3 id="toc_0.1.1">Answer</h3>
+<p>
+其实，SGMII和GMII应该是一样的，对于端口ge8,ge9来说，虽然是通过SGMII端口直接连接到SFP模块上，但是其本质还是通过GMII端口连接到SGMII，然后再连接到SFP模块。
+</p>
+
+<p>
+参考<a href="MII GMII SGMII QSGMII.html">MII GMII SGMII QSGMII</a>。
+</p>
+
+
+<h2 id="toc_0.2">端口的驱动：Cisco SGMII or standard SerDes</h2>
+<p>
+进一步研究发现关于ports和phy的描述又不一样：
+</p>
+<pre>
+BCM.0&gt; ports
+         ena/  speed/ link auto    STP                  lrn  inter   max  loop
+   port  link  duplex scan neg?   state   pause  discrd ops   face frame  back
+    ge0  up   100M FD   SW  Yes  Forward          None   FA   GMII 10240
+    ge1  down    -      SW  Yes  Forward          None   FA   GMII 10240
+    ge2  down    -      SW  Yes  Forward          None   FA   GMII 10240
+    ge3  down    -      SW  Yes  Forward          None   FA   GMII 10240
+    ge4  down    -      SW  Yes  Forward          None   FA   GMII 10240
+    ge5  down    -      SW  Yes  Forward          None   FA   GMII 10240
+    ge6  down    -      SW  Yes  Forward          None   FA   GMII 10240
+    ge7  down    -      SW  Yes  Forward          None   FA   GMII 10240
+    ge8  down   1G FD   SW  Yes  Forward          None   FA   GMII 10240
+    ge9  down   1G FD   SW  Yes  Forward          None   FA   GMII 10240
+   ge10  !ena   1G FD   SW  Yes  Forward  TX RX   None   FA   GMII  1518
+   ge11  !ena   1G FD   SW  Yes  Forward  TX RX   None   FA   GMII  1518
+ 
+BCM.0&gt; phy info
+Phy mapping dump:
+      port   id0   id1  addr iaddr             name    timeout
+  ge0(  1)   143  bd20    81     0         BCM53314     250000
+  ge1(  2)   143  bd20    82     0         BCM53314     250000
+  ge2(  3)   143  bd20    83     0         BCM53314     250000
+  ge3(  4)   143  bd20    84     0         BCM53314     250000
+  ge4(  5)   143  bd20    85     0         BCM53314     250000
+  ge5(  6)   143  bd20    86     0         BCM53314     250000
+  ge6(  7)   143  bd20    87     0         BCM53314     250000
+  ge7(  8)   143  bd20    88     0         BCM53314     250000
+  ge8(  9)   143  bff0    89    89       QSGMII65/0     250000
+  ge9( 13)   143  bff0    89    89       QSGMII65/4     250000
+ ge10( 17)   143  bff0    91    91       QSGMII65/0     250000
+ ge11( 21)   143  bff0    91    91       QSGMII65/4     250000
+</pre>
+ 
+<p>
+当然，phy info命令输出的QSGMII65/0，QSGMII65/4等都是一个名字，并不代表我的接口，而ports命令的输出，却也指示我的端口是GMII的。
+</p>
+ 
+<p>
+那到底是不是驱动的问题呢？首先，在datasheet上有这么一段描述：
+</p>
+<pre>
+The BCM5331X features GbE data ports. Port configuration information for these ports resides in the Gigabit Ethernet Port Interface Controller (GPIC) block. The GPIC interface can operate in Cisco? SGMII or standard SerDes mode. When the devices are configured in SGMII mode, an interface can be connected directly to an external physical device for a 10/100/1000 Mbps Ethernet application. In SerDes mode, the interface can connect to 1000 Mbps SerDes-compatible devices, in applications such as fiber module or backplane connections.
+</pre>
+ 
+<p>
+这段话是说，对于千兆口，可以操作在Cisco SGMII 和 standard SerDes mode这两种模式下，如果是配置在Cisco? SGMII 模式下面，那么这个千兆端口是应用于链接外部PHY芯片的情况，如果配置在SerDes模式下面，就可以应用在连接千兆SerDes-compatible devices，例如SFP光纤模块（fiber module ）。
+</p>
+ 
+<p>
+<strong>问题：关于Cisco? SGMII 和 standard SerDes mode这两种模式的资料实在太少，希望能够给予一些帮助。而且按照我的理解，我们以前都是使用的COMBO端口，应该都是在Cisco? SGMII模式下面，而现在应该是需要使用standard SerDes模式，以前可有对standard SerDes模式有过研究呢？</strong>
+</p>
+
+<h3 id="toc_0.2.1">answer</h3>
+<p>
+参看一个端口使用的驱动，不能够只是看端口连接的介质，使用phy命令查看结果如下：
+</p>
+<pre>
+BCM.0&gt; phy ge8
+Port ge8 (PHY addr 0x89): QSGMII65/0 (Internal QSGMII 65nm SERDES PHY Driver)
+        0x00: 0x1140    0x01: 0x0109    0x02: 0x0143    0x03: 0xbff0
+        0x04: 0x0020    0x05: 0x0000    0x06: 0x0004    0x07: 0x2001
+        0x08: 0x0000    0x09: 0x0000    0x0a: 0x0000    0x0b: 0x0000
+        0x0c: 0x0000    0x0d: 0x0000    0x0e: 0x1140    0x0f: 0xc000
+        0x10: 0x262f    0x11: 0x8b00    0x12: 0x0000    0x13: 0x0000
+        0x14: 0x0000    0x15: 0x0000    0x16: 0x0000    0x17: 0x0000
+        0x18: 0x0000    0x19: 0x0000    0x1a: 0x0000    0x1b: 0x0000
+        0x1c: 0x0000    0x1d: 0x0005    0x1e: 0x0000    0x1f: 0x0000
+BCM.0&gt; phy ge0
+Port ge0 (PHY addr 0x81): BCM53314 (546X/548X Gigabit PHY Driver)
+        0x00: 0x1140    0x01: 0x796d    0x02: 0x0143    0x03: 0xbd20
+        0x04: 0x01e1    0x05: 0x4de1    0x06: 0x0065    0x07: 0x2001
+        0x08: 0x0000    0x09: 0x0600    0x0a: 0x0000    0x0b: 0x0000
+        0x0c: 0x0000    0x0d: 0x0000    0x0e: 0x0000    0x0f: 0x3000
+        0x10: 0x0021    0x11: 0x0300    0x12: 0x0000    0x13: 0x0000
+        0x14: 0x0000    0x15: 0x0048    0x16: 0x0000    0x17: 0x0000
+        0x18: 0x7067    0x19: 0x8514    0x1a: 0x240e    0x1b: 0xffff
+        0x1c: 0x3882    0x1d: 0x04ec    0x1e: 0x0000    0x1f: 0x0000
+</pre>
+<p>
+Internal QSGMII 65nm SERDES PHY Driver和546X/548X Gigabit PHY Driver，对于ge8,ge9，确实是加载的serdes驱动，而普通的端口，就是加载的PHY驱动，和文档中的描述相同。
+</p>
+
+<h2 id="toc_0.3">流控的建立过程</h2>
+<p>
+最后回到现在存在问题的流控功能上来，所有的流控已经打开：
+</p>
+<pre>
+ BCM.0&gt; port ge9 
+PORT: Status (* indicates PHY link up)
+
+ *ge9     LS(SW) Auto(1GFD,pause) Ability (fd = 100MB,1000MB hd =  intf = gmii medium =  pause = pause_tx,pause_rx,pause_asymm lb = none,MAC,PHY flags = autoneg )Local (fd = 1000MB hd =  intf = medium =  pause = pause_rx lb =  flags =  )Remote (fd = 1000MB hd =  intf =  medium =  pause =  lb =  flags =  )STP(Forward) Lrn(ARL,FWD) UtPri(0) Pfm(FloodNone) IF(GMII) Max_frame(10240) MDIX(ForcedNormal, Normal) Medium(Fiber)
+</pre>
+
+<p>
+<strong>问题：流控采用发送pause帧的方式来实现，那么，这个pause帧是由MAC芯片自动产生发送的吗？除了配置流控的相关寄存器，CPU这边还对这个过程有其他的干预吗？如果说流控是MAC层的功能，那么MDIX是PHY层面的功能，为什么在这里还可以看到没有PHY芯片的ge9端口的MDIX(ForcedNormal, Normal) 呢？</strong>
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

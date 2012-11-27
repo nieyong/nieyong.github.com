@@ -1,0 +1,47 @@
+Q:安装某些需要内核源码的软件时，为什么我已经将内核源码装在了/usr/src/linux下,仍然提示找不到内核源码？
+
+A:因为这些软件configure会通过检测/usr/src/linux/include/linux/version.h或者utsrelease.h是否存在，以判断是否以安装内核源码，而如果只将内核源码包解压，并不存在version.h这个文件，所以需要做如下步骤：
+
+在内核源码目录下(/usr/src/linux)
+* 1)make include/linux/version.h 生成version.h文件
+* 2)make include/asm 创建    
+
+如果从www.kernel.org下载的源码包，使用下列命令安装：
+* cd /usr/src   进入/usr/src目录中，将源码包放置在这里。
+* tar jxvf linux-2.6.9.tar.bz2 解压源码包，会生成linux-2.6.9目录
+* ln -s /usr/src/linux-2.6.9 /usr/src/linux 编译内核建议做个软链接。
+并且要确保/lib/modules/2.6.9/下的build,source目录正确指向/usr/src/linux-2.6.9的：
+{{{
+[root@NEWLFS modules]#ls -l /lib/modules/2.6.9
+lrwxrwxrwx 1 root root    21 2005-02-08 20:28 build -> /usr/src/linux-2.6.9/
+drwxr-xr-x 9 root root   216 2005-02-08 20:28 kernel/
+-rw-r–r– 1 root root 3408 2005-02-09 13:26 modules.alias
+-rw-r–r– 1 root root    69 2005-02-09 13:26 modules.ccwmap
+-rw-r–r– 1 root root 7503 2005-02-09 13:26 modules.dep
+-rw-r–r– 1 root root    73 2005-02-09 13:26 modules.ieee1394map
+-rw-r–r– 1 root root   205 2005-02-09 13:26 modules.inputmap
+-rw-r–r– 1 root root    81 2005-02-09 13:26 modules.isapnpmap
+-rw-r–r– 1 root root 4649 2005-02-09 13:26 modules.pcimap
+-rw-r–r– 1 root root 13519 2005-02-09 13:26 modules.symbols
+-rw-r–r– 1 root root   189 2005-02-09 13:26 modules.usbmap
+lrwxrwxrwx 1 root root    21 2005-02-08 20:28 source -> /usr/src/linux-2.6.9/
+}}}
+ 
+做完这些，我去安装NVIDIA驱动，结果编译时出错。 将内核源码编译一次，不安装，就可以正常编译了。 2.4.x内核不知是否如此，如果编译NVIDIA过程中出现错误，就先编译一下内核
+方法很简单：
+从/boot目录下复制config-2.6.10到/usr/src/linux下， 命名为.config。
+对于2.6.x内核使用下列命令编译：
+* cd /usr/src/linux 进入源码目录
+* make   编译内核及模块
+注意：不要去make install 只要编译就可以了。
+2.4.x使用下列命令编译内核，同样，只编译不安装。
+* cd /usr/src/linux 
+* make dep 建立依赖关系(不知道是否有必要，做下没坏处)
+* make bzImage 编译内核
+* make modules 编译模块
+通常发行版中/boot中应该有当前内核的配置文件，如上面的config-2.6.9
+如果没有的话，可以通过下列命令创建出.config
+* [root@NEWLFS linux]# cd /usr/src/linux
+* [root@NEWLFS linux]#make menuconfig 字符界面配置内核
+* [root@NEWLFS linux]#make xconfig   图形界面配置内核
+这两种方法任选其一，喜欢的话，可以自己配置一下。或者直接使用默认值，保存退出即可。这样编译时间会长一些。make menuconfig: 假如是在图形界面中的终端运行，要保证该终端窗口为全屏，才不会出错。编译完成后，就可以安装nvidia驱动了。 

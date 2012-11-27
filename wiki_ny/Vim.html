@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Vim</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<ul>
+<li>
+<a href="vim的历史.html">vim的历史</a>
+
+<li>
+<a href="vim的寄存器.html">vim的寄存器</a>
+
+<li>
+<a href="vim tags.html">vim tags</a>
+
+</ul>
+
+<h2 id="toc_0.1">vimrc的一些配置</h2>
+<ol>
+<li>
+winpos	20 20		//vim在GUI中启动时的位置
+
+<li>
+set lines=25 columns=108	//vim启动时的行数和列数
+
+<li>
+set foldenable		//启动vim的代码折叠功能
+
+<li>
+set foldmethod=indent	//vim折叠的规则，有indent/syntax等规则可选
+
+</ol>
+
+
+<h2 id="toc_0.2">文件格式和文件编码</h2>
+<p>
+在VI/VIM下面，使用下面命令查看vi/vim编辑器当前的 <strong>文件格式</strong>
+</p>
+<pre>
+:set ff?
+</pre>
+<p>
+使用下面的命令强制转化编辑器的文件格式
+</p>
+<pre>
+:set ff=unix
+</pre>
+<p>
+如果是DOS格式的文本，作为SHELL脚本运行，会报错：bad interpreter:No such file or directory
+</p>
+
+<p>
+Windows中默认的操作系统文件编码是GBK(gb2312/cp936，注：cp936是微软发布的用在文件系统中的编码方式，而gb2313是中国国家标准，又叫做ANSI格式编码，在notepad编辑器上gb2312编码的文件就显示为ANSI格式编码，使用Linux下的file命令，则显示为ISO-8859 text)，而Linux一般都是UTF-8，一般用系统宏$LANG表示。在VIM下面，使用下面命令查看编辑器中文件现在使用的编码格式。
+</p>
+<pre>
+:set fileencoding?	或者	:set fenc?
+//这里需要注意，如果是拷贝一段文件到编辑器，那么fenc的值可能为空。这个时候，查看:set enc?，就是vim编辑器对文件使用的编码方式。
+</pre>
+<p>
+使用下面的命令修改编辑器中文件编码的编码格式。例如，将一个utf-8编码的文件转化为cp936编码的问题。
+</p>
+<pre>
+:set fenc?  utf-8		//说明该文件现在为utf-8编码
+:set fileencoding=cp936		//设置该文件使用cp936编码，vim编辑器就会自动将该文件由utf-8编码转化为cp936编码
+:w				//保存文件，这里成功的条件是否必须encoding为cp936呢？答案是不必要。
+</pre>
+<p>
+还可以在.vimrc文件中进行下面的设置，vim会依次尝试使用列出的编码方式打开文件，如果都不对，则会使用latin-1(ASCII)编码方式打开。
+</p>
+<pre>
+set fileencodings=ucs-bom,utf-8,cp936
+</pre>
+
+<p>
+那么，如果有一个文件，原来是utf-8编码，如果vim编辑器设置<code>:set fileencodings=gdb</code>打开，就会出现乱码。必须使用设置为<code>:set fileencodings=utf-8</code>打开。那么，如何将utf-8文件转化为gdb呢？有关更多相关知识，需要了解vim中的<code>encoding,fileencoding,fileencodings</code>这三个选项的设置。<a href="vim中的编码格式.html">vim中的编码格式</a>。
+</p>
+
+<h2 id="toc_0.3">使用录制功能</h2>
+<ol>
+<li>
+qm：录制操作到m寄存器中
+
+<li>
+q：退出录制模式
+
+<li>
+@m：将m寄存器中的录制重复一次
+
+</ol>
+
+<h2 id="toc_0.4">命令备忘</h2>
+<ol>
+<li>
+set nu/set nonu	显示行号
+
+<li>
+^			移动光标到本行的第一个非空字符（区别于0）
+
+<li>
+c0			用输入的正文替换从本行开头到光标的所有字符，进入编辑模式
+
+<li>
+c$ 或者 C		用输入的正文替换从光标所在的字符到行尾，进入编辑模式
+
+<li>
+ESC 或者 Ctrl+[	退出插入模式
+
+<li>
+:r!ls			将ls命令的结果插入文件中，例如需要将某个目录下的所有文件名编辑到文本中
+
+<li>
+* 或者 #		查找光标下的字，在命令模式下按下Shift+8，也就是*键，表示向后检索光标下的字；按下Shift+3，也就是#键，表示向前检索光标下的字。
+
+<li>
+		如何显示vim编辑器下的所有字符，包括空格字符和换行字符。这样可以查看为何同一个文件，使用tab键做的对齐，在vim和notepad下显示有差别。
+
+</ol>
+
+<h2 id="toc_0.5">vim &amp; regex</h2>
+<p>
+%：表示在所有行中执行该操作；
+g：表示对一行中所有的匹配点执行该操作；
+</p>
+
+<p>
+vim中使用正则表达式来查找，替换，删除。
+</p>
+<ol>
+<li>
+:%s/arp/ARP/g			替换所有的arp为ARP大写形式
+
+<li>
+:g/^\s*$/d			删除只有空白的行
+
+<li>
+				删除每行前面的空白字符
+
+<li>
+:%s/\\/\//g			替换路径中的左斜杠为右斜杠，这个在windows下将拷贝的路径分隔符进行转化时，很有帮助。例如将<code>E:\Project\trunk\Src\StackSource\appl\ui\http\web_v4_rc\web-page</code>中的左斜杠替换为右斜杠<code>E:/Project/trunk/Src/StackSource/appl/ui/http/web_v4_rc/web-page</code>。
+
+</ol>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

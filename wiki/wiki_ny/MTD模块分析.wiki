@@ -1,0 +1,39 @@
+== 什么是MTD ==
+MTD(memory technology device内存技术设备)是用于访问memory设备（ROM、flash）的Linux的子系统。MTD的主要目的是为了使新的memory设备的驱动更加简单，为此它在硬件和上层之间提供了一个抽象的接口。MTD的所有源代码在/drivers/mtd子目录下。
+
+== MTD设备 ==
+MTD 设备是象闪存芯片、小型闪存卡、记忆棒等之类的设备，它们在嵌入式设备中的使用正在不断增长。 MTD 驱动程序是在 Linux 下专门为嵌入式环境开发的新的一类驱动程序。相对于常规块设备驱动程序，使用 MTD 驱动程序的主要优点在于 MTD 驱动程序是专门为基于闪存的设备所设计的，所以它们通常有更好的支持、更好的管理和基于扇区的擦除和读写操作的更好的接口。
+
+
+== MTD用户模块和硬件模块 ==
+Linux 下的 MTD 驱动程序接口被划分为两类模块：用户模块和硬件模块。
+
+为了访问特定的闪存设备并将文件系统置于其上，需要将 MTD 子系统编译到内核中。这包括选择适当的 MTD 硬件和用户模块。当前，MTD 子系统支持为数众多的闪存设备 ― 并且有越来越多的驱动程序正被添加进来以用于不同的闪存芯片。
+
+有两个流行的用户模块可启用对闪存的访问： MTD_CHAR 和 MTD_BLOCK 。
+
+MTD_CHAR 提供对闪存的原始字符访问，而 MTD_BLOCK 将闪存设计为可以在上面创建文件系统的常规块设备（象 IDE 磁盘）。与 MTD_CHAR 关联的设备是 /dev/mtd0、mtd1、mtd2（等等），而与 MTD_BLOCK 关联的设备是 /dev/mtdblock0、mtdblock1（等等）。由于 MTD_BLOCK 设备提供象块设备那样的模拟，通常更可取的是在这个模拟基础上创建象 FTL 和 JFFS2 那样的文件系统。
+
+为了进行这个操作，可能需要创建分区表将闪存设备分拆到引导装载程序节、内核节和文件系统节中。 Linux 中 MTD 子系统的主要目标是在系统的硬件驱动程序和上层，或用户模块之间提供通用接口。硬件驱动程序不需要知道象 JFFS2 和 FTL 那样的用户模块使用的方法。所有它们真正需要提供的就是一组对底层闪存系统进行 read 、 write 和 erase 操作的简单例程。
+
+== CFI接口  MTD设备层次 ==
+CFI接口（Common Flash Interface）的MTD设备分为四层（从设备节点直到底层硬件驱动），这四层从上到下依次是：设备节点、MTD设备层、MTD原始设备层和硬件驱动层。
+
+一、Flash 硬件驱动层：硬件驱动层负责在init时驱动Flash硬件，Linux MTD设备的NOR　Flash芯片驱动遵循CFI接口标准，其驱动程序位于drivers/mtd/chips子目录下。NAND型Flash的驱动程序则位于/drivers/mtd/nand子目录下
+
+二、MTD原始设备：原始设备层有两部分组成，一部分是MTD原始设备的通用代码，另一部分是各个特定的Flash的数据，例如分区。
+
+用于描述MTD原始设备的数据结构是mtd_info，这其中定义了大量的关于MTD的数据和操作函数。mtd_table（mtdcore.c）则是所有MTD原始设备的列表，mtd_part（mtd_part.c）是用于表示MTD原始设备分区的结构，其中包含了mtd_info，因为每一个分区都是被看成一个MTD原始设备加在mtd_table中的，mtd_part.mtd_info中的大部分数据都从该分区的主分区mtd_part- >master中获得。
+
+在drivers/mtd/maps/子目录下存放的是特定的flash的数据，每一个文件都描述了一块板子上的flash。其中调用 add_mtd_device()、del_mtd_device()建立/删除mtd_info结构并将其加入/删除mtd_table（或者调用 add_mtd_partition()、del_mtd_partition()（mtdpart.c）建立/删除mtd_part结构并将 mtd_part.mtd_info加入/删除mtd_table 中）。
+
+三、MTD设备层：基于MTD原始设备，linux系统可以定义出MTD的块设备（主设备号31）和字符设备（设备号90）。MTD字符设备的定义在mtdchar.c中实现，通过注册一系列file operation函数（lseek、open、close、read、write）。MTD块设备则是定义了一个描述MTD块设备的结构 mtdblk_dev，并声明了一个名为mtdblks的指针数组，这数组中的每一个mtdblk_dev和mtd_table中的每一个 mtd_info一一对应。
+
+四、设备节点：通过mknod在/dev子目录下建立MTD字符设备节点（主设备号为90）和MTD块设备节点（主设备号为31），通过访问此设备节点即可访问MTD字符设备和块设备。
+
+五、根文件系统：在Bootloader中将JFFS（或JFFS2）的文件系统映像jffs.image（或jffs2.img）烧到flash的某一个分区中，在/arch/arm/mach-your/arch.c文件的your_fixup函数中将该分区作为根文件系统挂载。
+
+六、文件系统：内核启动后，通过mount 命令可以将flash中的其余分区作为文件系统挂载到mountpoint上。
+
+== MTD代码分析 ==
+[[MTD的分析]] -- 网摘，详细分析了MTD代码

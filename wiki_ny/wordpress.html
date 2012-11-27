@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>wordpress</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">涓婚〉</a></li>
+		  <li><a href="about.html">鍏充簬</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">优秀的wordpress网站</h2>
+<p>
+下面是 rubiqube 收集并推荐的20个做得比较成功且设计十分优秀的CMS型WordPress网站，希望能给使用WordPress来做CMS站点的朋友一些有用的参考：
+</p>
+<ol>
+<li>
+ubicle Ninjas
+
+<li>
+ord Auto Shows
+
+<li>
+risk Design
+
+<li>
+aijin Film and Sound
+
+<li>
+uck Magazine
+
+<li>
+uasar Software
+
+<li>
+id – Sri Lanka
+
+<li>
+im Wilson
+
+<li>
+P Hire
+
+<li>
+Executive Warfare
+
+<li>
+Feedback Audio
+
+<li>
+fraai
+
+<li>
+Future Snowboarding Magazine
+
+<li>
+Ginger Restaurant
+
+<li>
+Inbound Pass
+
+<li>
+International Screening Solutions
+
+<li>
+kineda
+
+<li>
+Little White Lies
+
+<li>
+Miami Dating Coach
+
+<li>
+ten24media
+
+</ol>
+
+<h2 id="toc_0.2">主题定制</h2>
+<p>
+新建一个page，如果page有定制模板，而你又想把在新建page中的内容显示出来，需要在定制模板前面添加如下代码：
+</p>
+<pre>
+	&lt;?php if (have_posts()) : while (have_posts()) : the_post(); ?&gt;
+
+	&lt;?php the_content(__('Read more'));?&gt;&lt;div style="clear:both;"&gt;&lt;/div&gt;
+
+	&lt;?php endwhile; else: ?&gt;
+
+	&lt;p&gt;&lt;?php _e('Sorry, no posts matched your criteria.'); ?&gt;&lt;/p&gt;&lt;?php endif; ?&gt;
+</pre>
+
+<h2 id="toc_0.3">jquery slider</h2>
+<p>
+<a href="novi slider.html">novi slider</a>
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

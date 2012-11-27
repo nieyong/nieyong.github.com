@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>博文编辑指南</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+博文编辑、发表指南。
+</p>
+
+<h2 id="toc_0.1">编辑模式：可视化&amp;HTML</h2>
+<p>
+在文章编辑框的右上角，有编辑模式的选择，分别是可视化和HTML两种模式。一般，从Word，网页等copy过来的文章，需要在可视化模式下粘贴，这样才能够保持原有的排版。HTML模式主要是辅助调整文章的排版，需要懂一点HTML的知识。
+</p>
+
+<p>
+<a href="image/博文编辑指南/editmode.gif.html">image/博文编辑指南/editmode.gif</a>
+</p>
+
+<h2 id="toc_0.2">添加图片</h2>
+<p>
+图片如何添加的问题。绝大部分同事都是使用的word编辑的文章，将文章粘贴过去之后，图片没有了。需要将图片源文件上传博客上，然后再添加到文章中。
+</p>
+
+<p>
+上传图片：
+</p>
+
+<p>
+<a href="image/博文编辑指南/image_1.gif.html">image/博文编辑指南/image_1.gif</a>
+</p>
+
+<p>
+光标放置到需要插入图片的位置，将上传的图片插入到文章中，分三步：
+</p>
+
+<p>
+<a href="image/博文编辑指南/image_2.gif.html">image/博文编辑指南/image_2.gif</a>
+</p>
+
+<h2 id="toc_0.3">撰写摘要</h2>
+<p>
+没有简介，这个需要添加。添加简介的方法如下。
+</p>
+
+<p>
+第一步 
+</p>
+
+<p>
+<a href="image/博文编辑指南/excerpt_1.gif.html">image/博文编辑指南/excerpt_1.gif</a>
+</p>
+
+<p>
+第二步
+</p>
+
+<p>
+<a href="image/博文编辑指南/excerpt_2.gif.html">image/博文编辑指南/excerpt_2.gif</a>
+</p>
+
+<p>
+第三步 在编辑页面的最后
+</p>
+
+<p>
+<a href="image/博文编辑指南/excerpt_3.gif.html">image/博文编辑指南/excerpt_3.gif</a>
+</p>
+
+
+<h2 id="toc_0.4">代码高亮</h2>
+<p>
+例如在博文中有一段C语言代码，直接放到文章中显示效果可能很差。站点安装了专门的插件用于代码的高亮显示。使用方法是，将编辑模式切换到HTML，然后将代码段使用标识符&lt;pre lang="c" line="1"&gt; &lt;/pre&gt;标示你的代码。
+</p>
+<pre>
+&lt;pre lang="c" line="1"&gt;
+
+你的C语言代码
+
+&lt;/pre&gt;
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

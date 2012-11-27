@@ -1,0 +1,27 @@
+== 嵌入式开发随想 ==
+工作一段时间之后，总结一下嵌入式开发所涉及到的知识点。这样既有一个分门别类，又能够看到自己还有哪些方面需要深入研究，方便自己以后的学习。
+* Embedded Technolodge
+    * CPU体系结构 -- 涉及关于MIPS,ARM,X86等多种CPU的体系结构
+	* MIPS
+	* ARM
+	* X86
+    * 嵌入式系统 -- 涉及SOC，总线，SDRAM，FLASH等嵌入式系统概念
+	* AHMA
+	* SDRAM
+	* FLASH
+    * 软件开发 -- 涉及OS，C/C++，编译链接等软件开发
+	* vxWorks
+	* C/C++
+	* 编译链接
+下面针对工作内容，以功能模块来划分
+* MIPS CPU体系结构
+* Cache工作原理
+* DMA工作原理
+* Flash和Flash驱动
+* SDRAM和SDRAM接口
+
+
+== CPU处理器的发展的软件开发 ==
+* [[Welcome to the jungle]]
+* [[The free lunch is over]]
+* [[后科技时代-处理器的思考]]

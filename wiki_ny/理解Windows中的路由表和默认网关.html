@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>理解Windows中的路由表和默认网关</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+每一个Windows系统中都具有IP路由表，它存储了本地计算机可以到达的网络目的地址范围和如何到达的路由信息。路由表是TCP/IP通信的基础，本地计算机上的任何TCP/IP通信都受到路由表的控制。
+</p>
+
+<h2 id="toc_0.1">理解路由表</h2>
+<p>
+你可以运行 route print 或 netstat -r 显示本地计算机上的路由表，如下图所示：
+</p>
+<pre>
+C:\Documents and Settings\administrator&gt;route print
+
+=========================================================================== 
+Interface List 
+0x1 ........................... MS TCP Loopback interface 
+0x10003 ...00 50 8d 4f 5f c5 ...... Realtek RTL8139/810x Family Fast Ethernet NIC 
+=========================================================================== 
+=========================================================================== 
+Active Routes:
+</pre>
+
+<table>
+<tr>
+<td>
+Num
+</td>
+<td>
+Network
+</td>
+<td>
+Destination
+</td>
+<td>
+Netmask Gateway
+</td>
+<td>
+Interface
+</td>
+<td>
+Metric
+</td>
+</tr>
+<tr>
+<td>
+1
+</td>
+<td>
+0.0.0.0
+</td>
+<td>
+0.0.0.0
+</td>
+<td>
+192.168.1.1
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+30
+</td>
+</tr>
+<tr>
+<td>
+2
+</td>
+<td>
+127.0.0.0
+</td>
+<td>
+255.0.0.0
+</td>
+<td>
+127.0.0.1
+</td>
+<td>
+127.0.0.1
+</td>
+<td>
+1
+</td>
+</tr>
+<tr>
+<td>
+3
+</td>
+<td>
+192.168.1.0
+</td>
+<td>
+255.255.255.0
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+30
+</td>
+</tr>
+<tr>
+<td>
+4
+</td>
+<td>
+192.168.1.240
+</td>
+<td>
+255.255.255.240
+</td>
+<td>
+192.168.1.8
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+20
+</td>
+</tr>
+<tr>
+<td>
+5
+</td>
+<td>
+192.168.1.240
+</td>
+<td>
+255.255.255.240
+</td>
+<td>
+192.168.1.7
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+15
+</td>
+</tr>
+<tr>
+<td>
+6
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+255.255.255.255
+</td>
+<td>
+127.0.0.1
+</td>
+<td>
+127.0.0.1
+</td>
+<td>
+30
+</td>
+</tr>
+<tr>
+<td>
+7
+</td>
+<td>
+192.168.1.255
+</td>
+<td>
+255.255.255.255
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+30
+</td>
+</tr>
+<tr>
+<td>
+8
+</td>
+<td>
+224.0.0.0
+</td>
+<td>
+240.0.0.0
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+30
+</td>
+</tr>
+<tr>
+<td>
+9
+</td>
+<td>
+255.255.255.255
+</td>
+<td>
+255.255.255.255
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+192.168.1.6
+</td>
+<td>
+1
+</td>
+</tr>
+</table>
+
+<pre>
+Default Gateway: 192.168.1.1 
+=========================================================================== 
+Persistent Routes: 
+None 
+</pre>
+<p>
+　
+</p>
+
+<p>
+路由表中的每一个路由项具有五个属性，在此我将它们分为四个部分：
+</p>
+
+<p>
+1、网络地址（Network Destination）、网络掩码（Netmask）：网络地址和网络掩码相与的结果用于定义本地计算机可以到达的网络目的地址范围。通常情况下，网络目的地址范围包含以下四种：
+</p>
+
+<ul>
+<li>
+主机地址；某个特定主机的网络地址，网络掩码为255.255.255.255，如上表中的6、7、9；
+
+<li>
+子网地址，某个特定子网的网络地址，如上表中的4、5；
+
+<li>
+网络地址；某个特定网络的网络地址，如上表中的2、3、8；
+
+<li>
+默认路由；所有未在路由表中指定的网络地址，如上表中的1；
+
+</ul>
+
+<p>
+在添加路由时，Windows要求输入的网络地址和网络掩码相与后的结果必须等于网络地址，否则路由添加会失败。
+</p>
+
+<p>
+2、网关（Gateway，又称为下一跳服务器）：在发送IP数据包时，网关定义了针对特定的网络目的地址，数据包发送到的下一跳服务器。如果是本地计算机直接连接到的网络，网关通常是本地计算机对应的网络接口，但是此时接口必须和网关一致；如果是远程网络或默认路由，网关通常是本地计算机所连接到的网络上的某个服务器或路由器。
+</p>
+
+<p>
+3、接口（Interface）：接口定义了针对特定的网络目的地址，本地计算机用于发送数据包的网络接口。网关必须位于和接口相同的子网（默认网关除外），否则造成在使用此路由项时需调用其他路由项，从而可能会导致路由死锁。
+</p>
+
+<p>
+4、跃点数（Metric）：跃点数用于指出路由的成本，通常情况下代表到达目标地址所需要经过的跃点数量，一个跃点代表经过一个路由器。跃点数越低，代表路由成本越低；跃点数越高，代表路由成本越高。当具有多条到达相同目的网络的路由项时，TCP/IP会选择具有更低跃点数的路由项。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

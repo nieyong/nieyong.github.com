@@ -1,0 +1,84 @@
+== netstat ==
+netstat命令是一个监控TCP/IP网络的非常有用的工具，它可以显示路由表、实际的网络连接以及每一个网络接口设备的状态信息，在我的计算机上执行netstat后，其输出结果为：
+{{{
+Active Internet connections (w/o servers)
+Proto Recv-Q Send-Q Local Address Foreign Address State
+tcp 0 2 210.34.6.89:telnet 210.34.6.96:2873 ESTABLISHED
+tcp 296 0 210.34.6.89:1165 210.34.6.84:netbios-ssn ESTABLISHED
+tcp 0 0 localhost.localdom:9001 localhost.localdom:1162 ESTABLISHED
+tcp 0 0 localhost.localdom:1162 localhost.localdom:9001 ESTABLISHED
+tcp 0 80 210.34.6.89:1161 210.34.6.10:netbios-ssn CLOSE
+
+Active UNIX domain sockets (w/o servers)
+Proto RefCnt Flags Type State I-Node Path
+unix 1 [ ] STREAM CONNECTED 16178 @000000dd
+unix 1 [ ] STREAM CONNECTED 16176 @000000dc
+unix 9 [ ] DGRAM 5292 /dev/log
+unix 1 [ ] STREAM CONNECTED 16182 @000000df
+}}}
+从整体上看，netstat的输出结果可以分为两个部分，一个是Active Internet connections，称为有源TCP连接，另一个是Active UNIX domain sockets，称为有源Unix域套接口。在上面的输出结果中，第一部分有5个输出结果，显示有源TCP连接的情况，而第二部分的输出结果显示的是 Unix域套接口的连接情况。Proto显示连接使用的协议；RefCnt表示连接到本套接口上的进程号；Types显示套接口的类型；State显示套 接口当前的状态；Path表示连接到套接口的其它进程使用的路径名。
+事实上，netstat是若干个工具的汇总。
+
+== 显示路由表 ==
+在随-r标记一起调用netstat时，将显示内核路由表，就像我们利用route命令一样。产生的输出如下：
+{{{
+[root@machine1 /]$ netstat -nr
+Kernel IP routing table
+Destination Gateway Genmask Flags MSS Window irtt Iface
+210.34.6.0 0.0.0.0 255.255.255.128 U 0 0 0 eth0
+192.168.1.0 0.0.0.0 255.255.255.0 U 0 0 0 eth1
+127.0.0.0 0.0.0.0 255.0.0.0 U 0 0 0 lo
+0.0.0.0 210.34.6.2 0.0.0.0 UG 0 0 0 eth0
+}}}
+-n 选项令netstat以点分四段式的形式输出IP地址，而不是象征性的主机名和网络名。如果想避免通过网络查找地址（比如避开DNS或NIS服务器），这一点是特别有用的。
+
+netstat输出结果中，第二列展示的是路由条目所指的网关，如果没有使用网关，就会出现一个星号（*）或者0.0.0.0；第三列展示路由的概述，在为具体的IP地址找出最恰当的路由时，内核将查看路由表内的所有条目，在对找到的路由与目标路由比较之前，将对IP地址和genmask进行按位“与”计算；第四列显示了不同的标记，这些标记的说明如下：
+
+* G 路由将采用网关。
+* U 准备使用的接口处于“活动”状态。
+* H 通过该路由，只能抵达一台主机。
+* D 如果路由表的条目是由ICMP重定向消息生成的，就会设置这个标记。
+* M 如果路由表条目已被ICMP重定向消息修改，就会设置这个标记。
+
+netstat输出结果的Iface显示该连接所用的物理网卡，如eth0表示用第一张，eth1表示用第二张。
+
+== 显示接口特性 ==
+在随-i标记一起调用时， netstat将显示网络接口的当前配置特性。除此以外，如果调用时还带上-a选项，它还将输出内核中所有接口，并不只是当前配置的接口。netstat-i的输出结果是这样的：
+{{{
+[root@machine1 /]$ netstat -i
+Kernel Interface table
+Iface MTU Met RX-OK RX-ERR RX-DRP RX-OVR TX-OK TX-ERR TX-DRP TX-OVR Flg
+eth0 1500 0 787165 0 0 1 51655 0 0 0 BRU
+eth1 1500 0 520811 0 0 0 1986 0 0 0 BRU
+lo 3924 0 1943 0 0 0 43 0 0 0 LRU
+}}}
+MTU和Met字段表示的是接口的MTU和度量值值；RX和TX这两列表示的是已经准确无误地收发了多少数据包（ RX - OK / TX - OK）、产生了多少错误（ RX-ERR/TX-ERR）、丢弃了多少包（RX-DRP/TX-DRP），由于误差而遗失了多少包（RX-OVR/TX-OVR）；最后一列展示的是 为这个接口设置的标记，在利用ifconfig显示接口配置时，这些标记都采用一个字母。它们的说明如下：
+
+* B 已经设置了一个广播地址。
+* L 该接口是一个回送设备。
+* M 接收所有数据包（混乱模式）。
+* N 避免跟踪。
+* O 在该接口上，禁用A R P。
+* P 这是一个点到点链接。
+* R 接口正在运行。
+* U 接口处于“活动”状态。
+
+== 显示链接 ==
+netstat支持用于显示活动或被动套接字的选项集。选项- t、- u、- w和- x分别表示TCP、UDP、RAW和UNIX套接字连接。如果你另外还提供了一个- a标记，还会显示出等待连接（也就是说处于监听模式）的套接字。这样就可以得到一份服务器清单，当前所有运行于系统中的所有服务器都会列入其中。
+
+调用netstat -ta时，输出结果如下：
+{{{
+[root@machine1 /]$ netstat -ta
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address Foreign Address State
+tcp 0 2 210.34.6.89:telnet 210.34.6.96:2873 ESTABLISHED
+tcp 0 0 210.34.6.89:1165 210.34.6.84:netbios-ssn ESTABLISHED
+tcp 0 0 localhost.localdom:9001 localhost.localdom:1162 ESTABLISHED
+tcp 0 0 localhost.localdom:1162 localhost.localdom:9001 ESTABLISHED
+tcp 0 0 *:9001 *:* LISTEN
+tcp 0 0 *:6000 *:* LISTEN
+tcp 0 0 *:socks *:* LISTEN
+tcp 0 80 210.34.6.89:1161 210.34.6.10:netbios-ssn CLOSE 
+}}}
+上面的输出表明部分服务器处于等待接入连接状态。利用- a选项的话，netstat还会显示出所有的套接字。注意根据端口号，可以判断出一条连接是否是外出连接。对呼叫方主机来说，列出的端口号应该一直是一个 整数，而对众所周知服务（well known service）端口正在使用中的被呼叫方来说，netstat采用的则是取自/etc/services文件的象征性服务名。
+

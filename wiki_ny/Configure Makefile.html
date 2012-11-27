@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Configure Makefile</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">autoconf和automake</h2>
+<p>
+本文介绍了在linux系统中，通过Gnu autoconf和automake这两个工具生成工程的Configure文件和Makefile文件的方法。
+</p>
+
+
+<h2 id="toc_0.2">内核源码与软件安装</h2>
+<p>
+<a href="内核源码与软件安装.html">内核源码与软件安装</a>
+</p>
+
+<p>
+内核源码路径：/usr/src/linux或者/linux/src/kernels。同时注意/lib/modules/build和/lib/modules/source目录和内核源码的关系。/boot/config*文件就是发行版linux的kernel编译时候的配置信息。
+</p>
+
+<h2 id="toc_0.3">Linux操作系统的Configure参数解释说明</h2>
+<p>
+<a href="Linux操作系统的Configure参数解释说明.html">Linux操作系统的Configure参数解释说明</a>
+</p>
+
+<p>
+Configure常用参数和使用方法，理解源码树(source tree)，构筑树(build tree)，安装树(install tree)的概念
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

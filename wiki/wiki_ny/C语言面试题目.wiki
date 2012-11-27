@@ -1,0 +1,25 @@
+== 将数字倒着输出 ==
+{{{name="code" class="c"
+int main()
+{
+	int a,b;
+	
+	a = 2343434;
+	b = 9087086;
+	fnc(a);
+	return 0;
+}
+
+void fnc(int a)
+{
+	int tmp;
+	
+	for(tmp = a; tmp != 0; )
+	{
+		printf("%d",tmp%10);
+		tmp = tmp/10;
+	}
+	
+}
+
+}}}

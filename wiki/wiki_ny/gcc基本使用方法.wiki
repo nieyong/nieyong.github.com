@@ -1,0 +1,4 @@
+
+* gcc对头文件搜索的路径，不会包含子路径。所以，在搜索路径的子路径下的头文件，在#include中加入子路径。默认系统搜索路径和工作搜索路径都是一样。
+* gcc可以包含一些库，这些库的定义在路径/usr/lib/pkgconfig/路径下。如下所示，包含了gupnp-1.0 gssdp-1.0 glib-2.0 gthread-2.04个库，在/usr/lib/pkgconfing/路径下可以找到相应的***.pc文件。
+    gcc   -o upnp-client upnp_client.c   `pkg-config --cflags --libs gupnp-1.0 gssdp-1.0 glib-2.0 gthread-2.0`

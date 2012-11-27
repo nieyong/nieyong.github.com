@@ -1,0 +1,159 @@
+markdown工具，可以将txt转化成html格式。这一类工具的作用是将按一定格式写成的可读性强的文本文件 转化为结构化的标准xhtml或html。markdown最初用perl写成，后来移植到python,java,php.这里主要 介绍下python-markdown的用法。
+
+python-markdown模块使用有两个模式，一种是做为独立的命令行，另外一种是做为python的模块使用。
+
+== 命令行模式 ==
+在Fedora下，命令行名称是markdown: [ray@localhost markdown]$ markdown。
+{{{
+[ray@localhost markdown]$ markdown
+Usage: markdown INPUTFILE [options]
+ 
+Options:
+  -h, --help            show this help message and exit
+  -f OUTPUT_FILE, --file=OUTPUT_FILE
+                        write output to OUTPUT_FILE
+  -e ENCODING, --encoding=ENCODING
+                        encoding for input and output files
+  -q, --quiet           suppress all messages
+  -v, --verbose         print info messages
+  -s SAFE_MODE, --safe=SAFE_MODE
+                        same mode ('replace', 'remove' or 'escape'  user's
+                        HTML tag)
+  --noisy               print debug messages
+  -x EXTENSION, --extension=EXTENSION
+                        load extension EXTENSION
+}}}
+
+使用起来很简单， 直接运行markdown input.txt > output.html即可。例如： [ray@localhost markdown]$ cat notes.txt
+{{{
+[ray@localhost markdown]$ cat notes.txt
+Who am I?
+===========
+This is Ray Chen speaking.
+ 
+Where am I from?
+====================
+I'm from SH, China. I love this place.
+ 
+What's next?
+=================
+  * nothing
+  * sleep
+  * study
+  * reading book
+ 
+[ray@localhost markdown]$ markdown notes.txt > notes.html
+[ray@localhost markdown]$ cat notes.html
+<h1>Who am I?</h1>
+<p>This is Ray Chen speaking.
+</p>
+ 
+<h1>Where am I from?</h1>
+<p>I'm from SH, China. I love this place.
+</p>
+ 
+<h1>What's next?</h1>
+<ul>
+ <li>
+     nothing
+ </li>
+ 
+ <li>
+     sleep
+ </li>
+ 
+ <li>
+     study
+ </li>
+ 
+ <li>
+     reading book
+ </li>
+}}}
+
+== 模块用法 ==
+[ray@localhost markdown]$ cat test_markdown.py
+{{{
+[ray@localhost markdown]$ cat test_markdown.py
+#!/usr/bin/python
+ 
+import markdown
+import codecs
+ 
+# Open input file in read, utf-8 mode
+input_file = codecs.open("notes.txt", mode="r", encoding="utf8")
+text = input_file.read()
+html = markdown.markdown(text)
+ 
+# print
+print html
+ 
+# Write string html to disk
+output_file = codecs.open("notes_py.html", mode="w", encoding="utf8")
+output_file.write(html)
+}}}
+
+[ray@localhost markdown]$ python test_markdown.py
+{{{
+[ray@localhost markdown]$ python test_markdown.py
+<h1>Who am I?</h1>
+<p>This is Ray Chen speaking.
+</p>
+ 
+<h1>Where am I from?</h1>
+<p>I'm from SH, China. I love this place.
+</p>
+ 
+<h1>What's next?</h1>
+<ul>
+ <li>
+     nothing
+ </li>
+ 
+ <li>
+     sleep
+ </li>
+ 
+ <li>
+     study
+ </li>
+ 
+ <li>
+     reading book
+ </li>
+</ul>
+}}}
+
+[ray@localhost markdown]$ cat notes_py.html
+{{{
+[ray@localhost markdown]$ cat notes_py.html
+<h1>Who am I?</h1>
+<p>This is Ray Chen speaking.
+</p>
+ 
+<h1>Where am I from?</h1>
+<p>I'm from SH, China. I love this place.
+</p>
+ 
+<h1>What's next?</h1>
+<ul>
+ <li>
+     nothing
+ </li>
+ 
+ <li>
+     sleep
+ </li>
+ 
+ <li>
+     study
+ </li>
+ 
+ <li>
+     reading book
+ </li>
+}}}
+
+== 后记 ==
+markdown工具在很多程序中用到，比如说wordpress, pybb等，特别适合wiki， blog，forum等。
+

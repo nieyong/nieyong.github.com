@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>node入门笔记</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">Node.js简介</h2>
+<p>
+Node.js事实上就是另外一种上下文，它允许在后端（脱离浏览器环境）运行JavaScript 代码。
+</p>
+
+<p>
+要实现在后台运行JavaScript 代码，代码需要先被解释然后正确的执行。Node.js的原理正是如此，它使用了Google的V8虚拟机（Google的Chrome浏览器使用的JavaScript执行环境），来解释和执行JavaScript代码。
+</p>
+
+<p>
+伴随着 Node.js的还有许多有用的模块，它们可以简化很多重复的劳作，比如向终端输出字符串。因此，Node.js事实上既是一个运行时环境，同时又是一个库。
+</p>
+
+<h2 id="toc_0.2">node.js开发和php开发的区别</h2>
+<p>
+我们先来想想，使用PHP的话我们会怎么构建这个结构。一般来说我们会用一个Apache HTTP服务器并配上mod_php5 模块。从这个角度看，整个“接收HTTP 请求并提供Web页面”的需求根本不需要PHP来处理。不过对Node.js来说，概念完全不一样了。使用Node.js时，我们不仅仅在实现一个应用，同时还实现了整个 HTTP 服务器。事实上，我们的Web应用以及对应的Web服务器基本上是一样的。 
+</p>
+
+<p>
+Felix Geisenderfer的大作Understanding node.js介绍了一些背景知识。
+</p>
+
+<p>
+写PHP应用的时候，我们一点也不为此担心：任何时候当有请求进入的时候，网页服务器（通常是Apache）就为这一请求新建一个进程，并且开始从头到尾执行相应的PHP脚本。那么在我们的Node.js程序中，当一个新的请求到达8888端口的时候，我们怎么控制流程呢？ 
+</p>
+
+<p>
+嗯，这就是 Node.js/JavaScript的事件驱动设计能够真正帮上忙的地方了――虽然我们还得学一些新概念才能掌握它。让我们来看看这些概念是怎么应用在我们的服务器代码里的。
+</p>
+
+<p>
+我们需要的所有数据都会包含在request对象中，该对象作为onRequest()回调函数的第一个参数传递。但是为了解析这些数据，我们需要额外的Node.JS模块，它们分别是url和querystring 模块。 
+</p>
+
+<p>
+我们的服务器应当知道路由的存在并加以有效利用。我们当然可以通过硬编码的方式将这一依赖项绑定到服务器上，但是其它语言的编程经验告诉我们这会是一件非常痛苦的事，因此我们将使用依赖注入的方式较松散地添加路由模块（你可以读读Martin Fowlers关于依赖注入的大作来作为背景知识）。 
+</p>
+
+<p>
+我是在读了Steve Yegge的大作《名词王国中的死刑》之后理解函数编程。你也去读一读这本书吧，真的。这是曾给予我阅读的快乐的关于软件的书籍之一。 
+</p>
+
+<h2 id="toc_0.3">node.js的非阻塞执行</h2>
+<p>
+这到底是为什么呢？原因就是start() 包含了阻塞操作。形象的说就是“它阻塞了所有其他的处理工作”。这显然是个问题，因为 Node一向是这样来标榜自己的：“ 在node中除了代码，所有一切都是并行执行的” 。 
+</p>
+
+<p>
+这句话的意思是说，Node.js可以在不新增额外线程的情况下，依然可以对任务进行并行处理  ――  Node.js 是单线程的。
+</p>
+
+<p>
+它通过事件轮询（event loop ）来实现并行操作，对此，我们应该要充分利用这一点   ―― 可能的避免阻塞操作，取而代之，多使用非阻塞操作。然而，要用非阻塞操作，我们需要使用回调，通过将函数作为参数传递给其他需要花时间做处理的函数（比方说，休眠10秒，或者查询数据库，又或者是进行大量的计算）。 
+</p>
+
+
+<p>
+对于Node.js来说，它是这样处理的：“ 嘿，probablyExpensiveFunction()（译者注：这里指的就是需要花时间处理的函数），你继续处理你的事情，我（Node.js线程）先不等你了，我继续去处理你后面的代码，请你提供一个callbackFunction()，等你处理完之后我会去调用该回调函数的，谢谢！”  
+</p>
+
+<p>
+如果想要了解更多关于事件轮询细节，可以阅读Mixu的博文――理解node.js的事件轮询。
+</p>
+
+
+<p>
+我们引入了一个新的 Node.js模块，child_process。之所以用它，是为了实现一个既简单又实用的非阻塞操作：exec() 。 
+</p>
+
+<p>
+exec() 做了什么呢？它从Node.js来执行一个 shell命令。在上述例子中，我们用它来获取当前目录下所有的文件（“ls -lah” ）, 然后，当/start URL请求的时候将文件信息输出到浏览器中。
+</p>
+
+<p>
+到目前为止，我们的应用已经可以通过应用各层之间传递值的方式（请求处理程序  -&gt;  请求路由  -&gt;  服务器）将请求处理程序返回的内容（请求处理程序最终要显示给用户的内容）传递给HTTP 服务器。 在我们采用如下这种新的实现方式：相对采用将内容传递给服务器的方式，我们这次采用将服务器“传递” 给内容的方式。  从实践角度来说，就是将response 对象（从服务器的回调函数 onRequest()获取）通过请求路由传递给请求处理程序。  随后，处理程序就可以采用该对象上的函数来对请求作出响应。
+</p>
+
+<h2 id="toc_0.4">处理POST请求</h2>
+<p>
+在我看来，获取所有来自请求的数据，然后将这些数据给应用层处理，应该是HTTP 服务器要做的事情。因此，我建议，我们直接在服务器中处理POST 数据，然后将最终的数据传递给请求路由和请求处理器，让他们来进行进一步的处理。 
+</p>
+
+<h2 id="toc_0.5">外部Node.js 模块</h2>
+<p>
+如何安装外部Node.js 模块，以及如何将它们应用到我们的应用中。
+</p>
+
+<p>
+这里我们要用到的外部模块是 Felix Geisenderfer 开发的node-formidable 模块。它对解析上传的文件数据做了很好的抽象。  其实说白了，处理文件上传“ 就是” 处理POST 数据  ――  但是，麻烦的是在具体的处理细节，所以，这里采用现成的方案更合适点。 用该模块，首先需要安装该模块。Node.js有它自己的包管理器，叫NPM。它可以让安装Node.js的外部模块变得非常方便。通过如下一条命令就可以完成该模块的安装：现在我们就可以用formidable 模块了――使用外部模块与内部模块类似，用require 语句将其引入即可
+</p>
+
+<p>
+对于保存在本地硬盘中的文件，如何才能在浏览器中看到呢？显然，我们需要将该文件读取到我们的服务器中，使用一个叫fs 的模块。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

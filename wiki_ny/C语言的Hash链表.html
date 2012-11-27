@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>C语言的Hash链表</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+下面是rip中路由表使用到的hash链表的整理，这部分理解还比较粗糙。
+</p>
+
+<h2 id="toc_0.1">路由表、路由条目</h2>
+<p>
+路由协议的最终目的，就是一张路由表。例如，vxWorks协议栈有一个路由表，rip协议有私有的路由表，rm层维护由一个路由表。路由表其实就是一个维护多个路由条目的数据结构。下面就我所了解的路由表的数据结构记录如下，以备忘。
+</p>
+<ul>
+<li>
+l2p阶段维护的路由表，使用的是双链表数据结构；
+
+<li>
+rm层维护的路由表，使用的是二叉树的数据结构；
+
+<li>
+rip私有路由表，使用的是hash链表的数据结构；
+
+</ul>
+
+<p>
+每种数据结构组织的路由表，都有其优点和劣势。下面就我接触的hash链表维护的路由表进行一个整理。由于理解有限，结构复杂，现在只能够大致的罗列，如果有必要再深究。
+</p>
+
+
+<h2 id="toc_0.2">Hash链表</h2>
+<ul>
+<li>
+Table.c文件：对rip私有路由表的操作，例如增删改，查找等，向下调用af.c文件中的哈希操作函数
+
+<li>
+af.c文件：对hash操作函数的封装，address family的意思
+
+</ul>
+
+<h2 id="toc_0.3">结构体定义</h2>
+<pre name="code" class="c">
+#define	ROUTEHASHSIZ	32		/* must be a power of 2 */
+#define	ROUTEHASHMASK	(ROUTEHASHSIZ - 1)
+
+struct rthash {
+	struct	rt_entry *rtu_forw;
+	struct	rt_entry *rtu_back;
+};
+
+
+
+struct	rthash nethash[ROUTEHASHSIZ];
+struct	rthash hosthash[ROUTEHASHSIZ];
+
+
+/*
+ * Structure used by kernel to store most
+ * addresses.
+ */
+struct sockaddr {
+	u_char		sa_len;		/* total length */
+	sa_family_t	sa_family;	/* address family */
+	char		sa_data[14];	/* actually longer; address value */
+};
+
+
+struct rthash {
+	struct	rt_entry *rtu_forw;
+	struct	rt_entry *rtu_back;
+};
+
+
+
+struct afhash {
+	u_int	afh_hosthash;
+	u_int	afh_nethash;
+};
+</pre>
+
+<p>
+最重要的hash函数，根据传入的IP地址，获取其位于hash数组中的位置。
+</p>
+<pre name="code" class="c">
+LOCAL int inet_hash(sin, hp)
+	register struct sockaddr_in *sin;
+	struct afhash *hp;
+{
+	register u_long n;
+
+	n = inet_netof(sin-&gt;sin_addr);
+	if (n)
+	    while ((n &amp; 0xff) == 0)
+		n &gt;&gt;= 8;
+	hp-&gt;afh_nethash = n;
+	hp-&gt;afh_hosthash = ntohl(sin-&gt;sin_addr.s_addr);
+	hp-&gt;afh_hosthash &amp;= 0x7fffffff;
+
+        return (OK);
+}
+
+</pre>
+
+<p>
+hash链表路由表查找函数，根据传入的IP地址，获得其位于Hash链表中路由条目的指针。
+</p>
+<pre name="code" class="c">
+/*
+ * Lookup dst in the tables for an exact match.
+ */
+struct rt_entry *
+rtlookup (dst)
+	struct sockaddr *dst;
+{
+	register struct rt_entry *rt;
+	register struct rthash *rh;
+	register u_int hash;
+	struct sockaddr target;
+	struct afhash h;
+	int doinghost = 1;
+
+	if (dst-&gt;sa_family &gt;= AF_MAX)
+		return (0);
+	(*afswitch[dst-&gt;sa_family].af_hash) (dst, &amp;h);
+	hash = h.afh_hosthash;
+	rh = &amp;hosthash[hash &amp; ROUTEHASHMASK];
+
+        /* 
+         * The equal() comparison within the following loop expects all
+         * members of the structure except the family, length, and address
+         * fields to be zero. This condition may not be met when processing a
+         * RIPv2 packet. In that case, the destination passed to this routine 
+         * accesses a route within the payload of a RIP message, so some
+         * fields of the overlayed structure will not be zero as expected.
+         * Duplicate or incorrect routes will be added because matching routes
+         * are not detected. To avoid this problem, copy the required fields 
+         * from the route destination value to a clean structure.
+         */
+
+        bzero ( (char *)&amp;target, sizeof (struct sockaddr));
+        target.sa_family = dst-&gt;sa_family;
+        target.sa_len = dst-&gt;sa_len;
+        ((struct sockaddr_in *)&amp;target)-&gt;sin_addr.s_addr = 
+                    ((struct sockaddr_in *)dst)-&gt;sin_addr.s_addr;
+        
+again:
+	for (rt = rh-&gt;rtu_forw; rt != (struct rt_entry *)rh; rt = rt-&gt;rtu_forw) {
+		if (rt-&gt;rtu_hash != hash)
+			continue;
+		if (equal (&amp;rt-&gt;rtu_dst, &amp;target))
+		{
+			return (rt);
+		}
+	}
+	if (doinghost) {
+		doinghost = 0;
+		hash = h.afh_nethash;
+		rh = &amp;nethash[hash &amp; ROUTEHASHMASK];
+		goto again;
+	}
+	return (0);
+}
+</pre>
+
+<h2 id="toc_0.4">hash链表结构示意图</h2>
+<p>
+下面摘录一个hash链表示意图。来自《交换机IPv4路由功能研究报告》	黄韬撰写。
+</p>
+
+<p>
+<a href="image/hash_list.png.html">image/hash_list.png</a>
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

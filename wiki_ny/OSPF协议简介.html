@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>OSPF协议简介</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+OSPF(Open Shortest Path First)是一个内部网关协议(Interior Gateway Protocol,简称IGP)，用于在单一自治系统(autonomous system,AS)内决策路由。
+</p>
+
+<p>
+OSPF通过路由器之间通告网络接口的状态来建立链路状态数据库，生成最短路径树，每个OSPF路由器使用这些最短路径构造路由表。
+</p>
+
+<p>
+开放最短路径协议(OSPF)协议不仅能计算两个网络结点之间的最短路径，而且能计算通信费用。可根据网络用户的要求来平衡费用和性能，以选择相应的路由。在一个自治系统内可划分出若干个区域，每个区域根据自己的拓扑结构计算最短路径，这减少了OSPF路由实现的工作量；OSPF属动态的自适应协议，对于网络的拓扑结构变化可以迅速地做出反应，进行相应调整，提供短的收敛期，使路由表尽快稳定化。每个路由器都维护一个相同的、完整的全网链路状态数据库。这个数据库很庞大，寻径时， 该路由器以自己为根，构造最短路径树，然后再根据最短路径构造路由表。路由器彼此交换，并保存整个网络的链路信息，从而掌握全网的拓扑结构，并独立计算路由。
+</p>
+
+<h2 id="toc_0.1">OSPF路由协议的工作原理</h2>
+<p>
+为了解决RIP协议的缺陷，1988年RFC成立了OSPF工作组，开始着手于OSPF的研究与制定，并于1998年4月在RFC 2328中OSPF协议第二版（OSPFv2）以标准形式出现。
+</p>
+
+<p>
+OSPF全称为开放式最短路径优先协议（Open Shortest-Path First），OSPF中的O意味着OSPF标准是对公共开放的，而不是封闭的专有路由方案。OSPF采用链路状态协议算法，每个路由器维护一个相同的链路状态数据库，保存整个AS的拓扑结构（AS不划分情况下）。一旦每个路由器有了完整的链路状态数据库，该路由器就可以自己为根，构造最短路径树，然后再根据最短路径构造路由表。对于大型的网络，为了进一步减少路由协议通信流量，利于管理和计算，OSPF将整个AS划分为若干个区域，区域内的路由器维护一个相同的链路状态数据库，保存该区域的拓扑结构。OSPF路由器相互间交换信息，但交换的信息不是路由，而是链路状态。
+</p>
+
+<h2 id="toc_0.2">OSPF路由协议分组及其作用</h2>
+<p>
+OSPF定义了5种分组：Hello分组用于建立和维护连接；数据库描述分组初始化路由器的网络拓扑数据库；当发现数据库中的某部分信息已经过时后，路由器发送链路状态请求分组，请求邻站提供更新信息；路由器使用链路状态更新分组来主动扩散自己的链路状态数据库或对链路状态请求分组进行响应；由于OSPF直接运行在IP层，协议本身要提供确认机制，链路状态应答分组是对链路状态更新分组进行确认。
+</p>
+
+<h2 id="toc_0.3">OSPF路由协议的优点</h2>
+<p>
+相对于其它协议，OSPF有许多优点。 OSPF支持各种不同鉴别机制（如简单口令验证，MD5加密验证等），并且允许各个系统或区域采用互不相同的鉴别机制；提供负载均衡功能，如果计算出到某个目的站有若干条费用相同的路由，OSPF路由器会把通信流量均匀地分配给这几条路由，沿这几条路由把该分组发送出去；在一个自治系统内可划分出若干个区域，每个区域根据自己的拓扑结构计算最短路径，这减少了OSPF路由实现的工作量；OSPF属动态的自适应协议，对于网络的拓扑结构变化可以迅速地做出反应，进行相应调整，提供短的收敛期，使路由表尽快稳定化，并且与其它路由协议相比，OSPF在对网络拓扑变化的处理过程中仅需要最少的通信流量；OSPF提供点到多点接口，支持CIDR（无类型域间路由）地址。
+</p>
+
+<p>
+OSPF的不足之处就是协议本身庞大复杂，实现起来较RIP困难。
+</p>
+
+<p>
+桥接和路由
+</p>
+
+<p>
+风河OSPFv2/v3 
+风河OSPF（Open Shortest Path First--开放式最短路径优先，简称OSPF）是PNE所提供的主要路由协议之一，它实现了所有内部网关协议(Interior Gateway Protocol--IGP)指定的功能。风河OSPF通过了所有工业测试套件（包括ANVL和在新罕布什尔大学）的测试，并且在实际网络部署中取得了巨大成功，并兼容OSPF 2.0(RFC 2328)和OSPF 3.0(RFC2740)两个业界标准。风河OSPFv2/v3与VxWorks和风河网络协议栈紧密地集成，并充分利用了网络协议栈中所有可用的高级功能。风河OSPF中使用高性能的搜索和压缩算法改进了动态路由数据库中IPv4和IPv6地址的存储和维护，从而进一步提升了性能。对于数据库的改进，使得风河OSPF能够遍及比先前更大型的网络。风河OSPF以源代码的形式提供，以便于用户为满足其特定的需求对其进行定制。 
+风河OSPFv2/v3的主要特性包括： 
+</p>
+<ul>
+<li>
+运营商级的可裁剪性，支持成千上万种路由途径
+
+<li>
+试用于区域内路由、跨区域边界路由以及自主系统
+  的边界路由
+
+<li>
+用于监控运行时状态的控制台消息
+
+<li>
+通过OSPF MIB进行动态重新配置的能力
+
+<li>
+通过ASCII命令文件的静态配置能力
+
+<li>
+改进了调试和监控工具
+
+<li>
+区域内和区域间路由
+
+<li>
+更新了路由多播
+
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

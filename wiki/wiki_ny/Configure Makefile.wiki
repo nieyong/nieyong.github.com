@@ -1,0 +1,13 @@
+== autoconf和automake ==
+本文介绍了在linux系统中，通过Gnu autoconf和automake这两个工具生成工程的Configure文件和Makefile文件的方法。
+
+
+== 内核源码与软件安装 ==
+[[内核源码与软件安装]]
+
+内核源码路径：/usr/src/linux或者/linux/src/kernels。同时注意/lib/modules/build和/lib/modules/source目录和内核源码的关系。/boot/config*文件就是发行版linux的kernel编译时候的配置信息。
+
+== Linux操作系统的Configure参数解释说明 ==
+[[Linux操作系统的Configure参数解释说明]]
+
+Configure常用参数和使用方法，理解源码树(source tree)，构筑树(build tree)，安装树(install tree)的概念

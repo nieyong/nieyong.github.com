@@ -1,0 +1,142 @@
+== Unix 简史 ==
+1965年时，贝尔实验室(Bell Labs)加入一项由奇异电子(General Electric)和麻省理工学院(MIT)合作的计划；该计划要建立一套多使用者、多任务、多层次(multi-user、multi- processor、multi-level)的MULTICS操作系统。直到1969年，因MULTICS计划的工作进度太慢，该计划就被停了下来。当时，Ken Thompson（后被称为Unix之父）已经有一个称为「星际旅行」的程序在GE-635的机器上跑，但是反应非常的慢，正巧也被他发现了一部被闲置的PDP-7(Digital的主机)，Ken Thompson和Dernis Ritchie就将「星际旅行」的程序移植到PDP-7上。而这部PDP-7就此在整个计算机历史上留下了芳名。
+
+MULTICS其实是"MULTiplexed Information and Computing System"的缩写，在1970年时，那部PDP-7却只能支持两个使用者，当时，Brian Kernighan就开玩笑地戏称他们的系统其实是："UNiplexed Information and Computing System"，缩写为"UNICS"，后来，大家取其谐音，就称其为"Unix"了。1970年可称为是Unix元年。
+
+1971年，他们申请了一部PDP-11/20，申请的名义是：要发展文书处理系统。该提案被获采纳，他们也发展出了一套文书处理系统 ─ 就是现在Unix操作系统里面文书处理系统(nroff/troff)的前身。有趣的是，没有多久，贝尔实验室的专利部门真的采用了这套系统作为他们处理文件的工具，而贝尔实验室的专利部门也就顺理成章地成为Unix的第一个正式使用者。当时，那部PDP-11／20只有0.5MB磁盘空间。而描述这整个系统的文件被标示为："First Edition"，版本日期是1970年11月。从此以后，Unix的版本就以系统文件的版别来称呼。
+
+== UNIX家谱 ==
+UNIX的历史开始于1969年ken Thompson，Dennis Ritchie（即著名的K&G，C语言的发明人）与一群人在一部PDP-7上进行的一些工作，后来这个系统变成了UNIX。它主要的几个版本为：
+
+* V1（1971）：第一版的UNIX，以PDP-11/20的汇编语言写成。包括文件系统，fork、roff、ed等软件。
+* V4（1973）：以C语言从头写过，这使得UNIX修改容易，可以在几个月内移植到新的硬件平台上。最初C语言是为UNIX设计的，所以C与UNIX间有紧密的关系。
+* V6（1975）：第一个在贝尔实验室外（尤其是大学中）广为流传的UNIX版本。这也是UNIX分支的起点与广受欢迎的开始。1.xBSD （PDP-II）就是由这个版本衍生出来的。
+* V7（1979）：在许多UNIX玩家的心目中，这是“最后一个真正的UNIX，”这个版本包括一个完整的K&RC编译器，Bourne shell。V7移植到VAX机器后称为32V。
+
+目前开发UNIX（System V）的公司是Unix System Laboratories (USL)。USL本为AT&T所有，1993年初被Novell收购。Novell于1993年末将UNIX这个注册商标转让给X/Open组织。
+
+目前为止，UNIX有两大流派：那就是AT&T发布的UNIX操作系统System V与美国加州大学伯克利分校发布的UNIX版BSD（Berkeley Software Distribution）。SVR4是两大流派融合后的产物。1991年底，与System V针锋相对的开放软件基金会(Open Software Foundation)推出了OSF/1。
+
+[[image/unix/unix发展图谱lite.gif||width:850px;]]
+
+== 现在几种主要的UNIX版本 ==
+* AIX：IBM的UNIX，是根据SVR2（最近已经出到SVR3.2）以及一部分BSD延伸而来，加上各种硬件的支持。具备特有的系统管理（SMIT）。
+* 386BSD：Jolitz从Net/2 software移植过来的。支持Posix，32位。
+* FreeBSD：1.x从386BSD 0.1而来，FreeBSD 2.x版是用4.4BSD lite改写。
+* HP-UX（HP）：旧系统是从S III（SVRx）发展面来，现在是由SVR2（4.2BSD）发展而来，目前是10.x版。
+* Linux(x86)：遵从POSIX，SYSV及BSD的扩展，这一点从上页表中即可看出。
+* OSF/1（DEC）：DEC对OSF/1的移植。
+* SCO UNIX（x86）：SVR3.2，目前影响较大的PC UNIX。
+* SunOS（680x0，Sparc，i386）：根据4.3BSD，包含许多来自System V的东西。Sun的主要成果在于：NFS，OpenLook GUI标准，后来演变为Solaris 。这也是目前最著名的UNIX版本之一。
+* Ultrix(DEC)：根据4.2BSD再加上许多4.3BSD的东西。
+* Xenix(x86)：Intel硬件平台上的UNIX，以SVR2为基础，由微软推出。在中国使用较广泛。
+
+[[image/unix/unix发展图谱.gif||width:1350px;]]
+
+== BSD历史 ==
+BSD (Berkeley Software Distribution，伯克利软件套件)是Unix的衍生系统，1970年代由加州大学伯克利分校开创。BSD用来代表由此派生出的各种套件集合。 
+
+BSD常被当作工作站级别的Unix系统，这得归功于BSD License非常地宽松，许多1980年代成立的计算机公司，不少都从BSD中获益，比较著名的例子如DEC的Ultrix，以及Sun公司的SunOS。1990年代，BSD很大程度上被System V4.x版以及OSF/1系统所取代，但其开源版本被采用，促进了因特网的开发。
+
+=== PDP-11开始 === 
+最初的Unix套件源自1970年代的贝尔实验室，操作系统中包含源码，这样研究人员以及大学都可以可以参与修改扩充。1974年，第一个伯克利模板:Ref的Unix系统被安装在PDP-11机器上，计算机科学系而后将其用作扩展研究。 
+
+其他大学开始对伯克利的软件感兴趣，在1977年，伯克利的研究生Bill Joy将程序整理到磁带上，作为first Berkeley Software Distribution（1BSD）发行。1BSD被作为第六版Unix系列，而不是单独的操作系统。主要程序包括Pascal编译器，以及Joy的ex行编辑器。 
+
+Second Berkeley Software Distribution（2BSD）于1978年发布，除了对1BSD中的软件进行升级，还包括了Joy写的两个新程序：vi文本编辑器（ex的可视版本），以及C Shell。这两个新添的程序，在Unix系统中至今仍被使用。 
+
+2BSD以后的版本逐渐从PDP-11结构向VAX计算机移植。最新的2.11BSD于1992年发布，更新维护一直持续到2003年。 
+
+=== VAX 版本 === 
+1978年，伯克利安装了第一台VAX计算机，但将Unix移植到VAX构架的UNIX/32V，并没有利用VAX虚拟内存的能力。伯克利的学生重写了32V的大部分内核，以实现虚拟内存的支持。1979年，3BSD诞生了，这个新系统完整包括了一个新内核、从2BSD移植到VAX的工具，还有32V原来的工具。 
+
+3BSD的成功使得Defense Advanced Research Projects Agency（DARPA，美国国防部高级研究规划署）决定资助伯克利的Computer Systems Research Group (CSRG，计算机系统研究组)，以开发一个Unix标准平台，以供DARPA未来的研究。1980年10月，CSRG发布了4BSD，该版本对3BSD有许多改进。 
+
+相较于VAX机器的主流系统VMS，用户对BSD时有批评，1981年6月，终于发布了4.1BSD 。Bill Joy大幅度提高了4.1BSD内核的性能，可以跟VMS在多个平台上媲美。为了避免与AT&T的UNIX System V（UNIX第五版）混淆，这个版本没有取名为5BSD。 
+
+以后4.2BSD历经两年，实现了多项重大改进后才得以问世。之前有三个中间版本相继推出：4.1a引入了修改版的BBN预试中TCP/IP；4.1b引入了由Marshall Kirk McKusick实现的新型Berkeley Fast File System（FFS）；4.1c是4.2BSD开发最后几个月的过渡版。 
+
+1983年8月，4.2BSD正式发布。这是1982年Bill Joy离开前去创建Sun公司后的第一个版本，此后Mike Karels和Marshall Kirk McKusick一直负责领导该项目。值得一提的是，这次BSD小惡魔正式出场，最初是McKusick的画作，出现在打印好的文档封面上，由USENIX发行。 
+
+=== BSD版本 === 
+1986年6月，4.3 BSD发布。该版本主要是将4.2BSD的许多新贡献作性能上的提高，原来的4.1BSD没有很好地协调。在该版本之前，BSD的TCP/IP实现已经跟BBN的官方实现有较大差异。经过数月测试后，DARPA认为4.2BSD更合适，所以在4.3BSD中作了保留。（参见en:History of the Internet） 
+
+4.3BSD后，BSD逐渐抛开老式的VAX平台。Computer Consoles有限公司开发的Power 6/32平台（代号为"Tahoe"），当时看来大有可为，但不久即被他们的开发员所遗弃。然后，1988年6月移植的4.3BSD-Tahoe却表现不俗，BSD将依赖于机器跟不依赖于机器的代码分离，为未来系统的可移植性打下了良好的基础。 
+
+到此为止，所有的BSD版本混合了专属的AT&T Unix代码，这样就继续使用就要求从AT&T获得许可证。源码许可证当时非常地昂贵，几个其他组织对单独的网络代码版感兴趣，完全独立于AT&T，这样就可不受许可证的支配。1989年6月，Networking Release 1（Net/1）诞生了，没有AT&T授权也能使用，可遵照BSD许可证进行自由再发布。 
+
+1990年初，推出了4.3BSD-Reno。该版本是4.4BSD早期开发的过渡版，使用该版本被戏称为是一种赌博，因为Reno就是内华达州的赌城雷诺。 
+
+=== Net/2以及法律问题 === 
+Net/1以后，Keith Bostic提议，BSD系统中应该有更多的非AT&T部分，以Net/1的协议发布。随后，他开始一个项目，着手重新实现一些Unix标准工具，其中不使用原来的AT&T代码。例如，Vi，也就是基于最初Unix上ed的编辑器，被重写为nvi（new vi）。18个月后，所有AT&T的工具被替换，剩下的只是存留在内核的一些AT&T文件。残余文件被剔除后，1991年6月，Net/2诞生了，这是一个全新的操作系统，并且可以自由发布。 
+
+Net/2成为Intel 80386构架上两种移植的主要组成，包括由William Jolitz负责，自由的386BSD；以及专属的BSD/OS，由Berkeley Software Design（BSDi）负责。386BSD本身虽然短命，但不久即成为NetBSD和FreeBSD 原始代码的基础。 
+
+BSDi很快就与AT&T的UNIX Systems Laboratories（USL）附属公司产生了法律纠纷，后者将拥有System V版权，以及Unix商标。1992年，USL正式对BSDi提起诉讼，这导致Net/2发布被中止，直到其源码能够被鉴定为符合USL的版权。 
+
+由于最后判决悬而未决，这桩法律诉讼将BSD后裔的开发，特别是自由软件，延迟了两年，这导致没有法律问题的Linux内核获得了极大的支持。Linux跟386BSD的开发几乎同时起步，Linus Torvalds曾说，当时如果有自由的Unix-like操作系统，基于386的，他就可能不会创造Linux。尽管无法预料这给以后的软件业究竟造成了什么样的影响，但有一点可以肯定，Linux更加丰富了这块土壤。 
+
+=== 4.4BSD及其后裔 === 
+这桩诉讼在1994年1月了结，更多地满足了伯克利的利益。伯克利套件的18,000个文件中，只有3个文件要求删除，另有70个文件要求修改，并显示USL的版权说明。这项调解另外要求，USL不得对下面的4.4BSD提起诉讼，不管是用户还是伯克利代码的分发者。 
+
+1994年6月，4.4BSD以两种形式发布：可自由再发布的4.4BSD-Lite，不包含AT&T源码；另有4.4BSD-Encumbered，跟以前的版本一样，遵照AT&T License。 
+
+伯克利的最终版本是1995年的4.4BSD-Lite Release 2，而后CSRG解散，在伯克利的BSD开发告一段落。在这之后，几种基于4.4BSD的套件（比如FreeBSD、OpenBSD和NetBSD）得以继续维护。 
+
+另外，由于BSD License的宽容，许多其他的操作系统，不管是自由还是专属，都采用了BSD的代码。例如，Microsoft Windows在TCP/IP的实现上引入了BSD代码；经过重新编译，在当前Windows版本中，还采用了许多BSD命令行下的网络工具。 
+
+=== 技术 === 
+BSD开创了现代计算机的潮流。伯克利的Unix率先包含了库，以支持互联网协议栈（Stack）、伯克利套接字（sockets）。通过将套接字与Unix操作系统的文件描述符相整合，库用户通过计算机网络读写数据，跟直接在磁盘上操作一样容易。AT&T实验室最后也发布了他们的STREAMS库，在软件栈中引入了类似的功能，虽然结构层有所改进，但由于套接字库已经使用广泛，另外由于少了对开放套接字的轮询功能（类似于伯克利库中的select调用），使得将软件移植到这个新的API很困难。 
+
+时至今日，BSD仍在学术机构，乃至许多商业或自由产品的高科技实验中，继续被用作试验平台，甚至在嵌入式设备中，其使用也在增长。由于BSD设计出众，代码编写清晰，包括它的文档（特别是参考文档，常被称为“man pages”），使得这样的系统，几乎成了程序员眼中的乐土。 
+
+许多公司都使用BSD衍生出的代码，如此便可以支持他们的知识产权，许多自由软件，如Linux、GNU工程都遵照GNU General Public License，与之相比，BSD License要更加灵活。当然，这也导致人们的机器上在跑一些BSD软件，但自己却并不知情。有兴趣的话，可以试着找找符号“University of California, Berkeley”，比如在产品文档内，二进制代码中的静态数据段，或者ROM中，还有通过一些产品的用户界面看看“about”（关于）内容。 
+
+有意思的是，通过一个二进制兼容层（compatibility layer），在BSD操作系统上，可以运行相同构架下其他操作系统上的原程序。这比模拟器要快得多，通过这个方法，针对Linux的应用程序，也可以在BSD上全速运行。所以，BSD不仅适合作为服务器，也可作为工作站来使用，众所周知，现在针对Linux的商业或封闭源码软件越来越多了。管理员也可以将一些原本只用于商业UNIX变种的专属软件，转移到BSD，这样在保持原有功能的同时，操作系统更趋现代，可继续使用这些软件，直到有更好的替代。 
+
+结末，当前的BSD操作系统变种支持各种通用标准，包括IEEE、ANSI、ISO以及POSIX，同时保持了传统BSD的良好风范。 
+
+=== BSD的开源后裔 === 
+不同的BSD操作系统针对不同的用途及用户，可应用于多种硬件构架。在政府机构中常能看到BSD的身影。虽然下面的BSD功能可能并非独有，但每种BSD在各自的领域，都逐渐具有了良好声誉，有的专注于性能，有的则以安全见长。
+
+* DragonflyBSD是最年轻的BSD，专门提供比FreeBSD更优秀的对称多处理机系统，并使内核直接支持SSI集群，以取得更好的计算效果。这个项目在此方向上，才开始数年，主要关注i386平台。 
+* FreeBSD在BSD家族中以易用性与高性能而著称，由于主要用作微处理器架构，如i386、AMD's 64-bit i386扩展，所以FreeBSD非常关注多处理器。FreeBSD在i386和amd64服务器上，运行地非常好，当然，它也可以在其他硬件构架上运行。 
+* NetBSD拥有特别出色的可移植性，能在多达54种平台上运行，小到嵌入式的掌上设备，大到服务器群，NetBSD甚至还在国际空间站中服务。 
+* OpenBSD在密码学和安全方面特别出众，可移植性也很好，当然略逊于NetBSD。安全功能如OpenSSH，是由OpenBSD率先开创的。OpenBSD作为安全请求机器（security demanding machines）运行，受到好评。 
+
+必须注意的是，上面所罗列的，更多地是基于感性认识，并针对其开发焦点，并没有严格地比较规则。实际而言，每种具体的BSD都可担当许多角色任务。 
+
+=== 结构 === 
+跟AT&T Unix一样，BSD也采用单内核，这意味着内核中的设备驱动，在核心态下运行，从而作为操作系统的核心部分。BSD的早期版本被用作组建Sun公司的SunOS，造就了Unix工作站的第一波热潮。 
+
+=== 诀别 ===
+BSD受到网络小白们的负面影响，小白在论坛、邮件列表上散布一些“别出心裁”的论调，其中最著名的是声称BSD正在死亡：在Slashdot上关于BSD文章的评论许多几乎都让人难以阅读，有人甚至断言，BSD将自己把自己压垮。许多小白们将FreeBSD主要开发员的离去，当作其佐证。一些顽皮的小白，制造了各种舆论，包括歌谣、讣告，乃至各种小道消息，以试图激起BSD爱好者的反应。一些小白们甚至特意在BSD迷中间挑拨离间。 
+
+=== BSD的子孙们 === 
+当前衍生自BSD的Unix类操作系统： 
+* BSD/OS （已倒闭） 
+* FreeBSD 
+* DragonFly BSD 
+* FireFlyBSD 
+* Freesbie （live CD版，光盘自启动版） 
+* DesktopBSD （采用Userland/Kernel，与FreeBSD同步） 
+* PC-BSD （采用Userland/Kernel，与FreeBSD同步） 
+* PicoBSD 
+* TrustedBSD - （非操作系统，而是为FreeBSD和Darawin构件扩展的一个项目） 
+* ClosedBSD 
+* pfSense 
+* m0n0wall 
+* NetBSD 
+* OpenBSD 
+* ekkoBSD （已倒闭） 
+* MicroBSD 
+* MirOS BSD 
+* NeXTSTEP 
+* OpenStep （已被Mac OS X和Mac OS X Server取代） 
+* Darwin （Mac OS X的核心， 由FreeBSD 4.5和NeXTSTEP混合派生） 
+* Mac OS X 
+* HPBSD （已倒闭） 
+
+== 主要的Linux发行版 ==
+
+[[image/unix/linux_distribution.png]]

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Windows下msysGit的配置</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+下面记录在Windows下msysGit的配置。
+</p>
+
+<h2 id="toc_0.1">ls命令无法显示中文路径和中文文件名</h2>
+<p>
+在Git\etc\git-completion.bash，加入：
+alias ls='ls --show-control-chars --color=auto'
+</p>
+
+
+<h2 id="toc_0.2">msysGit的中文录入问题</h2>
+<p>
+msysGit的shell环境中无法输入中文的，想要输入中文，我们需要修改下配置文件/etc/inputrc。
+</p>
+<pre>
+找到如下配置代码
+set output-meta off
+set convert-meta on
+修改成
+set output-meta on
+set convert-meta off
+</pre>
+
+<h2 id="toc_0.3">git log信息中中文显示时乱码的问题</h2>
+<p>
+<code>git config --system i18n.logOutputEncoding gbk</code>设置log信息输出到bash时使用gbk编码，例如在windows下的bash只能够显示gbk编码的中文，如果你提交的log信息是utf8编码的，则必须设置该选项，这样<code>git log</code>命令才能够在bash下正确的显示中文字符。
+</p>
+
+<p>
+git config --system i18n.commitEncoding gbk 标注提交说明所使用的字符集。
+</p>
+
+<p>
+export LESSCHARSET=utf-8 设置分页器的编码，这与git log 能否正常打印中文日志息息相关，因为git log的显示采用的就是less分页器，LESSCHARSET是分页器的环境变量，只要设置为utf-8，即可正常显示中文。使用命令<code>env |grep LESS1</code>可以查看现在less分页器使用的字符编码。
+</p>
+
+<h2 id="toc_0.4">git status命令无法显示中文名文件</h2>
+
+<p>
+[gui]
+encoding = utf-8
+</p>
+
+<p>
+说明：我们的代码库是统一用的 utf-8，这样设置可以在 git gui 中正常显示代码中的中文。
+</p>
+
+<p>
+[i18n]
+commitencoding = GB2312
+</p>
+
+<p>
+说明：如果没有这一条，虽然我们在本地用<code>$ git log</code>看自己的中文修订没问题，但是：
+</p>
+<ul>
+<li>
+一、我们的log推到服务器后会变成乱码；
+
+<li>
+二、别人在Linux下推的中文log我们pull过来之后看起来也是乱码。
+
+</ul>
+
+<p>
+这是因为，我们的commit log会被先存放在项目的 .git/COMMIT_EDITMSG 文件中；在中文Windows里，新建文件用的是GB2312的编码；但是Git不知道，当成默认的utf-8的送出去了，所以就乱码了。有了这条之后，Git 会先将其转换成utf-8，再发出去，于是就没问题了。
+</p>
+
+<p>
+以上，给 Windows 下的同事在 Git Bash 里推代码就比较完美了。不过仍然有 3 个问题：
+</p>
+
+<ul>
+<li>
+上面的 alias $ git go 有 bug，代码修订说明之前要输入一串字符凑数；
+
+<li>
+$ git diff，如果代码里有中文，会显示乱码；
+
+<li>
+$ git checkout 有时候需要修改/增删很多文件，如果某些文件被占用，会被 Windows 拒绝，导致失败，甚至可能造成版本库出现无法修复的问题。
+
+</ul>
+
+<p>
+这 3 个都是可承受的问题，前两个应该有办法解决；第 3 个归功于文件系统，只能尽量避免checkout，实在需要的时候先注销一次，就不会有问题了。
+</p>
+
+<h2 id="toc_0.5">git GUI的配置</h2>
+<p>
+在ms下可能还会使用git gui工具，默认情况下，在gui中的编码是gb2312，如果项目使用的是utf8编码，并且代码中有中文，则需要配置gui的字体。在“设置”选项中可以配置为utf8编码。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

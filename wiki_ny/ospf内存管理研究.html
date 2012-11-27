@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>ospf内存管理研究</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+OSPF实现了自己的内存管理方式，实现的基础是vxWorks的内存分区管理（memory partition manager）。
+</p>
+
+<h2 id="toc_0.1">OSPF内存管理结构体：</h2>
+<pre>
+ospfCommonMemPart.c文件
+typedef struct
+{
+    PART_ID memPartId;   /* id for the memory partition */
+    char *pMemPartPool[OSPF_MEMPART_MAX_EXPANSION];  /* pointer to memory pools */
+    unsigned char memPartIndex;  /* index to array of memory pools */
+} memPart_t;
+</pre>
+
+
+<ul>
+<li>
+memPartId：内存分区ID，整个OSPF协议有且只有一个；
+
+<li>
+pMemPartPool：指针数组，指向内存块，只有当当前内存块使用完了才会申请新的内存块，并且会将该内存块合并到当前内存分区ID中；
+
+<li>
+memPartIndex：标示当前内存块的数目，指向最后一个内存块。
+
+</ul>
+
+<h2 id="toc_0.2">OSPF内存管理对外接口：</h2>
+<pre>
+ospf_memory.h文件
+/* Define new memory macros */
+#define OSPF_PARTMEM_CREATE             ospfMemPartCreate
+#define OSPF_PARTMEM_DELETE             ospfMemPartDelete(ospfMemPartId)
+#define OSPF_PARTMEM_EXPAND(size)       ospfMemPartExpand(ospfMemPartId,size)
+
+#define OSPF_PARTMEM_OPTION(option)     ospfMemPartSetOptions(ospfMemPartId,option)
+#define OSPF_PARTMEM_SHOW(option)       ospfMemPartShow(ospfMemPartId,option)
+
+#define buffer_malloc(size)               ospfMemPartAlloc(ospfMemPartId,size)
+#define table_malloc(units,size)          ospfMemPartAlloc(ospfMemPartId,size)
+#define message_malloc(size)              ospfMemPartAlloc(ospfMemPartId,size)
+#define buffer_free(ptr)                  ospfMemPartFree(ospfMemPartId,(void*)ptr)
+#define table_free(ptr)                   ospfMemPartFree(ospfMemPartId,(void*)ptr)
+#define message_free(ptr)                 ospfMemPartFree(ospfMemPartId,(void*)ptr)
+</pre>
+<p>
+可以看到，OSPF中所有的内存获取都是从内存分区管理的ospfMemPartId中获取。对内存的使用可以分为三种：buffer_malloc、table_malloc、message_malloc。
+</p>
+
+<h2 id="toc_0.3">管理所有内存的入口，全局变量：</h2>
+<pre>
+ospf_init.c文件
+ULONG ospfMemPartId;
+</pre>
+
+<p>
+使用下面的OSPF内存结构图就可以将上面提到的所有OSPF内存管理结构体、内存管理接口、内存管理全局变量联系在一起。
+</p>
+
+<p>
+<a href="image/ospf_memory_manager.png.html">image/ospf_memory_manager.png</a>
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

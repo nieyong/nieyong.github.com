@@ -1,0 +1,20 @@
+== 一、VIM的历史 ==
+1976年左右Bill Joy开发了vi，他也是伯克利大学的毕业生，后来他跟其他人一起成立了Sun Microsystems公司并成为了Sun的首席科学家。一开始Bill开发了ex，尔后开发了vi作为ex的visual interface，也就是说vi允许一次能看到一屏的文本而非一行，vi也因此得名。
+
+早期，当键盘和视频终端成为最新的计算机交互手段时，人们开发了VI。那时候的键盘不具有目前熟悉的全部功能键，所以，VI就设计成只需要打字机的键盘加上退出键就能完成对文本的输入和修改（现在有的还接受一些其他的键输入方式，如光标控制键）。尽管看起来受了限制，不能充分利用现代键盘新增的许多键，可是‘祸中有福’，限制带来的好处是手指不离开打字区就能完成所有的编辑工作。
+
+技术不断进步，需求也在不断提高，VI的各种变种也不断涌现，知名的有nvi，elvis，VIM，vile，yzis，其中移植性最好、特性最多、使用最广的当属VIM，VIM主要是Bram Moolenaar开发的。最初Bram在Amiga计算机上改进一个叫Stevie的VI版本，他称之为“Vi IMitation”。随着功能的逐渐丰富，VIM的含义也就改成了“Vi IMproved”。相比原始的VI，VIM增加的一项最重要的功能便是多级撤销，VI只支持一级撤销。
+
+== 二、VI/VIM基础知识 ==
+很多人应该都知道VI是个有模式的编辑器：编辑模式和命令模式，按ESC回到命令模式，用i或者a进入编辑模式，由于区分了模式，导致VI的命令非常简洁，而无模式编辑器比如Emacs，所有的命令都需要加上控制键Ctrl或Alt。
+
+VI继承了ed的理念，另外也有历史原因，VI追求的是快捷――启动程序迅速，编辑文本高效，功能专注，而Emacs追求的是功能的丰富强大以及集成带来的方便。
+
+在VIM里头:help mode可以看到VIM的所有模式，主要有如下几种：
+* Normal mode  即通常所谓的命令模式，在此模式使用a、i、A、I、o、O等进入Insert mode
+* Insert mode  即通常所谓的编辑模式，在此模式使用ESC进入Normal mode或者Ctrl-o临时进入Normal mode。
+* Command-line mode 命令行模式，在Normal mode下按冒号进入，按ESC取消执行命令或者回车执行命令，然后回到Normal mode。（Visual Studio.Net也添加了命令行脚本功能，幸甚）
+* Visual mode  即选择模式（注意跟用鼠标选择不同），用v，V，C-v或C-q进入
+* Select mode  鼠标选择
+* Replace mode  在Normal mode下按R进入，按ESC返回Normal mode，相当于Windows下命令行中按Insert键进入的覆盖模式
+

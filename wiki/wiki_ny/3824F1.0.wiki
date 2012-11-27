@@ -1,0 +1,5 @@
+Ethernet transceivers
+
+The BCM54684 is based on the proven digital-signal processor technology of Broadcom, combining digital adaptive equalizers, ADCs, phase locked loops, line drivers, encoders, decoders, echo cancelers, crosstalk cancelers, and all other required support circuitry integrated into a single monolithic CMOS chip.  the BCM54684 automatically negotiates with any transceiver on the opposite end of the wire to agree on an operating speed.
+网卡
+PHY和MAC是网卡的主要组成部分，网卡一般用RJ-45插口，10M网卡或100M网卡RJ-45插口也只用了1、2、3、6四根针，而1000M网卡的则是八根针都是全的。除此以外，还需要其它元件，因为虽然PHY提供绝大多数模拟支持，但在一个典型实现中，仍需外接6、7只分立元件及一个局域网绝缘模块。绝缘模块一般采用一个1：1的变压器。这些部件的主要功能是为了保护PHY免遭由于电气失误而引起的损坏。

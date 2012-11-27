@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>C语言调试信息处理</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+在软件开发的过程中，我们经常使用printf()函数来调试代码、跟踪流程、输出错误。在代码量比较大，模块较多的时候，直接使用printf()函数就会显得笨拙而低效。这时，有必要对printf()进行封装，形成完整的调试信息处理模块。
+</p>
+
+<h2 id="toc_0.1">书写Debug版和Release版的程序</h2>
+<p>
+程序在开发过程中必然有许多程序员加的调试信息。我见过许多项目组，当程序开发结束时，发动群众删除程序中的调试信息，何必呢？为什么不像VC++那样建立两个版本的目标代码？一个是debug 版本的，一个是Release版的。那些调试信息是那么的宝贵，在日后的维护过程中也是很宝贵的东西，怎么能说删除就删除呢？  
+</p>
+
+<p>
+利用预编译技术吧，如下所示声明调试函数：  
+</p>
+<pre name="code" class="c">
+   #ifdef DEBUG 
+     void TRACE(char* fmt, ...) 
+     { 
+       ...... 
+     } 
+   #else 
+     #define TRACE(char* fmt, ...) 
+   #endif 
+</pre>
+<p>
+于是，让所有的程序都用TRACE输出调试信息，只需要在在编译时加上一个参数"-DDEBUG"，如： <code>cc -DDEBUG -o target target.c</code>。于是，预编译器发现 DEBUG变量被定义了，就会使用TRACE函数。而如果要发布给用户了，那么只需要取消 "-DDEBUG"参数，于是所有用到TRACE宏，这个宏什么都没有，所以源程序中的所有TRACE语句全部被替换成了空。一举两得，一箭双雕，何乐而不为呢？
+</p>
+
+<p>
+顺便提一下，几个很有用的系统宏，一个是<code>__FILE__</code>，一个是<code>__FUNCTION__</code>，一个是<code>__LINE__</code>，分别表示，所在的源文件的所在函数和行号，当你调试信息或是输出错误时，可以使用这两个宏，让你一眼就能看出你的错误，出现在哪个文件的第几行中。这对于用 C/C++ 做的大工程非常的管用。
+</p>
+
+<h2 id="toc_0.2">OSPF使用的调试信息</h2>
+<p>
+下面是我们使用的调试信息，用于ospf的sw层和uc层的调试。
+</p>
+<pre name="code" class="c">
+#ifdef _UC_OSPF_DEBUG_
+
+extern BOOL ospfDbgEnable;
+
+#define OSPF_DBG_PRINT(fmt, args...) 	\
+    do{\
+    if(ospfDbgEnable)\
+	printf("$OSPF_DBG$ %s %.4d:"fmt"\n\r",__FUNCTION__,__LINE__,##args);\
+    }while(0)
+#else
+
+#define OSPF_DBG_PRINT(fmt, args...)
+
+#endif
+</pre>
+
+<ul>
+<li>
+使用宏_UC_OSPF_DEBUG_来控制调试代码是否被编译到可执行文件中；
+
+<li>
+考虑到可以使用在cli中修改全局变量的值，所以使用了一个全局变量ospfDbgEnable来使能调试信息是否打印出来。当然，也可以不使用该全局变量。
+
+<li>
+使用do..while()来实现更好的封装，例如代码中的逗号使用等；
+
+<li>
+使用编译器提供的宏<code>__FUNCTION__</code>和<code>__LINE__</code>；
+
+<li>
+使用到了ANSI C标准中预编译时的标记符粘贴运算符##，<del>在这里是用于可变长参数第一个参数后面逗号的粘贴合并。</del>如果没有符号##，对于<code>OSPF_DBG_PRINT("abcd");</code>这样只有一个参数调用，将无法预编译通过。有关##符号的使用，还可以参考<a href="C语言的历史和标准.html">C语言的历史和标准</a>中的“可变参数的宏”一节。
+
+</ul>
+
+<p>
+<em>这里还有一个小小的疑惑，根据“可变参数的宏”一节的描述，这里是使用的GNU C标准，在标准C语言中，是不能够定义可变参数的宏。那么，在ANSI C中，是否支持可变参数的宏呢？</em>
+</p>
+<blockquote>
+ANSI标准定义的标记符粘贴运算符##可以把宏定义中的两个标记符组合成为一个标记符。例如，<code>#define combine(s1,s2) s1##s2</code>，那么对于<code>combine(TOTAL,SALES)</code>则为<code>TOTALSALES</code>。于此同时，另外一个比较相近的运算符#为字符串化运算符，作用是允许在宏定义中使用一个形参，它将被转化为一个字符串。另外，ANSI标准还规定，相邻字符串将连接起来。这也是<code>"\(OSPF_DBG\) %s %.4d:"fmt"\n\r"</code>正确的道理。在目录 <strong>./code/##_test.c</strong> 文件中有测试代码。
+</blockquote>
+
+<p>
+在本例中使用的定义宏代码段，在参数的有效性检查时也是很有用的，如下所示：
+</p>
+
+<pre name="code" class="c">
+#define OSPF_PROID_VALID_CHECK(pID)\
+	do{\
+	if(pID &gt; 65535 || pID &lt; 1)\
+	{\
+		RCC_EXT_WriteStrLine(pCliEnv, "Error:invalid parameter");\
+		return OK;\
+	}\
+	}while(0)
+
+
+#define OSPF_VLANID_VALID_CHECK(vlanID)\
+	do{\
+	if(vlanID &gt; 4094 || vlanID &lt; 1)\
+	{\
+		RCC_EXT_WriteStrLine(pCliEnv, "Error:invalid parameter");\
+		return OK;\
+	}\
+	}while(0)
+</pre>
+
+<h2 id="toc_0.3">RIP协议中调试信息的开关</h2>
+<p>
+RIP协议为PNE协议栈中的代码，其使用协议栈的相关调试模块，实现了调试信息的管理。要使调试信息输出，修改applUtilLib.h文件中的line 212行，FALSE修改为TRUE。当然，你也可以到下面的#else中添加你需要的debug级别，效果是一样的。
+</p>
+<pre name="code" class="c">
+#if FALSE  /* change to TRUE if a logging destination is not available */
+
+#define LOG_ENABLE_MASK (0)
+
+#elif TRUE  /* change to TRUE to do full logging 把这里修改为TRUE就OK */
+
+#define LOG_ENABLE_MASK (DEBUG_LEVEL | LOG_KERNEL_BIT)
+
+#else
+
+/*
+ * The _FREE_VERSION macro indicates a well-tested production
+ * system. We assume DEBUG and INFO levels are not of interest
+ * here (and should be removed to save space).
+ *
+ * For size reduction, remove these levels in the default (checked)
+ * build as well.
+ */
+#define LOG_ENABLE_MASK (LOG_NOTICE_BIT | \
+			 LOG_WARNING_BIT | \
+			 LOG_ERR_BIT | \
+			 LOG_CRIT_BIT | \
+			 LOG_ALERT_BIT | \
+			 LOG_EMERG_BIT | \
+			 LOG_KERNEL_BIT)
+
+
+#endif
+
+</pre>
+
+<p>
+另外，还需要在ripLib.c文件中定义<code>#define DEBUG</code>，这样才能够使用调试信息输出。为什么需要如此呢，因为在ripLibInit()函数中，DEBUG宏还控制着调试级别的改变：
+</p>
+<pre name="code" class="c">
+#ifdef DEBUG
+    LOG_LEVEL_CHANGE (RIP_V4_LOG, DEBUG_LEVEL);
+#else
+    LOG_LEVEL_CHANGE (RIP_V4_LOG, ERROR_LEVEL);
+#endif /* DEBUG */
+
+</pre>
+
+<p>
+在rip协议中，调试信息输出格式如下：
+</p>
+<pre name="code" class="c">
+log_debug (RIP_V4_LOG, "Received RIP message from %s.", fBuf);
+
+log_warning (RIP_V4_LOG, \
+	     "Command %d received from unsupported address family %d.", \
+	     rip-&gt;rip_cmd, from-&gt;sa_family);
+</pre>
+
+<p>
+下面的代码用于配置调试信息的输出内容，包括函数和行数，同样位于applUtilLib.h文件中。
+</p>
+
+<pre name="code" class="c">
+#define	_LOG_LOCATION	__FUNCTION__, __LINE__
+#define _LOC_UNIT	__FUNCTION__
+</pre>
+
+
+<h2 id="toc_0.4">RIP协议中调试信息的实现</h2>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

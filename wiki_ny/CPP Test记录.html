@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>CPP Test记录</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">igmp代码code review记录</h2>
+<p>
+igmp的code reviw记录，主要是其编码风格方面。
+</p>
+
+<p>
+igmpv3PacketProcess.c		文件阅读完毕，无
+</p>
+
+<p>
+函数名将近50个字符，在SI中，输入参数基本上到了窗口的最右端，大部分不可见。
+</p>
+<pre name="code" class="c">
+void igmpRouterProcessNonQuerierModeGroupStateTransition(unsigned int port ,
+														 unsigned int groupIpAddress,
+														 struct igmp   *igmpMsg ,
+														 int reporter,
+														 UINT8 panelPort,
+														 enum IGMP_ROUTER_GROUP_EVENT event)
+{
+}
+</pre>
+
+
+<p>
+变量，全局变量的名字特别长
+</p>
+<pre name="code" class="c">
+nextState = g_igmpRouterQuerierModeGroupStateTransitionTable[state][event].next_state;
+</pre>
+
+
+<p>
+太多的#if 0 #endif注释
+</p>
+
+<h2 id="toc_0.2">cpp test规则记录</h2>
+<ul>
+<li>
+switch case语句一定要有default分支吗？
+
+</ul>
+
+<ul>
+<li>
+指针之间的比较是否被允许呢？
+
+</ul>
+
+<ul>
+<li>
+sizeof操作符的输入参数问题
+
+</ul>
+
+<pre name="code" class="c">
+char *p;
+sizeof(p);
+</pre>
+
+<ul>
+<li>
+下面代码段的宏定义，输入参数是否需要括号呢？
+<pre name="code" class="c">
+#define OSPF_VLANID_VALID_CHECK(vlanID)\
+		do{\
+		if(vlanID &gt; 4094 || vlanID &lt; 1)\
+		{\
+			RCC_EXT_WriteStrLine(pCliEnv, "Error:invalid parameter");\
+			return OK;\
+		}\
+		}while(0)
+</pre>
+
+</ul>
+
+
+<ul>
+<li>
+全局变量声明时就需要初始化？
+
+</ul>
+
+<ul>
+<li>
+对于全局变量，静态的要l_开头，全局的要g_开头？
+<pre name="code" class="c">
+    #ifdef _UC_OSPF_DEBUG_
+    BOOL ospfDbgEnable;
+    #endif
+</pre>
+
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

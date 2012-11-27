@@ -1,0 +1,81 @@
+RIP协议中使用了两种套接字，分别来接受RIP数据报文和RIP相关消息。
+
+== RIP套接字的注册 ==
+RIP数据报文套接字的注册如下所示。
+{{{name="code" class="c"
+void ripTask()
+{
+    /* ... */
+
+    ripState.s = getsocket (AF_INET, SOCK_DGRAM, &ripState.addr);
+    if (ripState.s < 0)
+    {
+        log_err (RIP_V4_LOG, "Unable to get input/output socket.");
+        priv_ripInitFlag = INIT_FAILED;
+        return (ERROR);
+    }
+    /* ... */
+}
+
+LOCAL int getsocket (domain, type, sin)
+	int domain, type;
+	struct sockaddr_in *sin;
+{
+	int sock, on = 1;
+
+	if ((sock = socket (domain, type, 0)) < 0) {
+                log_err (RIP_V4_LOG, "Error creating socket.");
+		return (-1);
+	}
+#ifdef SO_BROADCAST
+	if (setsockopt (sock, SOL_SOCKET, SO_BROADCAST, (char *)&on, 
+                        sizeof (on)) < 0) {
+                log_err (RIP_V4_LOG, "error setting SO_BROADCAST option");
+		close (sock);
+		return (-1);
+	}
+#endif
+#ifdef SO_RCVBUF
+	for (on = BUFSPACE; ; on -= 1024) {
+		if (setsockopt (sock, SOL_SOCKET, SO_RCVBUF, 
+                                (char *)&on, sizeof (on)) == 0)
+			break;
+		if (on <= 8*1024) {
+                        log_debug (RIP_V4_LOG, "unable to set SO_RCVBUF option");
+			break;
+		}
+	}
+        log_debug (RIP_V4_LOG, "Receive buffer size %d.", on);
+#endif
+	if (bind (sock, (struct sockaddr *)sin, sizeof (*sin)) < 0) {
+                log_err (RIP_V4_LOG, "error binding socket.");
+		close (sock);
+		return (-1);
+	}
+        on = 1;
+	if (ioctl (sock, FIONBIO, (int) &on) == -1)
+                log_err (RIP_V4_LOG, "error setting O_NONBLOCK option.");
+
+	return (sock);
+}
+
+}}}
+
+RIP消息套接字的注册如下所示：
+{{{name="code" class="c"
+void ripTask()
+{
+    /* ... */
+    ripState.routeSocket = socket (AF_ROUTE, SOCK_RAW, 0);
+    if (ripState.routeSocket < 0)
+        {
+        log_err (RIP_V4_LOG, "Unable to get route socket.");
+        close (ripState.s); 
+        priv_ripInitFlag = INIT_FAILED;
+        return (ERROR);
+        }
+    
+    /* ... */
+}
+
+}}}

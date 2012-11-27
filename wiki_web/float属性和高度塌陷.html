@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>float属性和高度塌陷</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">高度塌陷</h2>
+<p>
+高度塌陷是指当容器内包含浮动元素，容器并未像如同这些元素不浮动般的自动扩展延伸。像下面的例子，我们的容器#container似乎是当浮动的img元素不存在般，在自身高度延伸问题上忽略了它，产生了高度塌陷问题。这不是浏览器的BUG，而属于预料中的正确显示。 <strong>因为浮动元素移出了文档流，所以#container容器在计算自身高度的时候便忽略了它。</strong> Eric Meyer在《包含浮动》一文中详细了阐述了这个现象，这是一篇很有用的笔记资料。
+</p>
+
+<h2 id="toc_0.2">解决办法之clear属性</h2>
+<p>
+幸运的是，我们有一大堆的办法可用来补救这种情形。常规的解决方案中的一个便是在浮动元素之后放置一个clear属性的元素，因为浮动元素虽然脱离了文档流，但其自身的所占据的空间还在哪里，所以后面放置的这个处于文档流内的clear属性元素会使父容器在计算自身高度时也把浮动元素的那部分高度也计算进去。实际的例子会更直观，如下所示。
+</p>
+
+<pre name="code" class="html">
+&lt;div id="container"&gt;   
+    &lt;p&gt;This is some text contained within a   
+    small-ish box. I'm using it as an example  
+    of how placing your floated elements in different   
+    orders in your HTML can affect your layouts. For  
+    example, take a look at this great photo   
+    placeholder that should be sitting on the right.&lt;/p&gt;  
+    &lt;img src="image.gif" /&gt;
+    &lt;div style="clear: both;"&gt;&lt;/div&gt;  
+&lt;/div&gt;    
+</pre>
+
+<h2 id="toc_0.3">解决办法之css方式</h2>
+<p>
+现在高度塌陷问题解决了，但这并不是优雅的办法，因为这会增加一个无意义的标记。所以，采用纯CSS的方式会优雅很多，现在我们就来接触其中的一种。
+</p>
+
+<p>
+考虑下面的这种情况，一个容器内部有三个浮动的图片，结构代码如下：
+</p>
+
+<pre name="code" class="html">
+&lt;div id="container"&gt;
+    &lt;img src="image.gif" /&gt;    
+    &lt;img src="image.gif" /&gt;    
+    &lt;img src="image.gif" /&gt;  
+&lt;/div&gt;    
+</pre>
+<p>
+CSS样式代码如下：
+</p>
+
+<pre name="code" class="css">
+#container {
+  width: 260px;
+  margin: 0 auto;
+  padding: 10px 0 10px 10px;
+  background: #aaa;
+  border: 1px solid #999;
+}
+
+img {
+  float: left;
+  margin: 0 5px 0 0;
+}
+</pre>
+
+<p>
+现在你一看到这种情况，就会意识到容器在计算高度时候不会把里面浮动的图片计算在内。现在我们使用CSS的方式而非之前添加额外的HTML标记的方式来处理这个问题。这一次我们用到的技巧是overflow:hidden，请注意overflow属性其本身存在的用意并不是为了应对此种情况，并且应用overflow:hidden来解救高度塌陷还可能会导致诸如内容区被隐藏或者出现无必要的滚动条。 
+</p>
+
+<pre name="code" class="css">
+#container {
+  overflow: hidden;
+  width: 260px;
+  margin: 0 auto;
+  padding: 10px 0 10px 10px;
+  background: #aaa;
+  border: 1px solid #999;
+}
+</pre>
+
+<h2 id="toc_0.4">解决办法之伪类</h2>
+<p>
+另一种麻烦较少的方法是采用CSS伪类选择器:after。还是这个例子，代码是：
+</p>
+
+<pre name="code" class="css">
+#container:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+</pre>
+
+<p>
+这里我们在容器的后面创建了一个有一点内容（这里是一个英文句号）的元素，并且通过把高度设置为0的办法把它变为不可见。
+</p>
+
+<p>
+最后，我们上面提到过的Eric Meyer的《包含浮动》这篇文章介绍了第三种解决高度塌陷的办法，我们这里引用其中关键点一句话： <strong>浮动元素本身可以清除任何因其内部子元素浮动产生的高度塌陷问题。</strong>
+</p>
+
+<p>
+所以对于我们的例子，把父容器#container本身设置为浮动也能达到上面介绍的几种办法的效果。上面介绍的几种方法都能完成同样的事情，它们都能使父容器在计算高度的时候把浮动的子元素的高度也计算在内。每一种方法都有其优点，你应该学习这些方法并在你需要的时候视情形选择使用某一种。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

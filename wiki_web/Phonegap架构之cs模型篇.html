@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Phonegap架构之cs模型篇</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+<a href="img/phonegap/web2native时序图.gif.html">img/phonegap/web2native时序图.gif</a>
+</p>
+
+<p>
+<code>org.apache.cordova.CordovaChromeClient.onJsConfirm(WebView view, String url, String message, final JsResult result);</code>这个方法会拦截html页面发送过来的Native Api请求（调用window.prompt()），然后交由对应的Plugin处理。
+</p>
+ 
+ 
+<h2 id="toc_0.1">服务器流程：</h2>
+<ul>
+<li>
+用Plugin来提供服务供客户端js调用，参见PhoneGap的plugin配置文件：plugins.xml，如果要自己定制plugin，需要继承Plugin类并在plugins.xml中进行相应的配置。
+
+<li>
+同步/异步
+
+</ul>
+<p>
+服务器根据2个参数来判断是同步OR异步，客户端传过来的异步参数 + 服务端Plugin.isSynch(action)
+</p>
+
+<p>
+如果是同步，则直接把处理请求并把响应写到客户端；如果是异步，则启动一个线程来处理，处理完后，将结果通过CallbackServer写到客户端。
+</p>
+<ul>
+<li>
+CallbackServer相当于xmlHttpResponse，负责将数据异步写到客户端。它在内部会有一个socket监听，不停的接收来自于客户端的请求，
+
+</ul>
+
+<p>
+如果发现变量(javascript)中有数据的话，就写到客户端，如果没有，则睡眠10s，10s后，如果有数据，则写到客户端，否则写一个404异常到客户端然后此次连接中断，重新接收新的客户端请求（客户端有一个轮询，如果服务端返回404，则客户端会每隔一段时间请求一次服务器）
+</p>
+<ul>
+<li>
+服务器异步返回给客户端的数据格式：
+<pre name="code" class="js">
+// 正常处理后的返回（Contacts2表示请求的ID，客户端根据这个ID调用对应的回调函数）：
+// 其中，红色的json对象是PluginResult对象（自定义plugin时也需要返回一个PluginResult对象）
+// 黑色的javascript脚本是经过PluginManager.exec()包装过的，被客户端eval解释执行。
+HTTP/1.1 200 OK
+require('cordova').callbackSuccess('Contacts2',{status:1,message:[{"displayName":"%E6%9D%8E%E6%8C%9A","id":"44","rawId":"46","phoneNumbers":[{"type":"mobile","value":"18608020312","id":"92","pref":false}]}],keepCallback:false});
+ 
+// 404保持连接的返回
+HTTP/1.1 404 NO DATA
+</pre>
+
+</ul>
+ 
+<h2 id="toc_0.2">客户端流程</h2>
+<ul>
+<li>
+调用Native Api
+
+</ul>
+<p>
+PhoneGap的js框架，在调用Native Api时，都会汇聚到exec这个方法：
+</p>
+<pre name="code" class="js">
+define('cordova/exec', function(require, exports, module) {
+    var cordova = require('cordova');
+module.exports = function(success, fail, service, action, args) {
+        try {
+            var callbackId = service + cordova.callbackId++;
+            if (success || fail) {
+                cordova.callbacks[callbackId] = {
+                    success: success,
+                    fail: fail
+                };
+            }
+        //这里给服务器发送请求，
+        //service表示采用哪个
+	//true表示采用异步调用
+	//服务器会判断这个service+action是否支持异步调用
+	//如果是同步，则服务器会立即返回处理结果到变量r
+	//如果是异步，则服务器返回空串””
+            var r = prompt(JSON.stringify(args),
+	    "gap:" + JSON.stringify([service, action, callbackId, true]));
+            // If a result was returned
+            if (r.length &gt; 0) {
+          ……
+            }
+        } catch(e2) {
+            console.log("Error: " + e2);
+        }
+    };
+});
+</pre>
+
+<ul>
+<li>
+异步回调
+<pre  name="code" class="js">
+define('cordova/plugin/android/callback', function(require, exports, module) {
+    ……
+    callback = function() {
+        ……
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState === 4) {
+                // 服务器端返回结果数据，客户端通过eval执行结果
+            // 再次往服务器发起请求。
+                if (xmlhttp.status === 200) {
+                    // Need to url decode the response
+                    var msg = decodeURIComponent(xmlhttp.responseText);
+                    setTimeout(function() {
+                        try {
+                            var t = eval(msg);
+                        } catch(e) {
+                            console.log("JSCallback: Message from Server: " + msg);
+                            console.log("JSCallback Error: " + e);
+                        }
+                    }, 1);
+                    setTimeout(callback, 1);
+                }
+                // 服务器与客户端约定如果404，则客户端接着请求服务器，10s内，
+            // 如果客户端调用了Native Api，则服务器服务数据后，进入上面200的逻辑，
+            // 如果客户端没调用，则服务器依然返回404，如此循环。
+                else if (xmlhttp.status === 404) {
+                    setTimeout(callback, 10);
+                }
+             ……
+            }
+        };
+        xmlhttp.open("GET", "http://127.0.0.1:" + port + "/" + token, true);
+        xmlhttp.send();
+    };
+});
+</pre>
+
+</ul>
+
+<h2 id="toc_0.3">自定义plugin流程</h2>
+<ul>
+<li>
+服务端
+
+</ul>
+<p>
+继承com.phonegap.api.Plugin类，重写execute方法<code>public PluginResult execute(String action, JSONArray args, String callbackId){}</code>；
+</p>
+
+<p>
+在plugins.xml中配置我们的类，<code>&lt;plugin name="LoginPlugin" value="com.synnex.plugin.LoginPlugin"/&gt;</code>
+</p>
+ 
+<p>
+NOTE:isSynch()方法是告诉PhoneGap框架，此处理是同步OR异步，true表示同步，false表示异步，默认为flase。在同步处理的时候，不要去做UI操作（如：修改EditText内容），可以交由Handler更新UI。
+</p>
+
+<ul>
+<li>
+客户端：
+<pre name="code" class="js">
+// 向PhoneGap注册服务
+var LoginPlugin = function(){};
+LoginPlugin.prototype.dologin = function(successCallback, failureCallback, args)
+{
+     //”LoginPlugin”需要与服务端xml中的名称一致。
+     //”login”即传给服务端excute()方法的action参数
+     //args必须是一个数组，对应execute()方法的args参数
+     return cordova.exec(successCallback, failureCallback, "LoginPlugin", "login", args);
+};
+
+cordova.addConstructor(function()
+{
+     cordova.addPlugin("loginPlugin", new LoginPlugin());
+});
+ 
+ 
+// 调用时：
+// 此处loginPlugin为上面addPlugin的第1个参数，
+// dologin为上面LoginPlugin函数的方法名
+// msg为服务端返回的数据。
+plugins.loginPlugin.dologin(function(msg)
+ {
+      navigator.notification.alert(msg, undefined, "Success", "OK");
+ }, function(msg)
+ {
+      navigator.notification.alert(msg || "Error", undefined, "Failure", "OK");
+ }, [{username: "troyz", password: "123456"}]);
+</pre>
+
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

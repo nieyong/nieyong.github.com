@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>php笔记</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">PHP中类的继承</h2>
+<pre name="code" class="php">
+class appController extends coreController
+{
+	function __construct()
+	{
+		// 载入默认的父类的构造函数
+		parent::__construct();
+	}
+
+	// login check or something
+	
+	
+}
+</pre>
+<p>
+',
+</p>
+
+
+<h2 id="toc_0.2">PHP的短标签语法</h2>
+<p>
+在模板中提倡使用php的短标签，而切忌使用大括号{}。if，foreach都可以这样写。
+</p>
+
+<p>
+foreach的写法：
+</p>
+<pre name="code" class="php">
+&lt;?php foreach( $sql as $head =&gt; $book ): ?&gt;
+	&lt;h2&gt;&lt;?=$head ?&gt;&lt;/h2&gt;
+	&lt;div&gt;&lt;?=$book ?&gt;&lt;/div&gt;
+&lt;?php endforeach; ?&gt;
+</pre>
+
+<p>
+if的写法：
+</p>
+<pre name="code" class="php">
+&lt;?php if($id == 0): ?&gt;add&lt;?php else: ?&gt;mod&amp;id=&lt;?=$id ?&gt;&lt;?php endif; ?&gt;
+</pre>
+
+
+<h2 id="toc_0.3">PHP与正则表达式</h2>
+
+<h3 id="toc_0.3.1">modifier i s m</h3>
+<p>
+One handy modifier is i, which makes the pattern matching case-insensitive. For example, the patterns (with delimiters) /[a-zA-Z]+/ and /[a-z]+/i produce the same results.
+</p>
+
+<p>
+Another useful modifier is s, which makes the dot metacharacter match newlines. The pattern (with delimiters) @<b>.<strong>?</b>@ matches a set of <b></b> tags and the text between them, but only if that text is all on one line. To match text that may include newlines, use the s modifier: @<b>.</strong>?</b>@s
+</p>
+
+<p>
+modifier m
+</p>
+
+<p>
+modifier u 表示的是utf8编码，例如匹配utf8编码的全角空格（0xa1a1）。
+</p>
+<pre name="code" class="php">
+$pattern03 = "/^　+/u";			//全角空格
+
+$out = preg_replace($pattern03,'',$out);
+</pre>
+
+<p>
+如果字符串不是utf8编码，那么会出现如下错误提示：
+</p>
+<blockquote>
+Warning: preg_replace() [function.preg-replace]: Compilation failed: invalid UTF-8 string at offset 1 in E:\AppServ\www\LazyPHP\controller\book.class.php on line 27
+</blockquote>
+
+
+<h3 id="toc_0.3.2">常用的表达式</h3>
+<p>
+Test the value of $html against the pattern <b>[^&lt;]+</b>,The delimiter is @ since / occurs in the pattern
+</p>
+
+<p>
+\(is_bold = preg_match('@<b>[^&lt;]+</b>@',\)html);
+</p>
+
+<ul>
+<li>
+匹配空白的行
+
+<ul>
+<li>
+/^\s*$/m		并不能够完全删除所有的空白行，会留有一行
+
+<li>
+/(\(\s*\))|(<sup><small>\s*</small></sup>)/m	这个能够完美的删除所有的空白行，比上一个完美
+
+</ul>
+<li>
+匹配html标签&lt;p&gt; &lt;/p&gt;对
+
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

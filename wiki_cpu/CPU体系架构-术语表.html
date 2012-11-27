@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>CPU体系架构-术语表</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+下面就以上几节使用到的术语进行总结。
+</p>
+
+<h2 id="toc_0.1">Compute Technology</h2>
+<p>
+<strong>ISA</strong>		Instructions Set Architecture（指令集系统架构）。ISA常被简称为Architecture（架构），是处理器的一个抽象描述，而ISA在处理器中的实现，被称为Microarchitecture（微架构）。ISA是将编程所需要了解的硬件信息从硬件系统中抽象出来，这样程序员就可以面向ISA编程。从编程人员的角度来看，ISA包括一套指令集和一些寄存器。
+</p>
+
+<p>
+<strong>CISC</strong>		Complex Instruction Set Computing（复杂指令集系统）。一种CPU芯片设计技术。X86，PowerPC等都是使用的CISC的理念和技术。
+</p>
+
+<p>
+<strong>RISC</strong>		Reduced Instructin Set Computing（精简指令集系统）。和CISC相对应，也是一种CPU芯片设计技术。ARM、MIPS等嵌入式处理器就是使用的RISC的理念和技术。
+</p>
+
+
+<p>
+<strong>DMA</strong>		Direct Memory Access（直接存储器访问）。DMA是计算机科学中的一种内存访问技术。它允许某些电脑内部的硬件子系统（电脑外设），可以独立地直接读写系统存储器，而不需绕道CPU。在同等程度的CPU负担下，DMA是一种快速的数据传送方式。很多硬件的系统会使用DMA，包含硬盘控制器、绘图显卡、网卡和声卡。（摘自《维基百科》）。对于嵌入式设备，上文中提到的 _<em>电脑内部的硬件子系统（电脑外设）</em>_ 对应的就是SOC芯片上的某些片上资源，例如I2C核，以太网接口等，也可以是一些外接独立芯片。
+</p>
+
+<p>
+<strong>TLB</strong>		Translation Lookaside Buffer（旁路转换缓冲）。MMU为了提高查询页表的速度，现在的处理器都为页表做了一个小Cache，叫做旁路转换缓冲(Translation lookaside buffer, TLB)。
+</p>
+
+
+<p>
+<strong>IEEE</strong>		the Institute for Electrical and Electronics Engineers,Inc（电气与电子工程师协会）
+</p>
+
+<p>
+<strong>POSIX</strong>		Portable Operating System Interface（可移植操作系统接口）
+</p>
+
+<p>
+<strong>内部碎片</strong>	指一页中未使用的存储空间
+</p>
+
+<p>
+<strong>外部碎片</strong>	todo
+</p>
+
+<p>
+<strong>BSS</strong>		这一名称是一个历史遗物，来自一条老的汇编操作称作“block started by symbol”。
+</p>
+
+<h2 id="toc_0.2">General Register Glossary</h2>
+<p>
+<strong>程序指针</strong>	又叫做程序计数器（program counter）。指向程序执行的下一条指令的地址。在X86上又叫做指令指针（IP，instruction pointer）。程序指针可以是一个存在的寄存器（例如X86上的IP寄存器和ARM上的r15寄存器），也可以不存在对程序员可见的寄存器，而只是这样一个概念（例如MIPS中就没有对应的寄存器）。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

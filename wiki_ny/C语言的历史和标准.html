@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>C语言的历史和标准</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">C语言历史</h2>
+<p>
+C语言的历史非常有趣，它的祖先可以上溯到古老的Algol 60语言──最早的块结构语言。
+</p>
+
+<p>
+1963年，剑桥大学将Algol 60语言发展成为CPL（Combined Programming Language）语言。CPL的最大缺点就是它太大了，以至于不能在很多应用程序中使用。到1967年，剑桥大学的Matin Richards在访问MIT时，对CPL语言进行了简化，设计出了BCPL（Basic CPL）语言。
+</p>
+
+<p>
+1970年，美国贝尔实验室的Ken Thompson发现BCPL太慢了，而且缺乏运行时的支持，他将BCPL进行了实验性的修改，并为它起了一个有趣的名字──B语言，意思是将CPL语言进行压缩，提炼出它的精华。B是BCPL的一个简化版，而且被设计成专门用来进行系统编程，但它依然不能满足程序员们的要求：它的字符处理机制太丑陋了，而且浮点数运算被实现得并不是很理想，处理指针时开销太大。
+</p>
+
+<p>
+在1972年，当PDP-11进入贝尔实验室时，Ken Thompson的同伴，同样在贝尔实验室的Dennis M. Ritchie，在从BCPL中抽取了一些共性放入B语言中，对B进行了改进，并且在里面加入了数据类型，他把这个扩展的语言称为NB（New B）。随后，他又继续对新语言进行大量修改，似乎可以用新的名字来重新命名它了，于是他取了B后面的那个字母作为这种语言的名字，这就是C语言。（曾几何时，人们猜测 C 的后裔会被命名为P──BCPL的第三个字母，而不是D，但如今最显见的C的后裔语言是叫C++。）
+</p>
+
+<p>
+1973年，Ritchie完成了C语言核心，并用C重写了整个Unix内核。为了使Unix操作系统推广，1977年Dennis M. Ritchie发表了不依赖于具体机器系统的C语言编译文本《可移植的C语言编译程序》。
+</p>
+
+<p>
+1978年，Brian W. Kernighian和Dennis M. Ritchie出版了长久不衰的经典之作──《The C Programming Language》，把C从贝尔实验室推向世界，从而使C语言成为目前世界上流行最广泛的程序设计语言之一。
+</p>
+
+
+<h2 id="toc_0.2">早期发展</h2>
+<p>
+C语言的第一次发展在1969年到1973年之间。之所以被称为“C”是因为C语言的很多特性是由一种更早的被称为B语言的程式语言中发展而来。早期作业系统的核心大多由组合语言组成，随着C语言的发展，C语言已经可以用来编写作业系统的核心。1973年，Unix作业系统的核心正式用C语言改写，这是C语言第一次应用在作业系统的核心编写上。
+</p>
+
+
+<h2 id="toc_0.3">K&amp;R C（标准C）</h2>
+<p>
+K&amp;R C又叫做标准C。
+</p>
+
+<p>
+1978年， 丹尼斯・里奇（Dennis Ritchie）和Brian Kernighan合作出版了《C程序设计语言》的第一版。书中介绍的C语言标准也被C语言程式设计师称作“K&amp;R C”，第二版的书中也包含了一些ANSI C的标准。K&amp;R C主要介绍了以下特色：
+</p>
+<ul>
+<li>
+结构（struct）类型
+
+<li>
+长整数（long int）类型
+
+<li>
+无号整数（unsigned int）类型
+
+<li>
+把运算符=+和=-改为+=和-=。因为=+和=-会使得编译器不知道使用者要处理i = +10还是i =- 10，使得处理上产生混淆。
+
+</ul>
+
+<p>
+即使在后来ANSI C标准被提出的许多年后，K&amp;R C仍然是许多编译器的最低标准要求，许多老旧的编译仍然运行K&amp;R C的标准。
+</p>
+
+<h2 id="toc_0.4">ANSI C 和 ISO C（1985年）</h2>
+<p>
+1989 年，C语言被 ANSI 标准化（ANSI X3.159-1989）。标准化的一个目的是扩展 K&amp;R C。这个标准包括了一些新特性。在 K&amp;R 出版后，一些新特性被非官方的加到 C 语言中。
+</p>
+<ul>
+<li>
+void 函数
+
+<li>
+函数返回 struct 或 union 类型
+
+<li>
+void * 数据类型
+
+</ul>
+<p>
+在 ANSI 标准化自己的过程中，一些新的特性被加了进去。ANSI 也规定了一套标准函数库。ANSI ISO（国际标准化组织）成立 ISO/IEC JTC1/SC22/WG14 工作组, 来规定国际标准的 C 语言。通过对 ANSI 标准的少量修改，最终通过了 ISO 9899:1990。随后, ISO 标准被 ANSI 采纳。
+</p>
+
+<p>
+传统 C 语言 到 ANSI/ISO 标准 C 语言 的改进包括：
+</p>
+<ul>
+<li>
+增加了真正的标准库
+
+<li>
+新的预处理命令与特性
+
+<li>
+函数原型允许在函数申明中指定参数类型
+
+<li>
+一些新的关键字，包括 const、volatile 与 signed
+
+<li>
+宽字符、宽字符串与字节多字符
+
+<li>
+对约定规则、声明和类型检查的许多小改动与澄清
+
+</ul>
+
+<h2 id="toc_0.5">ANSI C 和 ISO C（1995年）</h2>
+<p>
+作为对标准的维护与更新，WG14 工作小组在 1995年, 对 1985 年颁布的标准做了两处技术修订（缺陷修复）和一个补充（扩展）。下面是 1995 年做出的所有修改：
+</p>
+<ul>
+<li>
+3 个新的标准库头文件 iso646.h、wctype.h 和 wchar.h
+
+<li>
+几个新的记号与预定义宏，用于对国际化提供更好的支持
+
+<li>
+printf/sprintf 函数一系列新的格式代码
+
+<li>
+大量的函数和一些类型与常量，用于多字节字符和宽字节字符
+
+</ul>
+
+<h2 id="toc_0.6">C99</h2>
+<p>
+在ANSI的标准确立之后，C语言的规范在一段时间内没有大的变动，然而C++在自己的标准化建立过程中继续发展壮大。《标准修正案一》在1995 年为C语言建立了一个新标准，但是只修正了一些C89标准中的细节和增加更多更广得国际字符集支持。不过，这个标准引出了1999年ISO 9899:1999的发表。它通常被成为C99。C99被ANSI于2000年三月采用。
+</p>
+
+<p>
+在C99中包括的特性有：
+</p>
+<ul>
+<li>
+对编译器限制增加了，比如源程序每行要求至少支持到 4095 字节，变量名函数名的要求支持到 63 字节 (extern 要求支持到 31)
+
+<li>
+预处理增强了。例如：
+
+<ul>
+<li>
+巨集支持取可变参数 #define Macro(...) __VA_ARGS__
+
+<li>
+使用巨集的时候，参数如果不写，巨集里用 #,## 这样的东西会扩展成空串。(以前会出错的)
+
+<li>
+支持 // 行注释（这个特性实际上在C89的很多编译器上已经被支持了）
+
+</ul>
+<li>
+增加了新关键字 restrict, inline, _Complex, _Imaginary, _Bool
+
+<ul>
+<li>
+支持 long long, long double _Complex, float _Complex 这样的类型
+
+</ul>
+<li>
+支持 &lt;: :&gt; &lt;% %&gt; %: %:%: ，等等奇怪的符号替代，D&amp;E 里提过这个
+
+<li>
+支持了不定长的数组。数组的长度就可以用变量了。声明类型的时候呢,就用 int a[*] 这样的写法。不过考虑到效率和实现，这玩意并不是一个新类型。所以就不能用在全局里，或者 struct union 里面，如果你用了这样的东西，goto 语句就受限制了。
+
+<li>
+变量声明不必放在语句块的开头，for 语句提倡这么写 for(int i=0;i&lt;100;++i) 就是说，int i 的声明放在里面，i 只在 for 里面有效。
+
+<li>
+当一个类似结构的东西需要临时构造的时候，可以用 (type_name){xx,xx,xx} 这有点像 C++ 的构造函数
+
+<li>
+初始化结构的时候现在可以这样写:
+<pre name="code" class="c">
+struct {int a[3], b;} hehe[] =  { [0].a = {1}, [1].a = 2 };
+struct {int a, b, c, d;} hehe =  { .a = 1, .c = 3, 4, .b = 5}  // 3,4 是对 .c,.d 赋值的
+</pre>
+
+<li>
+字符串里面，\u 支持 unicode 的字符
+
+<li>
+支持 16 进制的浮点数的描述
+
+<li>
+所以 printf scanf 的格式化串多支持了 ll / LL (VC6 里用的 I64) 对应新的 long long 类型。
+
+<li>
+浮点数的内部数据描述支持了新标准，这个可以用 #pragma 编译器指定
+
+<li>
+除了已经有的 _<em>line</em>_ _<em>file</em>_ 以外，又支持了一个 _<em>func</em>_ 可以得到当前的函数名
+
+<li>
+对于非常数的表达式，也允许编译器做化简
+
+<li>
+修改了对于 / % 处理负数上的定义，比如老的标准里 -22 / 7 = -3, -22 % 7 = -1 而现在 -22 / 7 = -4, -22 % 7 = 6
+
+<li>
+取消了不写函数返回类型默认就是 int 的规定
+
+<li>
+允许 struct 定义的最后一个数组写做 [] 不指定其长度描述
+
+<li>
+const const int i; 将被当作 const int i; 处理
+
+<li>
+增加和修改了一些标准头文件, 比如定义 bool 的 &lt;stdbool.h&gt; 定义一些标准长度的 int 的 &lt;inttypes.h&gt; 定义复数的 &lt;complex.h&gt; 定义宽字符的 &lt;wctype.h&gt; 有点泛型味道的数学函数 &lt;tgmath.h&gt; 跟浮点数有关的 &lt;fenv.h&gt;。&lt;stdarg.h&gt; 里多了一个 va_copy 可以复制 ... 的参数。&lt;time.h&gt; 里多了个 struct tmx 对 struct tm 做了扩展
+
+<li>
+输入输出对宽字符还有长整数等做了相应的支持
+
+</ul>
+<p>
+但是各个公司对C99的支持所表现出来的兴趣不同。当GCC和其它一些商业编译器支持C99的大部分特性的时候，微软和Borland却似乎对此不感兴趣。
+</p>
+
+
+<h2 id="toc_0.7">GNU C 与ANSI C 相比，独特的9个地方</h2>
+<p>
+这篇的东西只对GNU C有效，其他的标准C或者VC并不适用。摘自人民邮电《Linux设备驱动开发详解》。
+</p>
+
+<h3 id="toc_0.7.1">1.允许零长度数组</h3>
+<p>
+GNU C允许零长度数组，在定义变长对象的头结构时，这个特性非常有用。
+</p>
+<pre name="code" class="c">
+struct var_data s
+{
+      int len;
+      char data[0];
+
+};
+</pre>
+
+<p>
+char data[0]仅仅意味着程序中通过var_data的结构体实例的data[index]成员可以访问len之后的第index个地址，并没有为data[0]分配内存。
+</p>
+
+<p>
+假设struct var_data的数据域保存在struct var_data紧接着的内存区域，通过如下代码可以遍历这些数据：
+</p>
+
+<pre name="code" class="c">
+struct var_data s;
+...
+for (i=0;i&lt;s.len;i++)
+{
+    printf("%02x",s.data[i]);
+}
+</pre>
+
+<h3 id="toc_0.7.2">2、case范围</h3>
+<p>
+GNU C 支持case x...y 这样的语法，区间[x,y]的数都会满足这个case的条件，记得数据结构试验时，有的同学为了做菜单使用了仅100个case，还好我做的是GUI的
+</p>
+
+<pre name="code" class="c">
+switch(c)
+{
+      case '0'...'9': c-='0';
+      break;
+      case 'a'...'f': c-='a'-10;
+      break;
+      case 'A'...'F': c-='A'-10;
+      break;
+}
+</pre>
+
+<p>
+这个case的特点大家都看得出来，比标准C少敲了多少case啊
+</p>
+
+<h3 id="toc_0.7.3">3、语句表达式</h3>
+<p>
+GNU C把包含在括号里的复合语句看做是一个表达式，称为语句表达式，它可以出现在任何允许表达式的地方。我们可以在语句表达式中使用原本只能在复合语句中使用的循环变量、局部变量等，例如
+</p>
+
+<pre name="code" class="c">
+#define min_t(type,x,y) \
+({type __x=(x); type __y=(y);__x&lt;__y?__x:__y})
+int ia,ib,mini;
+mini=min_t(int,ia,ib);
+</pre>
+
+<p>
+这样，因为重新定义了_<em>x和</em>_y这两个局部变量，所以上述方法定义的宏将不会有副作用。在标准C中，对应的宏通常会有副作用：
+</p>
+
+<pre name="code" class="c">
+#define min(x,y) ((x)&lt;(y)?(x):(y))
+</pre>
+
+<p>
+而代码min(++ia,++ib)将会被展开为<code>((++ia)&lt;(++ib)?(++ia):(++ib))</code>传入宏的参数会被增加两次。
+</p>
+
+<p>
+这个在 嵌入式程序员应知道的0x10个基本问题 里有讲过。
+</p>
+
+<h3 id="toc_0.7.4">4、typeof关键字</h3>
+<p>
+typeof(x)语句可以获得x的类型，因此，我们可以借助typeof重新定义第3条提到的min_t这个宏
+</p>
+
+<pre name="code" class="c">
+#define min(x,y) \
+({ \
+      const typeof(x) _x=(x);\
+      const typeof(y) _y=(y);\
+      (void) (&amp;_x==&amp;_y);\
+       _x&lt;_y ? _x: _y ; })
+</pre>
+
+<p>
+我们不需要像第三条时那样传一个type进去，因为通过typeof(x)可以得到type。
+</p>
+
+<p>
+代码 (void) (&amp;_x==&amp;_y);的作用是检查_x和_y的类型是否一致。
+</p>
+
+<h3 id="toc_0.7.5">5、可变参数的宏</h3>
+<p>
+标准C只支持可变参数的函数，意味着函数的参数可以是不固定的
+</p>
+
+<p>
+例如printf()函数的原型是
+</p>
+
+<pre name="code" class="c">
+int printf(const char *format [,argument]...);
+</pre>
+
+<p>
+而在GNU C中，宏也可以接受可变数目的参数，例如
+</p>
+
+<pre name="code" class="c">
+#define pr_debug(fmt,arg...) printk(fmt,##arg)
+</pre>
+
+<p>
+这里arg表示其余的参数可以是零个或多个，这些参数以及参数之间的逗号构成arg的值，
+</p>
+
+<p>
+在宏扩展时替换arg ，例如
+</p>
+
+<pre name="code" class="c">
+pr_debug("%s:%d",filename,line);
+</pre>
+
+<p>
+被扩展为
+</p>
+
+<pre name="code" class="c">
+printk("%s:%d",filename,line);
+</pre>
+
+<p>
+使用##的原因是为了处理arg不代表任何参数的情况，这时候，前面的逗号就变得多余了。
+</p>
+
+<p>
+使用##之后，GNU C预处理器会丢弃前面的逗号，这样代码<code>pr_debug("success!\n")</code>会被正确扩展为<code>printk("success!\n");</code>而不是<code>printk("success!\n",);</code>
+</p>
+
+<h3 id="toc_0.7.6">6.标号元素</h3>
+<p>
+标准c要求数组或结构体的初始化值必须以固定的顺序出现，在GNU C中，通过指定索引或结构体成员名，允许初始化值得以任意顺序出现。
+</p>
+
+<p>
+指定数组索引的方法是在初始化值前添加 [INDEX]= ，当然也可以用 [FIRST...LAST]= 的形式指定一个范围。例如下面的代码定义一个数组，并把其中的所有元素赋值为0：
+</p>
+
+<pre name="code" class="c">
+unsigned char data[MAX] ={[0...MAX-1]=0 };
+</pre>
+
+<p>
+下面的代码借助结构体成员名初始化结构体：
+</p>
+
+<pre name="code" class="c">
+struct file_operations DEMO_fops = {
+    owner :    THIS_MODULE,
+    llseek:      DEMO_llseek,
+    read:       DEMO_read,
+    write:       DEMO_write,
+    ioctl:        DEMO_ioctl,
+    open:        DEMO_open,
+    release:   DEMO_release,
+};
+</pre>
+
+<p>
+但是Linux 2.6还是推荐采用标准C的方式，如下
+</p>
+
+<pre name="code" class="c">
+struct file_operations DEMO_fops = {
+    .owner =    THIS_MODULE,
+    .llseek =   DEMO_llseek,
+    .read =     DEMO_read,
+    .write =    DEMO_write,
+    .ioctl =    DEMO_ioctl,
+    .open =     DEMO_open,
+    .release = DEMO_release,
+};
+</pre>
+
+<h3 id="toc_0.7.7">7.当前函数名</h3>
+<p>
+GUN C预定义了两个标识符保存当前的函数名，_<em>FUNCTION</em>_保存函数在源码中的名字，
+</p>
+
+<p>
+__PRETTY_FUNCTION__保存带语言特色的名字。在c函数中，这两个名字是相同的。
+</p>
+
+<pre name="code" class="c">
+void example()
+{
+      printf("This is function: %s ",__FUNCTION__);
+}
+</pre>
+
+<p>
+代码中的_<em>FUNCTION</em>_意味着字符串"example"
+</p>
+
+<h3 id="toc_0.7.8">8、特殊属性声明</h3>
+<p>
+GNU C允许声明函数、变量和类型的特殊属性，以便进行手工的代码优化和定制代码检查的方法。指定一个声明的属性，只需要在申明后添加 _<em>attribute</em>_((ATTRIBUTE))
+</p>
+
+<p>
+其中ATTRIBUTE为属性说明，如果存在多个属性，则以逗号分隔。GNU C支持noreturn format section aligned packed等十多个属性noreturn属性作用于函数，表示该函数从不返回。这会让编译器优化代码，并消除不必要的的警告信息。例如
+</p>
+
+<pre name="code" class="c">
+#define ATTRIB_NORET __attribute__ ((noreturn)) ....
+asmlinkage NORET_TYPE void do_exit(long error_code) ATTRIB_NORET;
+</pre>
+
+<p>
+format属性也可用于函数，表示该函数printf scanf 或strftime风格的参数，指定format属性可以让编译器根据格式串检查参数类型。例如：
+</p>
+
+<pre name="code" class="c">
+asmlinkage int printk(const char * fmt,...)\
+__attribute__((format(printf,1,2)));
+</pre>
+
+<p>
+详细的可以看<a href="http://blog.163.com/sunm_lin/blog/static/9192142200741533038695/">http://blog.163.com/sunm_lin/blog/static/9192142200741533038695/</a>
+</p>
+
+<p>
+unused属性作用于函数和变量，表示该函数或变量可能不会被用到，避免编译器产生的警告信息。
+</p>
+
+<p>
+aligned属性指定结构体、变量、联合体的对齐方式。packed属性作用于变量和类型，表示压缩结构体，使用最小的内存。
+</p>
+
+<pre name="code" class="c">
+struct examprl_struct
+{
+      char a;
+      int b;
+      long c;
+}__attribute__((packed));
+</pre>
+
+<p>
+注意，这个_<em>attribute</em>_((packed))只能用在GNU C
+</p>
+
+<p>
+关于在VC下的结构体对齐，参照<a href="http://hi.baidu.com/deep_pro/blog/item/421db081aeb604debd3e1e01.html">http://hi.baidu.com/deep_pro/blog/item/421db081aeb604debd3e1e01.html</a>
+</p>
+
+<h3 id="toc_0.7.9">9、内建函数</h3>
+<p>
+GNU C 提供了大量的内建函数，其中很多是标准 C 库函数的内建版本，例如memcpy，它们与对应的 C 库函数功能相同，本文不讨论这类函数，其他内建函数的名字通常以 __builtin 开始。
+</p>
+
+<ul>
+<li>
+__builtin_return_address (LEVEL)
+
+</ul>
+
+<p>
+内建函数 __builtin_return_address 返回当前函数或其调用者的返回地址，参数LEVEL 指定在栈上搜索框架的个数，0 表示当前函数的返回地址，1 表示当前函数的调用者的返回地址，依此类推。例如：
+</p>
+
+<pre name="code" class="c">
+++++ kernel/sched.c
+437:                 printk(KERN_ERR “schedule_timeout: wrong timeout ”
+438:                        “value %lx from %p\n”, timeout,
+439:                        __builtin_return_address(0));
+</pre>
+
+<ul>
+<li>
+__builtin_constant_p(EXP)
+
+</ul>
+
+<p>
+内建函数 __builtin_constant_p 用于判断一个值是否为编译时常数，如果参数 EXP 的值是常数，函数返回 1，否则返回 0。例如：
+</p>
+
+<pre name="code" class="c">
+++++ include/asm-i386/bitops.h
+249: #define test_bit(nr,addr) \
+250: (__builtin_constant_p(nr) ? \
+251: constant_test_bit((nr),(addr)) : \
+252: variable_test_bit((nr),(addr)))
+</pre>
+
+<p>
+很多计算或操作在参数为常数时有更优化的实现，在 GNU C 中用上面的方法可以根据参数是否为常数，只编译常数版本或非常数版本，这样既不失通用性，又能在参数是常数时编译出最优化的代码。
+</p>
+
+<ul>
+<li>
+__builtin_expect(EXP, C)
+
+</ul>
+
+<p>
+内建函数 __builtin_expect 用于为编译器提供分支预测信息，其返回值是整数表达式 EXP 的值，C 的值必须是编译时常数。例如：
+</p>
+
+<pre name="code" class="c">
+++++ include/linux/compiler.h
+13: #define likely(x)       __builtin_expect((x),1)
+14: #define unlikely(x)     __builtin_expect((x),0)
+++++ kernel/sched.c
+564:         if (unlikely(in_interrupt())) {
+565:                 printk(”Scheduling in interrupt\n”);
+566:                 BUG();
+567:         }
+</pre>
+
+<p>
+这个内建函数的语义是 EXP 的预期值是 C，编译器可以根据这个信息适当地重排语句块的顺序，使程序在预期的情况下有更高的执行效率。上面的例子表示处于中断上下文是很少发生的，第 565-566 行的目标码可能会放在较远的位置，以保证经常执行的目标码更紧凑。
+</p>
+
+<p>
+对标准的扩展，总是双刃剑。方便的同时带来了移植的困难。我还是尽量用标准C吧。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

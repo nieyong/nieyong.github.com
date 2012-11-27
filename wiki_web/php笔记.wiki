@@ -1,0 +1,64 @@
+== PHP中类的继承 ==
+{{{name="code" class="php"
+class appController extends coreController
+{
+	function __construct()
+	{
+		// 载入默认的父类的构造函数
+		parent::__construct();
+	}
+
+	// login check or something
+	
+	
+}
+}}}
+',
+
+
+== PHP的短标签语法 ==
+在模板中提倡使用php的短标签，而切忌使用大括号{}。if，foreach都可以这样写。
+
+foreach的写法：
+{{{name="code" class="php"
+<?php foreach( $sql as $head => $book ): ?>
+	<h2><?=$head ?></h2>
+	<div><?=$book ?></div>
+<?php endforeach; ?>
+}}}
+
+if的写法：
+{{{name="code" class="php"
+<?php if($id == 0): ?>add<?php else: ?>mod&id=<?=$id ?><?php endif; ?>
+}}}
+
+
+== PHP与正则表达式 ==
+
+=== modifier i s m ===
+One handy modifier is i, which makes the pattern matching case-insensitive. For example, the patterns (with delimiters) /[a-zA-Z]+/ and /[a-z]+/i produce the same results.
+
+Another useful modifier is s, which makes the dot metacharacter match newlines. The pattern (with delimiters) @<b>.*?</b>@ matches a set of <b></b> tags and the text between them, but only if that text is all on one line. To match text that may include newlines, use the s modifier: @<b>.*?</b>@s
+
+modifier m
+
+modifier u 表示的是utf8编码，例如匹配utf8编码的全角空格（0xa1a1）。
+{{{name="code" class="php"
+$pattern03 = "/^　+/u";			//全角空格
+
+$out = preg_replace($pattern03,'',$out);
+}}}
+
+如果字符串不是utf8编码，那么会出现如下错误提示：
+    Warning: preg_replace() [function.preg-replace]: Compilation failed: invalid UTF-8 string at offset 1 in E:\AppServ\www\LazyPHP\controller\book.class.php on line 27
+
+
+=== 常用的表达式 ===
+Test the value of $html against the pattern <b>[^<]+</b>,The delimiter is @ since / occurs in the pattern
+
+$is_bold = preg_match('@<b>[^<]+</b>@',$html);
+
+* 匹配空白的行
+  * /^\s*$/m		并不能够完全删除所有的空白行，会留有一行
+  * /($\s*$)|(^\s*^)/m	这个能够完美的删除所有的空白行，比上一个完美
+* 匹配html标签<p> </p>对

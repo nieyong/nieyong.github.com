@@ -1,0 +1,83 @@
+== php变量作用域 ==
+This is because activity inside a function happens in a different scope. Variables defined outside of a function are called global variables. They exist in one scope. Variables defined inside of a function are called local variables. Each function has its own scope.
+
+A variable called $dinner inside a function, whether or not it's an argument to that function, is completely disconnected from a variable called $dinner outside of the function and from a variable called $dinner inside another function.
+
+{{{name="code" class="php"
+<?php
+$dinner = 'Curry Cuttlefish';
+
+function vegetarian_dinner( ) {
+    print "Dinner is $dinner, or ";
+    $dinner = 'Sauteed Pea Shoots'; 
+    print $dinner;
+    print "\n";
+}
+
+function kosher_dinner( ) {
+    print "Dinner is $dinner, or ";
+    $dinner = 'Kung Pao Chicken';
+    print $dinner;
+    print "\n";
+
+}
+
+print "Vegetarian ";
+vegetarian_dinner( );
+print "Kosher ";
+kosher_dinner( );
+print "Regular dinner is $dinner";
+?>
+
+
+//输出的结果为：
+Vegetarian Dinner is , or Sauteed Pea Shoots
+Kosher Dinner is , or Kung Pao Chicken
+Regular dinner is Curry Cuttlefish
+}}}
+
+There are two ways to access a global variable from inside a function. The most straightforward is to look for them in a special array called $GLOBALS. Each global variable is accessible as an element in that array.
+
+The second way to access a global variable inside a function is to use the global keyword. This tells the PHP interpreter that further use of the named variable inside a function should refer to the global variable with the given name, not a local variable. This is called "bringing a variable into local scope." 
+
+Generally, I recommend that you use the $GLOBALS array to access global variables inside functions instead of the global keyword. Using $GLOBALS provides a reminder on every variable access that you're dealing with a global variable. Unless you're writing a very short function, it's easy to forget that you're dealing with a global variable with global and become confused as to why your code is misbehaving. Relying on the $GLOBALS array requires a tiny bit of extra typing, but it does wonders for your code's intelligibility.
+
+---《Learning PHP5》 5.4 Understanding Variable scope
+
+== js变量作用域 ==
+Scope in a programming language controls the visibility and lifetimes of variables and parameters. This is an important service to the programmer because it reduces nam-ing collisions and provides automatic memory management: 
+{{{name="code" class="js"
+var foo = function () {
+    var a = 3, b = 5;
+    var bar = function () {
+	var b = 7, c = 11;
+	// At this point, a is 3, b is 7, and c is 11
+	a += b + c;
+	// At this point, a is 21, b is 7, and c is 11
+    };
+    
+    // At this point, a is 3, b is 5, and c is not defined
+    bar();
+    // At this point, a is 21, b is 5
+};
+}}}
+
+Most languages with C syntax have *block scope*. All variables defined in a block (a list of statements wrapped with curly braces) are not visible from outside of the block. The variables defined in a block can be released when execution of the block is finished. This is a good thing.
+
+Unfortunately, JavaScript does not have block scope even though its block syntax suggests that it does. This confusion can be a source of errors.
+
+JavaScript does have *function scope*. That means that the parameters and variables defined in a function are not visible outside of the function, and that a variable defined anywhere within a function is visible everywhere within the function.
+
+In many modern languages, it is recommended that variables be declared as late as possible, at the first point of use. That turns out to be bad advice for JavaScript because it lacks block scope. So instead, it is best to declare all of the variables used in a function at the top of the function body.
+
+----《javascript the goog parts》Chapter 4 function.
+
+== c变量作用域 ==
+在c语言中，全局变量和局部变量都定义了变量i，在函数中使用变量i，i为局部变量的值。在函数中的变量i是应该使用栈上的值（局部变量）还是堆上的值（全局变量），在编译链接时就已经确定。C语言编译器在编译链接时有就近原则。
+
+== 总结说明 ==
+c语言、php、js一致的地方，函数中局部变量和全局变量同名时，使用局部变量。
+
+c语言和php的不同之处在于，函数中局部变量和全局变量同名，c语言已经不能够在函数中调用到全局变量，而php则可以通过GLOBAL[]数组调用到全局变量。
+
+js和php的不同之处在于，js使用的fuction scope，函数中定义的变量，在函数内任何位置都可以引用，包括在inner函数中，也包括变量的定义在引用发生之后。而对于php，则只能够先定义，后引用。

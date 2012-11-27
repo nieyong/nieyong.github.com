@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>js常用操作符</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">typeof</h2>
+<p>
+The values produced by typeof are 'number', 'string', 'boolean', 'undefined' , 'function', and 'object'. If the operand is an array or null, then the result is 'object', which is wrong. There will be more about typeof in Chapter 6 and Appendix A.
+</p>
+
+<h3 id="toc_0.1.1">typeof about object &amp; array</h3>
+<p>
+JavaScript itself is confused about the difference between arrays and objects. The typeofoperator reports that the type of an array is 'object', which isn’t very helpful.
+</p>
+
+<p>
+JavaScript does not have a good mechanism for distinguishing between arrays and objects. We can work around that deficiency by defining our ownis_array function:
+</p>
+
+<pre name="code" class="js">
+var is_array = function (value) {
+    return value &amp;&amp; typeof value === 'object' &amp;&amp; value.constructor === Array;
+};
+</pre>
+
+<p>
+Unfortunately, it fails to identify arrays that were constructed in a different window or frame. If we want to accurately detect those foreign arrays, we have to work a lit-tle harder:
+</p>
+
+<pre name="code" class="js">
+var is_array = function (value) {
+    return Object.prototype.toString.apply(value) === '[object Array]';
+ };
+</pre>
+
+<p>
+&lt;javascript the good parts&gt; chapter 6 array page 61.
+</p>
+
+<h3 id="toc_0.1.2">typeof about object &amp; null</h3>
+<p>
+The typeof operator returns a string that identifies the type of its operand. So:
+</p>
+<pre name="code" class="js">
+typeof 98.6
+</pre>
+
+<p>
+produces 'number'. Unfortunately:
+</p>
+<pre name="code" class="js">
+typeof null
+</pre>
+<p>
+returns 'object' instead of 'null'. Oops. A better test for null is simply:
+</p>
+<pre name="code" class="js">
+my_value === null
+</pre>
+
+<p>
+A bigger problem is testing a value for objectness. typeofcannot distinguish between null and objects, but you can because null is falsy and all objects are truthy:
+</p>
+<pre name="code" class="js">
+if (my_value &amp;&amp; typeof my_value === 'object') {
+    // my_value is an object or an array!
+}
+</pre>
+<p>
+Also see the later sections “NaN” and “Phony Arrays.”
+</p>
+
+<p>
+Implementations disagree on the type of regular expression objects. Some implemen-tations report that:
+</p>
+<pre name="code" class="js">
+typeof /a/
+</pre>
+
+<p>
+is 'object', and others say that it is 'function'. It might have been more useful to report 'regexp', but the standard does not allow that.
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

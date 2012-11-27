@@ -1,0 +1,9 @@
+从整体上来了解网络及其协议，了解产品位于网络层次的哪个位置。
+
+整个TCP/IP协议栈的详细图解，从物理层一直到应用层。
+
+[[image/TCP-IP.gif]]。
+
+网络通信协议图。在底层（物理层和数据链路层）包括局域网和广域网，在协议栈上包括TCP/IP协议栈，ISO协议栈，Banyan协议栈，AppleTalk协议栈，VOIP协议栈，Novell协议栈，IBM协议栈。
+
+[[ftp/network-protocol-map-2011.pdf]]

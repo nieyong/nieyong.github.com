@@ -1,0 +1,24 @@
+== 关于GMII/SGMII/QSGMII ==
+为什么软件打印的信息会不一致，这个还是在代码里面去找原因比较容易搞清楚。就这些接口来说，最早802.3里面只定义了MII（百兆）和GMII（千兆），至于后来SGMII, QSGMII，从附件的文档来看，“本质都还是GMII的”。
+ 
+大致是这个意思：
+ 
+最初的设计是这样的：(MAC和PHY指的是芯片内部的端口，不是整个芯片)
+[MAC--GMII]-----物理连接1-----[GMII--PHY]   (本来，GMII是用于连接MAC和PHY，引用软件的模块化设计思想，MAC看到的只有GMII)
+ 
+ 
+SGMII相当于在GMII下面又加了一层：
+[MAC--GMII--SGMII]-----物理连接2-----[SGMII--GMII--PHY]    （虽然加了这么一层，对于MAC来说，它看到的还是GMII。）
+ 
+ 
+QSGMII稍微复杂一点，本质还是一样：
+[MAC--GMII-QSGMII]-----物理连接3-----[QSGMII--GMII--PHY] 
+                 |                                              |   
+[MAC--GMII-|]                                            [--GMII--PHY]                                  
+                 |                                              |
+[MAC--GMII-|]                                            [--GMII--PHY] 
+                 |                                              |
+[MAC--GMII-|]                                            [--GMII--PHY] 
+ 
+上面大致能解释，SGMII接口为什么会被看成是GMII：因为看成GMII也没错。至于根本原因是什么，还是得在代码中找答案。
+

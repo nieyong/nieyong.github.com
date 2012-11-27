@@ -1,0 +1,33 @@
+== SSL ==
+SSL (Secure Sockets Layer), a security protocol, is to provide a secure connection for the application layer protocol (e.g. HTTP) based on TCP. 
+
+Certificate and Key.BASE64 encoded.
+
+
+== SSH ==
+SSH (Security Shell) can provide the unsecured remote management with security and powerful authentication to ensure the security of the management information.
+
+== xmodem ==
+《用UART做文件传输》
+
+XMODEM协议是一种串口通信中广泛用到的异步文件传输协议。分为标准Xmodem和1k-Xmodem两种，前者以128字节块的形式传输数据，后者字节块为1k即1024字节，并且每个块都使用一个校验和过程来进行错误检测。
+
+
+Xmodem 协议是由 Ward Chritensen 于 70 年代提出并实现的，传输数据单位为信息包，包含一个标题开始字符<SOH>，一个单字节包序号，一个包序号的补码，128 个字节数据和一个单字节的校验和。它把数据划分成 128个字符的小包进行发送，每发送一个小包都要检查是否正确，如果信息包正确接收方发送一个字节<ACK>的应答；有错重发则发送一个字节<NAK>应答，要求重发。因此 Xmodem 是一种发送等待协议，具有流量控制功能。优点：简单通用，几乎所有通信软件都支持该协议。 缺点：慢。
+
+名称 			数值(HEX)			描述
+SOH             0x01			128字节起始字节标志
+    STX             0x02			1K字节起始字节标志
+    EOT             0x04			发送终止
+    ACK             0x06			确认字节
+    NAK             0x15			请求重传
+    CAN             0x18			请求无条件停止传输
+    CTRLZ           0x1A			内容填充区
+
+
+
+累加和校验码是将所有发送数据的和按字节累加，保留其最低字节作为校验码，这种校验方式不能检测偶数位的误码。
+
+循环校验码（Jyclic Redundancy Check,简称CRC码): 是数据通信领域中最常用的一种差错校验码，其特征是信息字段和校验字段的长度可以任意选定。
+
+

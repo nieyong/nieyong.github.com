@@ -1,0 +1,157 @@
+== MUX层对数据的接收和处理 ==
+MUX层从END驱动中获得数据，并且根据报文的类型进行分发处理。
+
+=== MUX层向END驱动注册处理回调函数 ===
+在网络协议栈初始化阶段，[[协议栈初始化流程|初始化模块(usrNetEndLibInit)]]遍历用户在驱动层定义的设备列表endDevTbl，并调用muxDevLoad加载用户定义的网络设备，指定接收函数以便接收驱动层传上来的数据。根据用户加载的END网络设备的类型，有不同的接收函数：
+* END_STYLE_END类型的接收函数为muxReceive；
+* END_STYLE_NPT类型的接收函数为：muxTkReceive；
+* END_STYLE_MULTI类型的接收函数为：muxTkPktsReceive；
+
+目前我们的END类型为END_STYLE_END，END驱动层的报文都是通过接口muxReceive进入mux层。
+
+实际上，END层在加载用户定义的网络设备时，会生成一个END_OBJ对象，用pEnd表示，END_OBJ有一成员receiveRtn，在加载时，就是通过pEnd->receiveRtn=muxReceive把MUX层的接收函数注册到网络设备对应的END_OBJ对象中。
+
+{{{name="code" class="c"
+/* 注册mux层的接收函数到end驱动中 */
+void * muxDevLoad()
+{
+    /***/
+    
+    pNew->receiveRtn = muxReceive;
+
+    if (pNew->endStyle == END_STYLE_NPT)
+        pNew->receiveRtn = (FUNCPTR) muxTkReceive;
+    else if (pNew->endStyle == END_STYLE_MULTI)
+        pNew->receiveRtn = (FUNCPTR) muxTkPktsReceive;
+        
+    /***/
+}
+}}}
+
+END驱动层调用END_RCV_RTN_CALL把数据交给MUX层，而实际上END_RCV_RTN_CALL展开之后就是pEnd->receiveRtn。
+
+{{{name="code" class="c"
+#define END_RCV_RTN_CALL(pEnd,pMblk) \
+            { \
+	    if ((pEnd)->receiveRtn) \
+		{ \
+		(pEnd)->receiveRtn ((pEnd), pMblk,NULL,NULL,NULL,NULL); \
+		} \
+            else \
+		netMblkClChainFree (pMblk); \
+            }
+}}}
+
+=== mux层对报文的分发处理 ===
+muxReceive()函数在接收到报文后，会对报文分发给相应的函数进行处理。分发的根据是报文的类型。
+# 通过packetDataGet接口获取报文的协议类型pktType；
+# 匹配网络设备对应END_OBJ中的协议列表，找到第一个接收函数不为空且协议类型相匹配的协议；
+# 把数据包交给该协议处理，例如：如果是ETHERNET_ARP类型的，则交给APR协议的接收函数arpReceiveRtn来处理；如果是ETHERNET_IP类型的，则交给IP协议进行处理。
+
+下面是获得报文协议类型的代码。所谓报文的协议类型，也就是报文的以太网头中表明的报文类型，例如arp报文的类型为0x0806，ip报文的类型为0x0800。
+
+{{{name="code" class="c"
+STATUS muxReceive()
+{
+    /* ... */
+
+    if (pEnd->pFuncTable->packetDataGet == NULL ||
+        pEnd->pFuncTable->packetDataGet (pMblk, &llHdrInfo) != OK)
+        {
+        goto err_data_get;
+        }
+
+    type = llHdrInfo.pktType;
+    
+    /* ... */
+}
+}}}
+
+下面为根据报文类型进行分发处理的代码：
+{{{name="code" class="c"
+STATUS muxReceive()
+{
+    /* ... */
+
+    for (pProto = pEnd->pSnarf; pProto < pEnd->pStop; pProto++)
+	{
+	if (pProto->rr.endRcv == NULL)
+	    continue;
+
+	if (type == pProto->type ||
+	    pProto->type == MUX_PROTO_SNARF ||
+	    pProto->type == MUX_PROTO_PROMISC)
+	    {
+	    /* 报文被分发处理 */
+	    /* 例如IP报文就是在这里被回调函数ipReceiveRtn()放入IP协议栈中处理 */
+	    if (pProto->rr.endRcv (pProto->pBinding, type, pMblk,
+				   &llHdrInfo, pProto->recvRtnArg))
+		goto out;
+	    }
+	}
+    /* ... */
+}
+}}}
+
+
+== IP层对数据的接收和处理 ==
+如上所述，IP报文被回调函数ipReceiveRtn()从mux层转入IP协议栈中处理。
+
+IP Stack的处理流程包括快速转发(fast_forward)处理流程、ip_input处理流程、ip_forward处理流程、ip_output处理流程以及本地协议栈(local_stack)的处理流程。
+
+其中本地协议栈(local_stack)处理包括对发给本地的UDP、TCP、ICMP、IGMP、RIP等报文的处理，而UDP/TCP报文最终都是通过Socket把数据交给应用层，应此在后面都有涉及到。本地协议栈(local_stack)的对报文的分发使用函数指针pr_input，根据IP数据包中的不同的负载类型，对应不同的处理函数。例如，对于UDP报文处理函数为udp_input；对于TCP报文则处理函数为tcp_input； ~~对于RIP报文处理函数为rip_input等等。~~ rip_input()函数中的rip是raw ip（原始IP）的意思，并不是路由协议RIP。RIP报文属于udp报文，其处理函数为udp_input()函数。
+
+{{{name="code" class="c"
+void ip_input(struct mbuf *m)
+{
+	/* ... */
+
+	/*
+	 * Switch out to protocol's input routine.
+	 */
+        WV_NET_ADDRIN_EVENT_4_4 (NETD_IP4_DATAPATH_EVENT, WV_NETD_VERBOSE, 1,
+                                 11, ip->ip_src.s_addr, ip->ip_dst.s_addr,
+                                 WV_NETDEVENT_FINISH, WV_NETD_RECV, 
+				 ip_input, 0, htonl(ip->ip_src.s_addr), 
+                                 htonl(ip->ip_dst.s_addr))
+
+	_ipstat.ips_delivered++;
+	
+	/*　报文根据tcp，udp，rip等类型不同调用相应的函数进行处理 */
+	(*inetsw[ip_protox[ip->ip_p]].pr_input)(m, hlen, ip->ip_p);
+	return;
+}
+}}}
+
+下图是摘自研究报告的一张报文在ip协议栈中的处理流程图。其中，红色为处理函数。
+
+[[image/vxworks_tcp_ip/IP协议栈报文处理流程图.png]]
+
+
+== 应用程序如何获得报文 ==
+下面以rip协议为例，说明应用程序如何获得报文。RIP报文为udp报文，下面为udp报文处理函数的片段。
+
+{{{name="code" class="c"
+void udp_input()
+{
+	/* ... */
+	
+	append_sa = (struct sockaddr *)&priv_udp_in;
+	
+	/* sbappendaddr()函数将接收到的udp报文信息等放置到套接字接收队列中 */
+	if (sbappendaddr(&inp->inp_socket->so_rcv, append_sa, m, opts) == 0) {
+                WV_NET_PORTIN_EVENT_2 (NETD_IP4_DATAPATH_EVENT, WV_NETD_WARNING,
+                                       1, 9, uh->uh_sport, uh->uh_dport,
+                                       WV_NETDEVENT_WARNING, WV_NETD_RECV,
+                                       udp_input, WV_NETD_FULLSOCK)
+
+		udpStat.udps_fullsock++;
+		goto bad;
+	}
+	
+	/* 唤醒套接字接收队列中的所有睡眠进程  */
+	sorwakeup(inp->inp_socket);
+
+	/* ... */
+}
+}}}

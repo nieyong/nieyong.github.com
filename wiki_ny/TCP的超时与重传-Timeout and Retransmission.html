@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>TCP的超时与重传-Timeout and Retransmission</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">TCP-IP详解卷1-21：TCP的超时与重传（Timeout and Retransmission）</h2>
+
+<h2 id="toc_0.2">一：介绍</h2>
+<p>
+1： 与数据链路层的ARQ协议相类似，TCP使用超时重发的重传机制。
+即：TCP每发送一个报文段，就对此报文段设置一个超时重传计时器。
+此计时器设置的超时重传时间RTO（Retransmission Time－Out）应当略大于TCP报文段的平均往返时延RTT，一般可取RTO＝2RTT。
+但是，也可以根据具体情况人为调整RTO的值，例如可以设置此超时重传时间RTO＝90秒。
+当超过了规定的超时重传时间还未收到对此TCP报文段的预期确认信息，则必须重新传输此TCP报文段。
+</p>
+
+<h2 id="toc_0.3">二：四种定时器</h2>
+<ul>
+<li>
+1： 重传计时器（retransmission timer）：当TCP发送报文段时，就创建该特定报文段的重传计时器。可能发生两种情况：
+
+</ul>
+<p>
+A： 若在计时器截止时间到（通常是60秒）之前收到了对此特定报文段的确认，则撤销此计时器。
+B： 若在收到了对此特定报文段的确认之前计时器截止期到，则重传此报文段，并将计时器复位。
+</p>
+<ul>
+<li>
+2： 坚持计时器（persist timer ） ：为了对付零窗口大小通知，TCP需要另一个计时器。
+
+</ul>
+<p>
+假定接收TCP宣布了窗口大小为零。发送TCP就停止传送报文段，直到接收TCP发送确认并宣布一个非零的窗口大小。但这个确认可能会丢失。
+</p>
+
+<p>
+我们知道在TCP中，对确认是不需要发送确认的。若确认丢失了，接收TCP并不知道，而是会认为它已经完成任务了，并等待着发送TCP接着会发送更多的报文段。但发送TCP由于没有收到确认，就等待对方发送确认来通知窗口的大小。双方的TCP都在永远地等待着对方。
+</p>
+
+<p>
+要打开这种死锁，TCP为每一个连接使用一个坚持计时器。当发送TCP收到一个窗口大小为零的确认时，就启动坚持计时器。当坚持计时器期限到时，发送TCP就发送一个特殊的报文段，叫做探测报文段。这个报文段只有一个字节的数据。它有一个序号，但它的序号永远不需要确认；甚至在计算对其他部分的数据的确认时该序号也被忽略。探测报文段提醒对端：确认已丢失，必须重传。
+</p>
+
+<p>
+坚持计时器的值设置为重传时间的数值。但是，若没有收到从接收端来的响应，则需发送另一个探测报文段，并将坚持计时器的值加倍和复位。发送端继续发送探测报文段，将坚持计时器设定的值加倍和复位，直到这个值增大到门限值（通常是60秒）为止。在这以后，发送端每隔60秒就发送一个探测报文段，直到窗口重新打开。
+</p>
+
+<ul>
+<li>
+3： 保活计时器（keepalive timer ） ：保活计时器使用在某些实现中，用来防止在两个TCP之间的连接出现长时期的空闲。
+
+</ul>
+
+<p>
+假定客户打开了到服务器的连接，传送了一些数据，然后就保持静默了。也许这个客户出故障了。在这种情况下，这个连接将永远地处理打开状态。
+</p>
+
+<p>
+要解决这种问题，在大多数的实现中都是使服务器设置保活计时器。每当服务器收到客户的信息，就将计时器复位。保活计时器通常设置为2小时。若服务器过了2小时还没有收到客户的信息，它就发送探测报文段。
+若发送了10个探测报文段（每一个相隔75秒）还没有响应，就假定客户出了故障，因而就终止该连接。
+</p>
+
+<ul>
+<li>
+4： 时间等待计时器（2MSL timer ）：时间等待计时器是在连接终止期间使用的。
+
+</ul>
+<p>
+当TCP关闭一个连接时，它并不认为这个连接马上就真正地关闭了。
+在时间等待期间中，连接还处于一种中间过渡状态。
+这就可以使重复的FIN报文段（如果有的话）可以到达目的站因而可将其丢弃。
+这个计时器的值通常设置为一个报文段的寿命期待值的两倍。
+</p>
+
+<h2 id="toc_0.4">三：拥塞控制用到的术语</h2>
+<p>
+数据段：一个数据段就是任意的TCP/IP数据或确认包（或两者兼备）。
+发送端最大数据段尺寸（SMSS）:SMSS是发送端能发送的最大数据段的尺寸。这个值是以网络最大传送单元（MTU），MTU路径发现算法，RMSS(见下一项)，或其它因素为基础的。该尺寸不包括TCP/IP头和选项。
+接收端最大数据段尺寸（RMSS）:RMSS是接收端愿意接收的最大数据段的尺寸。这个值在连接开始时接收端发送的MSS选项中说明。又或者，如果MSS选项没有使用，就是536字节[Bra89].该尺寸不包括TCP/IP头和选项。
+满尺寸数据段：一个包括允许最大数目数据的数据段（也就是说，一个包括SMSS字节数据的数据段）。
+接收端窗口（rwnd）：最近通知的接收端窗口。
+拥塞窗口（cwnd）：一个TCP状态参量，代表着一个TCP允许发送的最大数据量。在任意
+一个给定的时刻，TCP不会发送序号大于最大确认序号和cwnd、rwnd中较小者的数据。
+初始窗口（iw）：初始窗口是三次握手完成后发送端的拥塞窗口的尺寸。
+丢失窗口（lw）：丢失窗口是在一个TCP根据它的重传定时器检测到了数据丢失之后，拥塞窗口的尺寸。
+重启窗口（rw）：重启窗口是TCP在一段闲置期之后重新开始传送后拥塞窗口的尺寸（如果使用慢启动算法；参见4.1节以获取更多的讨论）。
+</p>
+<blockquote>
+传送尺寸：已经被发送但还没有确认的数据的总量。
+</blockquote>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

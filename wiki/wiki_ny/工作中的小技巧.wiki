@@ -1,0 +1,17 @@
+== Windows文件夹栏展开所有子目录 ==
+在Windows的左侧的文件夹浏览栏，如何展开某一目录下的所有文件夹呢？
+
+== moinmoin smb wiki ==
+这是SMB交换机软件组的Wiki，使用moinmoin搭建。这将是我们团队的知识管理平台（knowledgemanagement）。每一位队员都可以在这里创建，修改技术文档。这将为我们团队的知识积累，新人培训，合作分享提供另外一种新的方式。
+
+知识管理平台（moinmoin wiki）将会和项目管理系统（redmine）、软件管理系统（subversion）、沟通工具（foxmail）、自动化测试系统（testlink）一起构成SMB交换机团队的研发协同管理平台。
+
+== 获取函数关系图软件 ==
+主要的软件有codeViz,doxygen,graphviz,egypt,ncc等
+
+== DMP的OpenGLES ==
+DMP的OpenGLES1.1/2.0 和 OpenVG1.1图形IP内核包括其PICA/SMAPH系列内核，是专为高性能和低功耗嵌入式应用开发的，可满足日益增加为高视觉效果运行Android的产品用户界面的需求。MIPS 科技和DMP 正在初步合作，将开发有关基于MIPS32TM Malta? 开发板和 DMP PICA200 3D 图形 IP-based GPU （NV7）的参考平台。
+
+
+== mysql密码 ==
+用户名：root  密码：yinxiong

@@ -1,0 +1,135 @@
+/* This is used for conditional compilation during development. */
+
+#ifndef __OSPF_VIRTUAL_STACK__
+#define __OSPF_VIRTUAL_STACK__
+#endif
+
+
+
+/* routing socket receive buffer size */
+#ifndef OSPF_RAW_RCV_BUFFER
+#define OSPF_RAW_RCV_BUFFER             (64 * 1024)
+#endif
+
+ospf_constants.h文件
+
+
+
+
+
+/*************************************************************************
+*
+* ospf_raw_socket_create - create and initialize OSPF raw socket
+*
+* This routine intialize raw sockets for OSPF transmit and receive. For Interface
+* with multicast capability, ospf_multicast_group_request() function must be called
+* to join/leave a multicast group.
+*
+* RETURNS: OK on success, ERROR otherwise
+*
+* ERRNO: N/A
+*
+* NOMANUAL
+*/
+
+static STATUS ospf_raw_socket_create ()
+
+
+
+
+
+/******************************************************************************
+*
+* ospf_routing_socket_create - create and initialize OSPF routing socket
+*
+* This routine initializes the OSPF routing socket. The routing socket is used
+* to receive and send routing information from/to the routing table.
+*
+* RETURNS: OK on success, ERROR otherwise
+*
+* ERRNO: N/A
+*
+* NOMANUAL
+*/
+
+static STATUS ospf_routing_socket_create ()
+
+
+
+/*****************************************************************************
+*
+* ospf_timer_task_entry_point - ospf timer task entry point
+*
+* This function creates and starts the OSPF watchdog.  It creates the OSPF
+* timer semaphore.  It then forever pends on the OSPF timer semaphore and
+* calls ospf_router_timer() every time it gets the semaphore.
+*
+* RETURNS: ERROR is the watchdog timer could not be created or started or if
+* OSPF timer semaphore could not be created.
+*
+* NOMANUAL
+*/
+
+
+
+/*****************************************************************************
+* ospf_rtm_task_entry_point - RTM task entry point
+*
+* This is the start function of OSPF rtm task.
+* Pseudocode:
+*   initialize
+*   synchronize with the other OSPF tasks having completed initialization
+*   start rtm task activities: infinite loop waiting (routing socket pended)
+*       to route updates received via routing socket from stack
+*
+* RETURNS: ERROR is not successful
+*
+* NOMANUAL
+*/
+
+
+
+/*****************************************************************************
+*
+* ospf_input_task_entry_point - ospf input task entry point
+*
+* This is the start function of OSPF input task.
+* Pseudocode:
+*   initialize
+*   synchronize with the other OSPF tasks having completed initialization
+*   start input task activities: infinite loop waiting (socket pended)
+*       to handle PDUs and interface events received via socket from router stack
+*
+* \NOMANUAL
+*/
+
+
+
+ospf_hello.c	用于发送、接收和处理hello报文
+
+
+
+/***************************************************************************************
+* ospf_vx_ip_receive_socket_input - OSPF packet received routine
+*
+* This is the entry point for "tOspfInput" task that is created in ospf_intialize_router()
+* (see ospf_initialization.c file). It waits for packet on the raw socket using the
+* select() call. Once select() returns, it calls recvfrom() to read the data from
+* the socket and the ospf_router_rx_packet() to process the received packet.
+* Unlike the tranditional receive routine that processes mbuf, it is not necssary to
+* enqueue the received packet to a linked list and have a separate task to do the actual
+* packet processing functionality. This is because the "tOspfInput" task always pend on a
+* set of sockets waiting for data and this task is receiving data independent of the
+* "tNetTask".
+*/
+
+
+
+
+
+
+== ospf_hello.c文件 ==
+This file is used from the timer task to send hello packets and on the receive task when receiving
+hello packets.
+
+

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>vim中的编码格式</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+记录一种应用场景。在Linux和MS下协作编写vimwiki，其中vimwiki全部使用utf-8编码，在MS下应该如何配置vim，使新建的文件和保存的文件等都使用utf-8编码？MS系统的$LANG为cp936。
+</p>
+
+<h2 id="toc_0.1">fenc</h2>
+<p>
+Sets the character encoding for the file of this buffer.When 'fileencoding' is different from 'encoding', conversion will be done when reading and writing the file.
+</p>
+
+<p>
+那么具体是如何转化的呢？
+</p>
+
+<p>
+首先是写操作，当前文件的fenc设置为何种编码，那么在写的时候，就会把文件按照该编码写入。这个时候，不要考虑enc的值。例如，有一个cp936编码的文件，使用vim打开，查看fenc为cp936，然后设置fenc为utf-8，然后再写入文件，那么该文件的编码就变为了utf-8，再次用vim打开就可以看到fenc为utf-8。
+</p>
+
+<p>
+然后是读操作，读操作vim会使用fencs中配置的编码来检测文件的编码，直到成功，然后就会设置fenc的值为现在成功时使用的编码值。如果fencs未设置，或者尝试了所有的编码都不正确，那么就以enc的编码来打开该文件，fenc的值为空。当然，如果文件的编码和enc的值不一样，那么就会出现乱码的现象。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

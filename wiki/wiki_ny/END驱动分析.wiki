@@ -1,0 +1,163 @@
+== et_load()函数分析 ==
+
+{{{name="code" class="c"
+END_OBJ*
+et_load(char *initString, void *unused)
+{
+    et_info_t *et;
+    char *tok;
+    int unit;
+    uint16 vendorid, deviceid;
+    uint32 regaddr;
+    void *regptr;
+    char irq;
+    int bus, dev, func;
+    osl_t *osh;
+    int gmac_int = 0;
+
+
+    et = NULL;
+    bus = dev = func = 0;
+    regaddr = 0;
+    irq = 0;
+
+    if (initString == NULL)
+        return (NULL);
+
+    /* end driver first pass init */
+    if (initString[0] == '\0') {
+        bcopy("et", initString, 3);
+        return (NULL);
+    }
+
+    /* get our unit number from the init string */
+    if ((tok = strtok(initString, ":")) == NULL) {
+        ET_ERROR(("et_load: garbled initString (%s) - unit number not found\n",
+            initString));
+        goto fail;
+    }
+    unit = bcm_atoi(tok);
+
+    ET_TRACE(("et%d: et_load\n", unit));
+
+    if (et_find_device(unit, &bus, &dev, &func, &vendorid, &deviceid) == ERROR) {
+        ET_ERROR(("et%d: et_load: et_find_device() failed \n", unit));
+        goto fail;
+    }
+
+    pciConfigInLong(bus, dev, func, PCI_CFG_BASE_ADDRESS_0, &regaddr);
+    pciConfigInByte(bus, dev, func, PCI_CFG_DEV_INT_LINE, &irq);
+
+    /* map chip registers */
+    regptr = REG_MAP(regaddr, 0);
+
+    /* allocate our private device structure */
+    if ((et = (et_info_t*) MALLOC(NULL, sizeof(et_info_t))) == NULL) {
+        ET_ERROR(("et%d: et_load: malloc et_info_t failed!\n", unit));
+        goto fail;
+    }
+
+    bzero((char*) et, sizeof(et_info_t));
+
+#if 0 
+      /* Sould consist with the configuration in si_mips_init()@hndmips.c */
+        gmac_int = IV_IORQ2_VEC;
+#else 
+    gmac_int = irq;
+#endif
+
+    et->irq = gmac_int;
+    et->ivec = INUM_TO_IVEC(gmac_int);
+
+    et->pciinfo.bus = bus;
+    et->pciinfo.dev = dev;
+    et->pciinfo.func = func;
+
+    osh = osl_attach((void*)&et->pciinfo, &et->endobj, FALSE);
+
+    /* PED */
+    et->osh = osh;
+
+    ET_TRACE(("et%d: et_load: regptr %p ivec %d irq %d\n",
+        unit, regptr, et->ivec, et->irq));
+
+    /* initialize private semaphore */
+    if ((et->mutex = semBCreate(SEM_Q_FIFO, SEM_FULL)) == NULL) {
+        ET_ERROR(("et%d: et_load: semBCreate fail\n", unit));
+        goto fail;
+    }
+
+    /* PED */
+    if (unit == 0) {
+        et->regs = (gmac0regs_t *)0xb8002000;
+    } else {
+        et->regs = (gmac0regs_t *)0xb800d000;
+    }
+
+    /* PED */
+    if (et_list == NULL) {
+        PKTPOLL_INIT_SHUNT();
+    }
+
+    /* common load-time initialization */
+    if ((et->etc = etc_attach((void*)et, vendorid, deviceid, unit, osh,
+        regptr)) == NULL) {
+        ET_ERROR(("et%d: etc_attach failed\n", unit));
+        goto fail;
+    }
+
+    /* create a watchdog timer */
+    if ((et->watchdogid = wdCreate()) == NULL) {
+        ET_ERROR(("et%d: error creating watchdog timer\n", unit));
+        goto fail;
+    }
+    et->dogtimerset = FALSE;
+
+    /* initialize the END and MIB2 parts of the structure */
+    if (END_OBJ_INIT(&et->endobj, (DEV_OBJ*)et, "et", unit, &etFuncTable, "END et Driver")
+        == ERROR)
+        goto fail;
+
+    if (END_MIB_INIT(&et->endobj, M2_ifType_ethernet_csmacd, (char *)&et->etc->cur_etheraddr,
+        ETHER_ADDR_LEN, ETHERMTU, 100000000) == ERROR)
+        goto fail;
+
+    /* allocate and initialize our private mblk/clblk netpool */
+    if (et_netpool_alloc(et) == ERROR)
+        goto fail;
+
+    /* set the flags to indicate readiness */
+    END_OBJ_READY(&et->endobj, (IFF_NOTRAILERS|IFF_BROADCAST|IFF_MULTICAST));
+
+    /* register our interrupt handler */
+    if (intConnect((VOIDFUNCPTR*)et->ivec, (VOIDFUNCPTR)et_vxintr, (int)et) == ERROR) {
+        ET_ERROR(("et%d: et_load: interrupt connect error\n", unit));
+        goto fail;
+    }
+
+    et_global[unit] = et;
+
+    /* add us to the global linked list */
+    et->next = et_list;
+    et_list = et;
+
+    /* PED: peer init for SHUNT */
+    if (et->next != NULL) {
+        et->di[0].peer = &et->next->di[0];
+        et->next->di[0].peer = &et->di[0];
+        et->di[1].peer = &et->next->di[1];
+        et->next->di[1].peer = &et->di[1];
+    }
+    
+    return (&et->endobj);
+
+fail:
+    et_free(et);
+    return (NULL);
+}
+
+}}}
+== 参考资料 ==
+* 《BCM47xx驱动分析.doc》		--杨晓强
+* 《usrRoot()函数.doc》			--聂勇
+* 《网络驱动ET_MIPS_NY.docx》		--聂勇

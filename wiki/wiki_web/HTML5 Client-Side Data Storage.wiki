@@ -1,0 +1,14 @@
+== HTML5提供的客户端数据存储方式 ==
+* Web Storage
+  * localStorage
+  * sessionStorage
+* Web SQL Database
+
+== Web SQL Database ==
+The Web SQL Database spec gives developers a simple but powerful JavaScript database API to store persistent data in a *local SQLite database*.
+
+
+`'INSERT INTO entries (date, calories, food) VALUES (?, ?, ?);'`, This is  the  statement  that  will  be  executed.  The  question  marks  are  data placeholders.
+
+`[date, calories, food]`, This is an array of the values being sent to the database. They correspond by position with the data placeholder question marks in the SQL statement.
+

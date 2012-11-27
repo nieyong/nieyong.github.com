@@ -1,0 +1,35 @@
+== 技术问题详解 ==
+下面为工作中所有遇到的技术问题的记录和总结。其分类方式有别于上面的嵌入式开发的分类，主要是为了方面自己以后的查询。
+* CPU
+    * [[MIPS]]
+    * [[ARM]]
+    * [[xBurst]]
+    * [[ARM MIPS X86]] --MIPS ARM POWERPC X86等CPU架构的比较
+    * [[嵌入式开发心得]]
+* 嵌入式系统 
+    * [[memory]] --这里的memory包括Flash，SDRAM等嵌入式系统中常见的存储设备
+    * [[bus]] --嵌入式系统中的总线，包括I2C，PCI，AMBA等
+    * [[DMA]] -- DMA原理和驱动
+* 文本编辑器
+    * [[Source Insight]]
+    * [[Vim]] --operation of vim.
+    * [[plain text]]
+* MyLinux
+    * [[Linux]] --knowledge of linux.
+    * [[Subvesion]] -- knowledge of Subvesion.
+    * [[git]]
+    * [[windows]]
+* 软件开发
+    * [[C_CPP]]
+    * [[unix编程]]
+    * [[web开发技术]] -- php、html、javascript、phython、mysql、wiki
+* 通信协议
+    * [[常用通信协议]]
+    * [[网络协议基本常识]]
+    * [[wireless tech]]
+    * [[加密算法常识]] -- MD5/DES/RSA/SHA
+    * [[OpenGL_DirectX_WebGL]]
+
+
+
+

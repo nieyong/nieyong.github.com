@@ -1,0 +1,72 @@
+首先，请参考Flash的相关知识介绍[[Flash|这里]]。
+
+[[Hawkeye方案Bootrom切换指南]]
+
+
+== 出现的问题 ==
+在Bootrom命令下Flash报错：
+{{{
+[TP-LINK]: reset
+0x81edffb0 (tBootrom): disk cache error: device 81ee2da0 block 0 errno 0, disk read failed
+0x81edffb0 (tBootrom): disk cache error: device 81ee2da0 block 0 errno c0003, disk read failed
+0x81edffb0 (tBootrom): dosFsLib.c : ERROR reading the device boot sector
+0x81edffb0 (tBootrom): dosFsLib.c : media not formatted or not present
+error
+}}}
+不解的是，为什么dosFsLib.c文件找不到呢？在SDK，工程等等目录下都没有。dosFsLibl.c文件属于vxWorks的部分，所以需要在vxWorks的源码中寻找。
+
+出现该问题的Bootrom版本为：
+{{{
+Press CTRL-B to enter the bootUtil
+                *********************************************
+                *         TP-LINK  BOOTUTIL(v1.0.0)         *
+                *********************************************
+                Copyright (c) 2011 TP-LINK Tech. Co., Ltd
+                Create Date: Apr 11 2011 16:27:56
+}}}
+
+打开Bootrom下reset命令的调试输出，部分输出如下：
+{{{
+-> sysFlashReset
+sysFlashReset() function
+d_name:switch.tp
+d_name:webImage.z
+d_name:ca.crt
+d_name:ca.key
+value = 1 = 0x1
+
+-> sysFlashReset
+sysFlashReset() function
+d_name:switch.tp
+d_name:webImage.z
+d_name:config.tp
+value = 1 = 0x1
+
+-> sysFlashReset
+sysFlashReset() function
+d_name:switch.tp
+d_name:webImage.z
+value = 1 = 0x1
+}}}
+
+现在的升级文件在升级结束之后的第一次启动，都会输出如下所示的信息：
+{{{
+[TP-LINK]: start
+Starting...
+
+
+Retrieved old volume params with %100 confidence:
+Volume Parameters: FAT type: FAT12, sectors per cluster 2
+  2 FAT copies, 0 clusters, 11 sectors per FAT
+  Sectors reserved 1, hidden 0, FAT sectors 22
+  Root dir entries 512, sysId (null)  , serial number 621402
+  Label:"           " ...
+Disk with 6896 sectors of 512 bytes will be formatted with:
+Volume Parameters: FAT type: FAT12, sectors per cluster 2
+  2 FAT copies, 3420 clusters, 11 sectors per FAT
+  Sectors reserved 1, hidden 0, FAT sectors 22
+  Root dir entries 512, sysId VXDOS12 , serial number 621402
+  Label:"           " ...
+
+***************** User Access Login ********************
+}}}

@@ -1,0 +1,173 @@
+引：这一段时间一直很忙，同时看着几份不同的项目代码，有bootloader启动画面的添加修改、图形界面的优化和配合中间件小组的开发。中间件移植有一个地方是涉及到MTD分区操作的，花了一两天的时间终于将这部分的来龙去脉弄清楚了。在这里声明：MTD驱动代码我只看过大概，大体上知道流程是怎样走，具体的分析只局限于Flash硬件驱动层（具体flash芯片）和MTD设备层（file operation系列函数）。
+ 
+介绍下环境及工具：
+VMWare Station + Debian + samba + nfs + Source Insignt + linux-source-2.6.18 + xxxx.patch
+ 
+问题描述：
+fd = open("/dev/mtd4", O_RDWR)失败，而fd = open("/dev/mtd4", O_RDONLY)成功
+ 
+开始之前，找了一些有关MTD设备的资料来看，有代表性有Jim Zeus的《Linux MTD源代码分析》。我没有很深入去研读，主要是去了解Mtd代码的层结构及几个重要的数据结构，毕竟我的主要任务是配合中间件移植小组将mtd分区读写起来，过于探讨细节对于我来说是一个奢求。
+ 
+　　MTD(memory technology device内存技术设备)是用于访问memory设备（ROM、flash）的Linux的子系统。MTD的主要目的是为了使新的memory设备的驱动更加简单，为此它在硬件和上层之间提供了一个抽象的接口。MTD的所有源代码在/drivers/mtd子目录下。我将CFI接口的MTD设备分为四层（从设备节点直到底层硬件驱动），这四层从上到下依次是：设备节点、MTD设备层、MTD原始设备层和硬件驱动层。
+* 一、Flash硬件驱动层：硬件驱动层负责在init时驱动Flash硬件，Linux MTD设备的NOR　Flash芯片驱动遵循CFI接口标准，其驱动程序位于drivers/mtd/chips子目录下。NAND型Flash的驱动程序则位于/drivers/mtd/nand子目录下。
+* 二、MTD原始设备：原始设备层有两部分组成，一部分是MTD原始设备的通用代码，另一部分是各个特定的Flash的数据，例如分区。 用于描述MTD原始设备的数据结构是mtd_info，这其中定义了大量的关于MTD的数据和操作函数。mtd_table（mtdcore.c）则是所有MTD原始设备的列表，mtd_part（mtd_part.c）是用于表示MTD原始设备分区的结构，其中包含了mtd_info，因为每一个分区都是被看成一个MTD原始设备加在mtd_table中的，mtd_part.mtd_info中的大部分数据都从该分区的主分区mtd_part->master中获得。 在drivers/mtd/maps/子目录下存放的是特定的flash的数据，每一个文件都描述了一块板子上的flash。其中调用add_mtd_device()、del_mtd_device()建立/删除mtd_info结构并将其加入/删除mtd_table（或者调用add_mtd_partition()、del_mtd_partition()（mtdpart.c）建立/删除mtd_part结构并将mtd_part.mtd_info加入/删除mtd_table 中）。
+* 三、MTD设备层：基于MTD原始设备，linux系统可以定义出MTD的块设备（主设备号31）和字符设备（设备号90）。MTD字符设备的定义在mtdchar.c中实现，通过注册一系列file operation函数（lseek、open、close、read、write）。MTD块设备则是定义了一个描述MTD块设备的结构mtdblk_dev，并声明了一个名为mtdblks的指针数组，这数组中的每一个mtdblk_dev和mtd_table中的每一个mtd_info一一对应。
+* 四、设备节点：通过mknod在/dev子目录下建立MTD字符设备节点（主设备号为90）和MTD块设备节点（主设备号为31），通过访问此设备节点即可访问MTD字符设备和块设备。
+* 五、根文件系统：在Bootloader中将JFFS（或JFFS2）的文件系统映像jffs.image（或jffs2.img）烧到flash的某一个分区中，在/arch/arm/mach-your/arch.c文件的your_fixup函数中将该分区作为根文件系统挂载。
+* 六、文件系统：内核启动后，通过mount 命令可以将flash中的其余分区作为文件系统挂载到mountpoint上。
+
+另外我还了解一下cfi的驱动流程。如下:
+
+* 1：构造map_info结构，指定基址/位宽/大小等信息以及"cfi_probe"限定，然后调用do_map_probe()。
+* 2：do_map_probe()根据名字"cfi_probe"找到芯片驱动"cfi_probe.c"直接调用cfi_probe()。 　
+* 3：cfi_probe()直接调用mtd_do_chip_probe()，传入cfi_probe_chip()函数指针。 　　
+* 4：mtd_do_chip_probe()分2步，先调用genprobe_ident_chips()探测芯片信息，后调用check_cmd_set()获取和初始化芯片命令集（多分区初始化就在里面）。 　　
+* 5：genprobe_ident_chips()函数如果不考虑多芯片串连的情况，那只需看前面的genprobe_new_chip()调用，完成后cfi.chipshift=cfi.cfiq->DevSize，２^chipshift=FLASH大小。 　　
+* 6：genprobe_new_chip()枚举各种不同的芯片位宽和背靠背数量，结合配置设定依次调用步骤３的cfi_probe_chip()，注意cfi->device_type=bankwidth/nr_chips，bankwidth是总线位宽，device_type是芯片位宽。这里我们只需要注意有限复杂情况即可，所谓有限复杂指的是编译时确定的复杂连接。这样，cfi_probe_chip()只有第1次调用才成功，如果考虑32位宽的FLASH插在16bit总线上的情况，那第2次调用成功。 　　
+* 7：cfi_probe_chip()，由于步骤6的原因，函数就在cfi_chip_setup()直接返回，后面的代码就不用考虑了。 　
+* 8：cfi_chip_setup()读取CFI信息，可以留意下Linux是怎么实现要点4的。 　　
+* 9：回到步骤4的check_cmd_set()阶段，进入cfi_cmdset_0001()函数，先调用read_pri_intelext()读取Intel的扩展信息，然后调用cfi_intelext_setup()初始化自身结构。 　　
+* 10：read_pri_intelext()函数，可以留意下怎么读取变长结构的技巧，也就是"need_more"的用法。这里说明下一些变量的含义，例如对于StrataFlash 128Mb Bottom类型的的FLASH芯片，块结构是4*32KB+127*128KB=16MB，一共16个分区，每个分区1MB。nb_parts=2。 　
+* 11：cfi_intelext_setup()函数首先根据CFI建立mtd_erase_region_info信息，然后调用cfi_intelext_partition_fixup()来支持分区。 　
+* 12：cfi_intelext_partition_fixup()用来建立虚拟Chip，每个分区对应1个Chip，不过并没有完全根据CFI扩展信息来建立，而是假定每个分区的大小都一致。cfi->chipshift调整为partshift，各个虚拟chip->start调整为各分区的基址。将来访问FLASH的入口函数cfi_varsize_frob()就根据ofs得到chipnum(chipnum=ofs>>cfi->chipshift)，这也是为什么要假定分区一致的原因。
+
+== MTD几个重要的的数据结构 ==
+{{{
+struct mtd_info {
+    u_char type;
+    u_int32_t flags;
+    u_int32_t size; // Total size of the MTD
+
+    /* "Major" erase size for the device. Na茂ve users may take this
+     * to be the only erase size available, or may use the more detailed
+     * information below if they desire
+     */
+    u_int32_t erasesize;
+    /* Minimal writable flash unit size. In case of NOR flash it is 1 (even
+     * though individual bits can be cleared), in case of NAND flash it is
+     * one NAND page (or half, or one-fourths of it), in case of ECC-ed NOR
+     * it is of ECC block size, etc. It is illegal to have writesize = 0.
+     * Any driver registering a struct mtd_info must ensure a writesize of
+     * 1 or larger.
+     */
+    u_int32_t writesize;
+    u_int32_t oobsize; // Amount of OOB data per block (e.g. 16)
+
+    u_int32_t oobavail; // Available OOB bytes per block
+
+    // Kernel-only stuff starts here.
+    char *name;
+    int index;
+
+    /* ecc layout structure pointer - read only ! */
+    struct nand_ecclayout *ecclayout;
+
+    /* Data for variable erase regions. If numeraseregions is zero,
+     * it means that the whole device has erasesize as given above.
+     */
+    int numeraseregions;
+    struct mtd_erase_region_info *eraseregions;
+};
+
+
+struct erase_info {
+    struct mtd_info *mtd;
+    u_int32_t addr;
+    u_int32_t len;
+    u_int32_t fail_addr;
+    u_long time;
+    u_long retries;
+    u_int dev;
+    u_int cell;
+    void (*callback) (struct erase_info *self);
+    u_long priv;
+    u_char state;
+    struct erase_info *next;
+};
+
+struct mtd_erase_region_info {
+    u_int32_t offset;            /* At which this region starts, from the beginning of the MTD */
+    u_int32_t erasesize;        /* For this region */
+    u_int32_t numblocks;        /* Number of blocks of erasesize in this region */
+    unsigned long *lockmap;        /* If keeping bitmap of locks */
+};
+}}}
+如果想了解一份驱动代码的流程及细节，先从这些重要的数据结构入手会快得多。
+ 
+
+我当时要了解MTD代码是因为fd = open("/dev/mtd4", O_RDWR)返回-1，而fd = open("/dev/mtd4", O_RDONLY)是成功的。可知mtd4是不可写的，但是中间件的移植要读写该mtd分区的，所以必须从驱动入手修改。以下的流程是我已经整理过的，当初并没有那么简单和条理。
+
+首先，从mtd设备层入手，因为open、close、read、write、ioctl等file operation函数都定义在这里。在mtdopen函数的实现中，很快可以看出苗头，注意如下代码框中字体加粗部分：
+{{{
+DE>/* You can't open the RO devices RW */
+    if ((file->f_mode & 2) && (minor & 1))
+        return -EACCES;
+
+    mtd = get_mtd_device(NULL, devnum);
+
+    if (!mtd)
+        return -ENODEV;
+
+    if (MTD_ABSENT == mtd->type) {
+        put_mtd_device(mtd);
+        return -ENODEV;
+    }
+
+    /* You can't open it RW if it's not a writeable device */
+    if ((file->f_mode & 2) && !(mtd->flags & MTD_WRITEABLE)) {
+        put_mtd_device(mtd);
+        return -EACCES;
+    }DE>
+}}}
+另外在fs.h中有定义
+
+DE>#define FMODE_READ 1
+#define FMODE_WRITE 2DE>
+显然，如果open的文件标志有写标记的话，那么会在open时判断该设备是否允许写操作。刚开始我根据if ((file->f_mode & 2) && (minor & 1))去追踪mtd4的次设备号与1相与是否非0。在目标板系统上执行ls -l /dev/mtd4，得知mtd4的次设备号为8，从而确定了不会在这一步返回。
+
+剩下的只有if ((file->f_mode & 2) && !(mtd->flags & MTD_WRITEABLE))了，mtd->flags有可能置!MTD_WRITEABLE标志，导致在这里open失败。之后的工作就定位在mtd->flags上。
+
+mtd_info的初始化应该在flash硬件驱动层进行的，本着这样的想法，我特地去了解一下cfi的probe过程，事实证明那是没有必要的。现在回到flash硬件驱动层，找到我们项目的flash芯片的驱程，init_xxxx_map()这样定义：
+{{{
+DE>    //以上是mtd各个区的offset、size设置
+    xxxx_mtd = do_map_probe("cfi_probe", &xxxx_map);
+    if (!xxxx_mtd) {
+        iounmap((void *)xxxx_map.virt);
+        return -ENXIO;
+    }
+        
+    add_mtd_partitions(xxxx_mtd, xxxx_parts, numparts);
+    xxxx_mtd->owner = THIS_MODULE;
+    return 0;DE>
+    }}}
+mtd_info的最初初始化是在do_map_probe()里完成的，它其实是通过调用cfi_probe()来完成这些工作的，从那里开始追踪可以看到mtd->flags = MTD_CAP_NORFLASH，而MTD_CAP_NORFLASH则等于MTD_WRITEABLE | MTD_BIT_WRITEABLE。add_mtd_partitions()是mtd partitions的加载实现，一般来说mtd_info等信息也会在这里被设置，进入该函数，果然可以找到我们关心的部分：
+
+{{{
+DE>        if ((slave->mtd.flags & MTD_WRITEABLE) &&
+         (slave->offset % slave->mtd.erasesize)) {
+            /* Doesn't start on a boundary of major erase size */
+            /* FIXME: Let it be writable if it is on a boundary of _minor_ erase size though */
+            slave->mtd.flags &= ~MTD_WRITEABLE;
+            printk ("mtd: partition \"%s\" doesn't start on an erase block boundary -- force read-only\n",
+                parts[i].name);
+        }
+        if ((slave->mtd.flags & MTD_WRITEABLE) &&
+         (slave->mtd.size % slave->mtd.erasesize)) {
+            slave->mtd.flags &= ~MTD_WRITEABLE;
+            printk ("mtd: partition \"%s\" doesn't end on an erase block -- force read-only\n",
+                parts[i].name);
+        }DE>
+        }}}
+这两个if判断，如果分区的偏移量offset不能被erasesize整除或者分区的大小size不能被erasesize整除的话，那么该分区的mtd.flags会被置不可写标志。从那些printk信息来看，offset、size必须满足erasesize的边界条件，才允许可写。
+
+找了原因，我验证了一下。ioctl(fd, MEMGETINFO, &mtd_info)得到mtd_info.erasesize=0x20000，xxxx-flash.c定义mtd分区信息是：
+
+{{{
+DE>    { name: "rootfs",        offset: 0,            size: 28*1024*1024 },
+    { name: "bootloader",     offset: 0x01C00000, size: 512*1024 },
+    { name: "zImage",    offset: 0x01C80000, size: 3582*1024 },
+    { name: "macadr",    offset: 0x01FFF800,    size: 144 },
+    { name: "config",    offset: 0x01FFF890,    size: 1904 },DE>
+    }}}
+可以计算到rootfs、bootloader分区的offset、size符合erasesize的边界条件，zImage、config、macadr分区则不符合erasesize的边界条件。以O_RDWR标志open /dev/mtd0和/dev/mtd1都是成功的，open后三个mtd区设备则失败，基本上验证了之前的分析。
+

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>OS硬件基础</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+最近借整理ARM/MIPS/X86系列文章之际，对x86体系架构进行了有针对性的学习。联系到大学课程《微机原理与接口技术》，将这次学习的一些心得，收获整理如下。
+</p>
+
+<h2 id="toc_0.1">温故知新</h2>
+<p>
+为什么要重新学习x86体系架构呢？在大学期间，学习过《微机原理与接口技术》，课程主要是以8086处理器为例，x86处理器（也就是i386处理器，包括从刚开始的80286，80386，奔腾系列，一直到现在的intel处理器）知识都没有涉及。只有8086处理器的知识，对理解操作系统内存管理原理，编译和链接，C语言运行等造成很大的困惑。
+</p>
+
+<p>
+下面主要认识一下CPU中的 <strong>内存寻址</strong> 和 <strong>虚拟内存</strong> 。
+</p>
+
+<h2 id="toc_0.2">内存寻址-实模式/保护模式</h2>
+<p>
+x86的内存寻址有两种模式，实模式和保护模式。实模式就是8086中的内存寻址模式，段寄存器左移4位+段基址寄存器的方式。在现在PC上，只有上电时很短的时候CPU工作在实模式，操作系统会很快将CPU切换到保护模式下工作。理解保护模式，也是理解OS内存管理等的基础。
+</p>
+
+<p>
+<a href="CPU体系架构-image/i386体系架构-520.png.html">CPU体系架构-image/i386体系架构-520.png</a>
+</p>
+
+<h2 id="toc_0.3">分段机制</h2>
+<p>
+因为使用页机制的原因，通过段机制转换得到的地址仅仅是作为一个中间地址――线性地址了，该地址不代表实际物理地址，而是代表整个进程的虚拟空间地址。 
+</p>
+
+<h2 id="toc_0.4">虚拟内存技术</h2>
+<p>
+虚拟内存技术就是一种由操作系统接管的按需动态内存分配方法。如果说内存寻址是处理器架构要解决的问题（由硬件设计解决），那么虚拟内存就是OS和处理器架构需要共同解决的问题（主要由OS内存管理模块和处理器中的MMU一起解决）。
+</p>
+
+<p>
+虚拟内存机制的特点：
+</p>
+<ul>
+<li>
+程序代码中访问的不再是物理地址，而是虚拟地址。例如32位的系统，每个进程有4GB的虚拟地址空间；
+
+<li>
+每个进程中有一个表，记录着每个虚拟地址对应的物理地址；
+
+<li>
+程序加载的时候，可以先分配号物理内存，然后把物理内存的地址填入这个表中；
+
+</ul>
+<blockquote>
+Linux的swap分区就是硬盘专门为虚拟存储空间预留的空间。经验大小应该是内存的两倍左右。有兴趣的话可以使用 swapon -s 查看交换分区大小，还可以用vmstat 查看当前每秒换入换出的数据大小(在si/so字段下)。
+</blockquote>
+
+<h2 id="toc_0.5">分页机制</h2>
+<p>
+为了减少虚拟地址映射表项所占用的内存空间，所有的OS都采用了页式管理，也就是分页机制。
+</p>
+
+
+<h2 id="toc_0.6">多级页表</h2>
+
+<h2 id="toc_0.7">进程权限级别问题</h2>
+<p>
+多数架构的CPU提供4个级别，0代表最高级别，3代表最低级别。多数操作系统在设计的时候，只是用了两个级别，内核运行在级别0上，应用程序运行在级别3上，通常称为ring0和ring3。
+</p>
+
+<h2 id="toc_0.8">网络资料</h2>
+<p>
+整理“x86体系架构“方面优秀的网络资料。 
+</p>
+<ol>
+<li>
+由Linux内核之旅网站提供的《i386体系架构》。该资料在网络上有pdf版本，也有多个博客，网站有过转载。 
+
+<li>
+由李彦昌编写的《80x86保护模式系列教程》。目前在网络上，我只找到chm版本的。 
+
+<li>
+有一个叫做DOS怀旧存档的网站，其中保存了很多关于i386基础知识的文档，对于夯实基础知识很有帮助。
+
+</ol>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

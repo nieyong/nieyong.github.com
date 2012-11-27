@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>css基本术语</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">1. 属性(Property)</h2>
+<p>
+应用在选择器上的样式，比如说：border, background之流。
+</p>
+
+<h2 id="toc_0.2">2. 值(Value)</h2>
+<p>
+就是属性拥有的值嘞。比如说：1px之类，的说~~
+</p>
+
+<h2 id="toc_0.3">3. 关键字(Keyword)</h2>
+<p>
+就是CSS里面很重要，很关键的单词，不可能用引号包裹的那个东东。比如说：solid, dotted, dashed之流，的说~~
+</p>
+
+<h2 id="toc_0.4">4. 长度单位(Length Units)</h2>
+<p>
+就是值的单位，数字后面跟的些玩意。比若说，px, %, em等其他。
+</p>
+
+<h2 id="toc_0.5">5. 功能符(Functional Notation)</h2>
+<p>
+值以函数的形式指定（就是被括号括起来的那种），主要用来表示颜色（rgba, hsla）、背景图片地址(url)、属性值、过渡动画等，好比说：rgba(0, 0, 0, 0.5), url('im.png'), attr('href'), scale(20)。
+</p>
+
+<h2 id="toc_0.6">6. 声明(Declaration)</h2>
+<p>
+属性名+值就是声明的说，比如说：background: red;
+</p>
+
+<h2 id="toc_0.7">7. 声明块(Declaration Block)</h2>
+<p>
+{}花括号包裹的一系列声明，如下所示：
+</p>
+<pre name="code" class="css">
+{
+    display: table-cell;
+    color: sky;
+}
+</pre>
+
+<h2 id="toc_0.8">8. 规则或规则集(Rule or Rule Set)</h2>
+<p>
+出现了选择器，而且后面还尾随着声明块，的说，比如：
+</p>
+<pre name="code" class="css">
+.halibote7{
+    display: table-cell;
+    color: sky;
+}
+</pre>
+
+<h2 id="toc_0.9">9. 选择器(Selector)</h2>
+<p>
+用来瞄准目标元素的东西，例如上面的.halibote7就是一个选择器的哈。更多选择器，可以参阅这里，或是看下面：
+</p>
+
+<ul>
+<li>
+类选择器(Class)：一般而言，以”.”这个谦卑的点号开头的选择器。很多很多的元素可以用同一个类选择器的。类嘛，生下来就是被公用的命。
+
+<li>
+ID选择器(ID)：”#”打头的，长得比较嚣张。boss感觉，所谓一山不容二虎，ID一般指向唯一元素，但是，CSS中，ID样式多用貌似也过得去，但是显然不推荐这么做的。
+
+<li>
+属性选择器(Attribute Selector)：就是长得类似下面div[title]{}，或是类似下面div[title="演示"]{}，或是类似下面div[title~="演示"]{}，或者是类似下面div[title^="演示"]{}，或者是类似下面，div[title$="演示"]{}或者是……
+
+<li>
+伪类选择器(Pseudo-Classes)：一般前面有个英文冒号”:”的选择器，例如说：:first-child 或是 :last-child等等等等。
+
+<li>
+伪元素选择器(Pseudo-Elements)：怎么说呢，就是会有连续两个冒号的选择器的说，好像：::first-line, ::first-letter, ::before, ::after。我之前有篇文章：“使用CSS3改变文本选中的默认颜色”，就是使用伪元素选择器实现。
+
+</ul>
+
+<h2 id="toc_0.10">10. 关系选择器(Combinators)</h2>
+<p>
+根据与其他元素的暧昧关系选择元素的选择器，常见的符号有空格( )，尖尖号(&gt;)，加号(+)，还有弯弯号(~)等，于是就有了：
+</p>
+<ul>
+<li>
+后代选择器(Descendant Combinator)：类似#yayunhui h1{}，直接把合乎条件的子子孙孙都选择了，的说~~
+
+<li>
+子选择器(Child Combinator)：直接选择儿子，而忽略孙子以及从孙等，尖尖号就是干这个活的。
+
+<li>
+临近兄弟选择器(Adjacent Sibling Combinator)：与其他元素直接相邻的元素的什么什么的说~~
+
+<li>
+一般兄弟选择器(General Sibling Combinator)：也是相邻的，但是不那么直接。
+
+</ul>
+
+<h2 id="toc_0.11">11. @规则(At-Rules)</h2>
+<p>
+以@字符开始的一些规则，像是@import, @page, @media, 和 @font-face诸如此类。
+</p>
+
+<h2 id="toc_0.12">12. 媒体特征(Media Features)</h2>
+<p>
+使用media queries属性，你可以根据不同的媒介有针对性的显示样式。当然，最常见的媒体特征应该是min-width和min-height之类的了。
+</p>
+
+<h2 id="toc_0.13">13. 商家指定扩展(Vendor-specific Extension)</h2>
+<p>
+就是一些私有属性啦。比如常见的CSS3的一些私有前缀啦，-moz-，或是-webkit-或是-o-或是-ms-之类的说，还有很多其他，IE浏览器下的私有属性貌似更多的说，就不展开了。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

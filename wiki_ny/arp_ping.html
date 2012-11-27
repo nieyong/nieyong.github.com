@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>arp_ping</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">ping命令的过程</h2>
+<p>
+主机（host），指发出ping命令的机器
+目标机，指ping命令中IP地址对应的机器
+</p>
+
+<ul>
+<li>
+在主机的ARP表中查找是否存在目标IP对应的MAC地址。这一点很重要，这是很多通信协议的前戏。查看主机的ARP表命令如下：
+<pre>
+C:\WINDOWS\system32&gt;ARP -a
+Interface: 192.168.0.79 --- 0x4
+  Internet Address      Physical Address      Type
+  192.168.0.1           00-0a-eb-00-13-01     dynamic
+  192.168.1.1           00-14-78-94-14-21     dynamic
+C:\WINDOWS\system32&gt;ARP -d
+</pre>
+
+</ul>
+
+<ul>
+<li>
+如果主机上没有目标IP的条目，也就是没有目标IP对应的MAC地址，则主机会先发送一个ARP请求的广播包，42bytes，含义为大致为：whitch MAC has the IP xxx,tell me.
+
+<li>
+如果该IP存在，目标机则会给主机回复一个ARP包，含义大致为：IP xxx is at MAC xxx。这样，主机就知道该IP地址对应的MAC地址是多少，建立该条新的ARP条目。注意，在操作系统中，ARP表是动态的，也就是说每隔一段时间，表会被清空，然后重新通过上面的过程建立ARP条目。
+
+<li>
+在知道了目标IP机对应的MAC地址之后，就可以进行真正的ping操作了。发送ICMP协议的ping request，目标机则回复ICMP协议的reply。
+
+</ul>
+
+<h2 id="toc_0.2">ping命令的一些使用技巧</h2>
+<ul>
+<li>
+获取ip地址的主机名，使用-a选项。
+
+</ul>
+
+<p>
+可以看到，127.0.0.1的主机名为localhost，而如果是本机的ip地址172.29.84.239，主机名则为tplink2195。 
+</p>
+<pre>
+C:\WINDOWS\system32&gt;ping -a 127.0.0.1
+
+Pinging localhost [127.0.0.1] with 32 bytes of data:
+
+Reply from 127.0.0.1: bytes=32 time&lt;1ms TTL=128
+Reply from 127.0.0.1: bytes=32 time&lt;1ms TTL=128
+Reply from 127.0.0.1: bytes=32 time&lt;1ms TTL=128
+Reply from 127.0.0.1: bytes=32 time&lt;1ms TTL=128
+
+Ping statistics for 127.0.0.1:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+
+C:\WINDOWS\system32&gt;ping -a 172.29.84.239
+
+Pinging tplink2195 [172.29.84.239] with 32 bytes of data:
+
+Reply from 172.29.84.239: bytes=32 time&lt;1ms TTL=128
+Reply from 172.29.84.239: bytes=32 time&lt;1ms TTL=128
+Reply from 172.29.84.239: bytes=32 time&lt;1ms TTL=128
+Reply from 172.29.84.239: bytes=32 time&lt;1ms TTL=128
+
+Ping statistics for 172.29.84.239:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+</pre>
+
+
+<ul>
+<li>
+使用大的数据包攻击某台电脑
+
+</ul>
+
+<p>
+在默认的情况下windows的ping发送的数据包大小为32byt，我们也可以自己定义它的大小，但有一个大小的限制，就是最大只能发送65500byt，也许有人会问为什么要限制到65500byt，因为Windows系列的系统都有一个安全漏洞（也许还包括其他系统）就是当向对方一次发送的数据包大于或等于65532时，对方就很有可能挡机，所以微软公司为了解决这一安全漏洞于是限制了ping的数据包大小。虽然微软公司已经做了此限制，但这个参数配合其他参数以后危害依然非常强大，比如我们就可以通过配合-t参数来实现一个带有攻击性的命令：（以下介绍带有危险性，仅用于试验，请勿轻易施于别人机器上，否则后果自负） 
+</p>
+<pre>
+　　C:＼&gt;ping -l 65500 -t 192.168.1.21 
+　　Pinging 192.168.1.21 with 65500 bytes of data: 
+　　Reply from 192.168.1.21: bytes=65500 time&lt;10ms TTL=254 
+　　Reply from 192.168.1.21: bytes=65500 time&lt;10ms TTL=254 
+　　……………… 
+</pre>
+<p>
+这样它就会不停的向192.168.1.21计算机发送大小为65500byt的数据包，如果你只有一台计算机也许没有什么效果，但如果有很多计算机那么就可以使对方完全瘫痪，我曾经就做过这样的试验，当我同时使用10台以上计算机ping一台Win2000Pro系统的计算机时，不到5分钟对方的网络就已经完全瘫痪，网络严重堵塞，HTTP和FTP服务完全停止，由此可见威力非同小可。 
+</p>
+
+<h2 id="toc_0.3">获取路由路径</h2>
+<p>
+ping -n 1 -r 9 172.168.21.2
+</p>
+
+<h2 id="toc_0.4">获取server的OS信息</h2>
+<p>
+一般情况下，通过ping目标地址，可让对方返回TTL值的大小，通过TTL值可以粗略判断目标主机的系统类型是Windows还是UNIX/Linux，一般情况下Windows系统返回的TTL值在100-130之间，而UNIX/Linux系统返回的TTL值在240-255之间。但TTL的值是可以修改的。故此种方法可作为参考。 
+</p>
+
+
+<h2 id="toc_0.5">web页面登录延迟问题</h2>
+<p>
+在登录交换机的web页面的时候，交换机刚启动时不能够立马登录，或者需要清空主机的ARP表才能够登录。原因是交换机在下载和启动之后，使用的MAC地址不一样。
+</p>
+
+<p>
+刚开始就登录web页面，主机使用ARP表中交换机下载时使用的MAC地址，而交换机新的MAC地址还没有被主机学到。
+</p>
+
+<p>
+解决的办法是，将bootrom阶段交换机的ip地址不用设置为192.168.0.1，这样，使用192.168.0.1登录web页面的时候，在主机上就没有了192.168.0.1对应的ARP。就会重新学习mac地址。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

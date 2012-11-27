@@ -1,0 +1,64 @@
+嵌入式软件开发中使用到的C、C++的相关知识
+
+最近遇到一个C语言标准引起的问题，在代码编译时，使用了宏`-ansi`，结果导致编译器不能够识别双斜杠`//`的注释，原因是注释符号`//`在C99标准中才正式被引入。有关C85、C99等C语言标准的问题，参考如下[[C语言的历史和标准]]。有关C语言的更多故事，可以参考[[纪念C语言之父]]。
+
+== 栈/堆 ==
+[[Stack]] --
+
+堆栈指针（stack pointer），帧指针（frame pointer），堆栈帧（stack frame），活动记录（active record），调用惯例（call convention）等相关概念。
+
+在x86架构的Linux系统中，函数调用过程通过栈里的一个被称为栈帧（Stack Frame）的结构保存了所有调用信息，这个概念与以前介绍GDB的使用时说到的如何查看调用堆栈中的帧概念类似。
+
+[[读取当前栈顶位置的内嵌汇编]]
+
+
+== C语言编程技巧 ==
+* [[C语言出错信息处理]]
+* [[C语言函数粒度问题]]
+* [[C语言的封装]] -- 摘自《系统程序员成长计划.pdf》
+* [[C语言调试信息处理]]
+* [[C语言的双链表]]
+* [[C语言的Hash链表]]
+* [[共用体和枚举类型]] -- 开发中遇到的共用体和枚举类型的实例做一个记录，备忘。
+* [[C语言的内存操作函数]] -- memcpy()/memset()/
+
+== 其它问题 ==
+* [[函数式编程]]
+* [[C语言面试题目]]
+* [[C Interview Questions]]
+
+
+今天又被运算符优先级问题困住了一会儿，记得以前做I2C驱动的时候，也出现过这个问题，特此记录下来。位运算符（&，|）优先级为8,10，要比等于（==）的优先级低。看下面的代码：
+
+{{{name="code" class="c"
+if ((rt->rtu_state & RTS_INTERFACE == 0) &&
+    rt->rtu_timer >= (ripState.garbage + ripState.expire))
+    {
+	rt = rt->rtu_back;
+
+	rtdelete (rt->rtu_forw);
+
+	continue;
+    }
+}}}
+其中`rt->rtu_state & RTS_INTERFACE == 0`一句，本意是求的`rt->rtu_state & RTS_INTERFACE`的值，如果其值为0，则满足该条件。考虑优先级问题，则代码有错。
+
+
+如何实现`%-ms`等的变量输出呢？也就是说，m是一个变量。下面是想到的一个代码：
+{{{name="code" class="c"
+static void cliOspfPrintDot(cli_env *pCliEnv,ULONG ipAddr,int len)
+{
+    char print_buffer[PRINT_BUFFER_SIZE];
+    char buf[PRINT_BUFFER_SIZE];
+    char buf3[PRINT_BUFFER_SIZE];
+
+    sprintf(buf,"%s%ds","%-",len);
+
+    OSPF_CONVERT_IP_ADDRESS_TO_DOT_FORMAT_FOR_DEBUG (print_buffer,ipAddr);
+    sprintf(buf3,buf,print_buffer);
+    RCC_EXT_WriteStr(pCliEnv, buf3);
+
+    return;
+}
+
+}}}

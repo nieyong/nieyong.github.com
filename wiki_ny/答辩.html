@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>答辩</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">答辩内容</h2>
+<p>
+计划讲解知识点：
+</p>
+<ul>
+<li>
+bootrom中PIC代码的处理
+  --为什么要实现pic，哪些代码需要实现PIC，是如何实现pic的这两点
+
+<li>
+代码的拷贝和解压缩过程
+  --如何确定解压缩的位置的，可以做何种修改使速度更快
+
+<li>
+cache
+  --cache使用中需要注意的问题
+
+<li>
+网络驱动中如何使用dma 
+  --控制dma的数据结构descriptor table是怎么样的，dma是如何将数据包发送出去的
+
+</ul>
+<p>
+调整之后的答辩内容：
+</p>
+
+<p>
+去掉了网络驱动和dma这一部分的内容，将重点放在了cache这一点上
+</p>
+<ul>
+<li>
+romInits.s部分的实现过程
+
+<li>
+memory 和cache的相关知识
+
+<li>
+PIC，拷贝，解压缩过程
+
+</ul>
+
+<p>
+最后答辩内容：
+</p>
+<ul>
+<li>
+bootrom的启动过程，重点是romInit()函数
+
+<li>
+PIC的实现
+
+<li>
+Cache的相关知识
+
+</ul>
+
+<h2 id="toc_0.2">评委提问</h2>
+<ol>
+<li>
+启动过程部分：
+
+<ul>
+<li>
+如果将bootrom烧写到flash中的任意一个地址，应该怎么做
+
+<li>
+冷启动和热启动的区别
+
+<li>
+按下开发板上的复位键，这是属于热启动还是冷启动
+
+</ul>
+<li>
+PIC部分：
+
+<ul>
+<li>
+为什么要使用PIC
+
+<li>
+加入fpic选项和不加有什么区别
+
+<li>
+MIPS中PIC为什么使用宏
+
+<li>
+研究内容从哪些方面进行优化，使MIPS运行更快
+
+</ul>
+<li>
+Cache部分：
+
+<ul>
+<li>
+Cache中是否有试着自己写函数
+
+<li>
+在代码的编写中，如何通过Cache提高命中率
+
+<li>
+Cache的编码中，是否需要考虑字节对齐问题
+
+<li>
+Cache中保存的是什么类型的数据
+
+</ul>
+<li>
+其它：
+
+<ul>
+<li>
+MIPS CPU架构的特点
+
+<li>
+在整个研究中，主要做了哪些工作
+
+<li>
+如果板子不能够启动，你解决的思路是什么
+
+</ul>
+</ol>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

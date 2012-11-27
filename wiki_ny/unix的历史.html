@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>unixçš„åŽ†å²</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">ä¸»é¡µ</a></li>
+		  <li><a href="about.html">å…³äºŽ</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">Unix ¼òÊ·</h2>
+<p>
+1965ÄêÊ±£¬±´¶ûÊµÑéÊÒ(Bell Labs)¼ÓÈëÒ»ÏîÓÉÆæÒìµç×Ó(General Electric)ºÍÂéÊ¡Àí¹¤Ñ§Ôº(MIT)ºÏ×÷µÄ¼Æ»®£»¸Ã¼Æ»®Òª½¨Á¢Ò»Ì×¶àÊ¹ÓÃÕß¡¢¶àÈÎÎñ¡¢¶à²ã´Î(multi-user¡¢multi- processor¡¢multi-level)µÄMULTICS²Ù×÷ÏµÍ³¡£Ö±µ½1969Äê£¬ÒòMULTICS¼Æ»®µÄ¹¤×÷½ø¶ÈÌ«Âý£¬¸Ã¼Æ»®¾Í±»Í£ÁËÏÂÀ´¡£µ±Ê±£¬Ken Thompson£¨ºó±»³ÆÎªUnixÖ®¸¸£©ÒÑ¾­ÓÐÒ»¸ö³ÆÎª¡¸ÐÇ¼ÊÂÃÐÐ¡¹µÄ³ÌÐòÔÚGE-635µÄ»úÆ÷ÉÏÅÜ£¬µ«ÊÇ·´Ó¦·Ç³£µÄÂý£¬ÕýÇÉÒ²±»Ëû·¢ÏÖÁËÒ»²¿±»ÏÐÖÃµÄPDP-7(DigitalµÄÖ÷»ú)£¬Ken ThompsonºÍDernis Ritchie¾Í½«¡¸ÐÇ¼ÊÂÃÐÐ¡¹µÄ³ÌÐòÒÆÖ²µ½PDP-7ÉÏ¡£¶øÕâ²¿PDP-7¾Í´ËÔÚÕû¸ö¼ÆËã»úÀúÊ·ÉÏÁôÏÂÁË·¼Ãû¡£
+</p>
+
+<p>
+MULTICSÆäÊµÊÇ"MULTiplexed Information and Computing System"µÄËõÐ´£¬ÔÚ1970ÄêÊ±£¬ÄÇ²¿PDP-7È´Ö»ÄÜÖ§³ÖÁ½¸öÊ¹ÓÃÕß£¬µ±Ê±£¬Brian Kernighan¾Í¿ªÍæÐ¦µØÏ·³ÆËûÃÇµÄÏµÍ³ÆäÊµÊÇ£º"UNiplexed Information and Computing System"£¬ËõÐ´Îª"UNICS"£¬ºóÀ´£¬´ó¼ÒÈ¡ÆäÐ³Òô£¬¾Í³ÆÆäÎª"Unix"ÁË¡£1970Äê¿É³ÆÎªÊÇUnixÔªÄê¡£
+</p>
+
+<p>
+1971Äê£¬ËûÃÇÉêÇëÁËÒ»²¿PDP-11/20£¬ÉêÇëµÄÃûÒåÊÇ£ºÒª·¢Õ¹ÎÄÊé´¦ÀíÏµÍ³¡£¸ÃÌá°¸±»»ñ²ÉÄÉ£¬ËûÃÇÒ²·¢Õ¹³öÁËÒ»Ì×ÎÄÊé´¦ÀíÏµÍ³ ©¤ ¾ÍÊÇÏÖÔÚUnix²Ù×÷ÏµÍ³ÀïÃæÎÄÊé´¦ÀíÏµÍ³(nroff/troff)µÄÇ°Éí¡£ÓÐÈ¤µÄÊÇ£¬Ã»ÓÐ¶à¾Ã£¬±´¶ûÊµÑéÊÒµÄ×¨Àû²¿ÃÅÕæµÄ²ÉÓÃÁËÕâÌ×ÏµÍ³×÷ÎªËûÃÇ´¦ÀíÎÄ¼þµÄ¹¤¾ß£¬¶ø±´¶ûÊµÑéÊÒµÄ×¨Àû²¿ÃÅÒ²¾ÍË³Àí³ÉÕÂµØ³ÉÎªUnixµÄµÚÒ»¸öÕýÊ½Ê¹ÓÃÕß¡£µ±Ê±£¬ÄÇ²¿PDP-11£¯20Ö»ÓÐ0.5MB´ÅÅÌ¿Õ¼ä¡£¶øÃèÊöÕâÕû¸öÏµÍ³µÄÎÄ¼þ±»±êÊ¾Îª£º"First Edition"£¬°æ±¾ÈÕÆÚÊÇ1970Äê11ÔÂ¡£´Ó´ËÒÔºó£¬UnixµÄ°æ±¾¾ÍÒÔÏµÍ³ÎÄ¼þµÄ°æ±ðÀ´³Æºô¡£
+</p>
+
+<h2 id="toc_0.2">UNIX¼ÒÆ×</h2>
+<p>
+UNIXµÄÀúÊ·¿ªÊ¼ÓÚ1969Äêken Thompson£¬Dennis Ritchie£¨¼´ÖøÃûµÄK&amp;G£¬CÓïÑÔµÄ·¢Ã÷ÈË£©ÓëÒ»ÈºÈËÔÚÒ»²¿PDP-7ÉÏ½øÐÐµÄÒ»Ð©¹¤×÷£¬ºóÀ´Õâ¸öÏµÍ³±ä³ÉÁËUNIX¡£ËüÖ÷ÒªµÄ¼¸¸ö°æ±¾Îª£º
+</p>
+
+<ul>
+<li>
+V1£¨1971£©£ºµÚÒ»°æµÄUNIX£¬ÒÔPDP-11/20µÄ»ã±àÓïÑÔÐ´³É¡£°üÀ¨ÎÄ¼þÏµÍ³£¬fork¡¢roff¡¢edµÈÈí¼þ¡£
+
+<li>
+V4£¨1973£©£ºÒÔCÓïÑÔ´ÓÍ·Ð´¹ý£¬ÕâÊ¹µÃUNIXÐÞ¸ÄÈÝÒ×£¬¿ÉÒÔÔÚ¼¸¸öÔÂÄÚÒÆÖ²µ½ÐÂµÄÓ²¼þÆ½Ì¨ÉÏ¡£×î³õCÓïÑÔÊÇÎªUNIXÉè¼ÆµÄ£¬ËùÒÔCÓëUNIX¼äÓÐ½ôÃÜµÄ¹ØÏµ¡£
+
+<li>
+V6£¨1975£©£ºµÚÒ»¸öÔÚ±´¶ûÊµÑéÊÒÍâ£¨ÓÈÆäÊÇ´óÑ§ÖÐ£©¹ãÎªÁ÷´«µÄUNIX°æ±¾¡£ÕâÒ²ÊÇUNIX·ÖÖ§µÄÆðµãÓë¹ãÊÜ»¶Ó­µÄ¿ªÊ¼¡£1.xBSD £¨PDP-II£©¾ÍÊÇÓÉÕâ¸ö°æ±¾ÑÜÉú³öÀ´µÄ¡£
+
+<li>
+V7£¨1979£©£ºÔÚÐí¶àUNIXÍæ¼ÒµÄÐÄÄ¿ÖÐ£¬ÕâÊÇ¡°×îºóÒ»¸öÕæÕýµÄUNIX£¬¡±Õâ¸ö°æ±¾°üÀ¨Ò»¸öÍêÕûµÄK&amp;RC±àÒëÆ÷£¬Bourne shell¡£V7ÒÆÖ²µ½VAX»úÆ÷ºó³ÆÎª32V¡£
+
+</ul>
+
+<p>
+Ä¿Ç°¿ª·¢UNIX£¨System V£©µÄ¹«Ë¾ÊÇUnix System Laboratories (USL)¡£USL±¾ÎªAT&amp;TËùÓÐ£¬1993Äê³õ±»NovellÊÕ¹º¡£NovellÓÚ1993ÄêÄ©½«UNIXÕâ¸ö×¢²áÉÌ±ê×ªÈÃ¸øX/Open×éÖ¯¡£
+</p>
+
+<p>
+Ä¿Ç°ÎªÖ¹£¬UNIXÓÐÁ½´óÁ÷ÅÉ£ºÄÇ¾ÍÊÇAT&amp;T·¢²¼µÄUNIX²Ù×÷ÏµÍ³System VÓëÃÀ¹ú¼ÓÖÝ´óÑ§²®¿ËÀû·ÖÐ£·¢²¼µÄUNIX°æBSD£¨Berkeley Software Distribution£©¡£SVR4ÊÇÁ½´óÁ÷ÅÉÈÚºÏºóµÄ²úÎï¡£1991Äêµ×£¬ÓëSystem VÕë·æÏà¶ÔµÄ¿ª·ÅÈí¼þ»ù½ð»á(Open Software Foundation)ÍÆ³öÁËOSF/1¡£
+</p>
+
+<p>
+<a href="image/unix/unix·¢Õ¹Í¼Æ×lite.gif.html">|width:850px;</a>
+</p>
+
+<h2 id="toc_0.3">ÏÖÔÚ¼¸ÖÖÖ÷ÒªµÄUNIX°æ±¾</h2>
+<ul>
+<li>
+AIX£ºIBMµÄUNIX£¬ÊÇ¸ù¾ÝSVR2£¨×î½üÒÑ¾­³öµ½SVR3.2£©ÒÔ¼°Ò»²¿·ÖBSDÑÓÉì¶øÀ´£¬¼ÓÉÏ¸÷ÖÖÓ²¼þµÄÖ§³Ö¡£¾ß±¸ÌØÓÐµÄÏµÍ³¹ÜÀí£¨SMIT£©¡£
+
+<li>
+386BSD£ºJolitz´ÓNet/2 softwareÒÆÖ²¹ýÀ´µÄ¡£Ö§³ÖPosix£¬32Î»¡£
+
+<li>
+FreeBSD£º1.x´Ó386BSD 0.1¶øÀ´£¬FreeBSD 2.x°æÊÇÓÃ4.4BSD lite¸ÄÐ´¡£
+
+<li>
+HP-UX£¨HP£©£º¾ÉÏµÍ³ÊÇ´ÓS III£¨SVRx£©·¢Õ¹ÃæÀ´£¬ÏÖÔÚÊÇÓÉSVR2£¨4.2BSD£©·¢Õ¹¶øÀ´£¬Ä¿Ç°ÊÇ10.x°æ¡£
+
+<li>
+Linux(x86)£º×ñ´ÓPOSIX£¬SYSV¼°BSDµÄÀ©Õ¹£¬ÕâÒ»µã´ÓÉÏÒ³±íÖÐ¼´¿É¿´³ö¡£
+
+<li>
+OSF/1£¨DEC£©£ºDEC¶ÔOSF/1µÄÒÆÖ²¡£
+
+<li>
+SCO UNIX£¨x86£©£ºSVR3.2£¬Ä¿Ç°Ó°Ïì½Ï´óµÄPC UNIX¡£
+
+<li>
+SunOS£¨680x0£¬Sparc£¬i386£©£º¸ù¾Ý4.3BSD£¬°üº¬Ðí¶àÀ´×ÔSystem VµÄ¶«Î÷¡£SunµÄÖ÷Òª³É¹ûÔÚÓÚ£ºNFS£¬OpenLook GUI±ê×¼£¬ºóÀ´ÑÝ±äÎªSolaris ¡£ÕâÒ²ÊÇÄ¿Ç°×îÖøÃûµÄUNIX°æ±¾Ö®Ò»¡£
+
+<li>
+Ultrix(DEC)£º¸ù¾Ý4.2BSDÔÙ¼ÓÉÏÐí¶à4.3BSDµÄ¶«Î÷¡£
+
+<li>
+Xenix(x86)£ºIntelÓ²¼þÆ½Ì¨ÉÏµÄUNIX£¬ÒÔSVR2Îª»ù´¡£¬ÓÉÎ¢ÈíÍÆ³ö¡£ÔÚÖÐ¹úÊ¹ÓÃ½Ï¹ã·º¡£
+
+</ul>
+
+<p>
+<a href="image/unix/unix·¢Õ¹Í¼Æ×.gif.html">|width:1350px;</a>
+</p>
+
+<h2 id="toc_0.4">BSDÀúÊ·</h2>
+<p>
+BSD (Berkeley Software Distribution£¬²®¿ËÀûÈí¼þÌ×¼þ)ÊÇUnixµÄÑÜÉúÏµÍ³£¬1970Äê´úÓÉ¼ÓÖÝ´óÑ§²®¿ËÀû·ÖÐ£¿ª´´¡£BSDÓÃÀ´´ú±íÓÉ´ËÅÉÉú³öµÄ¸÷ÖÖÌ×¼þ¼¯ºÏ¡£ 
+</p>
+
+<p>
+BSD³£±»µ±×÷¹¤×÷Õ¾¼¶±ðµÄUnixÏµÍ³£¬ÕâµÃ¹é¹¦ÓÚBSD License·Ç³£µØ¿íËÉ£¬Ðí¶à1980Äê´ú³ÉÁ¢µÄ¼ÆËã»ú¹«Ë¾£¬²»ÉÙ¶¼´ÓBSDÖÐ»ñÒæ£¬±È½ÏÖøÃûµÄÀý×ÓÈçDECµÄUltrix£¬ÒÔ¼°Sun¹«Ë¾µÄSunOS¡£1990Äê´ú£¬BSDºÜ´ó³Ì¶ÈÉÏ±»System V4.x°æÒÔ¼°OSF/1ÏµÍ³ËùÈ¡´ú£¬µ«Æä¿ªÔ´°æ±¾±»²ÉÓÃ£¬´Ù½øÁËÒòÌØÍøµÄ¿ª·¢¡£
+</p>
+
+<h3 id="toc_0.4.1">PDP-11¿ªÊ¼</h3>
+<p>
+×î³õµÄUnixÌ×¼þÔ´×Ô1970Äê´úµÄ±´¶ûÊµÑéÊÒ£¬²Ù×÷ÏµÍ³ÖÐ°üº¬Ô´Âë£¬ÕâÑùÑÐ¾¿ÈËÔ±ÒÔ¼°´óÑ§¶¼¿ÉÒÔ¿ÉÒÔ²ÎÓëÐÞ¸ÄÀ©³ä¡£1974Äê£¬µÚÒ»¸ö²®¿ËÀûÄ£°å:RefµÄUnixÏµÍ³±»°²×°ÔÚPDP-11»úÆ÷ÉÏ£¬¼ÆËã»ú¿ÆÑ§Ïµ¶øºó½«ÆäÓÃ×÷À©Õ¹ÑÐ¾¿¡£ 
+</p>
+
+<p>
+ÆäËû´óÑ§¿ªÊ¼¶Ô²®¿ËÀûµÄÈí¼þ¸ÐÐËÈ¤£¬ÔÚ1977Äê£¬²®¿ËÀûµÄÑÐ¾¿ÉúBill Joy½«³ÌÐòÕûÀíµ½´Å´øÉÏ£¬×÷Îªfirst Berkeley Software Distribution£¨1BSD£©·¢ÐÐ¡£1BSD±»×÷ÎªµÚÁù°æUnixÏµÁÐ£¬¶ø²»ÊÇµ¥¶ÀµÄ²Ù×÷ÏµÍ³¡£Ö÷Òª³ÌÐò°üÀ¨Pascal±àÒëÆ÷£¬ÒÔ¼°JoyµÄexÐÐ±à¼­Æ÷¡£ 
+</p>
+
+<p>
+Second Berkeley Software Distribution£¨2BSD£©ÓÚ1978Äê·¢²¼£¬³ýÁË¶Ô1BSDÖÐµÄÈí¼þ½øÐÐÉý¼¶£¬»¹°üÀ¨ÁËJoyÐ´µÄÁ½¸öÐÂ³ÌÐò£ºviÎÄ±¾±à¼­Æ÷£¨exµÄ¿ÉÊÓ°æ±¾£©£¬ÒÔ¼°C Shell¡£ÕâÁ½¸öÐÂÌíµÄ³ÌÐò£¬ÔÚUnixÏµÍ³ÖÐÖÁ½ñÈÔ±»Ê¹ÓÃ¡£ 
+</p>
+
+<p>
+2BSDÒÔºóµÄ°æ±¾Öð½¥´ÓPDP-11½á¹¹ÏòVAX¼ÆËã»úÒÆÖ²¡£×îÐÂµÄ2.11BSDÓÚ1992Äê·¢²¼£¬¸üÐÂÎ¬»¤Ò»Ö±³ÖÐøµ½2003Äê¡£ 
+</p>
+
+<h3 id="toc_0.4.2">VAX °æ±¾</h3>
+<p>
+1978Äê£¬²®¿ËÀû°²×°ÁËµÚÒ»Ì¨VAX¼ÆËã»ú£¬µ«½«UnixÒÆÖ²µ½VAX¹¹¼ÜµÄUNIX/32V£¬²¢Ã»ÓÐÀûÓÃVAXÐéÄâÄÚ´æµÄÄÜÁ¦¡£²®¿ËÀûµÄÑ§ÉúÖØÐ´ÁË32VµÄ´ó²¿·ÖÄÚºË£¬ÒÔÊµÏÖÐéÄâÄÚ´æµÄÖ§³Ö¡£1979Äê£¬3BSDµ®ÉúÁË£¬Õâ¸öÐÂÏµÍ³ÍêÕû°üÀ¨ÁËÒ»¸öÐÂÄÚºË¡¢´Ó2BSDÒÆÖ²µ½VAXµÄ¹¤¾ß£¬»¹ÓÐ32VÔ­À´µÄ¹¤¾ß¡£ 
+</p>
+
+<p>
+3BSDµÄ³É¹¦Ê¹µÃDefense Advanced Research Projects Agency£¨DARPA£¬ÃÀ¹ú¹ú·À²¿¸ß¼¶ÑÐ¾¿¹æ»®Êð£©¾ö¶¨×ÊÖú²®¿ËÀûµÄComputer Systems Research Group (CSRG£¬¼ÆËã»úÏµÍ³ÑÐ¾¿×é)£¬ÒÔ¿ª·¢Ò»¸öUnix±ê×¼Æ½Ì¨£¬ÒÔ¹©DARPAÎ´À´µÄÑÐ¾¿¡£1980Äê10ÔÂ£¬CSRG·¢²¼ÁË4BSD£¬¸Ã°æ±¾¶Ô3BSDÓÐÐí¶à¸Ä½ø¡£ 
+</p>
+
+<p>
+Ïà½ÏÓÚVAX»úÆ÷µÄÖ÷Á÷ÏµÍ³VMS£¬ÓÃ»§¶ÔBSDÊ±ÓÐÅúÆÀ£¬1981Äê6ÔÂ£¬ÖÕÓÚ·¢²¼ÁË4.1BSD ¡£Bill Joy´ó·ù¶ÈÌá¸ßÁË4.1BSDÄÚºËµÄÐÔÄÜ£¬¿ÉÒÔ¸úVMSÔÚ¶à¸öÆ½Ì¨ÉÏæÇÃÀ¡£ÎªÁË±ÜÃâÓëAT&amp;TµÄUNIX System V£¨UNIXµÚÎå°æ£©»ìÏý£¬Õâ¸ö°æ±¾Ã»ÓÐÈ¡ÃûÎª5BSD¡£ 
+</p>
+
+<p>
+ÒÔºó4.2BSDÀú¾­Á½Äê£¬ÊµÏÖÁË¶àÏîÖØ´ó¸Ä½øºó²ÅµÃÒÔÎÊÊÀ¡£Ö®Ç°ÓÐÈý¸öÖÐ¼ä°æ±¾Ïà¼ÌÍÆ³ö£º4.1aÒýÈëÁËÐÞ¸Ä°æµÄBBNÔ¤ÊÔÖÐTCP/IP£»4.1bÒýÈëÁËÓÉMarshall Kirk McKusickÊµÏÖµÄÐÂÐÍBerkeley Fast File System£¨FFS£©£»4.1cÊÇ4.2BSD¿ª·¢×îºó¼¸¸öÔÂµÄ¹ý¶É°æ¡£ 
+</p>
+
+<p>
+1983Äê8ÔÂ£¬4.2BSDÕýÊ½·¢²¼¡£ÕâÊÇ1982ÄêBill JoyÀë¿ªÇ°È¥´´½¨Sun¹«Ë¾ºóµÄµÚÒ»¸ö°æ±¾£¬´ËºóMike KarelsºÍMarshall Kirk McKusickÒ»Ö±¸ºÔðÁìµ¼¸ÃÏîÄ¿¡£ÖµµÃÒ»ÌáµÄÊÇ£¬Õâ´ÎBSDÐ¡ºÄ§ÕýÊ½³ö³¡£¬×î³õÊÇMcKusickµÄ»­×÷£¬³öÏÖÔÚ´òÓ¡ºÃµÄÎÄµµ·âÃæÉÏ£¬ÓÉUSENIX·¢ÐÐ¡£ 
+</p>
+
+<h3 id="toc_0.4.3">BSD°æ±¾</h3>
+<p>
+1986Äê6ÔÂ£¬4.3 BSD·¢²¼¡£¸Ã°æ±¾Ö÷ÒªÊÇ½«4.2BSDµÄÐí¶àÐÂ¹±Ï××÷ÐÔÄÜÉÏµÄÌá¸ß£¬Ô­À´µÄ4.1BSDÃ»ÓÐºÜºÃµØÐ­µ÷¡£ÔÚ¸Ã°æ±¾Ö®Ç°£¬BSDµÄTCP/IPÊµÏÖÒÑ¾­¸úBBNµÄ¹Ù·½ÊµÏÖÓÐ½Ï´ó²îÒì¡£¾­¹ýÊýÔÂ²âÊÔºó£¬DARPAÈÏÎª4.2BSD¸üºÏÊÊ£¬ËùÒÔÔÚ4.3BSDÖÐ×÷ÁË±£Áô¡££¨²Î¼ûen:History of the Internet£© 
+</p>
+
+<p>
+4.3BSDºó£¬BSDÖð½¥Å×¿ªÀÏÊ½µÄVAXÆ½Ì¨¡£Computer ConsolesÓÐÏÞ¹«Ë¾¿ª·¢µÄPower 6/32Æ½Ì¨£¨´úºÅÎª"Tahoe"£©£¬µ±Ê±¿´À´´óÓÐ¿ÉÎª£¬µ«²»¾Ã¼´±»ËûÃÇµÄ¿ª·¢Ô±ËùÒÅÆú¡£È»ºó£¬1988Äê6ÔÂÒÆÖ²µÄ4.3BSD-TahoeÈ´±íÏÖ²»Ë×£¬BSD½«ÒÀÀµÓÚ»úÆ÷¸ú²»ÒÀÀµÓÚ»úÆ÷µÄ´úÂë·ÖÀë£¬ÎªÎ´À´ÏµÍ³µÄ¿ÉÒÆÖ²ÐÔ´òÏÂÁËÁ¼ºÃµÄ»ù´¡¡£ 
+</p>
+
+<p>
+µ½´ËÎªÖ¹£¬ËùÓÐµÄBSD°æ±¾»ìºÏÁË×¨ÊôµÄAT&amp;T Unix´úÂë£¬ÕâÑù¾Í¼ÌÐøÊ¹ÓÃ¾ÍÒªÇó´ÓAT&amp;T»ñµÃÐí¿ÉÖ¤¡£Ô´ÂëÐí¿ÉÖ¤µ±Ê±·Ç³£µØ°º¹ó£¬¼¸¸öÆäËû×éÖ¯¶Ôµ¥¶ÀµÄÍøÂç´úÂë°æ¸ÐÐËÈ¤£¬ÍêÈ«¶ÀÁ¢ÓÚAT&amp;T£¬ÕâÑù¾Í¿É²»ÊÜÐí¿ÉÖ¤µÄÖ§Åä¡£1989Äê6ÔÂ£¬Networking Release 1£¨Net/1£©µ®ÉúÁË£¬Ã»ÓÐAT&amp;TÊÚÈ¨Ò²ÄÜÊ¹ÓÃ£¬¿É×ñÕÕBSDÐí¿ÉÖ¤½øÐÐ×ÔÓÉÔÙ·¢²¼¡£ 
+</p>
+
+<p>
+1990Äê³õ£¬ÍÆ³öÁË4.3BSD-Reno¡£¸Ã°æ±¾ÊÇ4.4BSDÔçÆÚ¿ª·¢µÄ¹ý¶É°æ£¬Ê¹ÓÃ¸Ã°æ±¾±»Ï·³ÆÎªÊÇÒ»ÖÖ¶Ä²©£¬ÒòÎªReno¾ÍÊÇÄÚ»ª´ïÖÝµÄ¶Ä³ÇÀ×Åµ¡£ 
+</p>
+
+<h3 id="toc_0.4.4">Net/2ÒÔ¼°·¨ÂÉÎÊÌâ</h3>
+<p>
+Net/1ÒÔºó£¬Keith BosticÌáÒé£¬BSDÏµÍ³ÖÐÓ¦¸ÃÓÐ¸ü¶àµÄ·ÇAT&amp;T²¿·Ö£¬ÒÔNet/1µÄÐ­Òé·¢²¼¡£Ëæºó£¬Ëû¿ªÊ¼Ò»¸öÏîÄ¿£¬×ÅÊÖÖØÐÂÊµÏÖÒ»Ð©Unix±ê×¼¹¤¾ß£¬ÆäÖÐ²»Ê¹ÓÃÔ­À´µÄAT&amp;T´úÂë¡£ÀýÈç£¬Vi£¬Ò²¾ÍÊÇ»ùÓÚ×î³õUnixÉÏedµÄ±à¼­Æ÷£¬±»ÖØÐ´Îªnvi£¨new vi£©¡£18¸öÔÂºó£¬ËùÓÐAT&amp;TµÄ¹¤¾ß±»Ìæ»»£¬Ê£ÏÂµÄÖ»ÊÇ´æÁôÔÚÄÚºËµÄÒ»Ð©AT&amp;TÎÄ¼þ¡£²ÐÓàÎÄ¼þ±»ÌÞ³ýºó£¬1991Äê6ÔÂ£¬Net/2µ®ÉúÁË£¬ÕâÊÇÒ»¸öÈ«ÐÂµÄ²Ù×÷ÏµÍ³£¬²¢ÇÒ¿ÉÒÔ×ÔÓÉ·¢²¼¡£ 
+</p>
+
+<p>
+Net/2³ÉÎªIntel 80386¹¹¼ÜÉÏÁ½ÖÖÒÆÖ²µÄÖ÷Òª×é³É£¬°üÀ¨ÓÉWilliam Jolitz¸ºÔð£¬×ÔÓÉµÄ386BSD£»ÒÔ¼°×¨ÊôµÄBSD/OS£¬ÓÉBerkeley Software Design£¨BSDi£©¸ºÔð¡£386BSD±¾ÉíËäÈ»¶ÌÃü£¬µ«²»¾Ã¼´³ÉÎªNetBSDºÍFreeBSD Ô­Ê¼´úÂëµÄ»ù´¡¡£ 
+</p>
+
+<p>
+BSDiºÜ¿ì¾ÍÓëAT&amp;TµÄUNIX Systems Laboratories£¨USL£©¸½Êô¹«Ë¾²úÉúÁË·¨ÂÉ¾À·×£¬ºóÕß½«ÓµÓÐSystem V°æÈ¨£¬ÒÔ¼°UnixÉÌ±ê¡£1992Äê£¬USLÕýÊ½¶ÔBSDiÌáÆðËßËÏ£¬Õâµ¼ÖÂNet/2·¢²¼±»ÖÐÖ¹£¬Ö±µ½ÆäÔ´ÂëÄÜ¹»±»¼ø¶¨Îª·ûºÏUSLµÄ°æÈ¨¡£ 
+</p>
+
+<p>
+ÓÉÓÚ×îºóÅÐ¾öÐü¶øÎ´¾ö£¬Õâ×®·¨ÂÉËßËÏ½«BSDºóÒáµÄ¿ª·¢£¬ÌØ±ðÊÇ×ÔÓÉÈí¼þ£¬ÑÓ³ÙÁËÁ½Äê£¬Õâµ¼ÖÂÃ»ÓÐ·¨ÂÉÎÊÌâµÄLinuxÄÚºË»ñµÃÁË¼«´óµÄÖ§³Ö¡£Linux¸ú386BSDµÄ¿ª·¢¼¸ºõÍ¬Ê±Æð²½£¬Linus TorvaldsÔøËµ£¬µ±Ê±Èç¹ûÓÐ×ÔÓÉµÄUnix-like²Ù×÷ÏµÍ³£¬»ùÓÚ386µÄ£¬Ëû¾Í¿ÉÄÜ²»»á´´ÔìLinux¡£¾¡¹ÜÎÞ·¨Ô¤ÁÏÕâ¸øÒÔºóµÄÈí¼þÒµ¾¿¾¹Ôì³ÉÁËÊ²Ã´ÑùµÄÓ°Ïì£¬µ«ÓÐÒ»µã¿ÉÒÔ¿Ï¶¨£¬Linux¸ü¼Ó·á¸»ÁËÕâ¿éÍÁÈÀ¡£ 
+</p>
+
+<h3 id="toc_0.4.5">4.4BSD¼°ÆäºóÒá</h3>
+<p>
+Õâ×®ËßËÏÔÚ1994Äê1ÔÂÁË½á£¬¸ü¶àµØÂú×ãÁË²®¿ËÀûµÄÀûÒæ¡£²®¿ËÀûÌ×¼þµÄ18,000¸öÎÄ¼þÖÐ£¬Ö»ÓÐ3¸öÎÄ¼þÒªÇóÉ¾³ý£¬ÁíÓÐ70¸öÎÄ¼þÒªÇóÐÞ¸Ä£¬²¢ÏÔÊ¾USLµÄ°æÈ¨ËµÃ÷¡£ÕâÏîµ÷½âÁíÍâÒªÇó£¬USL²»µÃ¶ÔÏÂÃæµÄ4.4BSDÌáÆðËßËÏ£¬²»¹ÜÊÇÓÃ»§»¹ÊÇ²®¿ËÀû´úÂëµÄ·Ö·¢Õß¡£ 
+</p>
+
+<p>
+1994Äê6ÔÂ£¬4.4BSDÒÔÁ½ÖÖÐÎÊ½·¢²¼£º¿É×ÔÓÉÔÙ·¢²¼µÄ4.4BSD-Lite£¬²»°üº¬AT&amp;TÔ´Âë£»ÁíÓÐ4.4BSD-Encumbered£¬¸úÒÔÇ°µÄ°æ±¾Ò»Ñù£¬×ñÕÕAT&amp;T License¡£ 
+</p>
+
+<p>
+²®¿ËÀûµÄ×îÖÕ°æ±¾ÊÇ1995ÄêµÄ4.4BSD-Lite Release 2£¬¶øºóCSRG½âÉ¢£¬ÔÚ²®¿ËÀûµÄBSD¿ª·¢¸æÒ»¶ÎÂä¡£ÔÚÕâÖ®ºó£¬¼¸ÖÖ»ùÓÚ4.4BSDµÄÌ×¼þ£¨±ÈÈçFreeBSD¡¢OpenBSDºÍNetBSD£©µÃÒÔ¼ÌÐøÎ¬»¤¡£ 
+</p>
+
+<p>
+ÁíÍâ£¬ÓÉÓÚBSD LicenseµÄ¿íÈÝ£¬Ðí¶àÆäËûµÄ²Ù×÷ÏµÍ³£¬²»¹ÜÊÇ×ÔÓÉ»¹ÊÇ×¨Êô£¬¶¼²ÉÓÃÁËBSDµÄ´úÂë¡£ÀýÈç£¬Microsoft WindowsÔÚTCP/IPµÄÊµÏÖÉÏÒýÈëÁËBSD´úÂë£»¾­¹ýÖØÐÂ±àÒë£¬ÔÚµ±Ç°Windows°æ±¾ÖÐ£¬»¹²ÉÓÃÁËÐí¶àBSDÃüÁîÐÐÏÂµÄÍøÂç¹¤¾ß¡£ 
+</p>
+
+<h3 id="toc_0.4.6">¼¼Êõ</h3>
+<p>
+BSD¿ª´´ÁËÏÖ´ú¼ÆËã»úµÄ³±Á÷¡£²®¿ËÀûµÄUnixÂÊÏÈ°üº¬ÁË¿â£¬ÒÔÖ§³Ö»¥ÁªÍøÐ­ÒéÕ»£¨Stack£©¡¢²®¿ËÀûÌ×½Ó×Ö£¨sockets£©¡£Í¨¹ý½«Ì×½Ó×ÖÓëUnix²Ù×÷ÏµÍ³µÄÎÄ¼þÃèÊö·ûÏàÕûºÏ£¬¿âÓÃ»§Í¨¹ý¼ÆËã»úÍøÂç¶ÁÐ´Êý¾Ý£¬¸úÖ±½ÓÔÚ´ÅÅÌÉÏ²Ù×÷Ò»ÑùÈÝÒ×¡£AT&amp;TÊµÑéÊÒ×îºóÒ²·¢²¼ÁËËûÃÇµÄSTREAMS¿â£¬ÔÚÈí¼þÕ»ÖÐÒýÈëÁËÀàËÆµÄ¹¦ÄÜ£¬ËäÈ»½á¹¹²ãÓÐËù¸Ä½ø£¬µ«ÓÉÓÚÌ×½Ó×Ö¿âÒÑ¾­Ê¹ÓÃ¹ã·º£¬ÁíÍâÓÉÓÚÉÙÁË¶Ô¿ª·ÅÌ×½Ó×ÖµÄÂÖÑ¯¹¦ÄÜ£¨ÀàËÆÓÚ²®¿ËÀû¿âÖÐµÄselectµ÷ÓÃ£©£¬Ê¹µÃ½«Èí¼þÒÆÖ²µ½Õâ¸öÐÂµÄAPIºÜÀ§ÄÑ¡£ 
+</p>
+
+<p>
+Ê±ÖÁ½ñÈÕ£¬BSDÈÔÔÚÑ§Êõ»ú¹¹£¬ÄËÖÁÐí¶àÉÌÒµ»ò×ÔÓÉ²úÆ·µÄ¸ß¿Æ¼¼ÊµÑéÖÐ£¬¼ÌÐø±»ÓÃ×÷ÊÔÑéÆ½Ì¨£¬ÉõÖÁÔÚÇ¶ÈëÊ½Éè±¸ÖÐ£¬ÆäÊ¹ÓÃÒ²ÔÚÔö³¤¡£ÓÉÓÚBSDÉè¼Æ³öÖÚ£¬´úÂë±àÐ´ÇåÎú£¬°üÀ¨ËüµÄÎÄµµ£¨ÌØ±ðÊÇ²Î¿¼ÎÄµµ£¬³£±»³ÆÎª¡°man pages¡±£©£¬Ê¹µÃÕâÑùµÄÏµÍ³£¬¼¸ºõ³ÉÁË³ÌÐòÔ±ÑÛÖÐµÄÀÖÍÁ¡£ 
+</p>
+
+<p>
+Ðí¶à¹«Ë¾¶¼Ê¹ÓÃBSDÑÜÉú³öµÄ´úÂë£¬Èç´Ë±ã¿ÉÒÔÖ§³ÖËûÃÇµÄÖªÊ¶²úÈ¨£¬Ðí¶à×ÔÓÉÈí¼þ£¬ÈçLinux¡¢GNU¹¤³Ì¶¼×ñÕÕGNU General Public License£¬ÓëÖ®Ïà±È£¬BSD LicenseÒª¸ü¼ÓÁé»î¡£µ±È»£¬ÕâÒ²µ¼ÖÂÈËÃÇµÄ»úÆ÷ÉÏÔÚÅÜÒ»Ð©BSDÈí¼þ£¬µ«×Ô¼ºÈ´²¢²»ÖªÇé¡£ÓÐÐËÈ¤µÄ»°£¬¿ÉÒÔÊÔ×ÅÕÒÕÒ·ûºÅ¡°University of California, Berkeley¡±£¬±ÈÈçÔÚ²úÆ·ÎÄµµÄÚ£¬¶þ½øÖÆ´úÂëÖÐµÄ¾²Ì¬Êý¾Ý¶Î£¬»òÕßROMÖÐ£¬»¹ÓÐÍ¨¹ýÒ»Ð©²úÆ·µÄÓÃ»§½çÃæ¿´¿´¡°about¡±£¨¹ØÓÚ£©ÄÚÈÝ¡£ 
+</p>
+
+<p>
+ÓÐÒâË¼µÄÊÇ£¬Í¨¹ýÒ»¸ö¶þ½øÖÆ¼æÈÝ²ã£¨compatibility layer£©£¬ÔÚBSD²Ù×÷ÏµÍ³ÉÏ£¬¿ÉÒÔÔËÐÐÏàÍ¬¹¹¼ÜÏÂÆäËû²Ù×÷ÏµÍ³ÉÏµÄÔ­³ÌÐò¡£Õâ±ÈÄ£ÄâÆ÷Òª¿ìµÃ¶à£¬Í¨¹ýÕâ¸ö·½·¨£¬Õë¶ÔLinuxµÄÓ¦ÓÃ³ÌÐò£¬Ò²¿ÉÒÔÔÚBSDÉÏÈ«ËÙÔËÐÐ¡£ËùÒÔ£¬BSD²»½öÊÊºÏ×÷Îª·þÎñÆ÷£¬Ò²¿É×÷Îª¹¤×÷Õ¾À´Ê¹ÓÃ£¬ÖÚËùÖÜÖª£¬ÏÖÔÚÕë¶ÔLinuxµÄÉÌÒµ»ò·â±ÕÔ´ÂëÈí¼þÔ½À´Ô½¶àÁË¡£¹ÜÀíÔ±Ò²¿ÉÒÔ½«Ò»Ð©Ô­±¾Ö»ÓÃÓÚÉÌÒµUNIX±äÖÖµÄ×¨ÊôÈí¼þ£¬×ªÒÆµ½BSD£¬ÕâÑùÔÚ±£³ÖÔ­ÓÐ¹¦ÄÜµÄÍ¬Ê±£¬²Ù×÷ÏµÍ³¸üÇ÷ÏÖ´ú£¬¿É¼ÌÐøÊ¹ÓÃÕâÐ©Èí¼þ£¬Ö±µ½ÓÐ¸üºÃµÄÌæ´ú¡£ 
+</p>
+
+<p>
+½áÄ©£¬µ±Ç°µÄBSD²Ù×÷ÏµÍ³±äÖÖÖ§³Ö¸÷ÖÖÍ¨ÓÃ±ê×¼£¬°üÀ¨IEEE¡¢ANSI¡¢ISOÒÔ¼°POSIX£¬Í¬Ê±±£³ÖÁË´«Í³BSDµÄÁ¼ºÃ·ç·¶¡£ 
+</p>
+
+<h3 id="toc_0.4.7">BSDµÄ¿ªÔ´ºóÒá</h3>
+<p>
+²»Í¬µÄBSD²Ù×÷ÏµÍ³Õë¶Ô²»Í¬µÄÓÃÍ¾¼°ÓÃ»§£¬¿ÉÓ¦ÓÃÓÚ¶àÖÖÓ²¼þ¹¹¼Ü¡£ÔÚÕþ¸®»ú¹¹ÖÐ³£ÄÜ¿´µ½BSDµÄÉíÓ°¡£ËäÈ»ÏÂÃæµÄBSD¹¦ÄÜ¿ÉÄÜ²¢·Ç¶ÀÓÐ£¬µ«Ã¿ÖÖBSDÔÚ¸÷×ÔµÄÁìÓò£¬¶¼Öð½¥¾ßÓÐÁËÁ¼ºÃÉùÓþ£¬ÓÐµÄ×¨×¢ÓÚÐÔÄÜ£¬ÓÐµÄÔòÒÔ°²È«¼û³¤¡£
+</p>
+
+<ul>
+<li>
+DragonflyBSDÊÇ×îÄêÇáµÄBSD£¬×¨ÃÅÌá¹©±ÈFreeBSD¸üÓÅÐãµÄ¶Ô³Æ¶à´¦Àí»úÏµÍ³£¬²¢Ê¹ÄÚºËÖ±½ÓÖ§³ÖSSI¼¯Èº£¬ÒÔÈ¡µÃ¸üºÃµÄ¼ÆËãÐ§¹û¡£Õâ¸öÏîÄ¿ÔÚ´Ë·½ÏòÉÏ£¬²Å¿ªÊ¼ÊýÄê£¬Ö÷Òª¹Ø×¢i386Æ½Ì¨¡£ 
+
+<li>
+FreeBSDÔÚBSD¼Ò×åÖÐÒÔÒ×ÓÃÐÔÓë¸ßÐÔÄÜ¶øÖø³Æ£¬ÓÉÓÚÖ÷ÒªÓÃ×÷Î¢´¦ÀíÆ÷¼Ü¹¹£¬Èçi386¡¢AMD's 64-bit i386À©Õ¹£¬ËùÒÔFreeBSD·Ç³£¹Ø×¢¶à´¦ÀíÆ÷¡£FreeBSDÔÚi386ºÍamd64·þÎñÆ÷ÉÏ£¬ÔËÐÐµØ·Ç³£ºÃ£¬µ±È»£¬ËüÒ²¿ÉÒÔÔÚÆäËûÓ²¼þ¹¹¼ÜÉÏÔËÐÐ¡£ 
+
+<li>
+NetBSDÓµÓÐÌØ±ð³öÉ«µÄ¿ÉÒÆÖ²ÐÔ£¬ÄÜÔÚ¶à´ï54ÖÖÆ½Ì¨ÉÏÔËÐÐ£¬Ð¡µ½Ç¶ÈëÊ½µÄÕÆÉÏÉè±¸£¬´óµ½·þÎñÆ÷Èº£¬NetBSDÉõÖÁ»¹ÔÚ¹ú¼Ê¿Õ¼äÕ¾ÖÐ·þÎñ¡£ 
+
+<li>
+OpenBSDÔÚÃÜÂëÑ§ºÍ°²È«·½ÃæÌØ±ð³öÖÚ£¬¿ÉÒÆÖ²ÐÔÒ²ºÜºÃ£¬µ±È»ÂÔÑ·ÓÚNetBSD¡£°²È«¹¦ÄÜÈçOpenSSH£¬ÊÇÓÉOpenBSDÂÊÏÈ¿ª´´µÄ¡£OpenBSD×÷Îª°²È«ÇëÇó»úÆ÷£¨security demanding machines£©ÔËÐÐ£¬ÊÜµ½ºÃÆÀ¡£ 
+
+</ul>
+
+<p>
+±ØÐë×¢ÒâµÄÊÇ£¬ÉÏÃæËùÂÞÁÐµÄ£¬¸ü¶àµØÊÇ»ùÓÚ¸ÐÐÔÈÏÊ¶£¬²¢Õë¶ÔÆä¿ª·¢½¹µã£¬²¢Ã»ÓÐÑÏ¸ñµØ±È½Ï¹æÔò¡£Êµ¼Ê¶øÑÔ£¬Ã¿ÖÖ¾ßÌåµÄBSD¶¼¿Éµ£µ±Ðí¶à½ÇÉ«ÈÎÎñ¡£ 
+</p>
+
+<h3 id="toc_0.4.8">½á¹¹</h3>
+<p>
+¸úAT&amp;T UnixÒ»Ñù£¬BSDÒ²²ÉÓÃµ¥ÄÚºË£¬ÕâÒâÎ¶×ÅÄÚºËÖÐµÄÉè±¸Çý¶¯£¬ÔÚºËÐÄÌ¬ÏÂÔËÐÐ£¬´Ó¶ø×÷Îª²Ù×÷ÏµÍ³µÄºËÐÄ²¿·Ö¡£BSDµÄÔçÆÚ°æ±¾±»ÓÃ×÷×é½¨Sun¹«Ë¾µÄSunOS£¬Ôì¾ÍÁËUnix¹¤×÷Õ¾µÄµÚÒ»²¨ÈÈ³±¡£ 
+</p>
+
+<h3 id="toc_0.4.9">¾÷±ð</h3>
+<p>
+BSDÊÜµ½ÍøÂçÐ¡°×ÃÇµÄ¸ºÃæÓ°Ïì£¬Ð¡°×ÔÚÂÛÌ³¡¢ÓÊ¼þÁÐ±íÉÏÉ¢²¼Ò»Ð©¡°±ð³öÐÄ²Ã¡±µÄÂÛµ÷£¬ÆäÖÐ×îÖøÃûµÄÊÇÉù³ÆBSDÕýÔÚËÀÍö£ºÔÚSlashdotÉÏ¹ØÓÚBSDÎÄÕÂµÄÆÀÂÛÐí¶à¼¸ºõ¶¼ÈÃÈËÄÑÒÔÔÄ¶Á£¬ÓÐÈËÉõÖÁ¶ÏÑÔ£¬BSD½«×Ô¼º°Ñ×Ô¼ºÑ¹¿å¡£Ðí¶àÐ¡°×ÃÇ½«FreeBSDÖ÷Òª¿ª·¢Ô±µÄÀëÈ¥£¬µ±×÷Æä×ôÖ¤¡£Ò»Ð©ÍçÆ¤µÄÐ¡°×£¬ÖÆÔìÁË¸÷ÖÖÓßÂÛ£¬°üÀ¨¸èÒ¥¡¢¸¼¸æ£¬ÄËÖÁ¸÷ÖÖÐ¡µÀÏûÏ¢£¬ÒÔÊÔÍ¼¼¤ÆðBSD°®ºÃÕßµÄ·´Ó¦¡£Ò»Ð©Ð¡°×ÃÇÉõÖÁÌØÒâÔÚBSDÃÔÖÐ¼äÌô²¦Àë¼ä¡£ 
+</p>
+
+<h3 id="toc_0.4.10">BSDµÄ×ÓËïÃÇ</h3>
+<p>
+µ±Ç°ÑÜÉú×ÔBSDµÄUnixÀà²Ù×÷ÏµÍ³£º 
+</p>
+<ul>
+<li>
+BSD/OS £¨ÒÑµ¹±Õ£© 
+
+<li>
+FreeBSD 
+
+<li>
+DragonFly BSD 
+
+<li>
+FireFlyBSD 
+
+<li>
+Freesbie £¨live CD°æ£¬¹âÅÌ×ÔÆô¶¯°æ£© 
+
+<li>
+DesktopBSD £¨²ÉÓÃUserland/Kernel£¬ÓëFreeBSDÍ¬²½£© 
+
+<li>
+PC-BSD £¨²ÉÓÃUserland/Kernel£¬ÓëFreeBSDÍ¬²½£© 
+
+<li>
+PicoBSD 
+
+<li>
+TrustedBSD - £¨·Ç²Ù×÷ÏµÍ³£¬¶øÊÇÎªFreeBSDºÍDarawin¹¹¼þÀ©Õ¹µÄÒ»¸öÏîÄ¿£© 
+
+<li>
+ClosedBSD 
+
+<li>
+pfSense 
+
+<li>
+m0n0wall 
+
+<li>
+NetBSD 
+
+<li>
+OpenBSD 
+
+<li>
+ekkoBSD £¨ÒÑµ¹±Õ£© 
+
+<li>
+MicroBSD 
+
+<li>
+MirOS BSD 
+
+<li>
+NeXTSTEP 
+
+<li>
+OpenStep £¨ÒÑ±»Mac OS XºÍMac OS X ServerÈ¡´ú£© 
+
+<li>
+Darwin £¨Mac OS XµÄºËÐÄ£¬ ÓÉFreeBSD 4.5ºÍNeXTSTEP»ìºÏÅÉÉú£© 
+
+<li>
+Mac OS X 
+
+<li>
+HPBSD £¨ÒÑµ¹±Õ£© 
+
+</ul>
+
+<h2 id="toc_0.5">Ö÷ÒªµÄLinux·¢ÐÐ°æ</h2>
+
+<p>
+<a href="image/unix/linux_distribution.png.html">image/unix/linux_distribution.png</a>
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

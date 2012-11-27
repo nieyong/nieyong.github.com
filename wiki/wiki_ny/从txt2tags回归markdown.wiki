@@ -1,0 +1,27 @@
+一度决定用txt2tags写博客，因为它有着比markdown更简单的标记，支持比markdown更多的转换格式（虽然对我来说没什么用），支持宏定义等等。
+
+但是时间一长，很多地方开始觉得不顺手，开始怀念起markdown了。首先，markdown支持HTML和自己的标记混合使用，因为任何一种轻量标记语言都不可能在功能、灵活性上和HTML比肩，markdown的这一特点弥补了自身与生俱来的不足，而txt2tags却不支持这个功能；其次，markdown支持嵌套的引用和有空行的引用，例如使用如下格式的文字：
+{{{
+
+    >level 1 , line 1
+    >
+    >level 1 , line 2
+    >>level 2 , line 1
+    >>level 2 , line 2
+}}}
+
+最终得到的HTML为：
+{{{
+<blockquote><p>level 1 , line 1</p>
+ 
+<p>level 1 , line 2</p>
+ 
+<blockquote><p>level 2 , line 1
+level 2 , line 2</p></blockquote></blockquote>
+}}}
+
+而txt2tags使用缩进来标记引用，既不支持引用的内容中有空行也不支持嵌套引用。此外，txt2tags也不允许引用的内容中有其它标记，哪怕是它自己的标记都不行，所有引用内容都会当纯文本显示。
+
+真正使用我决定回归markdown的，是它的一堆多语言移植版。markdown原本是用perl编写的，此外有一些人将它移植到c、python、java、javascript、lua等语言上。这样就可以很方便地使用markdown的lua移植版将SciTE变成一个博客编辑器。
+
+markdown的c移植版是discount；python移植版有两个，“markdown.py”和“markdown2.py”，按后者的作者的说法，“markdown.py”本身存在一些问题，而“markdown2.py”解决了这些问题，并且速度更快；markdown的java移植版我以前曾经提到过；好玩儿的是，它还有个javascript的移植版，喜欢胖客户端的开发者要高兴了；markdown的lua移植版也有两个，一个是纯lua的实现：markdown.lua，另一个是c移植版discount的lua移植版：lua-discount，据后者的作者的说法，lua-discount比“markdown.lua”快得多，这很正常，用c实现的lua模块自然要比纯lua的实现效率高得多。

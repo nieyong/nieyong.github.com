@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>BASE64编码原理及应用</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+Base64是网络上最常见的用于传输8Bit字节代码的编码方式之一。Base64 主要不是加密，它主要的用途是把一些二进制数转成普通字符用于网络传输。由于一些二进制字符在传输协议中属于控制字符，不能直接传送需要转换一下。Base64编码就是把二进制字节序列转化为ASCII字符序列。一般增加1/3长度，而且也是不可读的。
+</p>
+
+<h2 id="toc_0.1">base64编码背景</h2>
+<p>
+目前的internet e-mail标准--简单邮件传递协议(smtp)在rfc821中规定了两条重要但不难实现的限制： 
+</p>
+<ul>
+<li>
+1)邮件的内容必须全部为7-比特的美国ascii码。 
+
+<li>
+2)每一行的长度不能超过1000的字符。 
+
+</ul>
+
+<p>
+因此为了通过smtp用e-mail进行传送,内存的序列化对象必须转化为和以上相容的格式。 
+</p>
+
+<p>
+rfc1521提供了一个可行的方案。它定义了邮件的内容部分,使之能包涵多种形式的数据。这种标准就是目前众所周知的mime。 
+</p>
+
+<p>
+按照rfc1521编码过程为:输入是24个比特,输出是4个字节。24个比特输入组从左至右由3个8比特的输入组形成。这24个比特被看成4个连续的6比特组,而每个6比特输入组被翻译为 <strong>base64码表</strong> 中的一个数字。依次反复不断进行，直到全部输入数据转换完成。 
+</p>
+
+<p>
+如果最后剩下两个输入数据，在编码结果后加1个“=”；如果最后剩下一个输入数据，编码结果后加2个“=”；如果没有剩下任何数据，就什么都不要加，这样才可以保证资料还原的正确性。 
+</p>
+
+<p>
+完整的base64定义可见RFC1421和RFC2045。编码后的数据比原始数据略长，为原来的4/3。在电子邮件中，根据RFC822规定，每76个字符，还需要加上一个回车换行。可以估算编码后数据长度大约为原长的135.1%。
+</p>
+
+<h2 id="toc_0.2">base64编码定义</h2>
+<p>
+主要参考base64编码的rfc文档，rfc1421和rfc2045。
+</p>
+
+<p>
+base64就是将输入的比特流按照6个比特位编码转化，6个比特位一共有64个码字。每6个比特位被翻译为 <strong>base64码表</strong> 中的一个码字。这个码表应该如下所示：
+</p>
+
+<table>
+<tr>
+<td>
+码字
+</td>
+<td>
+个数
+</td>
+<td>
+ASCII码
+</td>
+<td>
+对应的6bit值
+</td>
+</tr>
+<tr>
+<td>
+0 - 9
+</td>
+<td>
+10个
+</td>
+<td>
+48 - 57
+</td>
+<td>
+52 - 61
+</td>
+</tr>
+<tr>
+<td>
+A - Z
+</td>
+<td>
+26个
+</td>
+<td>
+65 - 90
+</td>
+<td>
+0 - 25
+</td>
+</tr>
+<tr>
+<td>
+a - z
+</td>
+<td>
+26个
+</td>
+<td>
+96 - 122
+</td>
+<td>
+26 - 51
+</td>
+</tr>
+<tr>
+<td>
++
+</td>
+<td>
+1个
+</td>
+<td>
+43
+</td>
+<td>
+62
+</td>
+</tr>
+<tr>
+<td>
+/
+</td>
+<td>
+1个
+</td>
+<td>
+47
+</td>
+<td>
+63
+</td>
+</tr>
+</table>
+
+<p>
+另外，还有一个特殊码字 =。
+</p>
+
+<h2 id="toc_0.3">应用环境</h2>
+<h3 id="toc_0.3.1">1.mail</h3>
+
+<p>
+由于rfc821有以下两条限制：
+</p>
+<ul>
+<li>
+1)邮件的内容必须全部为7-比特的美国ascii码。
+
+<li>
+2)每一行的长度不能超过1000的字符
+
+</ul>
+
+<p>
+当邮件中有其他的非ASCII字符或二进制数据时，就需要做转换。这个就叫做Content-Transfer-Encoding，Base64就是其中的一种方法。在firefox你可以设置自己发送邮件的内容传输编码方式。在收到的邮件里，你可以查看邮件原文，看看原文的编码。
+</p>
+
+<h3 id="toc_0.3.2">2.URL</h3>
+<p>
+有些应用需要把二进制数据放到URL里，URL只能是特定的一些ASCII字符。这时候，也需要用到BASE64编码。当然这也只是对二进制数据本身的编码，编码后的数据里面可能包含+/,真正放到URL里面时候，还需要URL-Encoding,变成%XX模式。
+</p>
+
+
+<h3 id="toc_0.3.3">3.HTML中内嵌图片</h3>
+<p>
+就是说这种状况下，图片不是以链接地址的方式嵌到HTML中去的，图片本身已被BASE64成字符串放到HTML页面文本中去了，成为HTML文本的一部分。当HTML页面拉取完成之后，图片数据也就下来了，不再需要再去拉取图片.如下格式：
+</p>
+
+<p>
+<code>&lt;img src='data:image/png;base64，base64code'&gt;</code>
+</p>
+
+<p>
+这种标签图片的显示需要浏览器的支持，先Base64解码，再去显示不同格式的图片。
+</p>
+
+<p>
+使用data: URI直接在网页中嵌入，data: URI定义于IETF标准的RFC 2397。
+</p>
+
+<p>
+data: URI的基本使用格式如下： 
+</p>
+
+<p>
+<code>data:[&lt;MIME-type&gt;][;base64|charset=some_charset],&lt;data&gt;</code>
+</p>
+
+<p>
+mime-type是嵌入数据的mime类型，比如png图片就是image/png。如果后面跟base64，说明后面的data是采用base64方式进行编码的。
+</p>
+
+<p>
+获得图片的base64编码，base64编码工具不少，对于前端制作，下面这个本地图片base64编码获取页面是值得推荐的： <strong>Encode Data URL By PuterJam</strong> 。
+</p>
+
+
+<h3 id="toc_0.3.4">4.简单加密</h3>
+<p>
+迅雷等下载工具，就有他们自己特有的下载链接，如thunder://其实就是把一个HTTP URL资源地址加上了某些东西后再进行BASE64编码，然后加上thunder://头。
+</p>
+
+<p>
+垃圾讯息传播者用Base64来避过反垃圾邮件工具，因为那些工具通常都不会翻译Base64的讯息。
+</p>
+
+<h3 id="toc_0.3.5">5.百度地图地址转化</h3>
+<p>
+百度地图api的地址转化（例如gps坐标-&gt;百度地图坐标）结果，使用了base64加密。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

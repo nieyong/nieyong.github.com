@@ -1,0 +1,85 @@
+出处：《CSS 相对|绝对(relative/absolute)定位系列》
+
+== 定位系列1 ==
+position:absolute与float:left论长相差别有志玲姐和凤姐那么大，但是，却是近亲，细想一下也合情合理，两者有两大共性：包裹性，破坏性。
+
+=== 包裹性 ===
+包裹性换种说法就是让元素inline-block化，例如一个div标签默认宽度是100%显示的，但是一旦被absolute属性缠上，则100%默认宽度就会变成自适应内部元素的宽度。哦，举个例子吧，如下测试代码：
+{{{name="code" class="html"
+<html>
+	<head>
+		<style>
+			.div { padding:20px; margin-bottom:10px; background-color:#f0f3f9; }
+			.abs { position:absolute; }
+		</style>
+	</head>
+	
+	<body>
+		<div class="div">
+		<img src="img/2_01.jpg" />
+		    <p>无absolute</p>
+		</div>
+		<div class="div abs">
+		    <img src="img/2_01.jpg" />
+		    <p>absolute后</p>
+		</div>
+	</body>
+</html>
+
+}}}
+
+float也是典型的inline-block化元素，这种元素的inline-block化适用于任何水平的标签。例如平时我们要让span标签（span标签本身为inline标签）支持width属性（需要inline-block标签才支持width属性，参考[[inline element and inline model]]），可能要设置： 
+
+{{{name="code" class="css"
+span { display:block; width:100px; }
+}}}
+
+但是，有float:left/position:absolute撑腰的情况下，display属性就是多余的，可以直接回家喝茶了。
+
+{{{name="code" class="css"
+span { float:left; width:100px; }
+span { position:absolute; width:100px; }
+}}}
+
+=== 破坏性 ===
+浮动的破坏性在于切断line box链，致使高度塌陷，但由于浮动元素仍在凡间（DOM tree），实体是看得见摸得着的，所以其占据的实体位置还是在的。而absolute绝对定位不仅让高度塌陷，又由于从未深入凡间，在凡间没有他的实体位置，所以宽度也是塌陷的。
+
+absolute经常被一些新手拿来大肆建房子做布局也是可以理解的，貌似什么时候我看过一篇文章说，absolute属性的出现本来是想把页面搞得像photoshop那样，一个图层一个图层覆盖似的。但是，页面的发展显然与这个背道而驰，毕竟页面是活的。确实，像photoshop，把一个个层搞出来，使用absolute属性，以及一定坐标值就可以定位出来了。不需要考虑什么间距啊，margin啊，一些IE下乱七八糟的bug啊什么的，有一了百了的畅快感。尤其对于页面制作不熟悉的新手，这种绝对定位布局可谓屡试不爽。
+
+还有时候，遇到有些复杂的布局，项目经理又催得紧，懒得再去折腾，干脆，直接，绝对定位，先把效果做出来再说。因为绝对定位毕竟有飞翔的能力，例如想在黄浦江中间建个灯塔，直接告知坐标，飞过去，灯塔一插，搞定了，很省事的。
+
+流动性布局很强调不定宽，不定高，活用标签自身属性，顺其自然，最少干预。
+
+
+== 定位系列2 ==
+absolute属性是拿来定位，我们只要使用其他属性定位就可以了。此时，自然而然想到了CSS中另外一个更加低调全能的定位属性margin，下面的前两个例子都是使用margin代替absolute及相关属性。
+
+
+京东商城的实现，中规中矩，想这种带有覆盖效果的定位，使用absolute定位估计是大部分页面重构人员的首选。但是，绝对定位之“绝对”一词本身就意味着其在扩展性方面的表现受限。如果我们要求更高，可以使用CSS代码量更少，扩展性更强的margin布局。
+
+
+下面再看另外一个例子，就是淘宝首页的滚动播放效果，使用是absolute定位，通过改变top属性值实现上下的滚动切换。完全可以使用margin-top属性代替这里的relative+absolute+top属性组合。
+
+而IE浏览器下药实现opacity效果需要使用filter滤镜，然而opacity属性的半透明效果不仅会影响到当前元素，所有的子元素也会跟着半透明，此时，如果导航内元素放在半透明化的div内部显然容易死翘翘。所以，半透明背景层，与导航内容层不是父子关系，而是兄弟关系，导航内容覆盖于半透明背景上，就避免了导航内容被半透明化的危险。
+
+而覆盖定位一般都离不开absolute属性，所以，新浪微博的主导航使用了绝对定位。然而，这里的绝对定位使用我必须称赞一下，因为很难得的，这里的absolute使用主要是利用了absolute属性的破坏性（高宽占据空间为0的特性），而不是利用其定位性（借助left/top等属性的定位）。
+
+如果是我，一定会把这些隐藏的绝对定位元素放在在body标签内部，且最底部加载，以提高页面的呈现速度，甚至根本就不加载。此做法就是mtime时光网下拉导航的做法，是推荐的做法。
+
+== 定位系列3 ==
+早先时候我曾翻译过两篇关于回流与重绘的文章，“最小化浏览器中的回流(reflow)”以及“回流与重绘：CSS性能让JavaScript变慢？”。
+我自己是没测过。不过根据上面这两篇文章的说法，以及一位口碑前端前辈的说法，使用absolute隐藏于显示元素是会产生重绘而不会产生强烈的回流。而使用display:none不仅会重绘，还会产生回流，DOM影响范围越广，回流越强烈。所以，就JavaScript交互的呈现性能上来讲，使用absolute隐藏是要优于display相关隐藏的。
+
+
+这就是使用display属性控制元素显隐的局限性。顺带一提的是jQuery的显隐方法show()/hide()/toggle()就是基于display的，其会存储元素先前的display属性值，于是元素再显示的时候就可以准确地显示出之前的display值了。
+
+您可以狠狠地点击这里：jQuery与display的显隐测试
+
+== 定位系列4 ==
+虽然relative属性要借助z-index采能实现任意高度的纵云梯，但是，实际上，即使没有z-index这把御剑，在凡人之中，其纵云之气已经完全震慑周围。例如，凡人标签在margin负值下，后者会覆盖前者，如下图所示：
+
+
+相对定位的最小化影响原则。
+
+
+z-index属性目前只有在position:relative、position:absolute和position:fixed参与的情况下才有作用，表示层级，类似photoshop中层级的概念。

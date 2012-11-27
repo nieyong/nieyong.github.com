@@ -1,0 +1,53 @@
+== SI的录制功能 ==
+和vim的q键录制功能（recording）一样，SI也有这个功能。
+# Ctrl+F1	开始录制
+# Ctrl+F2	停止录制
+# Ctrl+F3	使用上次的录制内容编辑
+
+== 有关Source Insight的相关使用技巧，请参考readmine上的主题讨论项目。 ==
+
+* Navigation: Activate Symbol Window        :  Alt+L
+应用举例：现在在浏览代码，需要到符号窗口搜索一个函数，使用Alt+L就可以快速定位到符号窗口的搜索栏中。
+
+
+* View: Symbol Window                       :  Alt+F8
+应用举例：只是显示符号表，但是并不会跳转到符号表，用于控制符号窗口的出现和隐藏。
+
+
+* View: Highlight Word                      :  Shift+F8
+取消高亮也是这个快捷键
+
+* Navigation
+Navigation: Go Back                       :  F1, Alt+,, Thumb 1 Click
+
+Navigation: Go Back Toggle                :  Alt+M
+
+Navigation: Go Forward                    :  F2, Alt+., Thumb 2 Click
+
+* 缩进（indent right/indent left）	：F9/F8
+
+* 查找某一行，快速定位到某一行		：F5
+
+
+* 显示当前文件的完整路径?
+
+* 跳到函数、变量定义的地方，或者查看该函数被调用情况		: ctrl-=
+* 对变量和宏等进行智能改名					: ctrl+'
+
+* Alt+L 当焦点在文本编辑框时，按ALT+L焦点会飞到Symbol Window，可选择函数名等。
+
+* Ctrl+O 当焦点在文本编辑框时，按Ctrl+O焦点会飞到Project Window，可选择项目文件等。
+
+== SI和SVN定制 ==
+下列小技巧是在工作中同事整理总结的，对提高工作效率多少有点帮助，其中有些是对应于SVN的，没有使用SVN做版本管理的人就不要白费力气了。添加定制命令的步骤是Options->Custom Cammands。
+
+* ShellExecute open explorer /e,/select,%f
+作用是在资源管理器中打开当前编辑文件并选中，设置快捷键ctrl+e，这样能很方便的在资源管理器打开对应的文件，并进行tortoiseSVN的相关操作
+
+* C:\Progra~1\TortoiseSVN\bin\TortoiseProc.exe  /command:log  /path:%f
+作用是直接查看当前文件的svn log，使用前注意更改对应的exe文件安装路径，设置快捷键如ctrl+l。其中，%f表示当前路径下的文件，而C:\Progra~1\则表示C:\Program Files\路径。
+
+* C:\Progra~1\TortoiseSVN\bin\TortoiseProc.exe /command:diff /path:%f 
+作用是直接查看当前文件和基准版本的比较，可以设置快捷键如ctrl+d。
+
+ 

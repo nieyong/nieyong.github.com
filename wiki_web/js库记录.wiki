@@ -1,0 +1,250 @@
+== flipsnap.js ==
+该库在代码中的使用示例如下：
+{{{name="code" class="js"
+
+//函数的引用
+var flipsnap = Flipsnap("#wrap");
+
+}}}
+
+下面是flipsnap.js的实现。下面是抽取了其基本框架。
+{{{name="code" class="js"
+(function(window, document, undefined) {
+
+var ...;		/* 局部变量 */
+function(){} ;		/* 内部函数 */
+
+function Flipsnap(){};				/* Flipsnap()函数定义，该函数为内部函数 */
+Flipsnap.prototype.init = function(){};		/* 定义Flipsnap()函数的原型链 */
+Flipsnap.prototype.handleEvent = function(){};	/* 定义Flipsnap()函数的原型链 */
+......
+
+window.Flipsnap = Flipsnap;	/* 将定义的内部函数Flipsnap()赋值到window对象下，成为全局函数 */
+
+})(window, window.document);	/* 执行该无名函数，使函数内的操作都实现 */
+
+}}}
+
+通过上面的代码，可以看到flipsnap.js就是生成了一个window的对象，该对象是一个函数Flipsnap()。如果这是一个普通的函数（什么是？），那么在使用的时候可能有两种情况，一是直接调用该函数执行一些操作，返回的结果是true或者false；二是使用new实例化该函数，返回的结果为该函数的一个实例。我们看应用的示例，好像都不符合上面说的两种情况。其实，原因就在于Flipsnap()函数实现的一些特点。 
+
+{{{name="code" class="js"
+function Flipsnap(element, opts) {
+	return (this instanceof Flipsnap)
+		? this.init(element, opts)
+		: new Flipsnap(element, opts);
+}
+
+
+Flipsnap.prototype.init = function(element, opts) {
+	var self = this;
+	/* ... */
+	return self;
+};
+}}}
+
+可以看到，Flipsnap()函数返回的已经是一个其本身的实例。
+
+== cordova-2.0.0.js ==
+该js库主要学习其模块化机制。
+
+下面以Android的cordova-2.0.0.js为例分析其实现结构。
+
+
+{{{name="code" class="js"
+;(function() {
+
+// file: lib/scripts/require.js
+var require,
+    define;
+
+(function () {
+    var modules = {};
+
+    //初始化模块
+    function build(module) {
+        var factory = module.factory;
+        module.exports = {};
+        delete module.factory;		//模块的factory属性被删除
+        factory(require, module.exports, module);	//初始化模块
+        return module.exports;		//模块添加了exports属性，exprots属性在factory属性中实现
+    }
+
+    //获取模块的执行部分exports属性（对外表现为初始化一个模块），前提是模块已经初始化，exports属性在factory属性中实现，但是未初始化
+    require = function (id) {
+        if (!modules[id]) {
+            throw "module " + id + " not found";
+        }
+        
+	//判断该模块是否已经初始化的依据是factory属性是否还存在
+        return modules[id].factory ? build(modules[id]) : modules[id].exports;
+    };
+
+    //define()函数注册模块，modules对象存放
+    define = function (id, factory) {
+        if (modules[id]) {
+            throw "module " + id + " already defined";
+        }
+	
+	//注册时，每个模块都由modules的一个成员对象保存，只有id和factory两个属性
+        modules[id] = {
+            id: id,
+            factory: factory
+        };
+    };
+
+    define.remove = function (id) {
+        delete modules[id];
+    };
+
+})();	// 立即执行 
+
+//Export for use in node
+if (typeof module === "object" && typeof require === "function") {
+    module.exports.require = require;
+    module.exports.define = define;
+}
+
+define("cordova",function(){});	/* 调用define()函数，注册模块 */
+......
+
+window.cordova = require('cordova');	/* 初始化cordova模块，这是第一个被初始化的模块 */
+
+(function (context) {})(window);	//立即执行，后面有详细讲解
+
+})();	// 立即执行
+}}}
+
+下面是注册模块部分实现的示例，以FileSystem模块为例。
+{{{name="code" class="js"
+// file: lib/common/plugin/FileSystem.js
+define("cordova/plugin/FileSystem", function(require, exports, module) {
+var DirectoryEntry = require('cordova/plugin/DirectoryEntry');
+
+/**
+ * An interface representing a file system
+ *
+ * @constructor
+ * {DOMString} name the unique name of the file system (readonly)
+ * {DirectoryEntry} root directory of the file system (readonly)
+ */
+var FileSystem = function(name, root) {
+    this.name = name || null;
+    if (root) {
+        this.root = new DirectoryEntry(root.name, root.fullPath);
+    }
+};
+
+module.exports = FileSystem;
+
+});
+}}}
+
+上面这种先注册，后根据需要初始化的实现，很好的解决了模块之间的依赖关系。例如a需要依赖b模块，那么在a模块初始化的时候，就需要先初始化b模块（如果b模块没有初始化的话），或者直接获得b模块的exports（b模块已经初始化了）。例如上面的`var DirectoryEntry = require('cordova/plugin/DirectoryEntry');`一句。
+
+下面看看`(function (context) {})(window);`的实现。
+{{{name="code" class="js"
+// file: lib/scripts/bootstrap.js
+(function (context) {
+    var channel = require("cordova/channel"),
+        _self = {
+            boot: function () {
+                /**
+                 * Create all cordova objects once page has fully loaded and native side is ready.
+                 */
+                channel.join(function() {
+                    var builder = require('cordova/builder'),
+                        base = require('cordova/common'),
+                        platform = require('cordova/platform');
+
+                    // Drop the common globals into the window object, but be nice and don't overwrite anything.
+                    builder.build(base.objects).intoButDontClobber(window);
+
+                    // Drop the platform-specific globals into the window object
+                    // and clobber any existing object.
+                    builder.build(platform.objects).intoAndClobber(window);
+
+                    // Merge the platform-specific overrides/enhancements into
+                    // the window object.
+                    if (typeof platform.merges !== 'undefined') {
+                        builder.build(platform.merges).intoAndMerge(window);
+                    }
+
+                    // Call the platform-specific initialization
+                    platform.initialize();
+
+                    // Fire event to notify that all objects are created
+                    channel.onCordovaReady.fire();
+
+                    // Fire onDeviceReady event once all constructors have run and
+                    // cordova info has been received from native side.
+                    channel.join(function() {
+                        require('cordova').fireDocumentEvent('deviceready');
+                    }, channel.deviceReadyChannelsArray);
+
+                }, [ channel.onDOMContentLoaded, channel.onNativeReady ]);
+            }
+        };
+
+    // boot up once native side is ready
+    channel.onNativeReady.subscribeOnce(_self.boot);
+
+    // _nativeReady is global variable that the native side can set
+    // to signify that the native code is ready. It is a global since
+    // it may be called before any cordova JS is ready.
+    if (window._nativeReady) {
+        channel.onNativeReady.fire();
+    }
+
+}(window));
+
+}}}
+
+== iscroll.js ==
+下面是iscroll.js的实现。下面是抽取了其基本框架。
+{{{name="code" class="js"
+(function(){
+    var ...;	//全局变量初始化
+
+    // Constructor
+    iScroll = function (el, options) {
+	......
+    };
+
+    // Prototype
+    iScroll.prototype = {
+	//原型链变量的初始化
+	enabled: true,
+	x: 0,
+	......
+
+	//原型链函数的实现
+	handleEvent: function (e) {},
+	_checkDOMChanges: function () {},
+	......
+    };
+
+    if (typeof exports !== 'undefined') exports.iScroll = iScroll;
+    else window.iScroll = iScroll;
+
+})();	//立即执行
+}}}
+
+将iscroll.js和flipsnap.js比较，可以发现它们的结构基本上都是一样的。不同之处，iscroll函数就是前面说的普通函数，使用的时候，要使用new操作实例化。
+
+== toast.js ==
+这是一个jquery的插件，所以其符合jquery插件的格式。
+{{{name="code" class="js"
+(function($) {
+    toasting = false; 	//Global to check if toast is being displayed
+    toastQue = [];		//Array to store messages if a message is already being displayed
+    
+    //return new toastmessage object
+    $.toast = function (options) {
+	return new toastmessage(options);
+    };
+
+    var toastmessage = function(options){
+	......		//功能实现
+    };
+})(jQuery);
+}}}

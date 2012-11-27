@@ -1,0 +1,35 @@
+== fork初识 ==
+{{{name="code" class="c"
+#include <unistd.h>;
+#include <sys/types.h>;
+
+main ()
+{
+    pid_t pid;
+
+    pid=fork();
+    if (pid < 0)
+	printf("error in fork!");
+    else if (pid == 0)
+	printf("i am the child process, my process id is %dn",getpid());
+    else
+	printf("i am the parent process, my process id is %dn",getpid());
+}
+}}}
+
+上面的代码，运行的结果是：
+{{{name="code" class="c"
+[root@localhost c]# ./a.out 
+i am the child process, my process id is 4286 
+i am the parent process, my process id is 4285 
+}}}
+
+会出现这个问题的原因是：
+
+fork之后，操作系统会复制一个与父进程完全相同的子进程，虽说是父子关系，但是在操作系统看来，他们更像兄弟关系，这2个进程共享代码空间，但是数据空间是互相独立的，子进程数据空间中的内容是父进程的完整拷贝，指令指针也完全相同，但只有一点不同，如果fork成功，子进程中 fork的返回值是0，父进程中fork的返回值是子进程的进程号，如果fork不成功，父进程会返回错误。 
+
+可以这样想象，2个进程一直同时运行，而且步调一致，在fork之后，他们分别作不同的工作，也就是分岔了。这也是fork为什么叫fork的原因。 
+
+至于那一个最先运行，可能与操作系统有关，而且这个问题在实际应用中并不重要，如果需要父子进程协同，可以通过原语的办法解决。
+
+

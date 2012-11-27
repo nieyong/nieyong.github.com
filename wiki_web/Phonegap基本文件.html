@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Phonegap基本文件</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">Phonegap中的基本文件</h2>
+<p>
+cordova.js:拦截DOM,Window事件，加入自定义cordova事件,管理回调Javascript。  
+</p>
+  
+<p>
+scripts/require.js:PhoneGap中模块化机制的基础框架。简单但是也不简单!  
+</p>
+  
+<p>
+scripts/bootstrap.js:负责cordova的启动。  
+</p>
+  
+<p>
+common/channel.js:PhoneGap中实现事件监听的基础。  
+</p>
+  
+<p>
+common/builder.js:具备定制化构造模块的能力。  
+</p>
+  
+<p>
+common/plugin:如名字所示。这里放置所有平台通用的插件接口。  
+</p>
+  
+<p>
+lib/exec.js:于上一篇解析中提到。是Javascript调用Native的入口。  
+</p>
+  
+<p>
+lib/platform.js:与平台实现有关的初始化。  
+</p>
+  
+<p>
+lib/android/plugin:与android平台紧密相关的插件。  
+</p>
+
+<p>
+由于 Javascript 中在语法级别没有私有访问符。因此往往解决之道是： a. 模仿 C 风格，命名使用 _ 开头的一律表示是私有 ;b. 新建一个 private 对象 , 将其私有方法放置其中 , 起到命名空间的作用 ;c. 将私有部分用 function{} 套住 , 用 return 返回公开部分。这种做法充分发挥了 javascript 闭包的优势，但是可读性比较差。
+</p>
+
+<p>
+phoneGap 的 module 机制使用了第三种做法。但是通过将构造和依赖分离开来，使得可读性大大增加。代码清晰好懂，依赖性也一目了然。
+</p>
+
+<p>
+也许有朋友要问。这种模块机制碰到循环依赖的情况怎么办？例如 A 在 define 阶段 requireB ， B 在 define 阶段又 requireA 。很遗憾，这种循环依赖的情况 依照 phoneGap 的模块化思路是无法实现的。因此对于关键组件的编制 ,phoneGap 总会小心翼翼地处理其依赖顺序。
+</p>
+
+<p>
+通过阅读源码，发现大致的模块依赖顺序是这样子的 ( 被依赖模块到依赖模块 ):utils.js-&gt;channel.js|builder.js-&gt;cordova.js-&gt;exec.js|polling.js-&gt;callback.js-&gt;platform.js-&gt;bootstrap.js 。
+</p>
+
+<h2 id="toc_0.2">PhoneGap 中的事件处理机制</h2>
+<p>
+common/channel.js 是 PhoneGap 事件处理机制的基础。每个事件类型，都会包装成一个 Channel 对象。
+</p>
+
+<p>
+既然是事件，那么就得支持基础的观察者模式吧？ Channel 的 prototype 定义了事件的一些关键方法。 subscribe 用于注册一个监听器，并给监听器一个 guid 。 guid 类似 cordova.js 中的 callbackId ，只是一个流水标识。但 Channel 中的 guid 稍有些不同，指定确切的 guid 可以对监听器做覆盖操作。
+</p>
+
+<p>
+utils.close 是个很有趣的方法。 Javascript 中的调用不当引起 this 不对，这是新手常见的错误。常见的做法会通过封装 apply 做 delegate 。而 close 这个方法是绝了 , 它通过闭包包装了一个指向确定 this ，调用确定 function, 使用确定实参的 final 函数。不管在什么样的环境下调用 , 这个方法总能正确执行。
+</p>
+
+<p>
+subscribeOnce 类似于 YUI 或者 jquery 中的 one 。只会收到一次监听。 ( 若事件已经触发过，则在注册阶段立即回调监听 )unsubscribe 和 fire 分别用来注销监听器和触发事件。触发事件将会引起监听器的广播操作。可选的 fireArgs 用于保证 subscribeOnce 在事件已触发的情况下能获得正确的广播参数。
+</p>
+
+<p>
+Channel 本身还有一个监听注册 / 注销的事件拦截。分别是 onSubscribe 和 onUnSubscribe 。在 common\plugin\battery.js 中，我们可以看到。 battery.js 便是利用这个注册监听回调，来对 Plugin 服务做懒加载和卸载工作。
+</p>
+
+<p>
+作为模块暴露公有部分的 channel 对象比较有意思。 join 这个工具方法类似 subscribeOnce, 它的第二个参数是个 Channel 数组。当且仅当所有的 Channel 事件都被 fire 后 ,join 的监听才会被回调。这个方法还是挺有用的create 是个构造工厂方法。新构造的 Channel 事件会被放置在 channel 对象中。使用上会方便点。在 channel.create('onCordovaReady'); 后 , 便可以便捷的通过 channel[‘onCordovaReady’] 来方便的访问对应类型的 Channel 对象了。
+</p>
+
+<p>
+deviceReadyMap,deviceReadyArray,waitForInitialization,initializeComplete 这四者紧密相关。它们决定了 onDeviceReady 事件在何时被触发。于 common/bootstrap.js 中我们看到下面一段代码。
+</p>
+ 
+<pre  name="code" class="js">
+channel.join(function() {  
+  
+channel.onDeviceReady.fire();  
+  
+}, channel.deviceReadyChannelsArray);  
+</pre>
+<pre  name="code" class="js">
+channel.join(function() {  
+  
+channel.onDeviceReady.fire();  
+  
+}, channel.deviceReadyChannelsArray);  
+</pre>
+ 
+<p>
+waitForInitialization 用于添加 onDeviceReady 的等待 Channel 事件。 initializeComplete 用于触发指定的等待 Channel 事件。如果想要增加 onDeviceReady 的条件，我们只需要在 onCordovaReady 之前添加 waitForInitialization 即可。事实上，在 lib/android/plugin/storage.js 中我们便可以看到一个绝佳的例子。 cupcakeStorage 利用本地 Plugin 为不支持 localStorage API 的 WebView 提供了一个备选方案。在本地建立好备用的 sqlite 数据库后 ,cupcakeStorage 的等待时间便结束完毕。
+</p>
+
+<p>
+下面为phonegap的启动事件序列图。
+</p>
+
+<p>
+<a href="img/phonegap/phonegap启动事件序列.png.html">img/phonegap/phonegap启动事件序列.png</a>
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

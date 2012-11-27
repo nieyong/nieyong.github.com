@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>php常用函数和宏</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">常用函数</h2>
+<ul>
+<li>
+die()/exit()
+
+</ul>
+<p>
+exit()函数输出一条消息，并退出当前脚本。该函数是die()函数的别名。
+</p>
+
+<p>
+例如：
+</p>
+<pre name="code" class="php">
+&lt;?php
+    if( !defined('AROOT') ) die('NO AROOT!');	//没有定义变量AROOT，就退出程序
+?&gt;
+</pre>
+
+<ul>
+<li>
+define()函数/defined()函数
+
+</ul>
+<p>
+define()函数定义一个常量。defined()函数检查常量是否被定义。常量类似变量，不同之处在于：
+</p>
+<ol>
+<li>
+在设定以后，常量的值无法更改 
+
+<li>
+常量名不需要开头的美元符号 ($) 
+
+<li>
+作用域不影响对常量的访问 
+
+<li>
+常量值只能是字符串或数字 
+
+</ol>
+<p>
+例如：
+</p>
+<pre name="code" class="php">
+
+// define constant
+define( 'DS' , DIRECTORY_SEPARATOR );
+define( 'IN' , true );
+
+define( 'ROOT' , dirname( __FILE__ ) . DS );
+define( 'CROOT' , ROOT . 'core' . DS  );
+
+</pre>
+
+<ul>
+<li>
+dirname()函数
+
+</ul>
+<p>
+返回路径中的目录部分。
+</p>
+
+<p>
+例如：
+</p>
+<pre name="code" class="php">
+
+&lt;?php
+echo dirname("c:/testweb/home.php");		//输出结果：c:/testweb
+echo dirname("/testweb/home.php");		//输出结果：/testweb
+?&gt;
+
+</pre>
+
+<ul>
+<li>
+error_reporting()函数
+
+</ul>
+<p>
+error_reporting()设置PHP的报错级别并返回当前级别。
+</p>
+
+
+<ul>
+<li>
+stripslashes()函数
+
+</ul>
+<p>
+stripslashes()函数删除由addslashes()函数添加的反斜杠。
+</p>
+
+<p>
+示例：
+</p>
+<pre name="code" class="php">
+
+&lt;?php
+echo stripslashes("Who\s John Adams?");		//输出结果：Whos John Adams?
+?&gt;
+
+</pre>
+
+<ul>
+<li>
+move_uploaded_file() 函数将上传的文件移动到新位置。若成功，则返回 true，否则返回 false。
+
+</ul>
+
+<p>
+本函数检查并确保由 file 指定的文件是合法的上传文件（即通过 PHP 的 HTTP POST 上传机制所上传的）。如果文件合法，则将其移动为由 newloc 指定的文件。
+</p>
+
+
+<ul>
+<li>
+in_array() 函数在数组中搜索给定的值。
+
+</ul>
+
+
+
+<h2 id="toc_0.2">默认全局数组（auto-global array）</h2>
+<h3 id="toc_0.2.1">$GLOBALS array</h3>
+<p>
+The \(GLOBALS array, whether used inside or outside a function, is always in scope. This is because \)GLOBALS is a special kind of pre-defined variable, called an auto-global . Auto-globals are variables that can be used anywhere in your PHP programs without anything required to bring them into scope. They're like a well-known employee that everyone, at headquarters or a branch office, refers to by his first name.
+</p>
+
+<p>
+The auto-globals are always arrays that are automatically populated with data. They contain things such as submitted form data, cookie values, and session information. 
+</p>
+
+
+<h3 id="toc_0.2.2">$_SERVER auto-global array</h3>
+<p>
+The $_SERVER auto-global array holds a variety of information about your server and the current request the PHP interpreter is processing. 
+</p>
+
+<p>
+The PHP_SELF element of \(_SERVER holds the pathname part of the current request's URL. For example, if a PHP script is accessed at <code>http://www.example.com/store/catalog.php</code>, \)_SERVER['PHP_SELF'] is <code>/store/catalog.php</code> in that page.
+</p>
+
+<p>
+$_SERVER[PHP_SELF]经常用在form的action属性上，表明form的提交仍然使用当前php文件进行处理。
+</p>
+<pre name="code" class="php">
+
+&lt;form method="post" action="$_SERVER[PHP_SELF]"&gt;
+
+&lt;input type="text" name="my_name"&gt;
+&lt;input type="submit" value="Say Hello"&gt;
+
+&lt;/form&gt;
+
+</pre>
+
+<p>
+在uploadify.php中，有这样的使用，$_SERVER['DOCUMENT_ROOT']，这是指的哪个根路径呢？
+</p>
+
+<p>
+The directory on the web server computer that holds the documents available on the web site. If the document root is /usr/local/htdocs for the web site <code>http://www.example.com</code>, then a request for <code>http://www.example.com/catalog/store.php</code> corresponds to the file /usr/local/htdocs/catalog/store.php.
+</p>
+
+<p>
+下表总结了全局数组_SERVER的常用元素。
+</p>
+
+<table>
+<tr>
+<td>
+Element
+</td>
+<td>
+Example
+</td>
+<td>
+Description
+</td>
+</tr>
+<tr>
+<td>
+QUERY_STRING
+</td>
+<td>
+category=kitchen&amp;price=5
+</td>
+<td>
+The part of the URL after the question mark where the URL parameters live. The example query string shown is for the URL <a href="http://www.example.com/catalog/store.php?category=kitchen&amp;price=5.">http://www.example.com/catalog/store.php?category=kitchen&amp;price=5.</a>
+</td>
+</tr>
+<tr>
+<td>
+PATH_INFO
+</td>
+<td>
+/browse
+</td>
+<td>
+Extra path information tacked onto the end of the URL after a slash. This is a way to pass information to a script without using the query string. The example PATH_INFO shown is for the URL <a href="http://www.example.com/catalog/store.php/browse.">http://www.example.com/catalog/store.php/browse.</a>
+</td>
+</tr>
+<tr>
+<td>
+SERVER_NAME
+</td>
+<td>
+www.example.com
+</td>
+<td>
+The name of the web site on which the PHP interpreter is running. If the web server hosts many different virtual domains, this is the name of the particular virtual domain that is being accessed.
+</td>
+</tr>
+<tr>
+<td>
+DOCUMENT_ROOT
+</td>
+<td>
+/usr/local/htdocs
+</td>
+<td>
+The directory on the web server computer that holds the documents available on the web site. If the document root is /usr/local/htdocs for the web site <a href="http://www.example.com,">http://www.example.com,</a> then a request for <a href="http://www.example.com/catalog/store.php">http://www.example.com/catalog/store.php</a> corresponds to the file /usr/local/htdocs/catalog/store.php.
+</td>
+</tr>
+<tr>
+<td>
+REMOTE_ADDR
+</td>
+<td>
+175.56.28.3
+</td>
+<td>
+The IP address of the user making the request to your web server.
+</td>
+</tr>
+<tr>
+<td>
+REMOTE_HOST
+</td>
+<td>
+pool0560.cvx.dialup.verizon.net
+</td>
+<td>
+If your web server is configured to translate user IP addresses into hostnames, this is the hostname of the user making the request to your web server. Because this address-to-name translation is relatively expensive (in terms of computational time), most web servers do not do it.
+</td>
+</tr>
+<tr>
+<td>
+HTTP_REFERER[2]
+</td>
+<td>
+<a href="http://directory.google.com/Top/Shopping/Clothing/">http://directory.google.com/Top/Shopping/Clothing/</a>
+</td>
+<td>
+If someone clicked on a link to reach the current URL, HTTP_REFERER contains the URL of the page that contained the link. This value can be faked, so don't use it as your sole criteria for giving access to private web pages. It can, however, be useful for finding out who's linking to you.
+</td>
+</tr>
+<tr>
+<td>
+HTTP_USER_AGENT
+</td>
+<td>
+Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)
+</td>
+<td>
+The web browser that retrieved the page. The example value is the signature of Internet Explorer 6.0 running on Windows XP. Like HTTP_REFERER, this value can be faked, but is useful for analysis.
+</td>
+</tr>
+</table>
+
+
+
+
+<h3 id="toc_0.2.3">\(_GET and \)_POST auto-global arrays</h3>
+<pre name="code" class="php">
+
+$verifyToken = md5('unique_hash' . $_POST['timestamp']);
+
+if (!empty($_FILES) &amp;&amp; $_POST['token'] == $verifyToken) {
+//something to do
+}
+
+</pre>
+<p>
+这是采集到的什么信息，有什么作用？
+</p>
+
+<h3 id="toc_0.2.4">$_FILES auto-global array</h3>
+<p>
+\(_FILES数组是在文件（尤其是图片）的上传中经常要用到的。\)_FILES是一个二维的数组，这个和其他的全局数组有些不一样，第一个维度使用的是<code>&lt;input type="file" name="xxx" /&gt;</code>中name属性的属性值xxx。第二个维度一般包括文件的名name、文件大小size、文件类型type、文件存放临时名字tmp_name、错误信息error等。
+</p>
+
+<pre name="code" class="php">
+$_FILES['my_file']['error']
+
+print "You uploaded a file called {$_FILES['my_file']['name']} ";
+print "of type {$_FILES['my_file']['type']} that is ";
+print "{$_FILES['my_file']['size']} bytes long.";
+(move_uploaded_file($_FILES['my_file']['tmp_name'], $destination_file))
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

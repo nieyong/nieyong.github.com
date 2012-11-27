@@ -1,0 +1,229 @@
+C语言的第三次作业大家都完成了基本功能，基本目的是为了让大家了解编程中的一些基本优化。关于优化的文档将发给大家。关于代码优化，需要说明的有下面几点：
+# 一般的嵌入式平台上，不要有浮点运算。某些平台上支持浮点运算，也很勉强，速度慢。这主要考虑两方面的问题，一是处理器是否支持浮点运算，是否有浮点运算的运算单元，一般是一个单独的IP核，和ALU作用一样，例如MIPS的专门的浮点运算单元FPU；二是编译器是否支持浮点运算，对于浮点运算，可能在编译的时候就不能够成功；
+# 关于多线程和并行计算；多线程很多时候说的是软件上的时候，而并行计算可能谈及一些处理器本身的特性，例如多核问题，大家不要将这个弄混淆了。建议大家参考一下《大话处理器》一书，产品线有；
+# 关于函数封装和函数的颗粒度问题；有一些基本的原则，例如接口最小化原则、一个函数的长度最好是在100行以内，封装隔离变化降低复杂度等等；整个作业就是一个函数，或者所有的函数都没有形参，这代码看起来就不好了；
+# 关于结构体的字节对齐问题；字节对齐问题应该是需要考虑的，可以参考博客中的一些博文；
+
+
+
+== 陈可 ==
+* UI的交互不够好，在某些输入下cmd直接关闭，例如输入文件名不存在或者不对；
+* 考虑了结构体中字节对齐的问题：
+{{{name="code" class="c"
+    /*文件信息头*/
+    struct tagBITMAPFILEHEADER
+    {
+	UINT16 bfType;
+	DWORD bfSize;
+	UINT16 bfReserved1;
+	UINT16 bfReserved2;
+	DWORD bfOffBits;
+    }__attribute__((packed));
+}}}
+
+== 方桂烽 ==
+* UI的交互性可以，只在输入../xxx时候才会有cmd直接关闭的问题；
+* 考虑了结构体中字节对齐的问题：
+{{{name="code" class="c"
+    typedef struct tagBITMAPFILEHEADER { /* bmfh */
+    WORD bfType;
+    DWORD bfSize; 
+    DWORD bfReserved; 
+    DWORD bfOffBits;
+    }__attribute__((packed)) BITMAPFILEHEADER;/*用packed属性进行压缩，消除字节对齐*/
+}}}
+* 整个程序就只有一个函数，这个问题值得商榷。可以考虑代码的颗粒度问题。参考一下在这方便比较好的同事的代码。
+{{{name="code" class="c"
+    INT bmpToGray(IN char *pTrueColor, IN int len, OUT char **pGray, OUT int *grayImgLen)
+}}}
+
+== 付大军 ==
+* 在输入文件错误的情况下，仍然输出一张0kb的图片；
+* 使用内嵌汇编实现更加精准的时间测试函数；
+{{{name="code" class="c"
+    inline int64_t getCycleCount()
+    {
+	asm __volatile__(".byte 0x0f");
+	asm __volatile__(".byte 0x31");
+    }
+
+}}}
+
+== 李泽奇 ==
+* UI的交互不够好，在某些输入下cmd直接关闭，例如输入文件名不存在或者不对；
+* 对测试时间的计算，可以到us（毫秒）数量级，例如对2M大小图片的处理，可以到216us；
+{{{name="code" class="c"
+        /*开始计时*/
+        gettimeofday(&tStart, NULL);
+}}}
+
+* 代码的颗粒度方面把握还可以，例如在bmpConvert.c文件中。但是有些函数还是可以优化的，例如下面这一段就应该由tableInit()函数来完成，这样代码更加清晰；
+{{{name="code" class="c"
+    /*存入R、G、B可能的取值*/
+    int i = 0;
+    for(i = 0; i < TABLESIZE; i++)
+    {
+        red[i] = i;
+        green[i] = i;
+        blue[i] = i;
+    }
+}}}
+
+== 潘唐磊 ==
+* 没有上传dll文件；
+* 对索引表的建立，使用了宏定义，并且使用了多次移位运算，这是和大部分同事不一样的地方；
+{{{name="code" class="c"
+
+//浮点运算转换成移位和加减法运算, 丢失一小部分精度，
+//原来是y=0.299*r + 0.587*g + 0.114*b
+//现在是y=0.300*r + 0.589*g + 0.113*b
+#define CAL_R(i) ((i >> 2) + (i >> 4) - (i >> 6) + (i >> 8))
+#define CAL_G(i) ((i >> 1) + (i >> 4) + (i >> 5) - (i >> 7) + (i >> 8)) 
+#define CAL_B(i) ((i >> 3) - (i >> 7) - (i >> 8)) 
+}}}
+* 所有的函数都没有函数头；
+
+== 彭彬 ==
+* UI的交互性可以，但是无法解析./test/in.bmp这样的输入；
+* 使用了多线程进行处理优化；
+{{{name="code" class="c"
+    /*多线程*/
+    pthread_create(&thread1, NULL, (void *)&assign1, NULL);
+    pthread_create(&thread2, NULL, (void *)&assign2, NULL);
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+
+}}}
+* 函数的颗粒度问题处理得还不错；
+
+== 彭京思 ==
+* 无
+
+== 万义康 ==
+* 对函数颗粒度的把握较好的，值得其他所有同事学习。并且函数参数使用IN、INOUT表明。
+{{{name="code" class="c"
+
+/* 函数原型 */
+int bmpReadFileHeader(IN FILE *pFile, INOUT BITMAP_FILE_HEADER *buf);
+int bmpChkFileHeader(IN BITMAP_FILE_HEADER *buf);
+int bmpReadInfoHeader(IN FILE *pFile, INOUT BITMAP_INFO_HEADER *buf);
+int bmpChkInfoHeader(IN BITMAP_INFO_HEADER *buf);
+int bmpWriteToFile(INOUT FILE *pFileOut, IN char *buf, IN unsigned int bufLen);
+int bmpConvData(IN char *biDataBuf, INOUT char *convBuf, IN unsigned int biWidth);
+int bmpMkFileHd(IN FILE *pFileIn, INOUT FILE *pFileOut, INOUT BITMAP_FILE_HEADER *fileHd);
+int bmpMkInfoHd(IN FILE *pFileIn, INOUT FILE *pFileOut, INOUT BITMAP_INFO_HEADER *fileInfo);
+int bmpMkClrTab(INOUT FILE *pFileOut);
+
+}}}
+
+== 王焕林 ==
+* 没有上传dll文件，ui的提示和实际运行不一致，无论输入什么，都无法退出；
+* rgb的索引数据直接使用全局数组保存，有点嵌入式编程的感觉；
+{{{name="code" class="c"
+static unsigned char redTable[256]=
+{ 
+0,0,0,0,1,1,1,2,2,2,2,3,3,3,4,4,
+
+4,5,5,5,5,6,6,6,7,7,7,8,8,8,8,9,
+
+9,9,10,10,10,11,11,11,11,12,12,12,13,13,13,14,
+
+}}}
+* 读、写、转化函数都无参数输入，使用一个全局指针作为参数传递，这里值得商榷。在你的周报中提到“写出来的代码要有复用性，不能是一次性的，这样的代码没有生命力”，这里就是问题所在。另外，注意你代码代码函数封装和方桂烽代码的颗粒型问题的一些区别和联系。
+{{{name="code" class="c"
+int bmpRead(){}
+}}}
+
+== 阎煦洲 ==
+* UI的交互不够好，在代码中将图片文件限制在了test文件夹下；
+* exe可执行文件不需要dll放置到目录下就可以运行，你在编译的时候和其他同事的有什么区别？
+* 对函数颗粒度的把握较好的。
+{{{name="code" class="c"
+    int bmpProcess(FILE* fp);
+
+    LONG getLineBytes(LONG width, WORD bitCount);
+    int getBmpFileHdr(FILE* fp, BMP_FILE_HEADER* bmpFileHdr);
+    int getBmpInfoHdr(FILE* fp, BMP_INFO_HEADER* bmpInfoHdr);
+    int cratRgbTbl(FILE* fp, RGB_QUAD* rgbTable);
+    int getBmpData(FILE* fp, BYTE* bmpData, LONG height, LONG lineBytes);
+
+    int transBmp256(BYTE* bmpData, LONG height, LONG lineBytes);
+
+    int saveBmpFileHdr(FILE* fp, BMP_FILE_HEADER* bmpFileHdr);
+    int saveBmpInfoHdr(FILE* fp, BMP_INFO_HEADER* bmpInfoHdr);
+    int saveRgbTbl(FILE* fp, RGB_QUAD* rgbTable);
+    int saveBmpData(FILE* fp, BYTE* bmpData, int size);
+}}}
+
+== 余海 ==
+* UI设计比较好，例如有HELP信息；
+* 对函数颗粒度的把握较好的；
+* 在求索引表的时候，还是采用的浮点运算，这和题目优化代码的地方相悖；
+* 使用了多线程编程；
+
+== 钟奕涛 ==
+* 有多次提交仍然没有log信息，例如svn582、svn580；
+* UI的交互不够好，在某些输入下cmd直接关闭，例如输入文件名不存在或者不对；
+* readme文件还是使用上一次作业的，没有更新；
+* 对函数颗粒度的把握较好的。
+* 考虑了结构体中字节对齐的问题：
+{{{name="code" class="c"
+    /*定义bmp图像文件头结构体*/
+    typedef struct tagBITMAPFILEHEADER
+    {
+	    WORD bfType;  
+	    DWORD bfSize;  
+	    WORD bfReserved1;  
+	    WORD bfReserved2; 
+	    DWORD bfOffBits; 
+    }__attribute__((packed))BITMAPFILEHEADER;
+}}}
+
+
+== 周川添 ==
+* 忘记上传exe文件；
+* 调试函数还是整得很复杂，这个不是初衷；
+{{{name="code" class="c"
+	if (sourceInfoHeader.biCompression != BI_RGB)
+	{
+		fclose(sourceFile);
+		return printErrorMessage(__FUNCTION__, __LINE__, ERR_NOT_RGB);
+	}
+}}}
+* 在求索引表的时候，还是采用的浮点运算，这和题目优化代码的地方相悖；
+{{{name="code" class="c"
+	/*固定颜色，类似调色板*/
+	for (i = 0; i< colorAmount; i++)
+	{
+		gBlue[i] = i * 0.114;
+		gGreen[i] = i * 0.587;
+		gRed[i] = i * 0.299;
+	}
+}}}
+* 在函数注释等方面建议采用我们产品线统一的规范。另外，要配置好SI开发环境，参考《Source Insight 宏的使用》和《SourceInsight常用命令及其快捷键》。
+{{{name="code" class="c"
+/*
+ * 函 数 名：create24Gray
+ * 函数介绍：将24位BMP图像转化成8位BMP图像
+ * 输入参数：sourceFileHeader-24位源图像文件头，sourceInfoHeader-24位源图像信息头，
+ 					sourceFile-24位源文件，targetPath-输出文件路径
+ * 输出参数：无
+ * 返 回 值：errorType-错误类型
+ */
+}}}
+* 运用了windows下的多线程编程，这虽然不是本题的初衷（一般嵌入式平台一般没有多线程的支持），但还是值得肯定的。
+{{{name="code" class="c"
+	/*运用多线程处理,目前测试2个线程运行速度最快，毕竟建立线程也是有消耗的*/
+	#if 1
+	pthread_t t[threadAmount];
+	for (i = 0; i < threadAmount; i++)
+	{
+		pthread_create(&t[i], NULL, convert, (void*)i);
+	}
+	//pthread_join(t[threadAmount - 1], NULL);
+	
+	#endif
+}}}
+
+
+

@@ -1,0 +1,93 @@
+== 共用体 ==
+共用体又叫做联合体，是C语言中几个不同的变量共占一段内存的结构。
+
+下面是在OSPF协议代码中定义的一个共用体，并且使用到了段域的概念。
+{{{name="code" class="c"
+#if (_BYTE_ORDER == _LITTLE_ENDIAN )
+typedef _struct
+
+{
+        BIT_FIELD (enum, BOOLEAN)       transit:1;                      /* This is a transit area */
+        BIT_FIELD (enum, BOOLEAN)       virtual_up:1;           /* One or more virtual links in this area are up */
+        BIT_FIELD (enum, BOOLEAN)       stub:1;                         /* This is a  area (no external routes) */
+        BIT_FIELD (enum, BOOLEAN)       nssa:1;                         /* This is a not so stubby area */
+        BIT_FIELD (enum, BOOLEAN)       stub_default:1;         /* Inject default into this stub area */
+        BIT_FIELD (enum,BOOLEAN)        not_used:3;
+} _pack OSPF_AREA_FLAGS;
+#else /* _BYTE_ORDER == _BIG_ENDIAN */
+typedef _struct OSPF_AREA_FLAGS
+{
+        BIT_FIELD (enum,BOOLEAN)        not_used:3;
+        BIT_FIELD (enum, BOOLEAN)       stub_default:1;         /* Inject default into this stub area */
+        BIT_FIELD (enum, BOOLEAN)       nssa:1;                         /* This is a not so stubby area */
+        BIT_FIELD (enum, BOOLEAN)       stub:1;                         /* This is a  area (no external routes) */
+        BIT_FIELD (enum, BOOLEAN)       virtual_up:1;           /* One or more virtual links in this area are up */
+        BIT_FIELD (enum, BOOLEAN)       transit:1;                      /* This is a transit area */
+} _pack OSPF_AREA_FLAGS;
+#endif /* _BYTE_ORDER == _LITTLE_ENDIAN */
+
+typedef _union  UNION_OSPF_AREA_FLAGS
+{
+        OSPF_AREA_FLAGS _bit;
+        BYTE                    _byte;
+} _pack UNION_OSPF_AREA_FLAGS;
+}}}
+
+下面是rip协议中使用套接字接收数据，存放数据包的结构使用了共用体。
+{{{name="code" class="c"
+#define MAXPACKETSIZE           512     /* From rip/ripLib.h */
+
+typedef struct rip_pkt {
+	u_char	rip_cmd;		/* request/response */
+	u_char	rip_vers;		/* protocol version # */
+	u_char	rip_domain[2];		/* Version 2 routing domain. */
+	union {
+		struct	netinfo ru_nets[1];	/* variable length... */
+	} ripun;
+#define	rip_nets	ripun.ru_nets
+} RIP_PKT;
+
+LOCAL void process (int fd)
+{
+	struct sockaddr from;
+	int fromlen, cc;
+	union {
+		char	buf[MAXPACKETSIZE+1];
+		RIP_PKT rip;
+	} inbuf;	//定义了一个存放数据包的共用体，将char数组和rip数据包格式的结构体共用
+
+        bzero ((char *)&from, sizeof (from));
+	for (;;) 
+	{
+		fromlen = sizeof (from);
+		cc = recvfrom (fd, (char *)&inbuf, sizeof (inbuf), 0, 
+                               &from, &fromlen);	//将从socket中接收到的数据放入共用体buf中
+		if (cc <= 0) 
+		{
+			...
+			//出错处理
+		}
+		if (fromlen != sizeof (struct sockaddr_in)) break;
+		
+		routedInput (&from, &inbuf.rip, cc);	//使用共用体中的rip数据包格式变量作为参数
+	}
+}
+	
+}}}
+== 枚举类型 ==
+枚举类型是ANSI C新标准中增加的。
+
+下面是OSPF协议中定义的枚举的类型。
+{{{name="code" class="c"
+/* the OSPF interface configure parameters enum */
+typedef enum{
+	swOspfIfParam_cost = 1,
+	swOspfIfParam_retranInter = 2,
+	swOspfIfParam_tranDelay = 3,
+	swOspfIfParam_prio = 4,
+	swOspfIfParam_helloInter = 5,
+	swOspfIfParam_deadInter = 6,
+	swOspfIfParam_authKey = 7,
+	swOspfIfParam_digestKey =8
+}swOspfIfIfParam_t;
+}}}

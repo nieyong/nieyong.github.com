@@ -1,0 +1,28 @@
+== GNU Binutils ==
+* ELF文件头
+     
+     readelf -h
+     
+     示例：想看到一个镜像文件的入口地址，就可以通过打印该ELF文件的头部信息。但是看不到镜像文件的入口函数。那么，如果想看到入口函数，需要怎么做呢？现在想到的办法，只能够将该文件反汇编查看。
+
+* 目标代码反汇编
+
+     objdump -d
+     
+* 段表（Section Header Table）
+     
+     objdump -h
+     
+     readelf -S
+* 重定位表（Relocation Table）
+     
+     .rel.text  对文本段的重定位
+     
+     .rel.data  对数据段的重定位
+* 符号表，段名为.symtab
+     
+    nm -n
+     
+    readelf -s
+* 查看so文件的动态符号表及其哈希表
+    readelf -sD Lib.so

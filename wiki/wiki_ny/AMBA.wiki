@@ -1,0 +1,2 @@
+== AMBA:Advanced Microcontroller Bus Architecture ==
+ARM公司定义的总线规范，它是一组基于ARM核，片上系统之间通信而设计的标准协议。在AMBA中，定义了AHB,APB,ASB这3种总线。其中，现在AHB已经取代了ASB总线，所以最常见的就是AHB总线和APB总线。

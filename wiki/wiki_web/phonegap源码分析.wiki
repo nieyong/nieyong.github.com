@@ -1,0 +1,29 @@
+以phonegap-2.0.0为例，分析phonegap的实现原理。
+
+== cordova-2.0.0.js ==
+下面以Android的cordova-2.0.0.js为例分析其实现结构。
+
+[[img\cordova_js\01.png]]
+
+[[img\cordova_js\02.png]]
+
+[[img\cordova_js\03.png]]
+
+[[img\cordova_js\04.png]]
+
+[[img\cordova_js\05.png]]
+
+[[img\cordova_js\06.png]]
+
+[[img\cordova_js\07.png]]
+
+[[img\cordova_js\08.png]]
+
+[[img\cordova_js\09.png]]
+
+[[img\cordova_js\10.png]]
+
+== js中的模块化机制 ==
+参考[[js库记录]]中的cordova.js一节。
+
+

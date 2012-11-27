@@ -1,0 +1,9 @@
+* [[glibc, eglibc和 glib的区别]]
+* [[GNU Binutils]]
+* [[gcc基本使用方法]]
+* [[存取效率的比较]]
+* [[Configure Makefile]]
+
+== GCC编译参数 ==
+* -fno-builtin
+GCC编译器提供了很多的内置函数（Built-in Function），它会把一些常用的C库函数替换成编译器的内置函数，以达到优化的功能。例如GCC会将只有字符串参数的printf函数替换成为puts，以节省格式解析的时间。该功能默认是开启的，使用该选项可以关闭GCC内置函数功能。

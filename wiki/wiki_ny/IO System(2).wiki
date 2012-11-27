@@ -1,0 +1,28 @@
+介绍一下I/O System实现的一些细节。下面的介绍主要是以vxWorks下的I/O System为实例，对于unix下的I/O System，可能有一些差别，在阅读和理解时注意甄别。
+
+== 文件和设备 ==
+在I/O System中，其实并不需要涉及到硬件设备。因为在vxWorks下（unix也一样），总是将硬件设备当做系统中的一个文件。当然，这样也常常容易混淆设备和文件的关系，尤其是在同时考虑I/O System和设备驱动的时候。例如，说道某个设备的时候，可能在I/O System下面是指某个设备对应的文件，而在讨论设备驱动的时候，就要实指某个硬件设备。 
+
+再次强调， *I/O System操作的对象是文件。* 在vxWorks下，将被I/O System操作的文件进行一个划分，有以下两种：
+* unstructured "raw" device 对于该类文件，其实就是硬件设备，文件名就是设备名，例如/tyCo/0
+* a logical file 对于该类文件，其实是文件系统（FS）中存在的那种文件
+
+另外，按照被操作文件是否有buffer，又可以划分为basic和buffered两类。
+
+== I/O System和APP ==
+I/O System为APP提供的接口函数有open(),creat(),read(),write(),ioctl(),close(),remove()这7个。其中，open(),creat(),remove()这3个函数在参数中使用filename（其实就是文件名的字符串）来指定一个文件，而其它函数使用文件描述符fd来指定一个文件。有关文件描述符fd的相关内容，将在随后做详细说明。
+
+其中，remove()函数在大部分驱动程序中都没有实现，表示删除一个文件。只有两类设备驱动需要实现该接口：
+* 文件系统驱动程序
+* 网络设备驱动程序，调用该接口删除远程主机上的文件
+
+== I/O System和设备驱动 ==
+说完了I/O System和APP的关联（接口函数），下面要考虑I/O System是如何和设备驱动程序联系在一起的呢？在vxWorks中，一共使用了3个数据结构（表）来关联I/O System和设备驱动，分别是：
+* 设备列表，保存所有已经添加在系统中的设备
+* 驱动程序列表，保存所有添加在系统中的设备对应的驱动程序函数接口地址
+* 文件描述符表，存放所有已经被打开（open）的文件（设备）的相关信息
+
+
+本节主要介绍I/O System是如何实现应用程序（APP）和设备驱动程序之间的统一接口的。首先介绍I/O System和应用程序（APP）之间的接口，然后介绍I/O System和设备驱动之间的接口。其实，I/O System就是添加在APP和设备驱动之间的一个层。
+Any problem in computer science can be solved by another layer of indirection.
+

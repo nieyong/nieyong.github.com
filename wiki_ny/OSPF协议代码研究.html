@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>OSPF协议代码研究</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+/* This is used for conditional compilation during development. */
+</p>
+
+<p>
+#ifndef __OSPF_VIRTUAL_STACK__
+#define __OSPF_VIRTUAL_STACK__
+#endif
+</p>
+
+
+
+<p>
+/* routing socket receive buffer size */
+#ifndef OSPF_RAW_RCV_BUFFER
+#define OSPF_RAW_RCV_BUFFER             (64 * 1024)
+#endif
+</p>
+
+<p>
+ospf_constants.h文件
+</p>
+
+
+
+
+
+<p>
+/*************************************************************************
+*
+</p>
+<ul>
+<li>
+ospf_raw_socket_create - create and initialize OSPF raw socket
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+This routine intialize raw sockets for OSPF transmit and receive. For Interface
+
+<li>
+with multicast capability, ospf_multicast_group_request() function must be called
+
+<li>
+to join/leave a multicast group.
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+RETURNS: OK on success, ERROR otherwise
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+ERRNO: N/A
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+NOMANUAL
+
+</ul>
+<p>
+*/
+</p>
+
+<p>
+static STATUS ospf_raw_socket_create ()
+</p>
+
+
+
+
+
+<p>
+/******************************************************************************
+*
+</p>
+<ul>
+<li>
+ospf_routing_socket_create - create and initialize OSPF routing socket
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+This routine initializes the OSPF routing socket. The routing socket is used
+
+<li>
+to receive and send routing information from/to the routing table.
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+RETURNS: OK on success, ERROR otherwise
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+ERRNO: N/A
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+NOMANUAL
+
+</ul>
+<p>
+*/
+</p>
+
+<p>
+static STATUS ospf_routing_socket_create ()
+</p>
+
+
+
+<p>
+/*****************************************************************************
+*
+</p>
+<ul>
+<li>
+ospf_timer_task_entry_point - ospf timer task entry point
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+This function creates and starts the OSPF watchdog.  It creates the OSPF
+
+<li>
+timer semaphore.  It then forever pends on the OSPF timer semaphore and
+
+<li>
+calls ospf_router_timer() every time it gets the semaphore.
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+RETURNS: ERROR is the watchdog timer could not be created or started or if
+
+<li>
+OSPF timer semaphore could not be created.
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+NOMANUAL
+
+</ul>
+<p>
+*/
+</p>
+
+
+
+<p>
+/*****************************************************************************
+</p>
+<ul>
+<li>
+ospf_rtm_task_entry_point - RTM task entry point
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+This is the start function of OSPF rtm task.
+
+<li>
+Pseudocode:
+
+<li>
+  initialize
+
+<li>
+  synchronize with the other OSPF tasks having completed initialization
+
+<li>
+  start rtm task activities: infinite loop waiting (routing socket pended)
+
+<li>
+      to route updates received via routing socket from stack
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+RETURNS: ERROR is not successful
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+NOMANUAL
+
+</ul>
+<p>
+*/
+</p>
+
+
+
+<p>
+/*****************************************************************************
+*
+</p>
+<ul>
+<li>
+ospf_input_task_entry_point - ospf input task entry point
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+This is the start function of OSPF input task.
+
+<li>
+Pseudocode:
+
+<li>
+  initialize
+
+<li>
+  synchronize with the other OSPF tasks having completed initialization
+
+<li>
+  start input task activities: infinite loop waiting (socket pended)
+
+<li>
+      to handle PDUs and interface events received via socket from router stack
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+\NOMANUAL
+
+</ul>
+<p>
+*/
+</p>
+
+
+
+<p>
+ospf_hello.c	用于发送、接收和处理hello报文
+</p>
+
+
+
+<p>
+/***************************************************************************************
+</p>
+<ul>
+<li>
+ospf_vx_ip_receive_socket_input - OSPF packet received routine
+
+</ul>
+<p>
+*
+</p>
+<ul>
+<li>
+This is the entry point for "tOspfInput" task that is created in ospf_intialize_router()
+
+<li>
+(see ospf_initialization.c file). It waits for packet on the raw socket using the
+
+<li>
+select() call. Once select() returns, it calls recvfrom() to read the data from
+
+<li>
+the socket and the ospf_router_rx_packet() to process the received packet.
+
+<li>
+Unlike the tranditional receive routine that processes mbuf, it is not necssary to
+
+<li>
+enqueue the received packet to a linked list and have a separate task to do the actual
+
+<li>
+packet processing functionality. This is because the "tOspfInput" task always pend on a
+
+<li>
+set of sockets waiting for data and this task is receiving data independent of the
+
+<li>
+"tNetTask".
+
+</ul>
+<p>
+*/
+</p>
+
+
+
+
+
+
+<h2 id="toc_0.1">ospf_hello.c文件</h2>
+<p>
+This file is used from the timer task to send hello packets and on the receive task when receiving
+hello packets.
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

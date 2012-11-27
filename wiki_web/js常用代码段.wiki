@@ -1,0 +1,79 @@
+== 对象初始化，并且设置默认值 ==
+一个对象作为参数传入时，可能有该对象也可能没有。而且，对象内的属性个数也是不确定的。
+{{{name="code" class="js"
+    var ripStTemp = {};
+    
+    /* 如果全局变量ripSt未提供，则设置默认值 */
+    ripSt = window.ripSt || {};
+    ripStTemp.enable = (ripSt.enable === undefined)? false : ripSt.enable ;
+    ripStTemp.autoSum = (ripSt.autoSum === undefined)? false : ripSt.autoSum ;
+    ripStTemp.distStatic = (ripSt.distStatic === undefined)? false : ripSt.distStatic ;
+    ripStTemp.updateTimer = (ripSt.updateTimer === undefined)? 30 : ripSt.updateTimer ;
+    ripStTemp.timeOutTimer = (ripSt.timeOutTimer === undefined)? 120 : ripSt.timeOutTimer ;
+    ripStTemp.garbageTimer = (ripSt.garbageTimer === undefined)? 300 : ripSt.garbageTimer ;
+    ripStTemp.distance = (ripSt.distance === undefined)? 12 : ripSt.distance ;
+    ripStTemp.metric = (ripSt.metric === undefined)? 8 : ripSt.metric ;
+    ripStTemp.version = (ripSt.version === undefined)? 'ripV1' : ripSt.version ;
+
+}}}
+
+参考iscroll.js代码的实现，上面的代码写成这样更加简洁。
+{{{name="code" class="js"
+    var i;
+    /* 默认选项 */
+    var ripStOption = {
+	    enable: false,
+	    version: 'ripV1',
+	    distance: 120,
+	    autoSum: true,
+	    metric: 12,
+	    distStatic: false,
+	    updateTimer: 30,
+	    timeOutTimer: 180,
+	    garbageTimer: 300
+    };
+    
+    /* ripSt为全局变量，window.ripSt为rpm函数生成。
+     * 设置rpm函数传入的数据
+     */
+    ripSt = window.ripSt || {};
+    for (i in ripSt) that.ripStOption[i] = ripSt[i];
+}}}
+
+参考toast.js代码的实现，如果使用了jquery库，那么可以使用jquery.extend()函数实现以上代码。
+{{{name="code" class="js"
+    
+    /* ripSt为全局变量，window.ripSt为rpm函数生成。
+     * 设置rpm函数传入的数据
+     */
+    ripSt = window.ripSt || {};
+    $.extend(ripStOption,ripSt);
+}}}
+
+== 对象的遍历，并且转化为数组 ==
+使用for in结构，使用[]操作而不是.操作访问对象的属性值。
+{{{name="code" class="js"
+    var rtArray = [];
+    
+    /* just for test */
+    /* rtTable对象的demo：*/
+    rtTable = {
+	    rt1:{dst:"192.168.0.0/24",gateway:"192.168.0.1",metric:1,intf:"sc1",time:23},
+	    rt2:{dst:"192.168.2.0/24",gateway:"192.168.2.1",metric:2,intf:"lo3",time:2},
+	    rt3:{dst:"192.168.3.0/24",gateway:"192.168.3.1",metric:2,intf:"sc4",time:122}
+	    };
+    
+    /* 将rtTable对象转化为rtArray数组 */
+    /* rtArray数组的结构demo：
+    var rtArray = [
+	    ["192.168.1.0/24","192.168.1.1","1","sc1","1"],
+	    ["192.168.2.0/24","192.168.2.1","2","sc2","3"],
+	    ["192.168.3.0/24","192.168.3.1","3","sc3","4"],
+	    ["192.168.4.0/24","192.168.4.1","4","sc4","16"]
+	    ];
+    */
+    for ( var key in rtTable ){
+	    rtArray.push(new Array(rtTable[key].dst,rtTable[key].gateway,rtTable[key].metric,rtTable[key].intf,rtTable[key].time));
+    }
+
+}}}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>NOR Flash VS NAND Flash</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">nand flash和NOR FLASH区别</h2>
+<p>
+nand flash和nor flash有许多不同之处，比如具体的存储管理方式，读写速度，价格等，我觉得最重要的一点区别是是NOR FLASH地址线和数据线分开，可以象SRAM一样连接在数据线上，而且NOR FLASH以“字”为基本单位来操作，因此程序可以直接在nor flash里运行，不必把代码COPY到RAM里才运行。所以一般把系统启动代码存放到NOR FLASH里，可以直接从FLASH启动系统。nand flash共用数据和地址线，而且是以块为单位操作数据，很难用来做启动芯片。因此boot代码一般放到nor flash里。
+</p>
+
+<p>
+不过2410比较特殊，S3C2410在启动的时候，可以把nand flash前面的启动程序装载到2410里面自己一个4k大小的SRAM（Steppingstone） 里面,这4K SRAM被映射到0X0，从而实现nand flash模式的启动，从nand flash启动比nor flash模式速度要快。
+</p>
+
+<p>
+在掌上电脑里要使用NAND FLASH 存储数据和程序,但是必须有NOR FLASH来启动。除了SAMSUNG处理器,其他用在掌上电脑的主流处理器还不支持直接由NAND FLASH 启动程序。因此,必须先用一片小的NOR FLASH 启动机器,在把OS等软件从NAND FLASH 载入SDRAM中运行才行
+</p>
+
+<h2 id="toc_0.2">NOR Flash和NAND Flash在软件驱动上的差别</h2>
+<p>
+当讨论软件支持的时候，应该区别基本的读/写/擦操作和高一级的用于磁盘仿真和闪存管理算法的软件，包括性能优化。
+</p>
+
+<p>
+可以非常直接地使用基于NOR的闪存，可以像其他存储器那样连接，并可以在上面直接运行代码。
+由于需要I/O接口，NAND要复杂得多。各种NAND器件的存取方法因厂家而异。
+在使用NAND器件时，必须先写入驱动程序，才能继续执行其他操作。向NAND器件写入信息需要相当的技巧，因为设计师绝不能向坏块写入，这就意味着在NAND器件上自始至终都必须进行虚拟映射。
+</p>
+
+<p>
+在NOR器件上运行代码不需要任何的软件支持,在NAND器件上进行同样操作时,通常需要驱动程序,也就是内存技术驱动程序(MTD),NAND和NOR器件在进行写入和擦除操作时都需要MTD。
+</p>
+
+<p>
+使用NOR器件时所需要的MTD要相对少一些,许多厂商都提供用于NOR器件的更高级软件,这其中包括M-System的TrueFFS驱动,该驱动被 WindRiverSystem、Microsoft、QNXSoftwareSystem、Symbian和Intel等厂商所采用。驱动还用于对 DiskOnChip产品进行仿真和NAND闪存的管理,包括纠错、坏块处理和损耗平衡。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

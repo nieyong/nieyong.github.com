@@ -1,0 +1,3 @@
+ In browsers that don't support fixed positioning, the toolbars will remain positioned in flow, at the top or bottom of the page.
+
+ Fullscreen fixed toolbars sit on top of the content at all times when they are visible, and unlike regular fixed toolbars, fullscreen toolbars do not fall back to static positioning when toggled. Instead they disappear from the screen entirely. 

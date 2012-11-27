@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>HTML5 Client-Side Data Storage</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">HTML5提供的客户端数据存储方式</h2>
+<ul>
+<li>
+Web Storage
+
+<ul>
+<li>
+localStorage
+
+<li>
+sessionStorage
+
+</ul>
+<li>
+Web SQL Database
+
+</ul>
+
+<h2 id="toc_0.2">Web SQL Database</h2>
+<p>
+The Web SQL Database spec gives developers a simple but powerful JavaScript database API to store persistent data in a <strong>local SQLite database</strong>.
+</p>
+
+
+<p>
+<code>'INSERT INTO entries (date, calories, food) VALUES (?, ?, ?);'</code>, This is  the  statement  that  will  be  executed.  The  question  marks  are  data placeholders.
+</p>
+
+<p>
+<code>[date, calories, food]</code>, This is an array of the values being sent to the database. They correspond by position with the data placeholder question marks in the SQL statement.
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

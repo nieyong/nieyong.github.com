@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>ProjectGutenberg</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+以工作项目存放相关工作资料。关于<a href="SMB交换机.html">SMB交换机</a>。
+</p>
+
+<h2 id="toc_0.1">工作项目</h2>
+<ul>
+<li>
+<a href="MIPS BSP 前期研究.html">MIPS BSP 前期研究</a> -- 有关bcm5836平台下mips的bootrom,BSP方面的研究，同时也是转正答辩题目。
+
+<li>
+<a href="MIPS BSP 后期研究.html">MIPS BSP 后期研究</a> -- 区别于上面的研究，重点是vxWorks启动过程，END网络驱动的研究。
+
+<li>
+<a href="Flash的研究.html">Flash的研究</a> --了解Flash的相关知识
+
+<li>
+<a href="系统管理模块.html">系统管理模块</a> -- 维护模块，和系统管理相关
+
+<li>
+<a href="MAC PHY.html">MAC PHY</a> -- 关于MAC，PHY芯片知识积累
+
+<li>
+<a href="交换机路由.html">交换机路由</a> --  交换机路由，RIP学习笔记
+
+<li>
+<a href="802_1x.html">802_1x</a>
+
+<li>
+<a href="2011届培训计划.html">2011届培训计划</a>
+
+<li>
+<a href="OS.html">OS</a> -- 学习vxWorks等OS的笔记
+
+</ul>
+
+
+<h2 id="toc_0.2">机型和芯片方案</h2>
+<h3 id="toc_0.2.1">TL-SL3428欧3.0</h3>
+<ul>
+<li>
+两片千兆FHY芯片：88E1543
+
+<li>
+三片百兆FPY芯片：88E3083
+
+<li>
+主控芯片（CPU+MAC）：98DX3165
+
+</ul>
+
+<h3 id="toc_0.2.2">TL-SG5428</h3>
+<ul>
+<li>
+六片千兆PHY芯片：88E1545
+
+<li>
+主控芯片（CPU+MAC）：98DX3165
+
+</ul>
+
+<h3 id="toc_0.2.3">TL-SG3424</h3>
+<ul>
+<li>
+PHY芯片：MCS54685
+
+<li>
+驱动文件：PHY54682.c，使用的是MCS54682芯片的驱动
+
+<li>
+文档：MCS54685-DS03-RDS.pdf
+
+</ul>
+
+<h3 id="toc_0.2.4">TL-SG3216</h3>
+<ul>
+<li>
+PHY芯片：PHY54684   
+
+<li>
+驱动文件：PHY54684.c
+
+<li>
+使用文档：54684-DS05-RDS.pdf
+
+</ul>
+
+<h3 id="toc_0.2.5">TL-SG6428S</h3>
+<ul>
+<li>
+主控芯片（CPU+MAC）：BCM56330，整体介绍的文档：56330-PG102-RDS.pdf，关于该芯片的寄存器，参考文档：56130_56330-PR101-RDS.pdf（专门为TP-LINK公司的）和56130_56330-PR101-RDS_NoRestriction.pdf。
+
+<li>
+SDK 5.10.0：介绍的文档为56XX-PG624-RDS.pdf
+
+<li>
+堆叠原理需要参考的文档由：《HiGig-AN104-RDS.pdf》，又名《The Complete Guide to the HiGig Stacking Protocol》，文中详细的介绍了Broadcom方案的堆叠实现协议HiGig。对于该文档的了解，硬件工程师应该比软件工程师更加了解。如果需要了解SDK 5.10.0中关于堆叠的相关内容，文档为56XX-PG624-RDS.pdf，其中的Section 11:Fabric一章可以作为参考。
+
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

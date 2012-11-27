@@ -1,0 +1,33 @@
+== windows的共享文件夹 ==
+windows下在使用共享文件夹，输入地址`\\192.168.0.146`之后，出现错误提示：
+* 无任何网络提供程序接受指定的网络路径
+* 找不到网络路径
+
+这是，需要检查下面几个windows服务：
+* server服务
+* workstation服务
+* computer browser服务
+可能是这3个服务中的某个没有开启，或者不存在。例如，workstation服务不存在。这时需要重新安装一下。步骤为：网络连接-属性-Miscrosoft网络的文件和打印机共享-安装。
+
+== windows cmd ==
+查看变量PATH，输入以下命令：PATH或者echo %PATH%
+
+查看其他变量，使用echo命令，例如：echo %WIND_BASE%，如果该变量不存在，则输出echo后面的部分，如果该变量存在，则输出该变量的值。
+
+注意，cmd的命令不区分大小写
+
+== dos cmd的for循环打印 ==
+打印所有可执行文件的路径，用于判断该可执行文件是否存在。
+
+{{{name="code" class="js"
+@echo off
+setlocal enabledelayedexpansion
+FOR  %%i IN (java.exe notepad.exe) DO (
+	SET FOUND=%%~$PATH:i
+	echo !FOUND!
+)
+pause 
+
+}}}
+
+[[bmp图像格式]]

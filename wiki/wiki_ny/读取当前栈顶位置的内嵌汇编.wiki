@@ -1,0 +1,91 @@
+== 读取当前栈顶位置的内联汇编 ==
+原来的程序
+{{{name="code" class="c"
+#include <stdio.h>
+
+int main() {
+    int address;
+    asm volatile("movl %%esp, %0":"=r"(address));
+    printf("size = %x\n", address);
+    return 0;
+}
+}}}
+
+修改后代码如下：
+{{{name="code" class="c"
+int main(void)
+{
+    int a,b;
+    asm volatile("movl %%esp,%0":"=r"(a));
+
+    b = (int)(&a);
+
+    printf("%x\n",&a);
+    printf("%x\n",&b);
+    printf("%x\n",a);
+    printf("%x\n",b);
+    return 0;
+}
+}}}
+在fedora 10下面，使用GNU编译得到可执行文件，然后使用objdump -d反汇编，其中，以上代码部分的反汇编如下所示：
+{{{name="code" class="c"
+080483c4 <main>:
+ 80483c4:    8d 4c 24 04              lea    0x4(%esp),%ecx
+ 80483c8:    83 e4 f0                 and    $0xfffffff0,%esp
+ 80483cb:    ff 71 fc                 pushl  -0x4(%ecx)
+ 80483ce:    55                       push   %ebp
+ 80483cf:    89 e5                    mov    %esp,%ebp
+ 80483d1:    51                       push   %ecx
+ 80483d2:    83 ec 24                 sub    $0x24,%esp
+ 80483d5:    89 e0                    mov    %esp,%eax
+ 80483d7:    89 45 f8                 mov    %eax,-0x8(%ebp)        以上2句对应于C语言中的“asm volatile("movl %%esp,%0":"=r"(a));”一句
+ 80483da:    8d 45 f8                 lea    -0x8(%ebp),%eax
+ 80483dd:    89 45 f4                 mov    %eax,-0xc(%ebp)        以上2句对应于C语言中的“b = (int)(&a);”一句
+ 80483e0:    8d 45 f8                 lea    -0x8(%ebp),%eax
+ 80483e3:    89 44 24 04              mov    %eax,0x4(%esp)
+ 80483e7:    c7 04 24 04 85 04 08     movl   $0x8048504,(%esp)
+ 80483ee:    e8 01 ff ff ff           call   80482f4 <printf@plt>   以上4句对应于C语言中的“printf("%x\n",&a);”一句
+ 80483f3:    8d 45 f4                 lea    -0xc(%ebp),%eax
+ 80483f6:    89 44 24 04              mov    %eax,0x4(%esp)
+ 80483fa:    c7 04 24 04 85 04 08     movl   $0x8048504,(%esp)
+ 8048401:    e8 ee fe ff ff           call   80482f4 <printf@plt>   以上4句对应于C语言中的“printf("%x\n",&b);”一句
+ 8048406:    8b 45 f8                 mov    -0x8(%ebp),%eax
+ 8048409:    89 44 24 04              mov    %eax,0x4(%esp)
+ 804840d:    c7 04 24 04 85 04 08     movl   $0x8048504,(%esp)
+ 8048414:    e8 db fe ff ff           call   80482f4 <printf@plt>    以上4句对应于C语言中的“printf("%x\n",a);”一句
+ 8048419:    8b 45 f4                 mov    -0xc(%ebp),%eax
+ 804841c:    89 44 24 04              mov    %eax,0x4(%esp)
+ 8048420:    c7 04 24 04 85 04 08     movl   $0x8048504,(%esp)
+ 8048427:    e8 c8 fe ff ff           call   80482f4 <printf@plt>    以上4句对应于C语言中的“printf("%x\n",b);”一句
+ 804842c:    b8 00 00 00 00           mov    $0x0,%eax
+ 8048431:    83 c4 24                 add    $0x24,%esp
+ 8048434:    59                       pop    %ecx
+ 8048435:    5d                       pop    %ebp
+ 8048436:    8d 61 fc                 lea    -0x4(%ecx),%esp
+ 8048439:    c3                       ret    
+ 804843a:    90                       nop    
+ 804843b:    90                       nop    
+ 804843c:    90                       nop    
+ 804843d:    90                       nop    
+ 804843e:    90                       nop    
+ 804843f:    90                       nop    
+}}}
+通过阅读上面的AT&T汇编代码，我们可以确定，-0x8(%ebp)是局部变量a的地址，-0xc(%ebp)是局部变量b的地址。
+程序运行的结果如下图所示。
+
+[[image/result.jpg]]
+
+根据上面的运行结果和反汇编代码，可以画出运行时堆栈的示意图
+
+[[image/堆栈示意图.jpg]]
+
+
+现在存在的疑惑有：
+* 80483d2: 83 ec 24 sub $0x24,%esp
+为什么堆栈指针sp需要减去0x24呢？在程序刚开始运行的时候，堆栈指针确实指向的位置，并不是asm volatile("movl %%esp,%0":"=r"(a));得到的地址吗？
+
+* 8048419: 8b 45 f4 mov -0xc(%ebp),%eax
+804841c: 89 44 24 04 mov %eax,0x4(%esp)
+
+在main函数中，printf函数还没有调用，就已经为printf函数中的形参分配了堆栈空间，这和我们一般意义上的C语言的活动记录的描述不一样，这又是怎么一回事呢？
+

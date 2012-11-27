@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>telnet下printf的使用问题</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+在项目开发中，Cli Server下不能够使用printf函数打印信息到Telnet或者ssh上，而只能够打印到Console上。带着这个问题，对printf，telnet、console、I/O system、vxworks的cli server等进行了学习。虽然现在还没有解决其中的疑惑，但是先总结一下了解到的知识。
+</p>
+
+<h2 id="toc_0.1">printf和I/O system</h2>
+<p>
+printf()函数为C语言库中的标准I/O函数。也就是说，printf()函数并不和具体的操作系统实现相关，printf()函数只实现一个事情，那就是将格式化的数据写到标准输出。至于标准输出对应的设备是什么，那么就是操作系统的I/O system需要解决的问题。
+</p>
+
+<p>
+操作系统也对应着自己的一套I/O函数。在Linux下，叫做unix I/O函数，在vxworks下，叫做basic I/O函数。C库中的标准I/O函数就是实现在其上。有关跟多I/O系统的知识，参考<a href="OS.html">OS</a>中的I/O system学习笔记。
+</p>
+
+<h2 id="toc_0.2">telnet和ssh</h2>
+<p>
+telnet和ssh都是用于远程登录的协议，其中ssh是telnet的加密版。telnet登录的整个框架如下图所示：
+</p>
+
+<p>
+这里注意一点，telnet服务器进程并不直接和shell交互，而是伪终端设备（pseudo-terminal device）。在Linux下，我们可以看到这样的一个设备/dev/pts，其中，pts是pseudo terminal slave的缩写。
+</p>
+
+<h2 id="toc_0.3">I/O system和Linux</h2>
+<p>
+在Linux下做了实验，使用telnet或者ssh登录到系统上，然后运行带有printf的程序，printf的值是可以打印到telnet或者ssh终端的。
+</p>
+
+<h2 id="toc_0.4">vxworks的cli server</h2>
+<p>
+在vxworks下，使用telnet或者ssh登录交换机，进不了bcm-cli模式，只能够运行在cli server模式下。运行带有printf的程序，printf的输出仍然是在console端口上，也就是标准输出上。
+</p>
+
+<p>
+分析一下为什么函数RCC_EXT_WriteStrLine的输出却能够在telnet或者ssh终端打印呢？在代码中，RCC_EXT_WriteStrLine函数的输出是使用pClienv中的output函数句柄做的输出。也就是说，现在的cli server能够判断当前连接的是console还是telnet等，然后选择不同的输出句柄。
+</p>
+
+<pre name="code" class="c">
+typedef STATUS WriteHandle (WMB_SESSION_T *pEnv, sbyte *pBuf, sbyte4 BufSize);
+typedef STATUS ReadHandle  (WMB_SESSION_T *pEnv, cliChar *charIn);
+typedef STATUS SessionInit (WMB_SESSION_T *pEnv);
+
+
+typedef struct cli_info_tag
+{
+    ......
+    WriteHandle        *pCliWriteHandle;
+    ReadHandle         *pCliReadHandle;
+    sbyte4              optBufferIndex;
+    ......
+} cli_info;
+</pre>
+
+
+<h2 id="toc_0.5">问题</h2>
+<p>
+一些问题：
+</p>
+<ol>
+<li>
+使用telnet或者ssh登录机器之后，在Linux下，标准输入输出等是如何将输出设备映射到telnet上来的呢？在vxworks下，为什么标准输入输出的设备仍然是console呢？
+
+<li>
+cli server和bcm-cli以及我们Linux下使用的shell有什么不一样呢，才导致本文讨论的问题的出现呢？
+
+<li>
+telnet服务器的配置是否也是导致该问题的原因呢？
+
+</ol>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

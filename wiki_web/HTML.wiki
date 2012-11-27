@@ -1,0 +1,27 @@
+== 关于href属性 ==
+在HTML中，哪些标签可以拥有href属性呢，但是没有id属性？
+<a></a>	
+
+容易弄错，但是确实没有href属性的标签：
+<button></button>
+<img></img>	//img可以有src属性
+
+== 和form有关的tags ==
+下面这些标签和和form有关，分别是label、fieldset、input。
+
+== 表格的HTML标签 ==
+记录如下，备忘：
+
+{{{name="code" class="php"
+
+<table>
+	<tr> .... </tr>		//创建一行，也可以使用<th>标签
+	<tr>			//创建第二行
+		<td> .... </td>	//创建一列（column）
+		<td> .... </td>	//创建第二列
+	</tr>
+</table>
+
+}}}
+
+[[HTML大纲算法]]

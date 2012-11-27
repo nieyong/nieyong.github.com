@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>C语言的封装</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<ul>
+<li>
+什么是封装？
+
+<li>
+为什么要封装？
+
+<li>
+如何实现封装？
+
+</ul>
+
+<p>
+花上半小时去思考，尝试回答上述问题，然后按你的想法重写双向链表(多写多练，不要偷懒)。
+</p>
+
+<h2 id="toc_0.1">1.什么封装？</h2>
+<p>
+人有隐私，程序也有隐私。有隐私不是什么坏事，没有隐私人就不是人了，程序也不成其为程序了。问题是隐私不应该让别人知道，否则伤害的不仅仅是自己，相关人物也会跟着倒霉，“艳照门”就是个典型的例子。程序隐私的暴露，造成的伤害不一定有“艳照门”大， 也不一定比它小，反正不要小看它就行了。封装 就是要保护好程序的隐私，不该让调用者知道的事，就坚决不要暴露出来。
+</p>
+
+<h2 id="toc_0.2">2.为什么要封装？</h2>
+<p>
+总体来说，封装主要有以下两大好处(具体影响后面再说): 
+</p>
+
+<p>
+<strong>隔离变化</strong> 程序的隐私通常是程序最容易变化的部分，比如内部数据结构，内部使用的函 数和全局变量等等，把这些代码封装起来，它们的变化不会影响系统的其它部分。 
+</p>
+
+<p>
+<strong>降低复杂度</strong> 接口最小化是软件设计的基本原则之一，最小化接口容易被理解和使用。封装内部实现细节，只暴露最小的接口，会让系统变得简单明了，在一定程度上降低了系统的 复杂度。
+</p>
+
+<h2 id="toc_0.3">3.如何封装？</h2>
+<h3 id="toc_0.3.1">隐藏数据结构</h3>
+<p>
+暴露内部数据结构，会使头文件看起来杂乱无章，让调用者发蒙。其次是如果调用者图方便， 直接访问这些数据结构的成员，会造成模块之间紧密耦合，给以后的修改带来困难。隐藏数据结构的方法很简单，如果是内部数据结构，外面完全不会引用，则直接放在C文件中就 好了，千万不要放在头文件里。如果该数据结构 在内外都要使用，则可以对外暴露结构的 名字，而封装结构的实现细节，做法如下：
+</p>
+
+<p>
+在头文件中声明该数据结构。 如：
+</p>
+<pre name="code" class="c">
+struct _LrcPool;
+typedef struct _LrcPool LrcPool;
+</pre>
+
+<p>
+在C文件中定义该数据结构。
+</p>
+<pre name="code" class="c">
+struct _LrcPool
+{
+    size_t unit_size;
+    size_t n_prealloc_units;
+};
+</pre>
+<p>
+提供操作该数据结构的函数，哪怕只是存取数据结构的成员，也要包装成相应的函数。 如：
+</p>
+<pre name="code" class="c">
+void* lrc_pool_alloc(LrcPool* thiz);
+void lrc_pool_free(LrcPool* thiz, void* p);
+</pre>
+<p>
+提供创建和销毁函数。因为只是暴露了结构的名字，编译器不知道它的大小(所占内存空间)， 外部可以访问结构的指针(指针的大小的固定的)，但不能直接声明结构的变量，所以有必要提供创建和销毁函数。 如：
+这样是非法的：LrcPool lrc_pool; 应该对外提供创建和销毁函数。
+</p>
+<pre name="code" class="c">
+LrcPool* lrc_pool_new(size_t unit_size, size_t n_prealloc_units);
+void lrc_pool_destroy(LrcPool* thiz);
+</pre>
+
+<p>
+任何规则都有例外。有些数据结构纯粹是社交型的，为了提高性能和方便起见，常常不需要 对它们进行封装，比如点(Point)和矩形(Rect)等。当然封装也不是坏事，MFC就对它们作了封装，是否需要封装要根据具体情况而定。
+</p>
+
+<h3 id="toc_0.3.2">隐藏内部函数</h3>
+<p>
+内部函数通常实现一些特定的算法(如果具有通用性，应该放到一个公共函数库里)，对调用 者没有多大用处，但它的暴露会干扰调用者的思路，让系统看起 来比实际的复杂。函数名 也会污染全局名字空间，造成重名问题。它还会诱导调用者绕过正规接口走捷径，造成不必 要的耦合。隐藏内部函数的做法很简单： 在头文件中，只放最小接口函数的声明。 在C文件上，所有内部函数都加上static关键字。
+</p>
+
+<h3 id="toc_0.3.3">禁止全局变量</h3>
+<p>
+除了为使用单件模式(只允许一个实例存在)的情况外，任何时候都要禁止使用全局变量。这 一点我反复的强调，但发现初学者还是屡禁不止，为了贪图方便而使用全局变量。请读者从 现在开始就记住这一准则。
+</p>
+
+<p>
+<strong>全局变量始终都会占用内存空间，共享库的全局变量是按页分配的，那怕只有一个字节的全 局变量也占用一个page，所以这会造成不必要空间浪费。</strong> 全局 变量也会给程序并发造成困 难，想把程序从单线程改为多线程将会遇到麻烦。重要的是，如果调用者直接访问这些全局 变量，会造成调用者和实现者之间的耦合。
+</p>
+
+<p>
+在整个系统程序员成长计划中，我们都是以面向对象的方式来设计和实现的(封装就是面向 对象的主要特点之一)。为了避免不必要的概念混淆，这里先解释一下对象和类：
+</p>
+
+<p>
+关于对象：对象就是某一具体的事物，比如一个苹果, 一台电脑都是一个对象。每个对象都 是唯一的实例，两个苹果，无论它们的外观有多么相像，内部成分有多么相似，两个苹果毕 竟是两个苹果，它们是两个不同的对 象。对象可以是一个实物，也可以是一个概念，比如 一个苹果对象是实物，而一项政策就是一个概念。在软件中，对象是一个运行时概念，它只 存在于运行环境中， 比如：代码中并不存在窗口对象这样的东西，要创建一个窗口对象一 定要运行起来才行。
+</p>
+
+<p>
+关于类：对象可能是一个无穷的集合，用枚举的方式来表示对象集合不太现实。抽象出对 象的特征和功能，按此标准将 对象进行分类，这就引入类的概念。类就是一类事物的统称， 类实际上就是一个分类的标准，符合这个分类标准的对象都属于这个类。当然，为了方便起 见，通常只 需要抽取那些对当前应用来说是有用的特征和功能。在软件中，类是一个设计 时概念，它只存在于代码中，运行时并不存在某个类和某个类之间的交互。我们说，编 写 一个双向链表，实际上指的是双向链表这个类。
+</p>
+
+<p>
+C语言里并没有类这个概念，我也不想因为引入这个概念让读者感到迷惑。在后面的讲述中， 我不会刻意区分类和对象，我们说对象，可能是指单个对象，也 可能是指对象所属的类， 要根据上下文进行区分(这种区分通常是很直观的)。我并不是这种做法的首创者，见过好几 本书都是这样做的，希望挑剔的读者不要在这 个概念问题上纠缠。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

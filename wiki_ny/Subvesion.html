@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Subvesion</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<ul>
+<li>
+revert操作：将现在工作空间的所有修改都删除，恢复到工作空间所在版本的服务器端文件。以前一直认为revert是用来回溯版本的，其实不是。
+
+<li>
+update to version操作：这个才是真正用来回溯版本的。而且，在回溯的时候，工作空间所有的修改都不会被删除，而是会进行合并。所以如果有修改的话，在回溯时，可能会有冲突。
+
+</ul>
+
+<h2 id="toc_0.1">SVN命令行</h2>
+<p>
+常用命令使用说明：<a href="svn command.html">svn command</a>
+</p>
+
+
+<h2 id="toc_0.2">SVN工作实例</h2>
+<p>
+什么时候会产生冲突（conflict）呢？
+这个必须从svn update操作说起。下面是一个使用svn工作的实例。
+</p>
+
+<ul>
+<li>
+svn checkout
+
+</ul>
+<p>
+获得三个文件及其版本号（svn上和本地）
+</p>
+<pre>
+a.c	1
+b.c	1
+c.c	1
+</pre>
+
+<ul>
+<li>
+本地修改了文件b.c和c.c
+
+</ul>
+<p>
+此时，文件a.c和b.c都被人修改了，并且上传到svn上，svn上对应的版本号如下
+</p>
+<pre>
+a.c	2
+b.c	2
+c.c	1
+</pre>
+
+<ul>
+<li>
+svn update
+
+</ul>
+<p>
+第二天你需要继续在b.c和c.c上进行工作，但是你担心昨天自己不关心的文件a.c被修改了，所以你开始今天工作之前做的第一件事情就是svn update。将你现在本地的文件和svn上的文件保持一致。
+</p>
+
+<p>
+第二种情况就是你需要将修改的文件b.c和c.c上传，但这两个文件可能已经被别人修改并且上传到svn版本库中。这个时候，你需要svn update。
+</p>
+
+<p>
+svn update的结果就是：
+本地文件：
+</p>
+<pre>
+a.c	2	（由于本地的版本1没有修改，该文件自动跟新为svn上的版本2的文件）
+b.c	conflict or merge
+c.c	1	（本地版本和svn上的版本保持一致，为1。只是你在版本1上做的修改尚未上传）
+</pre>
+
+<p>
+<strong>关于b.c文件中conflict和merge的说明</strong>
+</p>
+
+<p>
+本地的版本1被修改，而svn上的版本2也是从版本1修改而来的，如果现在本地修改的b.c和svn上的版本2有不相同――一般都会有不相同的，就会产生合并或者冲突。那么，什么是合并，又什么是冲突呢？什么时候会产生合并，什么时候会产生冲突呢？其实，SVN是以行为单位进行比对的。如果现在本地的b.c和SVN上的b.c文件（已经是版本2）对同一行进行了修改（做了修改使相对于版本1），那么，就会产生冲突，如果不是对同一行进行了修改，那么就会合并所作修改的行。解决冲突的过程，就相当于在版本2的基础上做修改，冲突解决完成，则本地的b.c文件的版本号变为2，只是你还是在版本2的基础上有修改而尚未上传。
+</p>
+
+<ul>
+<li>
+svn commit
+
+</ul>
+<p>
+进过第三步之后，你软件版本已经和svn上的保持一致了，你现在就可以在最新的软件版本上工作了，当然，你也可以上传代码到svn。使用svn commit。
+</p>
+
+
+<p>
+如何使用SVN查看代码的变化
+情况一：在update一个文件的时候，文件被合并（merged）。这个时候，你可能想看两方面的变化：
+</p>
+<ul>
+<li>
+自己做了哪些修改
+
+</ul>
+<p>
+compare with working copy   这会拿svn上的最新版本和本地的文档进行对比。注意，此时本地的文档已经是上一版本做的修改和svn上的最新版本的合并（merged）的一个文件。所以，比较看到的就只有自己做的修改部分。
+</p>
+<ul>
+<li>
+svn上的版本做了哪些修改
+
+</ul>
+<p>
+compare with previous revision 这会拿svn上的最新版本和svn上的上一版本进行对比。由于svn上的最新版本已经合并到本地文件中，这样就可以看到svn上的版本（其实也就是本地合并版本）相对上一版本被别人做了哪些修改。
+</p>
+
+
+<p>
+Git does a simple three-way merge:
+</p>
+<ul>
+<li>
+Snapshot to Merge Into
+
+<li>
+Snapshot to Merge In
+
+<li>
+Common Ancestor
+
+</ul>
+
+<p>
+对于SVN（早期版本），则需要自己选定一个best merge base（Common Ancestor）。
+</p>
+
+
+<p>
+This is a special case of the tree merge described below, and it requires only the URL to merge from (normally) your development branch. It uses the merge-tracking features of Subversion to calculate the correct revision ranges to use
+</p>
+
+
+<p>
+ merge tracking features of Subversion
+</p>
+
+<h2 id="toc_0.3">产品线svn</h2>
+<p>
+在讨论产品线软件版本管理的时候，提出的一个管理模型<a href="一个分支模型.html">一个分支模型</a>。
+</p>
+
+<p>
+下图为产品线软件版本svn图（图片为wmf格式，web下暂时无法显示）。
+<a href="image/git/smb_svn_graph.wmf.html">image/git/smb_svn_graph.wmf</a>
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

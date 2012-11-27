@@ -1,0 +1,137 @@
+== 常用函数 ==
+* die()/exit()
+exit()函数输出一条消息，并退出当前脚本。该函数是die()函数的别名。
+
+例如：
+{{{name="code" class="php"
+<?php
+    if( !defined('AROOT') ) die('NO AROOT!');	//没有定义变量AROOT，就退出程序
+?>
+}}}
+
+* define()函数/defined()函数
+define()函数定义一个常量。defined()函数检查常量是否被定义。常量类似变量，不同之处在于：
+    # 在设定以后，常量的值无法更改 
+    # 常量名不需要开头的美元符号 ($) 
+    # 作用域不影响对常量的访问 
+    # 常量值只能是字符串或数字 
+例如：
+{{{name="code" class="php"
+
+// define constant
+define( 'DS' , DIRECTORY_SEPARATOR );
+define( 'IN' , true );
+
+define( 'ROOT' , dirname( __FILE__ ) . DS );
+define( 'CROOT' , ROOT . 'core' . DS  );
+
+}}}
+
+* dirname()函数
+返回路径中的目录部分。
+
+例如：
+{{{name="code" class="php"
+
+<?php
+echo dirname("c:/testweb/home.php");		//输出结果：c:/testweb
+echo dirname("/testweb/home.php");		//输出结果：/testweb
+?>
+
+}}}
+
+* error_reporting()函数
+error_reporting()设置PHP的报错级别并返回当前级别。
+
+
+* stripslashes()函数
+stripslashes()函数删除由addslashes()函数添加的反斜杠。
+
+示例：
+{{{name="code" class="php"
+
+<?php
+echo stripslashes("Who\s John Adams?");		//输出结果：Whos John Adams?
+?>
+
+}}}
+
+* move_uploaded_file() 函数将上传的文件移动到新位置。若成功，则返回 true，否则返回 false。
+
+本函数检查并确保由 file 指定的文件是合法的上传文件（即通过 PHP 的 HTTP POST 上传机制所上传的）。如果文件合法，则将其移动为由 newloc 指定的文件。
+
+
+* in_array() 函数在数组中搜索给定的值。
+
+
+
+== 默认全局数组（auto-global array） ==
+=== $GLOBALS array ===
+The $GLOBALS array, whether used inside or outside a function, is always in scope. This is because $GLOBALS is a special kind of pre-defined variable, called an auto-global . Auto-globals are variables that can be used anywhere in your PHP programs without anything required to bring them into scope. They're like a well-known employee that everyone, at headquarters or a branch office, refers to by his first name.
+
+The auto-globals are always arrays that are automatically populated with data. They contain things such as submitted form data, cookie values, and session information. 
+
+
+=== $_SERVER auto-global array ===
+The $_SERVER auto-global array holds a variety of information about your server and the current request the PHP interpreter is processing. 
+
+The PHP_SELF element of $_SERVER holds the pathname part of the current request's URL. For example, if a PHP script is accessed at `http://www.example.com/store/catalog.php`, $_SERVER['PHP_SELF'] is `/store/catalog.php` in that page.
+
+$_SERVER[PHP_SELF]经常用在form的action属性上，表明form的提交仍然使用当前php文件进行处理。
+{{{name="code" class="php"
+
+<form method="post" action="$_SERVER[PHP_SELF]">
+
+<input type="text" name="my_name">
+<input type="submit" value="Say Hello">
+
+</form>
+
+}}}
+
+在uploadify.php中，有这样的使用，$_SERVER['DOCUMENT_ROOT']，这是指的哪个根路径呢？
+
+The directory on the web server computer that holds the documents available on the web site. If the document root is /usr/local/htdocs for the web site `http://www.example.com`, then a request for `http://www.example.com/catalog/store.php` corresponds to the file /usr/local/htdocs/catalog/store.php.
+
+下表总结了全局数组_SERVER的常用元素。
+
+| Element | Example | Description |
+|QUERY_STRING |category=kitchen&price=5 |The part of the URL after the question mark where the URL parameters live. The example query string shown is for the URL http://www.example.com/catalog/store.php?category=kitchen&price=5.  |
+|PATH_INFO |/browse |Extra path information tacked onto the end of the URL after a slash. This is a way to pass information to a script without using the query string. The example PATH_INFO shown is for the URL http://www.example.com/catalog/store.php/browse.  |
+|SERVER_NAME |www.example.com |The name of the web site on which the PHP interpreter is running. If the web server hosts many different virtual domains, this is the name of the particular virtual domain that is being accessed.  |
+|DOCUMENT_ROOT |/usr/local/htdocs |The directory on the web server computer that holds the documents available on the web site. If the document root is /usr/local/htdocs for the web site http://www.example.com, then a request for http://www.example.com/catalog/store.php corresponds to the file /usr/local/htdocs/catalog/store.php.  |
+|REMOTE_ADDR |175.56.28.3 |The IP address of the user making the request to your web server.  |
+|REMOTE_HOST |pool0560.cvx.dialup.verizon.net |If your web server is configured to translate user IP addresses into hostnames, this is the hostname of the user making the request to your web server. Because this address-to-name translation is relatively expensive (in terms of computational time), most web servers do not do it.  |
+|HTTP_REFERER[2] |http://directory.google.com/Top/Shopping/Clothing/ |If someone clicked on a link to reach the current URL, HTTP_REFERER contains the URL of the page that contained the link. This value can be faked, so don't use it as your sole criteria for giving access to private web pages. It can, however, be useful for finding out who's linking to you.  |
+|HTTP_USER_AGENT |Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1) |The web browser that retrieved the page. The example value is the signature of Internet Explorer 6.0 running on Windows XP. Like HTTP_REFERER, this value can be faked, but is useful for analysis.  |
+
+
+
+
+=== $_GET and $_POST auto-global arrays ===
+{{{name="code" class="php"
+
+$verifyToken = md5('unique_hash' . $_POST['timestamp']);
+
+if (!empty($_FILES) && $_POST['token'] == $verifyToken) {
+//something to do
+}
+
+}}}
+这是采集到的什么信息，有什么作用？
+
+=== $_FILES auto-global array ===
+$_FILES数组是在文件（尤其是图片）的上传中经常要用到的。$_FILES是一个二维的数组，这个和其他的全局数组有些不一样，第一个维度使用的是`<input type="file" name="xxx" />`中name属性的属性值xxx。第二个维度一般包括文件的名name、文件大小size、文件类型type、文件存放临时名字tmp_name、错误信息error等。
+
+{{{name="code" class="php"
+$_FILES['my_file']['error']
+
+print "You uploaded a file called {$_FILES['my_file']['name']} ";
+print "of type {$_FILES['my_file']['type']} that is ";
+print "{$_FILES['my_file']['size']} bytes long.";
+(move_uploaded_file($_FILES['my_file']['tmp_name'], $destination_file))
+}}}
+
+
+
+

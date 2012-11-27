@@ -1,0 +1,48 @@
+  == web开发技术笔记 ==
+== JavaScript笔记 ==
+* [[js对象]]
+* [[BASE64编码原理及应用]]
+* [[Jquery笔记]]
+* [[js和图片处理]]
+* [[js正则表达式]]
+* [[js常用操作符]]
+* [[js对象是否存在的判断]]
+* [[JavaScript Enlightenment笔记]]
+* [[js库记录 -- flipsnap.js/cordova.js/iscroll.js]]
+* [[js常用代码段]]
+== css/html/less笔记 ==
+* [[less]]
+* [[HTML]]
+* [[css]]
+* [[jquery]]
+* [[HTML5 Client-Side Data Storage]]
+* [[jqm toolbar]]
+== node.js笔记 ==
+* [[node入门笔记]]
+== php笔记 ==
+* [[php笔记]]
+* [[php常用函数和宏]]
+* [[php变量作用域]]
+== phonegap研究笔记 ==
+* [[webkit简介]]
+* [[PhoneGap架构简述]]
+* [[Phonegap架构之cs模型篇]]
+* [[Phonegap基本文件]]
+* [[phonegap源码分析]]
+* [[phonegap api]]
+== web调试技术 ==
+* [[Weinre]]
+* [[地图api]]
+* [[web开发参考书籍]]
+* [[页面自动刷新工具]]
+* [[about]]
+== Android & JAVA ==
+* [[Java虚拟机]]
+== 参考资料 ==
+| 类别     | 书名                                                 | 作者              | 备注                                 |   |   |
+| PHP      | Learning PHP 5                                       | David Sklar       | 英文电子档，一直的参考手册           |   |   |
+| PHP      | plug-in php 100 power solutions                      | Robin Nixon       | 中文译名《php快速开发工具箱》        |   |   |
+| js       | Javascript the good parts                            | Douglas crockford | 英文pdf                              |   |   |
+| app      | Building Android Apps with HTML, CSS, and JavaScript | Jonathan Stark    | 全书就围绕着一个kilo的应用展开，推荐 |   |   |
+| HTML/CSS | Pro CSS and HTML Design Patterns                     | Michael Bowers    | 中文译名《精通CSS与HTML设计模式》    |   |   |
+

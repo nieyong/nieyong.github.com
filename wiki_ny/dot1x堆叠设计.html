@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>dot1x堆叠设计</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">删除含有unit号的全局变量，简化堆叠设计</h2>
+<p>
+802.1x模块堆叠设计的几个要点：
+</p>
+<ul>
+<li>
+报文的处理是分布式的，每个unit处理自己所拥有端口的认证；
+
+<li>
+报文的id号必须唯一，根据报文id号区分被认证者的；
+
+</ul>
+
+<p>
+根据这两点，原来的设计如下所示（以两台机器堆叠为例）：
+</p>
+
+<p>
+<a href="image/dot1x/dot1x堆叠模型1.png.html">image/dot1x/dot1x堆叠模型1.png</a>
+</p>
+
+<p>
+原来的设计中存在全局二维数组，而且数组中有unit号，在堆叠合并分裂时处理会很麻烦。下面为修改之后的设计：
+</p>
+
+<p>
+<a href="image/dot1x/dot1x堆叠模型2.png.html">image/dot1x/dot1x堆叠模型2.png</a>
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

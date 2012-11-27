@@ -1,0 +1,307 @@
+从linux kernel的源代码的角度来分析。
+
+== 二:fork()与execve()中stderr,stdio.stdout的继承关系 == 
+其实用继承这个词好像不太准确,要准确一点,可能复制更适合. 首先有二点: 
+* 1:父进程fork出子进程后,是共享所有文件描述符的(实际上也包括socket) 
+* 2:进程在execve后,除了用O_CLOEXEC标志打开的文件外,其它的文件描述符都是会复制到下个执行序列(注意这里不会产生一个新进程,只是将旧的进程替换了) 
+
+下面我们从代码中找依据来论证以上的两个观点. 
+
+对于第一点: 我们在分析进程创建的时候,已经说过,如果父过程在创建子进程的时候带了CLONE_FILES标志的时候,会和父进程共享task->files.如果没有定义,就会复制父进程的task->files.无论是哪种情况,父子进程的环境都是相同的. 代码如下: 
+{{{name="code" class="c"
+static int copy_files(unsigned long clone_flags, struct task_struct * tsk)
+{ 
+     struct files_struct *oldf, *newf; 
+     int error = 0; 
+     oldf = current->files; 
+     if (!oldf) 
+         goto out; 
+     if (clone_flags & CLONE_FILES) { 
+         atomic_inc(&oldf->count); 
+         goto out; 
+     } 
+     tsk->files = NULL; 
+     newf = dup_fd(oldf, &error); 
+     if (!newf) 
+         goto out; 
+     tsk->files = newf; 
+     error = 0; 
+out: 
+     return error; 
+} 
+}}}
+
+从上面的代码可以看出.如果带CLONE_FILES标志,只是会增加它的引用计数.否则,打开的文件描符述会全部复制. 
+
+对于二: 我们之前同样也分析过sys_execve().如果有不太熟悉的,到本站找到相关文章进行阅读.在这里不再详细说明整个流程.相关代码如下: 
+{{{name="code" class="c"
+static void flush_old_files(struct files_struct * files) 
+{ 
+     long j = -1; 
+     struct fdtable *fdt; 
+     spin_lock(&files->file_lock); 
+     for (;;) { 
+         unsigned long set, i; 
+         j++; 
+         i = j * __NFDBITS; 
+         fdt = files_fdtable(files); 
+         if (i >= fdt->max_fds) 
+              break; 
+         set = fdt->close_on_exec->fds_bits[j]; 
+         if (!set) 
+              continue; 
+         fdt->close_on_exec->fds_bits[j] = 0; 
+         spin_unlock(&files->file_lock); 
+         for ( ; set ; i++,set >>= 1) { 
+              if (set & 1) { 
+                   sys_close(i); 
+              } 
+         } 
+         spin_lock(&files->file_lock); 
+     } 
+     spin_unlock(&files->file_lock); 
+} 
+}}}
+该函数会将刷新旧环境的文件描述符信息.如果该文件描述符在fdt->close_on_exec被置位,就将其关闭. 
+
+然后,我们来跟踪一下,在什么样的情况下,才会将fdt->close_on_exec的相关位置1. 在sys_open() à get_unused_fd_flags(): 
+{{{name="code" class="c"
+int get_unused_fd_flags(int flags) 
+{ 
+     …… 
+     ……. 
+if (flags & O_CLOEXEC) 
+         FD_SET(fd, fdt->close_on_exec); 
+     else 
+         FD_CLR(fd, fdt->close_on_exec); 
+…… 
+} 
+}}}
+只有在带O_CLOEXEC打开的文件描述符,才会在execve()中被关闭. 
+
+== 三:用户空间的stderr,stdio.stdout初始化 == 
+论证完上面的二个观点之后,后面的就很容易分析了.我们先来分析一下,在用户空间中,printf是可以使用的.哪它的stderr,stdio.stdout到底是从哪点来的呢? 
+
+我们知道,用户空间的所有进程都是从init进程fork出来的.因此,它都是继承了init进程的相关文件描述符. 
+
+因此,问题都落在,init进程的stderr,stdio.stdout是在何时被设置的? 
+
+首先,我们来看一下内核中的第一个进程.它所代码的task_struct结构如下所示: 
+{{{name="code" class="c"
+#define INIT_TASK(tsk) 
+{                                         
+     .state        = 0,                        
+     .stack        = &init_thread_info,                 
+     .usage        = ATOMIC_INIT(2),                
+     .flags        = 0,                        
+     .lock_depth   = -1,                            
+     .prio         = MAX_PRIO-20,                       
+     .static_prio  = MAX_PRIO-20,                       
+     .normal_prio  = MAX_PRIO-20,                       
+     .policy       = SCHED_NORMAL,                      
+     .cpus_allowed = CPU_MASK_ALL,                      
+     ……. 
+     .files        = &init_files,                       
+     …… 
+} 
+}}}
+它所有的文件描述符信息都是在init_files中的,定义如下: 
+{{{name="code" class="c"
+static struct files_struct init_files = INIT_FILES; 
+#define INIT_FILES 
+{                                
+     .count        = ATOMIC_INIT(1),      
+     .fdt     = &init_files.fdtab,        
+     .fdtab        = INIT_FDTABLE,             
+     .file_lock    = __SPIN_LOCK_UNLOCKED(init_task.file_lock), 
+     .next_fd = 0,                   
+     .close_on_exec_init = { { 0, } },         
+     .open_fds_init     = { { 0, } },               
+     .fd_array = { NULL, }            
+} 
+}}}
+我们从这里可以看到,内核的第一进程是没有带打开文件信息的.  我们来看一下用户空间的init进程的创建过程: Start_kernel() - rest_init()中代码片段如下: 
+{{{name="code" class="c"
+static void noinline __init_refok rest_init(void) 
+     __releases(kernel_lock) 
+{ 
+     int pid; 
+     kernel_thread(kernel_init, NULL, CLONE_FS | CLONE_SIGHAND); 
+     numa_default_policy(); 
+     pid = kernel_thread(kthreadd, NULL, CLONE_FS | CLONE_FILES); 
+     kthreadd_task = find_task_by_pid(pid); 
+     unlock_kernel(); 
+     /* 
+      * The boot idle thread must execute schedule() 
+      * at least once to get things moving: 
+      */ 
+     init_idle_bootup_task(current); 
+     preempt_enable_no_resched(); 
+     schedule(); 
+     preempt_disable(); 
+     /* Call into cpu_idle with preempt disabled */ 
+     cpu_idle(); 
+} 
+}}}
+该函数创建了两个进程,然后本进程将做为idle进程在轮转. 
+
+在创建kernel_init进程的时候,带的参数是CLONE_FS | CLONE_SIGHAND.它没有携带CLONE_FILES标志.也就是说,kernel_init中的文件描述符信息是从内核第一进程中复制过去的.并不和它共享.以后,kernel_init进程中,任何关于files的打开,都不会影响到父进程. 
+
+然后在kernel_init() à init_post()中有: 
+{{{name="code" class="c"
+static int noinline init_post(void) 
+{ 
+&n
+
+bsp;   …… 
+     …… 
+if (sys_open((const char __user *) "/dev/console", O_RDWR, 0) < 0) 
+         printk(KERN_WARNING "Warning: unable to open an initial console.\n"); 
+     (void) sys_dup(0); 
+     (void) sys_dup(0); 
+     …… 
+     …… 
+run_init_process(XXXX); 
+} 
+}}}
+从上面的代码中可以看到,它先open了/dev/console.在open的时候,会去找进程没使用的最小文件序号.而,当前进程没有打开任何文件,所以sys_open()的时候肯定会找到0.然后,两次调用sys_dup(0)来复制文件描述符0.复制后的文件找述符肯定是1.2.这样,0.1.2就建立起来了. 
+
+然后这个进程调用run_init_process() kernel_execve()将当前进程替换成了用户空间的一个进程,这也就是用户空间init进程的由来.此后,用户空间的进程全是它的子孙进程.也就共享了这个0.1.2的文件描述符了.这也就是我们所说的stderr.stdio,stdout. 
+
+从用户空间写个程序测试一下: 
+{{{name="code" class="c"
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <sys/types.h> 
+#include <sys/stat.h> 
+#include <fcntl.h> 
+main() 
+{ 
+         int ret; 
+        char *ttyname0,*ttyname1,*ttyname2; 
+        ttyname0 = ttyname(0); 
+        ttyname1 = ttyname(1); 
+        ttyname2 = ttyname(2); 
+         printf(“file0 : %s\n”,ttyname0); 
+         printf(“file1 : %s\n”,ttyname1); 
+         printf(“file2 : %s\n”,ttyname2); 
+        return; 
+} 
+}}}
+运行这个程序,我们会看到,0,1,2描述符的信息全为/dev/consle. 
+
+== 四:内核创建用户空间进程的过程 == 
+在内核中创建用户空间进程的相应接口为call_usermodehelper(). 
+
+实现上,它将要创建的进程信息链入一个工作队列中,然后由工作队列处理函数调用kernel_thread()创建一个子进程,然后在这个进程里调用kernel_execve()来创建用户空间进程. 
+
+在这里要注意工作队列和下半部机制的差别.工作队列是利用一个内核进程来完成工作的,它和下半部无关.也就是说,它并不在一个中断环境中. 
+
+那就是说,这样创建出来的进程,其实就是内核环境,它没有打开0,1.2的文件描述符. 
+
+可能也有人会这么说:那我就不在内核环境下创建用户进程不就行了? 
+
+例如,我在init_module的时候,创建一个内核线程,然后在这个内核线程里,kernel_execve()一个用户空间进程不就可以了吗? 
+
+的确,在这样的情况下,创建的进程不是一个内核环境,因为在调用init_module()的时候,已经通过系统调用进入kernel,这时的环境是对应用户进程环境.但是别忘了.在系统调用环境下,再进行系统调用是不会成功的(kernel_execve也对应一个系统调用.) 
+
+举例印证如下: 
+Mdoule代码: 
+{{{name="code" class="c"
+#include <linux/ioport.h> 
+#include <linux/interrupt.h> 
+#include <asm/io.h> 
+#include <linux/serial_core.h> 
+#include <linux/kmod.h> 
+#include <linux/file.h> 
+#include <linux/unistd.h> 
+MODULE_LICENSE("GPL"); 
+MODULE_AUTHOR( "ericxiao:xgr178@163.com" ); 
+static int exeuser_init() 
+{ 
+     int ret; 
+     char *argv[] = 
+     { 
+         "/mnt/hgfs/vm_share/user_test/main", 
+         NULL, 
+     }; 
+     char *env[] = 
+     { 
+         "HOME=/", 
+         "PATH=/sbin:/bin:/usr/sbin:/usr/bin", 
+         NULL, 
+     }; 
+     printk("exeuser_init ...\n"); 
+     ret = call_usermodehelper(argv[0], argv, env,UMH_WAIT_EXEC); 
+     return 0; 
+} 
+static int exeuser_exit() 
+{ 
+     printk("exeuser_exit ...\n"); 
+     return 0; 
+} 
+module_init(exeuser_init); 
+module_exit(exeuser_exit); 
+}}}
+用户空间程序代码: 
+{{{name="code" class="c"
+#include <stdio.h> 
+#include <stdlib.h>    
+#include <unistd.h> 
+#include <sys/types.h> 
+#include <sys/stat.h> 
+#include <fcntl.h> 
+int main(int argc,char *argv[],char *env[]) 
+{ 
+     int i; 
+     int fd; 
+     int size; 
+     char *tty; 
+     FILE *confd; 
+     char printfmt[4012]; 
+     system("echo i am coming > /var/console"); 
+     for(i=0; env[i]!=NULL;i++){ 
+         sprintf(printfmt,"echo env[%d]:%s. >>/var/console",i,env[i]); 
+         system(printfmt); 
+     } 
+     for(i=0; i<argc ;i++){ 
+         sprintf(printfmt,"echo arg[%d]:%s. >>/var/console",i,argv[i]); 
+         system(printfmt);      
+     } 
+     tty = ttyname(0); 
+     if(tty == NULL) 
+         system("echo tty0 is NULL >> /var/console"); 
+     else{ 
+         sprintf(printfmt,"echo ttyname0 %s. >>/var/console",tty); 
+         system(printfmt);  
+     } 
+     tty = ttyname(1); 
+     if(tty == NULL) 
+         system("echo tty1 is NULL >> /var/console"); 
+     else{ 
+         sprintf(printfmt,"echo ttyname1 %s. >>/var/console",tty); 
+         system(printfmt);  
+     } 
+     tty = ttyname(2); 
+     if(tty == NULL) 
+         system("echo tty2 is NULL >> /var/console"); 
+     else{ 
+         sprintf(printfmt,"echo ttyname2 %s. >>/var/console",tty); 
+         system(printfmt);  
+     } 
+     tty = ttyname(fd); 
+     if(tty == NULL) 
+         system("echo fd is NULL >> /var/console"); 
+     else{ 
+         sprintf(printfmt,"echo fd %s. >>/var/console",tty); 
+         system(printfmt);  
+     } 
+     return 0; 
+} 
+}}}
+插入模块过后,调用用户空间的程序,然后这个程序将进程环境输出到/var/console中,完了可以看到.这个进程输出的0,1,2描述符信息全部NULL. 
+
+千万要注意,在测试的用户空间程序,不能打开文件.这样会破坏该进程的原始文件描述符环境(因为这个问题.狠调了一个晚上,汗颜…). 
+
+这样.用户空间的printf当然就不能打印出东西了
+

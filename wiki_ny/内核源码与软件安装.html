@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>å†…æ ¸æºç ä¸è½¯ä»¶å®‰è£…</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">ä¸»é¡µ</a></li>
+		  <li><a href="about.html">å…³äº</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+Q:°²×°Ä³Ğ©ĞèÒªÄÚºËÔ´ÂëµÄÈí¼şÊ±£¬ÎªÊ²Ã´ÎÒÒÑ¾­½«ÄÚºËÔ´Âë×°ÔÚÁË/usr/src/linuxÏÂ,ÈÔÈ»ÌáÊ¾ÕÒ²»µ½ÄÚºËÔ´Âë£¿
+</p>
+
+<p>
+A:ÒòÎªÕâĞ©Èí¼şconfigure»áÍ¨¹ı¼ì²â/usr/src/linux/include/linux/version.h»òÕßutsrelease.hÊÇ·ñ´æÔÚ£¬ÒÔÅĞ¶ÏÊÇ·ñÒÔ°²×°ÄÚºËÔ´Âë£¬¶øÈç¹ûÖ»½«ÄÚºËÔ´Âë°ü½âÑ¹£¬²¢²»´æÔÚversion.hÕâ¸öÎÄ¼ş£¬ËùÒÔĞèÒª×öÈçÏÂ²½Öè£º
+</p>
+
+<p>
+ÔÚÄÚºËÔ´ÂëÄ¿Â¼ÏÂ(/usr/src/linux)
+</p>
+<ul>
+<li>
+1)make include/linux/version.h Éú³Éversion.hÎÄ¼ş
+
+<li>
+2)make include/asm ´´½¨    
+
+</ul>
+
+<p>
+Èç¹û´Ówww.kernel.orgÏÂÔØµÄÔ´Âë°ü£¬Ê¹ÓÃÏÂÁĞÃüÁî°²×°£º
+</p>
+<ul>
+<li>
+cd /usr/src   ½øÈë/usr/srcÄ¿Â¼ÖĞ£¬½«Ô´Âë°ü·ÅÖÃÔÚÕâÀï¡£
+
+<li>
+tar jxvf linux-2.6.9.tar.bz2 ½âÑ¹Ô´Âë°ü£¬»áÉú³Élinux-2.6.9Ä¿Â¼
+
+<li>
+ln -s /usr/src/linux-2.6.9 /usr/src/linux ±àÒëÄÚºË½¨Òé×ö¸öÈíÁ´½Ó¡£
+
+</ul>
+<p>
+²¢ÇÒÒªÈ·±£/lib/modules/2.6.9/ÏÂµÄbuild,sourceÄ¿Â¼ÕıÈ·Ö¸Ïò/usr/src/linux-2.6.9µÄ£º
+</p>
+<pre>
+[root@NEWLFS modules]#ls -l /lib/modules/2.6.9
+lrwxrwxrwx 1 root root    21 2005-02-08 20:28 build -&gt; /usr/src/linux-2.6.9/
+drwxr-xr-x 9 root root   216 2005-02-08 20:28 kernel/
+-rw-r¨Cr¨C 1 root root 3408 2005-02-09 13:26 modules.alias
+-rw-r¨Cr¨C 1 root root    69 2005-02-09 13:26 modules.ccwmap
+-rw-r¨Cr¨C 1 root root 7503 2005-02-09 13:26 modules.dep
+-rw-r¨Cr¨C 1 root root    73 2005-02-09 13:26 modules.ieee1394map
+-rw-r¨Cr¨C 1 root root   205 2005-02-09 13:26 modules.inputmap
+-rw-r¨Cr¨C 1 root root    81 2005-02-09 13:26 modules.isapnpmap
+-rw-r¨Cr¨C 1 root root 4649 2005-02-09 13:26 modules.pcimap
+-rw-r¨Cr¨C 1 root root 13519 2005-02-09 13:26 modules.symbols
+-rw-r¨Cr¨C 1 root root   189 2005-02-09 13:26 modules.usbmap
+lrwxrwxrwx 1 root root    21 2005-02-08 20:28 source -&gt; /usr/src/linux-2.6.9/
+</pre>
+ 
+<p>
+×öÍêÕâĞ©£¬ÎÒÈ¥°²×°NVIDIAÇı¶¯£¬½á¹û±àÒëÊ±³ö´í¡£ ½«ÄÚºËÔ´Âë±àÒëÒ»´Î£¬²»°²×°£¬¾Í¿ÉÒÔÕı³£±àÒëÁË¡£ 2.4.xÄÚºË²»ÖªÊÇ·ñÈç´Ë£¬Èç¹û±àÒëNVIDIA¹ı³ÌÖĞ³öÏÖ´íÎó£¬¾ÍÏÈ±àÒëÒ»ÏÂÄÚºË
+·½·¨ºÜ¼òµ¥£º
+´Ó/bootÄ¿Â¼ÏÂ¸´ÖÆconfig-2.6.10µ½/usr/src/linuxÏÂ£¬ ÃüÃûÎª.config¡£
+¶ÔÓÚ2.6.xÄÚºËÊ¹ÓÃÏÂÁĞÃüÁî±àÒë£º
+</p>
+<ul>
+<li>
+cd /usr/src/linux ½øÈëÔ´ÂëÄ¿Â¼
+
+<li>
+make   ±àÒëÄÚºË¼°Ä£¿é
+
+</ul>
+<p>
+×¢Òâ£º²»ÒªÈ¥make install Ö»Òª±àÒë¾Í¿ÉÒÔÁË¡£
+2.4.xÊ¹ÓÃÏÂÁĞÃüÁî±àÒëÄÚºË£¬Í¬Ñù£¬Ö»±àÒë²»°²×°¡£
+</p>
+<ul>
+<li>
+cd /usr/src/linux 
+
+<li>
+make dep ½¨Á¢ÒÀÀµ¹ØÏµ(²»ÖªµÀÊÇ·ñÓĞ±ØÒª£¬×öÏÂÃ»»µ´¦)
+
+<li>
+make bzImage ±àÒëÄÚºË
+
+<li>
+make modules ±àÒëÄ£¿é
+
+</ul>
+<p>
+Í¨³£·¢ĞĞ°æÖĞ/bootÖĞÓ¦¸ÃÓĞµ±Ç°ÄÚºËµÄÅäÖÃÎÄ¼ş£¬ÈçÉÏÃæµÄconfig-2.6.9
+Èç¹ûÃ»ÓĞµÄ»°£¬¿ÉÒÔÍ¨¹ıÏÂÁĞÃüÁî´´½¨³ö.config
+</p>
+<ul>
+<li>
+[root@NEWLFS linux]# cd /usr/src/linux
+
+<li>
+[root@NEWLFS linux]#make menuconfig ×Ö·û½çÃæÅäÖÃÄÚºË
+
+<li>
+[root@NEWLFS linux]#make xconfig   Í¼ĞÎ½çÃæÅäÖÃÄÚºË
+
+</ul>
+<p>
+ÕâÁ½ÖÖ·½·¨ÈÎÑ¡ÆäÒ»£¬Ï²»¶µÄ»°£¬¿ÉÒÔ×Ô¼ºÅäÖÃÒ»ÏÂ¡£»òÕßÖ±½ÓÊ¹ÓÃÄ¬ÈÏÖµ£¬±£´æÍË³ö¼´¿É¡£ÕâÑù±àÒëÊ±¼ä»á³¤Ò»Ğ©¡£make menuconfig: ¼ÙÈçÊÇÔÚÍ¼ĞÎ½çÃæÖĞµÄÖÕ¶ËÔËĞĞ£¬Òª±£Ö¤¸ÃÖÕ¶Ë´°¿ÚÎªÈ«ÆÁ£¬²Å²»»á³ö´í¡£±àÒëÍê³Éºó£¬¾Í¿ÉÒÔ°²×°nvidiaÇı¶¯ÁË¡£ 
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

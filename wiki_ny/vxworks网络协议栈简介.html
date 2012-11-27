@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>vxworks网络协议栈简介</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">vxworks OS</h2>
+<p>
+VxWorks是美国Wind River System公司（风河公司）推出的一个运行在目标机上的高性能、可裁减的嵌入式实时操作系统。VxWorks操作系统包括以下五大部分：任务管理、内存管理、设备管理、文件系统管理和网络协议栈，如下图。vxworks网络协议栈是五大组成部分之一，属于操作系统中离CPU最远的一部分。
+</p>
+
+<p>
+<a href="image/vxworks_tcp_ip/vxworks_os.png.html">image/vxworks_tcp_ip/vxworks_os.png</a>
+</p>
+
+<h2 id="toc_0.2">vxworks网络协议栈</h2>
+
+<p>
+VxWorks中的网络协议栈叫作SENS（Scalable Enhanced Network Stack），即可裁减增强性网络协议栈。SENS是基于<a href="网络协议栈的历史和分类.html">BSD4.4 TCP/IP协议栈</a>发展而来的，但是包含了许多BSD4.4 TCP/IP协议栈没有的协议，同时SENS在实现一些协议功能时候增加了许多新特性，比如在IP协议实现时增加了多播功能。
+</p>
+
+<p>
+<a href="image/vxworks_tcp_ip/协议栈架构图.png.html">image/vxworks_tcp_ip/协议栈架构图.png</a>
+</p>
+
+<p>
+SENS的基本特征和传统的TCP/IP网络协议栈相似， SENS最大的特点在于数据链路层和网络协议层之间多了一个MUX层。在SENS中，网络接口的驱动程序是叫做END（Enhanced Network Driver），即增强型网络驱动程序，它处于数据链路层。IP，TCP以及UDP等其它协议合称为网络协议层。在数据链路层和网络协议层之间存在一个接口，这个接口在SENS中叫作MUX（Multiplexer）接口，也称为MUX层。
+</p>
+
+<p>
+在网络协议层，VxWorks典型地使用TCP/IP协议族，在数据链路层典型地使用Ethernet，也支持其它数据传输的物理媒体，例如远距离连接使用的串行线路接入方式PPP等。但是，无论使用什么物理媒体，END都需要使用MUX层接口与网络协议层通信。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

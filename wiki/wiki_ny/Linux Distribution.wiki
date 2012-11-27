@@ -1,0 +1,3 @@
+== Linux发行版本CentOS ==
+CentOS（Community ENTerprise Operating System）是Linux发行版之一，是RHEL/Red Hat Enterprise Linux的精简免费版，和RHEL为同样的源代码，不过，RHEL和SUSE LE等企业版，提供的升级服务均是收费升级，无法免费在线升级，因此要求免费的高度稳定性的服务器可以用CentOS替代Red Hat Enterprise Linux使用。
+

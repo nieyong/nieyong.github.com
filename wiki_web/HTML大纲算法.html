@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>HTML大纲算法</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+大纲算法允许用户代理(user agent)从一个web页面生成一个信息结构目录，让用户对页面有一个快速的概览。类似书籍、PDF、帮助文档等，都有一个清晰的目录结构，用户能方便的定位所需内容。一个良好结构的大纲，不仅是对于搜索引擎的优化，更是为借助于屏幕阅读器浏览网页的盲人（或弱视力）用户提供了巨大的帮助。
+</p>
+
+<p>
+HTML4或者之前，我们都是采用hn（h1~h6）来生成大纲的。HTML5引入了section、article、aside、nav等新的节点元素(sectioning content)，添加了一些新的规则，后面会详细阐述。
+</p>
+
+<p>
+如果想要查看这段代码的大纲，可以试试Geoffrey Sneddon做的大纲工具Outliner（强烈推荐），上传文件和输入片段代码都可以。如果想要查看在线网页的大纲，可以给浏览器安装插件：chrome：HTML5 Outliner（推荐）/ Web Devoloper，firefox：Web Devoloper；opera：HTML5 Outliner。（HTML5 Outliner里中文会显示乱码，建议换成英文测试。浏览器插件可以显示中文）
+</p>
+
+<p>
+每个标题都会生成一个隐性节点(implicit section)，紧随其后的相对层级低的标题会成为它的子节点，层级相同或者更高的标题则会关闭这个节点并生成新的节点。可以测试一下下面的代码：
+</p>
+
+
+<p>
+原因是此时大纲是由节点元素生成的，而非标题元素。HTML5的新标签section、article、aside、nav会生成显性节点(explicit sections)，每个显性节点内部又有它自己的标题结构（当然也符合HTML4、HTML5大纲算法）。这也就是为什么HTML5允许多个h1存在的原因，不过，在全部浏览器、屏幕阅读器都完美支持HTML5之前，建议还是需要同时考虑标题结构，优雅降级。
+</p>
+
+<p>
+未命名节点(untitled sections)
+</p>
+
+<p>
+HTML5新节点元素除了section、article还有aside、nav，我们也来使用一下。
+复制到outliner会发现， nav标签会产生一个untitled section，因为nav里并没有给予任何标题元素。这不是错误也不会被认为是不好的HTML5结构。但是section、article还是建议给予适当的标题。如果不确定可以给予什么标题，也许使用div更适合，不要忘了我们还有div啊。
+</p>
+
+
+<p>
+根节点可以生成自己的大纲，它的标题和节点对祖先的大纲没有任何影响（而且不会出现在祖先大纲里）。目前有六个根节点：
+</p>
+
+<p>
+1.body
+</p>
+
+<p>
+2.blockquote
+</p>
+
+<p>
+3.details
+</p>
+
+<p>
+4.fieldset
+</p>
+
+<p>
+5.figure
+</p>
+
+<p>
+6.td
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

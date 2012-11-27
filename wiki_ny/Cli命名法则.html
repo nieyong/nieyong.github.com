@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Cli命名法则</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+本文遵守CLI开发指引中的语法约定，以命令TP-LINK(config) ip address {ip-addr} {mask} [gateway]为例：
+</p>
+
+<ul>
+<li>
+命令关键字（命令中固定不变，必须原样输入的部分）以粗体方式出现。主要有两种情况：一种是命令节点（如ip和address）；另一种是absolute类型的参数。下面另作介绍。
+
+<li>
+参数：变量以斜体出现，如ip-addr、mask和gateway。常量以正体出现（如枚举量）。
+
+<li>
+在中括号 [ ] 中的任何内容是可选的，如gateway可以给定也可以不给定。
+
+<li>
+模式 [ ]* 表示括号的内容可以出现多次。
+
+<li>
+在大括号 { } 中的任何内容是必选的，如ip-addr和mask必须给定。
+
+<li>
+如果选项不止一个，则使用竖线 “|”分隔每个选项。例如：speed {10|100|1000} 表示speed有三个选项：10、100、1000，三者选其一。
+
+</ul>
+<p>
+从上面也可以看出，一条CLI命令主要由命令节点和参数组成。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

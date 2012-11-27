@@ -1,0 +1,27 @@
+== 什么是MDIX ==
+MDI:media Dependent Interface.auto-mdix is a PHY function for the detection and internal correction for improper use of cross over cable.
+
+简单说，就是确定端口的TRD-0+-和TXD-1+-中哪一对网线收数据，哪一对网线发送数据。
+
+对于一个端口，如果开启了自动协商功能，那么在正常模式下，TRD-0-+和TRD-0--这一对线是用来发送（Tx），TRD-1-+和TRD-1--这一对线是用来接收（Rx）。
+
+如果没有AUTO MDIX功能，解决哪一对收，哪一对发的问题，需要使用crossover cable（就是说的交叉网线，网线头一端的1,2连接到网线头另一端的3,6）或者使用cross-wired(MDIX) ports（这是什么）。
+
+== normal mode & cross over mode ==
+如果如上面所说，第0对线为发送，第1对线为接收，那么我们说这个端口处于normal mode，否则，我们就说其处于cross over mode。
+
+== 在BCM下如何查看 ==
+{{{
+BCM.0> port ge14
+PORT: Status (* indicates PHY link up)
+ *ge14    LS(SW) Auto(1GFD,pause) Ability (fd = 10MB,100MB,1000MB hd = 10MB,100MB intf = sgmii medium = copper pause = pause_tx,pause_rx,pause_asymm lb = none,MAC,PHY flags = autoneg )Local (fd = 10MB,100MB,1000MB hd = 10MB,100MB intf = medium =  pause = pause_tx,pause_rx lb =  flags =  )Remote (fd = 10MB,100MB,1000MB,10GB hd = 10MB,100MB intf =  medium =  pause = pause_tx,pause_rx lb =  flags =  )STP(Forward) Lrn(ARL,FWD) UtPri(0) Pfm(FloodNone) IF(SGMII) PH(Auto) Max_frame(10240) MDIX(Auto, Xover) Medium(Copper)
+}}}
+对于ge14端口，我们可以看到MDIX(Auto, Xover)，这就是说，ge14端口是被配置成Auto-MDIX模式，当前链接的网线是和正常引脚功能相反的，也就是，第0对是接收，第1对是发送。
+
+{{{
+BCM.0> port ge21
+PORT: Status (* indicates PHY link up)
+ *ge21    LS(SW) Auto(1GFD,pause) Ability (fd = 100MB,1000MB hd = 100MB intf = sgmii medium = fiber pause = pause_tx,pause_rx,pause_asymm lb = none,MAC,PHY flags = autoneg,combo )Local (fd = 1000MB hd =  intf = medium =  pause = pause_tx,pause_rx lb =  flags =  )Remote (fd = 1000MB hd =  intf =  medium =  pause =  lb =  flags =  )STP(Forward) Lrn(ARL,FWD) UtPri(0) Pfm(FloodNone) IF(SGMII) Max_frame(10240) MDIX(ForcedNormal, Normal) Medium(Fiber)
+}}}
+
+对于ge21端口，我们可以看到MDIX(ForcedNormal, Normal)，这就是说，ge21端口是被配置成Force-Normal模式（其实对应SDK上，应该是Force-Auto），当前链接的是正常的，也就是第0对是发送，第1对是接收。

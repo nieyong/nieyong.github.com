@@ -1,0 +1,57 @@
+== TCP/IP及路由基本概念、理论 ==
+* [[路由简介]] -- TCP/IP，路由的基本概念
+* [[IP地址分类]]
+* [[理解Windows中的路由表和默认网关]]
+* [[netstat使用]]
+* [[非连续网络_可变长子网掩码]]
+* [[Marvell 98DX系列]]
+* [[套接字地址数据结构]]
+* [[网络编程笔记]]
+* [[TCP协议疑难杂症全景分析]] -- 摘自网络博客
+* [[网络常见术语]]
+
+== vxWorks网络协议栈、IP协议栈 ==
+* [[网络基本常识简介]]
+* [[vxworks网络协议栈简介]]
+* [[协议栈初始化流程]]
+* [[数据包接收过程]]
+* [[数据包发送过程]]
+* [[协议栈开发调试记录]]
+* [[Vxworks Network Stack]]
+* [[MAC芯片对报文的控制]]
+* [[END驱动分析]]
+* [[网络协议栈的历史和分类]]
+
+
+== RIP ==
+* [[RIP简介]] -- 概要的介绍RIP的原理，实现过程以及和交换机的关系
+* [[PNE RIP研究]] -- 介绍Wind River提供的网络协议平台中的RIP实现
+* [[RIP还待解决的问题]]
+* [[RIP协议中套接字的使用]]
+
+== OSPF ==
+* [[OSPF协议简介]]
+* [[OSPF协议代码研究]]
+* [[MIB]]
+* [[bug list]]
+* [[OSPF还待解决的问题]]
+* [[CPP Test记录]] -- 记录code review结果和问题，cpp test规则等
+
+== C语言设计问题 ==
+* BOOL类型的定义，枚举类型还是UINT32呢？对实际代码有何影响？
+[[BOOL数据类型定义]]
+
+* 在设计参数mask时，我们应该如何处理呢？例如rip中的state量，ospf中sw层中的很多mask。
+* 位域在uc中的使用。
+[[C语言中位域的使用]]
+
+* 对于字符串指针，sizeof(p)的结果是什么？cli_ospf.c文件的line 1001
+[[sizeof的用法]]
+
+== 参考资料 ==
+# 《TCP/IP路由技术-第一卷-第二版》	Jeff Doyle,Jennifer Carroll著
+# 《TCP/IP详解 卷2：实现》		Gary R.Wright/W.Richard Stevens著
+# 《IP路由协议疑难解析》		Faraz Shamim等著
+# 《交换机IPv4路由功能研究报告》	黄韬撰写
+# 《Wind River Network Stack 2.0数据处理流程》		吕祝雄写
+# 《VxWorks协议栈研究报告》		杨晓强写

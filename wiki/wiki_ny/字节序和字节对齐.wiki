@@ -1,0 +1,6 @@
+交换机串口接收到ip地址的字符串，在程序中需要将之转化为unsigned int类型：
+{{{name="code" class="c"
+	*pIpAddr = ntohl(inet_addr(ipT));
+	*pMaskAddr = ntohl(inet_addr(maskT));
+}}}
+必须要使用ntohl进行字节序的转化。

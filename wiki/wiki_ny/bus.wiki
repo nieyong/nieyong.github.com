@@ -1,0 +1,9 @@
+在了解各种总线之前，了解一些soc架构方面的知识。一个基本的soc架构如下图所示：
+
+[[image/soc_arch.png]]
+
+== 总线 ==
+* [[I2C]] -- I2C原理和驱动
+* [[PCI]] -- 关于PCI的相关概念和软件设计
+* [[AMBA]] -- ARM公司定义的总线规范，包括AHB,ASB,APB.
+* [[SiliconBackplane]] -- Broadcom公司的一套总线规范，例如BCM5836芯片

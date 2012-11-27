@@ -1,0 +1,9 @@
+== vim里ctags和cscopes自动更新 ==
+能够产生标签文件的程序：
+# ctags:只支持C语言
+# exuberant ctags:语言支持广泛
+# etags:和Emacs兼容
+# jtags:支持java
+# ptags.py：支持python。
+# ptags:支持perl
+

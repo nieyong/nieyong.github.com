@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>网络基本常识简介</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">以太网帧结构</h2>
+<p>
+以太网主要有以下四种帧结构
+</p>
+<ol>
+<li>
+Ethernet II
+
+<li>
+Ethernet 802.3 raw（Novell Ethernet）
+
+<li>
+Ethernet 802.3 SAP 
+
+<li>
+Ethernet 802.3 SNAP 
+
+</ol>
+
+<p>
+<a href="image/tcp_ip/ethernet_ii.png.html">image/tcp_ip/ethernet_ii.png</a>
+</p>
+
+<ul>
+<li>
+Ethernet II类型以太网帧的最小长度为64字节（6＋6＋2＋46＋4），最大长度为1518字节。
+
+<li>
+类型字段标识出以太网帧所携带的上层数据类型，如16进制数0x0800代表IP协议数据 。
+
+<li>
+校验序列（Frame Check Sequence，FCS），采用32位CRC循环冗余校验对从"目标MAC地址"字段到"数据"字段的数据进行校验。
+
+</ul>
+
+<p>
+<a href="image/tcp_ip/ethernet_novell.png.html">image/tcp_ip/ethernet_novell.png</a>
+</p>
+
+<ul>
+<li>
+在Ethernet 802.3 raw类型以太网帧中，原来Ethernet II类型以太网帧中的类型字段被“总长度”字段所取代，它指明其后数据域的长度，其取值范围为：46-1500。
+
+<li>
+接下来的2个字节是固定不变的16进制数0xFFFF，它标识此帧为Novell以太类型数据帧。 
+
+</ul>
+
+
+<p>
+<a href="image/tcp_ip/ethernet_sap.png.html">image/tcp_ip/ethernet_sap.png</a>
+</p>
+
+<ul>
+<li>
+802.3 SAP首部包括两个服务访问点：源服务访问点（SSAP）和目标服务访问点（DSAP）。它们用于标识以太网帧所携带的上层数据类型，如16进制数 0x06代表IP协议数据。 
+
+<li>
+控制字段基本不使用（一般被设为0x03，指明采用无连接服务的802.2无编号数据格式）。
+
+</ul>
+
+<p>
+<a href="image/tcp_ip/ethernet_snap.png.html">image/tcp_ip/ethernet_snap.png</a>
+</p>
+
+<ul>
+<li>
+Ethernet 802. 3 SNAP类型以太网帧格式和Ethernet 802. 3 SAP类型以太网帧格式的主要区别在于：
+
+<li>
+2个字节的DSAP和SSAP字段内容被固定下来，其值为16进制数0xAA。
+
+<li>
+1个字节的“控制”字段内容被固定下来，其值为16进制数0x03。
+
+<li>
+增加了SNAP字段，由下面两项组成：Org code+类型（与Ethernet II 中类型字段含义相同）。
+
+</ul>
+
+<h2 id="toc_0.2">TCP/IP数据报文结构</h2>
+<p>
+IP头部结构：
+<a href="image/tcp_ip/ip_hdr.png.html">image/tcp_ip/ip_hdr.png</a>
+</p>
+
+<p>
+UDP头结构：
+</p>
+
+<p>
+<a href="image/tcp_ip/udp_hdr.png.html">image/tcp_ip/udp_hdr.png</a>
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

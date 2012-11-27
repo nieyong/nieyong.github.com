@@ -1,0 +1,134 @@
+Cache研究是转正答辩“MIPS BSP研究”中重要的一部分。只可惜当时时间紧，没有能够总结成文档。时隔将近一年，这次编写《CPU体系架构系列》，对于这一部分内容既是总结整理，又是温故知新。
+
+== 概述 ==
+Cache是用来对内存数据的缓存。CPU要访问的数据在Cache中有缓存，称为“命中” (Hit)，反之则称为“缺失” (Miss)。CPU访问它的速度介于寄存器与内存之间（数量级的差别）。实现Cache的花费介于寄存器与内存之间。
+
+现在 CPU 的 Cache 又被细分了几层，常见的有 L1 Cache, L2 Cache, L3 Cache，其读写延迟依次增加，实现的成本依次降低。现代系统采用从 Register ―> L1 Cache ―> L2 Cache ―> L3 Cache ―> Memory ―> Mass storage的层次结构，是为解决性能与价格矛盾所采用的折中设计。下图描述的就是CPU、Cache、内存、以及DMA之间的关系。程序的指令部分和数据部分一般分别存放在两片不同的cache中，对应指令缓存（I-Cache）和数据缓存（D-Cache）。
+
+[[CPU体系架构-image/cache/cache01.jpg]]
+
+引入 Cache 的理论基础是程序局部性原理，包括时间局部性和空间局部性。即最近被CPU访问的数据，短期内CPU
+还要访问（时间）；被 CPU 访问的数据附近的数据，CPU 短期内还要访问（空间）。因此如果将刚刚访问过的数据缓存在Cache中，那下次访问时，可以直接从Cache中取，其速度可以得到数量级的提高。
+
+
+== Cache结构 ==
+根据Cache相联方式的不同，Cache有3类：直接相联，全相联，组相联。在这里我们只介绍组相连的Cache结构。因为组相联 Cache 则是直接相联与全相联的一个折衷，兼顾性能与价格，也是最常见，最普遍的Cache结构。首先给出组相连Cache的结构图。以harrier平台的CPU芯片BCM5836的Cache为例。
+
+[[CPU体系架构-image/cache/cache02.png]]
+
+对照上面的Cache结构图，下面说明如何来说明Cache的指标。
+# Cache的大小，也就是能够存放多少字节。一般有16KBytes，32KBytes等。例如上面的这个Cache的大小就是16KBytes。后面会说明这16KB是如何组成的。
+# Cache有多少路？英文中，“路”表示为way。例如上面的Cache就是两路相连，分别为Way0、Way1。
+# Cache有多少组？英文中，“组”表示为set。例如上面的Cache一共拥有512组。
+# Cache的行大小？英文中，“行”表示为line。在上图中，行没有标示出来，行其实就是某一路的某一组，或者某一组的某一路。上面的虽然有点儿绕，其实就是看到的tag0、status、16bytes就是一行。行的大小就是16bytes。Cache的大小就是所有的这些行的大小。
+
+现在就知道Cache的大小是如何算得：16Bytes（行大小）*2（路）*512（组）=16KBytes。
+
+例如，在我的个人PC上，使用软件检测获得到Cache的数据如下图所示。
+
+[[CPU体系架构-image/cache/cache06.gif]]
+
+== 工作方式 ==
+下面介绍组相连Cache的工作方式。
+
+*首先看的是CPU是如何获取Cache中的数据的。* 如下图所示。
+
+[[CPU体系架构-image/cache/cache03.png]]
+
+假设这里是16KBytes的指令Cache（I-Cache），那么左上角32位的虚拟地址就是PC指针中的值（如果PC指针存在的话）。32位的地址在图中使用了3中颜色标记（黑色：bit0~bit3；蓝色：bit4~bit12；红色：bit13~bit31）。下面就是CPU从Cache中获取指令的过程：
+# 匹配组。蓝色的9bit选择某一个组（一共512个组，9bit表示完）；
+# 匹配路。匹配是上一步选定的组中的哪一路。在这里，有两种选择路的方式：index类型和hit类型。
+# 匹配tag头。将红色部分的虚拟地址（VA）转化成物理地址（PA），转化的物理地址和tag头中的匹配，那么就认为该地址处的值在Cache中存在，也就命中（hit）Cache。如果不匹配，那么就认为该指令在Cache中不存在，未命中（miss），此时就需要到内存中取指令。
+# 匹配指令位置。通过上面三步，已经找到Cache中的某一行了。但是一行中有16个字节，应该取那一个（或者连续几个）呢？黑色的4bit来确定。
+CPU和数据Cache（D-Cache）的交互基本上也是这样的。存在差别的地方时第三步，匹配tag头。对于指令Cache，不允许修改的（绝大部分情况），所以匹配到tag头，就认为Cache命中了，可以把Cache中的指令读取到CPU执行了。但是数据Cache可能被修改了（corrupt），内存中的和Cache中的不相同了，这个时候，还需要查看数据Cache是否有效（valid）。
+
+还需要强调的一点是，上面的过程完全由硬件完成，程序员不能够操控其中的任何环节。
+
+*然后要看的是Cache和内存如何交互数据。* 如下图所示。
+
+[[CPU体系架构-image/cache/cache07.png]]
+
+在CPU如何获取Cache中的数据的问题中，还遗留有三个问题：第一，CPU读取Cache中的数据，没有命中（miss）应该怎么办？第二，对于数据Cache，CPU修改了某个数据的值，并把它写回到Cache中，造成Cache中的数据和内存中的数据不一致怎么办？第三，对于数据Cache，CPU修改了某个数据的值，并把它写回到Cache中，结果没有命中（miss）应该怎么办？这三个问题，就是这一段Cache和内存如何交互需要解决的问题。
+
+首先看图中Read Data->Miss的过程，CPU读取Cache中的数据，没有命中应该怎么办？
+    读数据时Cache miss，实际实现中有2种策略：Read-allocate和No read-allocate(Read through)。现代的实现一般皆为Read-allocate，即：先从Cache中分配一行，后从RAM中读数据填充之，尔后将数据传给CPU。No read-allocate   则是直接从RAM取数据到CPU（不经Cache）。若非特别指出，读策略皆默认为Read-allocate。
+
+然后看图中Write Data->Hit的过程，CPU修改数据Cache，命中，可能造成数据Cache和内存中的值不一致应该怎么办？
+    在写命中(store hit)时，Cache的实现亦有两种策略：Write-back和Write-through。Write-through的Cache，在 write hit时，会将数据更新到Cache和RAM。Write-back的Cache，在write hit时，则仅将数据更新到Cache且将被更新的行标为'dirty'，当该行被替换时控制器才将该行数据写回到内存。对于Write-back的Cache，在连续多次写数据时可以节约总线带宽，性能要好于Write- through，但由于其缓存的数据往往是最新的，与内存中的数据多数时候是不一致的，因此需要软件来维护其一致性。
+
+最后看图中Write Data->Miss的过程，CPU修改数据Cache，未命中，这时应该如何处理呢？
+    写数据时Cache miss，实现的策略和读数据时Cache miss类似，有两种：Write-allocate和No write-allocate。前者的处理方式是先分配一行，后从RAM中读数据填充之（相当于一个 read miss refill 过程），最后才将数据写入 Cache（到此，亦会根据写命中store hit进行后面的操作）。No read-allocate (Write-around)的处理方式则是绕过这一级Cache（不分配Cache line），直接将数据送到下一级Cache/Memory。有些MIPS 的实现两种写策略皆支持。
+
+其实，上面的Cahce和内存交互是一个策略问题。一般都使用Read-allocate，Write-back，No write-allocate的策略，对于具体芯片实现，需要参考其data sheet。
+
+=== 未深入的技术 ===
+虚地址Cache：Cache里面的地址索引是使用物理地址索引，还是用虚地址索引？导致的问题有：错误共享问题和别名问题。
+
+Cache在MIPS下的重影问题。
+
+== Cache实例（MIPS Cache） ==
+对于Cache，软件能够做什么呢，程序员应该做什么呢？本节就已MIPS Cache为实例来说明其中一些常见的操作。
+
+在上文的Cache和内存的交互描述中，有这么一段话： _对于Write-back的Cache，在连续多次写数据时可以节约总线带宽，性能要好于Write- through，但由于其缓存的数据往往是最新的，与内存中的数据多数时候是不一致的，因此需要软件来维护其一致性。_ 这就是程序员在编程时，需要对Cache进行操作的地方。考虑这么一种情况：
+
+对于某片内存区域，刚开始在内存和Cache中是一致的。现在程序运行，对这篇数据进行了修改，由于Cache是Write-back类型的，修改的数据都保存在Cache中，而内存中的数据仍然是旧的数据。此时，程序启动DMA，将内存中的数据传送到外部设备。无疑，此时传送出去的数据并不是我们想要的数据（我们想要传送出去的是通过计算，仍然保存在Cache中的新数据），这就是问题出错的地方。我们需要在完成数据计算之后，启动DMA之前，将Cache中的数据写回到（flush）到内存中。这就是所说的需要软件来维护其一致性。
+
+当然，上面是一种很常见的需要软件参与的情况，还有很多其它类似的情况。下面我们首先来看看MIPS留给程序员的Cache接口是怎么样的。
+
+=== MIPS Cache软件接口 ===
+*寄存器* TagHi和TagLo用于暂存Cache行的Tag中的数据，都是32位CP0寄存器。
+
+*Cache指令* MIPS体系结构只引入了cache指令作为软件控制cache的统一接口。Cache指令的格式如下所示：
+    cache ops, addr
+其中ops在指令中占据5位，低2位指定Cache的类型，高3位指定执行的操作。下表中列出了ops低2位指定的Cache的类型，一般我们使用到的只有一级I-Cache和D-Cache。
+| ops低2位 | Cache的类型          |
+| 00     | L1        I-Cache |
+| 01     | L1        D-Cache |
+| 10     | L2        Cache   |
+| 11     | L3        Cache   |
+下表中列出了ops高3位指定该Cache命令执行的操作。
+| Ops高3位 | 执行的操作                         |
+| 000    | Index Invalidate              |
+| 001    | Index Load Tag                |
+| 010    | Index Store Tag               |
+| 011    |                               |
+| 100    | Hit Invalidate                |
+| 101    | Fill/Hit Writeback Invalidate |
+| 110    | Hit Writeback                 |
+| 111    | Fetch and Lock                |
+有关MIPS Cache的软件接口，可以参考《See MIPS Run》一书的Chapter 4-How Caches Work on MIPS Processors 4.9-Programming MIPS32/64 Caches，也可以参考《The MIPS Cache Architecture》一文的Chapter 4-MIPS Cache控制接口。
+
+=== 初始化Cache ===
+Cache的初始化分两步：第一步开启Cache功能，设置寄存器CP0 config 0、CP0 brcm config 0等，使能I-Cache和D-Cache功能，开启Kseg0的Cache功能。第二步初始化Cache，将未知状态的Cache行的Tag域置为0。下面的代码就是设置Tag头为0的过程。
+{{{name="code" class="c"
+……
+	/* Calc an address that will correspond to the last cache line  */
+	addu	a3, a2, a0
+	subu    a3, a1
+
+	/* Loop through all lines, invalidating each of them */
+1:	
+	 cache	ICACHE_INDEX_STORE_TA 0(a2) 	/* clear tag */
+        bne	a2, a3, 1b
+	addu	a2, a1
+……
+
+}}}
+
+=== DMA操作和Cache ===
+最后回答一下在本节开始举的那个问题，Cache和内存中的数据不一致，导致DMA需要软件参与Cache的操作。代码如下所示，如果是DMA要将内存中的数据传送到外设（DMA_TX），那么需要将Cache中的数据冲刷到内存（cacheFlush函数），保证内存中的数据是最新的数据；如果DMA将外设的数据传送到内存了，那么需要将Cache中的数据置位无效（cacheInvalidate函数），这样下次CPU取该部分数据时，就不会到cache中获取，而是获取内存中的最新数据。
+{{{name="code" class="c"
+……
+void*
+osl_dma_map(void *dev, void *va, uint size, uint direction)
+{
+	if (direction == DMA_TX)
+		cacheFlush(DATA_CACHE, va, size);
+	else
+		cacheInvalidate(DATA_CACHEva, size);
+	return ((void*)CACHE_DMA_VIRT_TO_PHYS(va));
+}
+……
+
+}}}
+该段代码选自网络驱动模块，DMA将网络数据包在内存和网卡之间传送。

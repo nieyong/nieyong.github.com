@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>PhoneGap架构简述</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">PhoneGap的架构组成</h2>
+<p>
+PhoneGap在应用层上很简单清晰，将Native Code封装成13个类（phonegap.jar或者cordova.jar），通过webview中java和js交互技术转化为js脚本（phonegap.js或者cordova.js)，来供Web开发者在网页开发中应用。Phonegap提供的整体方案。
+</p>
+
+<p>
+<a href="img/phonegap/phonegap架构图.gif.html">img/phonegap/phonegap架构图.gif</a>
+</p>
+
+<p>
+下面是几个关键点：
+</p>
+<ul>
+<li>
+基于WebView来渲染HTML
+
+</ul>
+<p>
+这点比较简单，大家都想得到，它实际上就是个内嵌的浏览器，各个移动平台也提供了这样的组件，在Android上就是WebView。
+</p>
+
+<p>
+但Phonegap对WebView做了些改造，它通过扩展WebViewClient和WebChromeClient改变了些标准行为，它用CordovaWebViewClient扩展WebViewClient，并复写shouldOverrideUrlLoading、onPageStarted、onPageFinished等方法，使得它扩展了web纯url网页调用的行为，具备了通过geo:xxx调用intent，通过sms:xxx发短信等能力。另外，它用CordovaChromeClient扩展WebChromeClient，并复写了onJsAlert、onJsConfirm等方法，用Native的风格的窗口来相应js端alert、confirm的调用，使其更像是一个native的程序。更关键的是它复写了prompt，并通过这个方法来实现js对android端的调用，下面会详细谈这点。
+</p>
+
+<p>
+总之，它就是基于CordovaWebViewClient和CordovaChromeClient扩展了WebView，使其具备标准的HTML执行渲染能力外，更具备Native化的样式和能力。这块的代码我就不具体去讲了，比较简单。
+</p>
+
+<ul>
+<li>
+基于Plugin的模式来封装Native API
+
+</ul>
+
+<p>
+它的结构也比较扁平，总共三个类Plugin, PluginManager和PluginResult，一个配置文件plugin.xml。jar部分架构一节会有详细说明。
+</p>
+
+<ul>
+<li>
+以覆盖prompt方法的形式来实现Web端对Android端的调用
+
+</ul>
+
+<p>
+在phonegap通信过程一节有详细说明。
+</p>
+
+<ul>
+<li>
+以XHR或JSONP的方式来实现Android端向Web端返回异步调用的结果
+
+</ul>
+
+<p>
+在phonegap通信过程一节有详细说明。
+</p>
+
+<p>
+下图是另外一张phonegap设计概念图。
+</p>
+
+<p>
+<a href="img/phonegap/phonegap概念.png.html">img/phonegap/phonegap概念.png</a>
+</p>
+
+<h3 id="toc_0.1.1">jar部分架构</h3>
+<p>
+内部实现的架构，其实也并不复杂，只需要分析jar包。分析一下PhoneGap类库架构，结合PhoneGap示例，首先我们最感兴趣的，就是DroidGap这个class，源码截取部分如下 ：
+</p>
+<pre name="code" class="java">
+package com.phonegap;
+ 
+public class DroidGap extends PhonegapActivity
+{
+    protected WebView appView;
+    protected WebViewClient webViewClient;
+    protected PluginManager pluginManager;
+}
+</pre>
+
+<p>
+通过类结构结合WebView的了解，其实这也是在WebView的基础上进行了一把封装。虽然截取不多，我们也能得到PhoneGap结构第一个结论： <strong>PhoneGap整体技术思路建立在WebView的基础上，是结合WebView、Native Code和HTML技术的中间层封装。</strong>
+</p>
+
+<p>
+接下来，我们打开Plugin和一个具体的Plugin类，截取代码如下：
+</p>
+<pre name="code" class="java">
+
+public abstract class Plugin
+  implements IPlugin
+{
+  public String id;
+  public abstract PluginResult execute(String paramString1, JSONArray paramJSONArray, String paramString2);
+}
+ 
+public class DirectoryListPlugin extends Plugin {  
+    /** List Action */  
+    public static final String ACTION = "list";  
+  
+    @Override  
+    public PluginResult execute(String action, JSONArray data, String callbackId) {  
+        return result;  
+    }  
+}
+</pre>
+
+<p>
+通过如上的Plugin抽象类和DirectoryListPlugin实体类，我们可以看到，PhoneGap采用插件化的方式来管理各个模块，这个你可以通过分析class可以验证，所有的模块封装，都是继承自Plugin，而纯虚函数execute则定义各个模块函数功能的规范，让具体的实体类来负责各自的实现。于是，我们得到了PhoneGap结构的第二个结论： <strong>PhoneGap是通过插件机制来管理自己的架构，从而将整个框架支撑在一起。</strong> 当然，这也是类库设计的一种经典方法了，及可以自用实现功能，也能扩展插件让用户自己开发。
+</p>
+
+<p>
+下面，我们再看一下插件管理机制，主要是Plugin、PluginManager、PluginResult。，截取代码如下：
+</p>
+
+<pre name="code" class="java">
+public final class PluginManager
+{
+    private HashMap&lt;String, IPlugin&gt; plugins = new HashMap();
+    private HashMap&lt;String, String&gt; services = new HashMap();
+ 
+    public PluginManager(WebView app, PhonegapActivity ctx)
+    {
+        loadPlugins();
+    }
+    
+  public void loadPlugins()
+  {
+    int id = this.ctx.getResources().getIdentifier("plugins", "xml", this.ctx.getPackageName());
+    if (id == 0) pluginConfigurationMissing();
+    XmlResourceParser xml = this.ctx.getResources().getXml(id);
+    int eventType = -1;
+    while (eventType != 1) {
+      if (eventType == 2) {
+        String strNode = xml.getName();
+        if (strNode.equals("plugin")) {
+          String name = xml.getAttributeValue(null, "name");
+          String value = xml.getAttributeValue(null, "value");
+ 
+          addService(name, value);
+        }
+      }
+      try {
+        eventType = xml.next();
+      } catch (XmlPullParserException e) {
+        e.printStackTrace();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+ 
+  public String exec(String service, String action, String callbackId, String jsonArgs, boolean async)
+  {
+  }
+}
+</pre>
+<pre name="code" class="java">
+public class DroidGap extends PhonegapActivity
+{
+    public void init()
+    {
+        bindBrowser(this.appView);
+    }
+    
+    private void bindBrowser(WebView appView)
+    {
+        this.pluginManager = new PluginManager(appView, this);
+    }
+}
+</pre>
+
+<p>
+首先DroidGap类在初始化的时候会创建PluginManager类，可以简单认为DroidGap和PluginManager是一一对应的关系，全局变量（这种理解绝对上是不对的）。而PluginManager通过loadPlugins解析plugin.xml，将引用的插件加载进来，而在调用时则通过exec函数来具体到具体的Plugin插件来实现。于是，得到了PhoneGap架构的第三个结论： <strong>PhoneGap插件管理采用标准的工厂模式，通过xml进行解析和扩展，从而完成整个工作流的架构，</strong> 对了，忘记提PluginResult了，这个就是结果返回类的标准。
+</p>
+
+<h3 id="toc_0.1.2">js部分架构</h3>
+<p>
+//todo
+</p>
+
+
+<h2 id="toc_0.2">PhoneGap通信过程</h2>
+<p>
+好了，理解完上面的WebView思路和PhoneGap架构，我们就有一个好的基础来研究PhoneGap具体实现，比如一个完整的通信过程是如何实现，这就需要细化到具体的函数内部实现。
+</p>
+
+<p>
+当我们写的第一个PhoneGap程序时，我想你的第一个代码肯定是这样的： <code>super.loadUrl(file:///android_asset/www/index.html);</code>。于是，在PhoneGap的帮助下，一个Hello World就展现在我们的眼前，这时候你就会眼前一亮，loadUrl，这个函数在WebView控件中也有，我们就来看一下PhoneGap的实现代码如下：
+</p>
+
+<pre name="code" class="java">
+public class DroidGap extends PhonegapActivity
+{
+    protected WebView appView;
+    public void init()
+      {
+        this.appView = new WebView(this);
+        
+    
+        if (Build.VERSION.RELEASE.startsWith("1.")) {
+          this.appView.setWebChromeClient(new GapClient(this));
+        }
+        else {
+          this.appView.setWebChromeClient(new EclairClient(this));
+        }
+            
+        settings.setJavaScriptEnabled(true);
+            
+        String url = getStringProperty("url", null);
+        if (url != null) {
+          System.out.println("Loading initial URL=" + url);
+          loadUrl(url);
+        }
+      }
+    public void loadUrl(String url)
+    {
+        this.val$me.appView.loadUrl(this.val$url);
+    }
+}
+</pre>
+
+<p>
+如上可见，DroidGap在初始化时调用WebView支持JS脚本解析，在loadUrl中，也是经过一些判断，最终也是调用WebView的loadUrl来实现最终功能。
+</p>
+
+<p>
+下面就该具体的通信过程了，以DirectoryListPlugin插件的应用为例子，这个事PhoneGap自己提供的自定义插件开发的示例，用户在页面开发中代码如下：
+</p>
+
+<pre name="code" class="xml">
+&lt;script type="text/javascript" src="phonegap.js"&gt;&lt;/script&gt;  
+&lt;script type="text/javascript" src="directorylisting.js"&gt;&lt;/script&gt;  
+&lt;script type="text/javascript" &gt;
+  document.addEventListener('deviceready', function () {
+      var btn = document.getElementById("list-sdcard");
+      btn.onclick = function () {
+          DirectoryListing.list("/sdcard",
+	  function (r) { printResult(r) },
+	  function (e) { alert("error") }
+	  );
+      };
+      btn.disabled = false;
+  }, true);
+&lt;/script&gt;
+</pre>
+
+
+<pre name="code" class="js">
+// directorylisting.js
+var DirectoryListing = {    
+    list: function(directory,successCallback, failureCallback) {  
+        return PhoneGap.exec(successCallback,        //Success callback from the plugin  
+                             failureCallback,        //Error callback from the plugin  
+                             'DirectoryListPlugin',  //Tell PhoneGap to run "DirectoryListingPlugin" Plugin  
+                             'list',                 //Tell plugin, which action we want to perform  
+                             [directory]);           //Passing list of args to the plugin  
+    }  
+}; 
+</pre>
+
+<p>
+当脚本调用DirectoryListing.list，是调用的PhoneGap.exec函数来进行的具体实现，该函数在PhoneGap.js这个文件中实现：
+</p>
+
+<pre  name="code" class="js">
+PhoneGap.exec = function(success, fail, service, action, args) {
+    try {
+        var callbackId = service + PhoneGap.callbackId++;
+        if (success || fail) {
+            PhoneGap.callbacks[callbackId] = {success:success, fail:fail};
+        }
+	
+	//prompt()函数是重点，这个函数是属于js代码中的函数
+        var r = prompt(PhoneGap.stringify(args), "gap:"+PhoneGap.stringify([service, action, callbackId, true]));
+    } catch (e2) {
+        console.log("Error: "+e2);
+    }
+};
+</pre>
+
+<p>
+prompt()是整个函数的重点。prompt()函数是如何调用到Android(Java)端的功能的呢？
+</p>
+
+<p>
+WebChromeClient提供了一个onJsPrompt方法，这个方法是当web端调用prompt方法时就会调到。于是乎，它就把这个方法给改了，改成Android向Web端暴露的接口，当Web要调用任何Android(Java)端的方法时，就调prompt，onJsPrompt被调后，它再去解析参数来代理后续的行为。这时，它就主要是调用Plugin，通过Plugin来满足Web端的需求。时序图如下图所示：
+</p>
+
+<p>
+<a href="img/phonegap/web2native时序图.gif.html">img/phonegap/web2native时序图.gif</a>
+</p>
+
+<p>
+<code>org.apache.cordova.CordovaChromeClient.onJsConfirm(WebView view, String url, String message, final JsResult result);</code>这个方法会拦截html页面发送过来的Native Api请求（调用window.prompt()），然后交由对应的Plugin处理。接下来会调用onJsPrompt()函数，onJsPrompt()调用exec函数，那让我们来看一下他们又做了什么事情，依次代码如下：
+</p>
+
+<pre  name="code" class="java">
+public class DroidGap extends PhonegapActivity
+{
+    public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result)
+    {
+        String r = DroidGap.this.pluginManager.exec(service, action, callbackId, message, async);
+    }
+}
+ 
+public final class PluginManager
+{
+    public String exec(String service, String action, String callbackId, String jsonArgs, boolean async)
+    {
+        String clazz = (String)this.services.get(service);
+        if (isPhoneGapPlugin(c)) {
+            IPlugin plugin = addPlugin(clazz, c);
+            if (runAsync)
+        {
+          Thread thread = new Thread(new Runnable(plugin, action, args, callbackId, ctx)
+          {
+            public void run() {
+              try {
+                PluginResult cr = this.val$plugin.execute(this.val$action, this.val$args, this.val$callbackId);
+                int status = cr.getStatus();
+ 
+                if ((status != PluginResult.Status.NO_RESULT.ordinal()) || (!(cr.getKeepCallback())))
+                {
+                  if ((status == PluginResult.Status.OK.ordinal()) || (status == PluginResult.Status.NO_RESULT.ordinal())) {
+                    this.val$ctx.sendJavascript(cr.toSuccessCallbackString(this.val$callbackId));
+                  }
+                  else
+                  {
+                    this.val$ctx.sendJavascript(cr.toErrorCallbackString(this.val$callbackId)); }
+                }
+              } catch (Exception e) {
+                PluginResult cr = new PluginResult(PluginResult.Status.ERROR, e.getMessage());
+                this.val$ctx.sendJavascript(cr.toErrorCallbackString(this.val$callbackId));
+              }
+            }
+          });
+          thread.start();
+          return "";
+        }
+ 
+        cr = plugin.execute(action, args, callbackId);
+ 
+        if ((cr.getStatus() == PluginResult.Status.NO_RESULT.ordinal()) &amp;&amp; (cr.getKeepCallback()))
+          return "";
+        }
+    }
+}
+</pre>
+
+<p>
+上面的代码简单介绍如下，当你轻轻在界面点击一个按钮，触发js事件时，PhoneGap的js脚本调用prompt函数，这会促发java代码中DroidGap类的onJsPrompt，此函数最主要的作用是调用PluginManager的exec函数，这样将具体的js函数通过插件Manager来指定具体的Plugin来执行，这在PluginManager中通过Hash字典通过service参数获取具体的Plugin插件，专业的人做专业的事情嘛，这时候Plugin就通过execute来调用系统API，达到js与系统级别之间的通信。
+</p>
+
+<p>
+另外，还有一个返回值问题的考虑，如果是同步，那很自然的通过返回的PluginResult来返回，而如果是异步方式，这就需要注意代码中Thread的应用，这时候PhoneGap创建了一个线程，来专门用于获取返回值，这个线程不停的Run，直到获取到返回的结果，然后以sendJavascript的方式回调给js，从而完成java通信js的过程。
+</p>
+
+<p>
+另外，这个sendJavascript是干什么用的吗，呵呵，一看就是发送给Javascript的消息，这个一看就知道了，这里只是突然想到了MFC下面的经典面试题：PostMessage和SendMessage有什么不同，呵呵，SendMessage只是抛消息而不负责事件的返回就直接走人，而post则需要等待一个结果才负责人的闪人，说不定写sendJavascript接口这个人当时应该也是这么想的吧，可以通过是否有postJavascript这个接口来验证:)
+</p>
+
+<p>
+这样，PhoneGap整个的过程都已经结束，其实总结下来其技术看起来确实很有新颖，但是本质看来并无什么惊叹之处，都是一些很实用直接的方法，当然这帮哥们应该是对Java客户端技术和HTML很熟悉的，但就代码而言还是很专业的，无论是质量还是设计。当然，其最难的部分确实是异步机制的处理，通过创建Thread的方式来实现，因为我对Java线程run运行机制不是很了解，直观来看这种方式在CS开发上没有问题，但是这样实现有点简单零散，感觉如果有观察者模式的方式来进行管理，代码上会更优雅一些，但本身返回值就是一个JSONArray，这样做是否有点小题大做，这也说不清楚，毕竟PhoneGap要考虑这么多移动平台的Native Code而非Android一个平台。
+</p>
+
+<p>
+<a href="Phonegap架构之cs模型篇.html">Phonegap架构之cs模型篇</a>以cs模型的方式分析phonegap的架构，很有实践指导作用。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

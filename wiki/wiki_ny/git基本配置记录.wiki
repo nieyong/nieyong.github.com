@@ -1,0 +1,23 @@
+== git配置文件 ==
+* /etc/gitconfig文件，对应MS下的安装路径下的gitconfig文件。命令`git config`的--system选项就是配置该文件，例如：`git config --system i18n.logOutputEncoding gbk`。
+* ~/.gitconfig文件，对应于MS下的当前用户目录（例如C:\Documents and Settings\Administrator）下的.gitconfig文件。命令`git config`的--global选项就是配置该文件，例如：`git config --global user.name "nieyong"`。
+
+查看现在git的配置结果，命令`git config --list`。
+
+
+== git使用外部的diff或者merge工具 ==
+git可以配置使用外部的diff或者merge工具，例如使用p4merge工具。
+
+git有一些默认支持的外部merge工具，在文件libexec/git-core/git-mergetool--lib文件中。
+
+{{{
+git config --global merge.tool p4merge
+git config --global mergetool.p4merge.cmd  'p4merge \"$BASE\" \"$LOCAL\"
+
+但是对不git默认支持p4merge的情况，使用
+
+git config --global mergetool.p4merge.path "C:/Progra~1/Perfoce/p4merge.exe"
+
+}}}
+
+最后实验的结果，不需要配置也没有关系，在安装了p4merge之后，直接使用命令`git difftool 232e 21dk`就可以切换到p4merge查看。但是如果使用`git diff 232e 21dk`，则无论配置与否，都不能够切换到p4merge查看。

@@ -1,0 +1,27 @@
+下面就以上几节使用到的术语进行总结。
+
+== Compute Technology ==
+*ISA*		Instructions Set Architecture（指令集系统架构）。ISA常被简称为Architecture（架构），是处理器的一个抽象描述，而ISA在处理器中的实现，被称为Microarchitecture（微架构）。ISA是将编程所需要了解的硬件信息从硬件系统中抽象出来，这样程序员就可以面向ISA编程。从编程人员的角度来看，ISA包括一套指令集和一些寄存器。
+
+*CISC*		Complex Instruction Set Computing（复杂指令集系统）。一种CPU芯片设计技术。X86，PowerPC等都是使用的CISC的理念和技术。
+
+*RISC*		Reduced Instructin Set Computing（精简指令集系统）。和CISC相对应，也是一种CPU芯片设计技术。ARM、MIPS等嵌入式处理器就是使用的RISC的理念和技术。
+
+
+*DMA*		Direct Memory Access（直接存储器访问）。DMA是计算机科学中的一种内存访问技术。它允许某些电脑内部的硬件子系统（电脑外设），可以独立地直接读写系统存储器，而不需绕道CPU。在同等程度的CPU负担下，DMA是一种快速的数据传送方式。很多硬件的系统会使用DMA，包含硬盘控制器、绘图显卡、网卡和声卡。（摘自《维基百科》）。对于嵌入式设备，上文中提到的 __电脑内部的硬件子系统（电脑外设）__ 对应的就是SOC芯片上的某些片上资源，例如I2C核，以太网接口等，也可以是一些外接独立芯片。
+
+*TLB*		Translation Lookaside Buffer（旁路转换缓冲）。MMU为了提高查询页表的速度，现在的处理器都为页表做了一个小Cache，叫做旁路转换缓冲(Translation lookaside buffer, TLB)。
+
+
+*IEEE*		the Institute for Electrical and Electronics Engineers,Inc（电气与电子工程师协会）
+
+*POSIX*		Portable Operating System Interface（可移植操作系统接口）
+
+*内部碎片*	指一页中未使用的存储空间
+
+*外部碎片*	todo
+
+*BSS*		这一名称是一个历史遗物，来自一条老的汇编操作称作“block started by symbol”。
+
+== General Register Glossary ==
+*程序指针*	又叫做程序计数器（program counter）。指向程序执行的下一条指令的地址。在X86上又叫做指令指针（IP，instruction pointer）。程序指针可以是一个存在的寄存器（例如X86上的IP寄存器和ARM上的r15寄存器），也可以不存在对程序员可见的寄存器，而只是这样一个概念（例如MIPS中就没有对应的寄存器）。

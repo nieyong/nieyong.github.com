@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>网络协议基本常识</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+报告说，针对办理不同带宽的固网宽带用户进行的上网平均速度调查发现，超过半数用户上网平均速度达不到标定速度。数据显示，使用4M宽带的用户中，理论上应享有512KB/s（注：KB/秒，KB是计算机中表示储存容量大小的单位，中文表达是“千字节”）的网速，实际上，平均速度在400KB/s以下的占91.2%；使用2M宽带，理论网速是256KB/s，实际上，平均速度在200KB/s以下的占83.5%；使用1M宽带，理论网速是128KB/s，实际上，平均网速在100KB/s以下的占67.6%。
+</p>
+
+<p>
+<a href="arp_ping.html">arp_ping</a>
+</p>
+
+<p>
+在chrome下登录web页面的时候，登录速度很慢。通过抓包发现存在TCP Retransmission的现象。数据包的分析结果是The RTO for this segment was:xxxx seconds。这说明WEB Server没有响应某些请求，数据包没有发送出来。
+</p>
+
+<p>
+<a href="TCP的超时与重传-Timeout and Retransmission.html">TCP的超时与重传-Timeout and Retransmission</a>
+</p>
+
+<h2 id="toc_0.1">upnp/dlna</h2>
+<ul>
+<li>
+<a href="upnp 协议.html">upnp 协议</a>
+
+<li>
+<a href="UPnP和其他类似标准的比较.html">UPnP和其他类似标准的比较</a>
+
+<li>
+<a href="UPNP协议细节.html">UPNP协议细节</a>
+
+</ul>
+
+
+<h2 id="toc_0.2">Port Forwarding</h2>
+<p>
+Port Forwarding主要应用于开放已知端口给外部网络。例如用户需要在内网建立一个网站供外部访问，除了在内网使用一台计算机搭建一个WEB服务器外，还必须在路由器开放http协议使用的端口（默认为80），从而使公网上其他用户可以通过使用公网IP来访问这个服务器。
+</p>
+
+<p>
+常见服务的默认端口均已在前文中列举，这些端口可以修改，但是在访问时必须使用公网IP+指定端口号的形式。例如内网中的WEB服务器使用的是8080端口，公网地址为222.1.1.1，则在访问时需要在IE地址栏输入<a href="http://222.1.1.1:8080。">http://222.1.1.1:8080。</a>
+</p>
+
+<p>
+注意：
+</p>
+<ol>
+<li>
+如果在内网创建的WEB服务器使用的是80端口，则需要将远程WEB管理的端口更改为其他端口。
+
+<li>
+我司外销路由器均支持VPN Passthrough，即可以在内网访问外部的VPN服务器。 如果VPN服务器建立在内部网络，则需要针对具体使用的协议开放对应的端口。（L2TP为UDP:1701, PPTP为TCP:1723）。
+
+<li>
+我们路由器处理FTP的程序段叫做ALG（Application Layer Gateway，应用层网关），目前我们宽带路由器的FTP ALG只是检测TCP端口号21的数据报文，所以当FTP服务器把端口号改为其他的端口的时候，FTP应用就可能有问题。
+
+</ol>
+
+<p>
+相关FAQ: <a href="http://www.tp-link.com/support/showfaq.asp?id=134">http://www.tp-link.com/support/showfaq.asp?id=134</a>
+For Xbox Live: <a href="http://www.tp-link.com/support/showfaq.asp?id=133">http://www.tp-link.com/support/showfaq.asp?id=133</a>
+</p>
+
+
+<h3 id="toc_0.2.1">9. 已经设置了端口映射但是外网还是访问不了服务器，怎么办？</h3>
+<p>
+问题排除过程如下：
+</p>
+<ul>
+<li>
+1. 首先检查用户设置的端口影射是否正确映射到内网的服务器。即设置的转发规则的IP地址是否为服务器的IP地址。
+
+<li>
+2. 无法访问内网的服务器，请检查服务器是否开启了。可以在局域网内使用其他的计算机访问一下的服务器，确认服务器是否开启，并能成功访问。
+
+<li>
+3. 请用户检查是否映射了服务器所需的所有端口，有可能没有完全设置访问服务器所需的端口，导致访问失败。可以通过开启“DMZ主机”来检测一下，是否端口没有映射完全。若开启DMZ主机后，能正常访问服务器，则可能是端口添加不完全。
+
+<li>
+4. 路由器上是否设置了“防火墙”，是否将服务器通信的端口过滤，导致访问失败。
+
+<li>
+5. 本机防火墙：因本地网络为信任区域，防火墙并不会阻止本地网络的访问，若访问源地址为外网地址（非信任区域地址），则可能会被防火墙拦截而无法访问；
+
+<li>
+6. 是否为特殊应用：如FTP以及VoIP等，特殊应用需要路由器ALG（应用层网关）功能支持，对于VoIP我公司路由器目前仅支持H.323，不支持SIP与MGCP协议。FTP，因其进行数据传输需要建立两条连接：控制连接与数据连接，控制连接默认端口为“21”，若将控制连接端口改为其他数字，则可能因路由器无法识别其为FTP服务而导致无法建立数据连接；
+
+<li>
+7. 服务商将相应端口屏蔽：在路由器WAN口接一台电脑模拟内外网环境，若WAN口所接电脑可以正常访问内网服务器，但在Internet上无法访问，则可能是服务器将相应端口屏蔽导致虚拟服务器无法访问；
+
+</ul>
+
+<p>
+注意:
+</p>
+<ul>
+<li>
+1. 若是80端口的WEB服务器，一定要注意路由器的管理端口是否更改，否则两者会冲突；
+
+<li>
+2. 检查虚拟服务器是否映射成功一定要从外网进行访问，不要从内网用WAN口IP去访问，这样在测试的时候是成功的，但实际外网并不能成功访问。
+
+<li>
+3. 特殊的服务器，如网络摄像机及特殊的应用软件等，如果客户自己都不清楚通讯的端口，可先尝试DMZ主机以确认是否可以使用，同时建议客户咨询软件提供商。
+
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

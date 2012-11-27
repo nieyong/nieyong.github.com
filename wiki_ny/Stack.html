@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Stack</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">栈 Stack</h2>
+<p>
+堆栈指针（stack pointer），帧指针（frame pointer），堆栈帧（stack frame），活动记录（active record），调用惯例（call convention）等相关概念。
+</p>
+
+<h2 id="toc_0.2">术语 Terminology</h2>
+<ul>
+<li>
+堆栈指针（stack pointer）
+
+</ul>
+<p>
+指CPU中的一个寄存器，该寄存器始终指向栈的顶部，同时也指向当前函数活动记录的顶部。在X86架构下，该寄存器是esp，在MIPS架构下，该寄存器是sp，即MIPS的32个通用寄存器中的29号寄存器（从0开始编号）。
+</p>
+
+<p>
+同时需要指出的是，对堆栈指针的操作，在属于复杂指令集（CISC）的X86下，除了使用加减指令（ADD，SUB）之外，还有专门的指令POP,PUSH，在属于精简指令集的计算机（RISC）的MIPS下，则只能使用通用的加减指令（ADD，SUB）。
+</p>
+<ul>
+<li>
+帧指针（frame pointer）
+
+</ul>
+<p>
+帧指针是存储函数活动记录中固定地址的寄存器。其实就是CPU中的一个寄存器，该寄存器始终指向函数活动记录的一个固定位置，不会随这个函数的执行而变化（注意，并不是指向活动记录的最底部位置）。在X86架构下，该寄存器是ebp，在MIPS架构下，该寄存器是s8，即MIPS的32个通用寄存器中的30号寄存器（从0开始编号）。
+</p>
+<ul>
+<li>
+堆栈帧（stack frame）/活动记录（active record）
+
+</ul>
+<p>
+指由栈保存的一个函数调用所需维护的信息。一般包括：函数返回地址和参数，临时变量和局部变量，某些寄存器的值。
+</p>
+<ul>
+<li>
+调用惯例（call convention）
+
+</ul>
+<p>
+函数调用方和被调用方对于函数如何调用的一个约定。一般包括：函数参数的传递顺序和方式，栈的维护方式，名字修饰策略等。 
+</p>
+
+<h2 id="toc_0.3">调用惯例 ―― cdecl</h2>
+<p>
+cdecl这个调用惯例是C语言默认的调用惯例。首先，对C语言中常见的几种调用惯例进行一个总结性的比较。然后就其中一些特别的地方做一个说明。
+</p>
+
+<table>
+<tr>
+<td>
+调用惯例
+</td>
+<td>
+出栈方
+</td>
+<td>
+参数传递
+</td>
+<td>
+名字修饰
+</td>
+</tr>
+<tr>
+<td>
+cdecl
+</td>
+<td>
+函数调用方
+</td>
+<td>
+从右向左入栈
+</td>
+<td>
+下划线+函数名
+</td>
+</tr>
+<tr>
+<td>
+stdcall
+</td>
+<td>
+函数本身
+</td>
+<td>
+从右向左入栈
+</td>
+<td>
+下划线+函数名+@+参数字节数
+</td>
+</tr>
+<tr>
+<td>
+fastcall
+</td>
+<td>
+函数本身
+</td>
+<td>
+寄存器+从右向左入栈
+</td>
+<td>
+@+函数名+@参数字节数
+</td>
+</tr>
+<tr>
+<td>
+pascall
+</td>
+<td>
+函数本身
+</td>
+<td>
+从左向右入栈
+</td>
+<td>
+较复杂
+</td>
+</tr>
+</table>
+
+<ul>
+<li>
+cdecl调用惯例的参数传递为从右向左，参数入栈。这是C语言函数实现可变长参数的基础。最常见的可变长参数函数是printf();
+
+<li>
+cdecl调用惯例的出栈方是函数调用方，这是和其他3种调用惯例不一样的地方，它们的出栈方都是函数本身。那么，调用惯例中的出栈方具体是指什么呢？
+
+</ul>
+
+<h2 id="toc_0.4">函数调用实例</h2>
+<p>
+下图为cdecl调用惯例的一般情况示意图。
+</p>
+
+<p>
+<a href="image/cdel_call_convention.png.html">image/cdel_call_convention.png</a>
+</p>
+
+<p>
+下面分析cdecl调用惯例中，调用函数和被调用函数分别负责活动记录（堆帧栈）中的什么操作呢？首先是被调用函数，在函数的入口，需要做以下操作：
+</p>
+<ul>
+<li>
+需要将返回地址入栈，例如MIPS下的 <code>sw \(ra,28(\)sp)</code> 一句，就是将函数的返回地址入栈。对于x86架构，由于call命令会自动将返回地址入栈，所以在函数入口处没有返回地址入栈的指令；
+
+<li>
+需要将调用函数的帧指针入栈，然后设置本身自己函数的帧指针。在x86下，是 <code>push %ebp;mov %esp,%ebp</code>两句，而在MIPS下，是<code>sw \(s8,24(\)sp);move \(s8,\)sp;</code>两句。这里也可以看出x86的拥有专门入栈指令的特点push的特点；
+
+<li>
+调整堆栈指针的大小，升栈到函数需要的堆栈大小。
+
+</ul>
+
+<p>
+上面是被调用函数需要负责的事情，那么调用函数需要负责什么呢？主要有一下几点：
+</p>
+<ul>
+<li>
+准备好函数调用参数；
+
+<li>
+调用指令call跳转到被调用函数。
+
+</ul>
+
+<h3 id="toc_0.4.1">X86架构下的函数调用</h3>
+<p>
+这个调用中没有调整堆栈指针的操作，因为不需要用到额外的堆栈空间。所以，只有上面提到的第一点和第二点。
+</p>
+<pre>
+push   %ebp
+mov    %esp,%ebp
+.....
+add    %edx,%eax
+pop    %ebp
+ret   
+</pre>
+
+<h3 id="toc_0.4.2">MIPS架构下的函数调用</h3>
+<p>
+在子程序的入口，sp会被升到该子程序需要用到的最大堆栈的位置。在子程序中，堆栈的升降的汇编代码一般都大同小异，下面将romStart()函数开头和结尾的堆栈升降提取出来，代码如下所示：
+</p>
+<pre>
+addiu	$sp,$sp,-32
+sw	$ra,28($sp)
+sw	$s8,24($sp)
+move	$s8,$sp
+……
+move	$sp,$s8
+lw	$ra,28($sp)
+lw	$s8,24($sp)
+jr	$ra
+addiu	$sp,$sp,32
+</pre>
+<p>
+第一句代码的-32就说明，被调用函数romStart()最多用到的堆栈空间为32bytes。然后就是将返回地址ra和调用函数的堆栈位置（存放在\(s8中）放入堆栈中，然后将被调用函数堆栈栈顶位置放入\)s8中（move \(s8,\)sp）。在函数返回就是一个逆操作，恢复调用函数的堆栈现场。有关$s8（又叫做帧指针fp）的知识，请参考下一节。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

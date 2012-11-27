@@ -1,0 +1,118 @@
+== UPNP协议细节 ==
+UPNP的全称是 Universal plug-and-play( 通用即插即用)。UPnP是针对智能家电、无线设备以及各种外观尺寸的个人电脑的普遍对等（peer-to-peer）网络连接而设计的一种架构。它旨在为家庭、小型企业、公共场所中或连接到互联网的ad-hoc网或未管理网络提供易于使用、灵活且基于标准的连接。
+
+我们这里用到的自动端口映射只是UPNP的一个小应用。按照UPNP的相关规范，UPNP网络的第0步是寻址（获得一个IP地址，在我要解决的问题中这不是一个问题。）　　　　　　　
+
+== 第１步是发现 ==
+控制点在网上搜索感兴趣的设备，而设备向网络中的控制点宣告其服务。对于自动端口映射来说就是发现带UPNP功能的路由器。
+
+发现这个过程主要有两步。第一，使用数据报套接字向239.255.255.250:1900，发送一条多播请求，格式如下
+{{{
+M-SEARCH * HTTP/1.1
+HOST: 239.255.255.250:1900
+MAN:"ssdp:discover"
+MX:3
+ST:UPnP:rootdevice
+}}}
+这个多播请求的含义如下：M-SEARCH SSDP协议定义的搜索请求方法。HOST必须是这个多播地址。MAN的值也必须是"ssdp:discover" 不可少了双引号。MX的含义是最长等待时间，可以自己设置。ST表示search target 搜索目标。我们在这里用找根设备。另外在编程中我们要在每一行后面加上"rn" 表示换行。（详见源码 UPNPNAT.discovery()函数)。
+
+第二步，如果你的网络存在一个UPNP设备的话，为了被找到，设备必须向发送查找请求的多播通道的源IP地址与端口发送响应信息。所以你可以从239.255.255.250:1900这个地址接收到响应消息。类似下面的消息。
+{{{
+HTTP/1.1 200 OK
+CACHE-CONTROL: max-age=100
+DATE: Sun, 15 Jan 2006 06:51:02 GMT
+EXT:
+LOCATION: http://192.168.14.1:1900/igd.xml
+SERVER: TP-LINK Wireless Router WR541G/5, UPnP/1.0
+ST: upnp:rootdevice
+USN:uuid:upnp-InternetGatewayDevice-192168141678900001::upnp:rootdevice
+}}}
+接下来我们要从里面获得我们要的消息。首先，我们必须找到"200 OK"，说明没有错误发生，否则一切免谈。接着，我们要找到LOCATION项，获得设备描述URL。（程序中的处理归根到底就是一个子字符的查找。）
+
+到这里，我们的第一步“发现”完成。
+
+
+== 第２步是描述。 ==
+在第1步中我们往往能获得一个设备的描述URL，在第2步中我们要通过一个URL，下载一个XML文件。并从中找到有关设备的类型，服务类型，控制URL，事件触发URL等。
+
+我们同样分两步进行，首先下载设备描述文件。（请看源码中UPNPNAT::get_description()函数）
+* 解析描述文件的URL，获得主机(host)、端口(port)、路径(path).(parseUrl函数) 
+* 连接到host:port (tcp_connect 函数)
+* 构造类似的信息（第二行下要一个空行），并通过刚才的TCP 套接字，发送到路由器。（sprintf ,send 函数).
+* 接收数据，我使用flag为 MSG_WAITALL的recv函数，函数一直阻塞直到数据全部读完。 数据最终保存在std::string description_info中。我想通过浏览器下载这个文件的过程是类似的吧。
+{{{
+GET path HTTP/1.1
+Host: host:port
+}}}
+
+然后，解析这个XML文件。（请看源码 中UPNPNAT:: parser_description()函数）
+{{{
+我们找到"root"的"deviceType"是"urn:schemas-upnp-org:device:InternetGatewayDevice:1"的"device" childNode ,获得这个"device"的"deviceList",记为A。
+找到A的"deviceType"是"urn:schemas-upnp-org:device:WANDevice:1"的"device" childNode ,获得这个"device"的"deviceList",记为B。
+找到B的"deviceType"是"urn:schemas-upnp-org:device:WANConnectionDevice:1"的"device" childNode ,获得这个"device"的"serviceList",记为C。
+找到C的"serviceType"是"urn:schemas-upnp-org:service:WANIPConnection:1" 或"urn:schemas-upnp-org:service:WANPPPConnection:1" 的"service"  childNode ,记为D.
+}}}
+获得D的"controlUrl"保存在std::string control_url中。但是这里获得control_url一般为相对URL,所以要从"root"下面，找到"URLBase"的值，（如果是空，则用describe_url的"htpp://xxx.xxx.xxx.xxx:xxxx"部分代替。)最后在相对的control_url前加上URLBasr 获得完整的control_url。
+
+至此，第二步“获得控制URL”完成。
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
+== 第３步是控制。 ==
+通过第2步获得的控制URL，通过向其发送控制消息（同样用XML描述）来实现某些功能。对于自动端口映射来说就是查看、增加、删除等。
+
+在这里我先把各种控制信息的格式说明一下。（下面的rn都是表示换行）
+增加端口映射。 "AddPortMapping"
+{{{
+"<NewRemoteHost></NewRemoteHost>rn"
+"<NewExternalPort>ExternalPort</NewExternalPort>rn"
+"<NewProtocol>Protocol</NewProtocol>rn"
+"<NewInternalPort>InternalPort</NewInternalPort>rn"
+"<NewInternalClient>InternalClient</NewInternalClient>rn"                 
+"<NewEnabled>1</NewEnabled>rn"
+"<NewPortMappingDescription>PortMappingDescription"
+"</NewPortMappingDescription>rn"       
+"<NewLeaseDuration>LeaseDuration</NewLeaseDuration>rn"
+删除端口映射　"DeletePortMapping"
+"<NewRemoteHost></NewRemoteHost>rn"
+"<NewExternalPort>ExternalPort</NewExternalPort>rn"
+"<NewProtocol>Protocol</NewProtocol>rn"
+获得端口映射信息　"GetGenericPortMappingEntry"
+"<NewPortMappingIndex>PortMappingIndex</NewPortMappingIndex>"
+"<NewRemoteHost></NewRemoteHost>rn"
+"<NewExternalPort></NewExternalPort>rn"
+"<NewProtocol></NewProtocol>rn"
+"<NewInternalPort></NewInternalPort>rn"
+"<NewInternalClient></NewInternalClient>rn"
+"<NewEnabled>1</NewEnabled>rn"
+"<NewPortMappingDescription>"                                          
+"</NewPortMappingDescription>rn"
+"<NewLeaseDuration></NewLeaseDuration>rn"
+}}}
+其中斜体部分需要在编程是填入的。ExternalPort 外部端口。InternalPort内部端口。这 两者一般就填映射的端口。Protocal 填TCP或UDP。InterClient 一般就是本地IP地址。PortMappingDescription 填写端口映射的描述，比如什么程序建立了这个端口。LeaseDuration 是映射的持续时间，用0表示不永久。PortMappingIndex 是端口映射索引，路由上第几个映射。
+ 
+我们再来看下面这个XML文档结构。
+{{{
+     "<?xml version="1.0" encoding="utf-8"?>rn" 
+     "<s:Envelope xmlns:s="
+     ""http://schemas.xmlsoap.org/soap/envelope/" "
+     "s:encodingStyle="                                   
+     ""http://schemas.xmlsoap.org/soap/encoding/">rn"
+     "<s:Body>rn" 
+     "<u:actionName xmlns:u="serviceType">rn"
+     "actionParams</u:actionName>rn" 
+     "</s:Body>rn"
+     "</s:Envelope>rn"
+}}}
+我们在actionName 处填入"AddPortMapping" "DeletePortMapping" "GetGenericPortMappingEntry"。serviceType 处填入设备的服务类型。"urn:schemas-upnp-org:service:WANIPConnection:1"或"urn:schemas-upnp-org:service:WANPPPConnection:1"。actionParams 填入上面的各种控制信息。
+
+最后在前面加上HTTP头。
+{{{
+    "POST path HTTP/1.1rn"
+    "HOST: host:portrn"      
+    "SOAPACTION:"serviceType#actionName"rn"  
+    "CONTENT-TYPE: text/xml ; charset="utf-8"rn"
+    "Content-Length: contentLength rnrn"
+}}}
+path host port 意思很明显。contentLength面那个XML文档的长度。然后连接到host:port，发送到整个信息即可完成控制　　　　　　　　　　　　
+
+第4步事件触发和第5步展示在自动端口映射没用用到。有兴趣可以自己看文档。
+

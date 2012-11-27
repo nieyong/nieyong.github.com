@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>dot1x代码分析记录</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">dot1x的任务</h2>
+<p>
+auth_task该任务中处理所有的auth_msg_handle，也就是用户对认证的配置消息。
+</p>
+
+<h2 id="toc_0.2">dot1x的两种认证模式</h2>
+<p>
+cli_dot1xAuthMethod    802.1x authentication method
+</p>
+
+<p>
+认证模式有两种，如下所示：
+</p>
+<pre>
+TL-SL5428(config)%dot1x auth-method
+ &lt;method&gt;             - Authentication method,pap|eap-md5
+</pre>
+
+<p>
+PAP是什么？PAP（Password Authentication Protocal）密码认证协议。
+</p>
+
+<p>
+在设备端PAE与RADIUS服务器之间，EAP协议报文可以使用EAPOR封装格式（EAP over RADIUS），承载于RADIUS协议中；也可以由设备端PAE进行终结，而在设备端PAE与RADIUS服务器之间传送PAP协议报文或CHAP协议报文。
+</p>
+
+<p>
+我司交换机认证模式默认是EAP-MD5，也就是EAP协议报文可以使用EAPOR封装格式（EAP over RADIUS），承载于RADIUS协议中。这也就是EAP中继方式，交换机只是起到一个中继用户名，密码（MD5加密）等信息的作用，可以看到，cli段发送给交换机的eap报文被原封不动的封装到了radius协议报文中，被传送到radius服务器上。在报文中，Attribute value pairs中有类型为EAP-Message(79)和Message-Authenticator(80)两个字段。
+</p>
+
+<p>
+PAP认证用于EAP终结方式，对于EAP终结方式，交换机与RADIUS服务器之间可以采用PAP或者CHAP认证方法。
+</p>
+
+<p>
+EAP终结方式与EAP中继方式的认证流程相比，不同之处在于用来对用户口令信息进行加密处理的随机加密字由交换机生成，之后交换机会把用户名、随机加密字和客户端加密后的口令信息一起送给RADIUS服务器，进行相关的认证处理。
+</p>
+
+
+<h2 id="toc_0.3">guest vlan</h2>
+<p>
+本文主要就协议中的需求分析和状态机进行介绍，为后续TACACS认证以及GUEST VLAN开发打下理论基础。
+</p>
+
+<p>
+Guest VLAN：在用户通过认证以前允许访问Guest VLAN内的资源。
+</p>
+
+
+<p>
+cli_guestVlan
+vlan 2~4094
+</p>
+
+<p>
+cli_noGuestVlan		没有vlan参数，全部关闭？
+</p>
+
+<p>
+guest vlan是什么？
+</p>
+
+<p>
+cli_guestVlanIf`
+</p>
+
+<p>
+在每个端口上还有guest vlan使能？
+</p>
+
+
+<p>
+arcot systems eap [jerdonek] (16)
+</p>
+
+<h2 id="toc_0.4">基于port认证和基于mac认证的区别</h2>
+<p>
+/*!
+ *\fn			int adDot1xIsPortAuthorized(user_port up)
+ *\brief		检查端口状态
+ *\details		通过调用底层函数，返回端口是否状态报文过滤状态，此状态是对基于端口认证
+</p>
+<blockquote>
+而言的，因为基于mac认证时端口是处于非过滤状态，返回值恒为1
+</blockquote>
+<p>
+ *
+ *\param[in]	port	交换机端口，从1开始
+ *
+ *\return		端口状态
+ *\retval		0	处于双向过滤状态，或参数错误
+</p>
+<blockquote>
+1	处于非过滤状态
+</blockquote>
+<p>
+ *
+ *\note		
+ */
+int adDot1xIsPortAuthorized(user_port up)
+</p>
+
+
+<p>
+/*!
+ *\fn			int swDot1xIsPortAuthorized(user_port up)
+ *\brief		检查端口是否处于授权状态
+ *\details		已经认证或未开启认证功能均为授权状态，因此基于mac认证端口恒为授权状态
+ *
+ *\param[in]	port	usert port,start at 1
+ *
+ *\return	
+ *\retval		1	已授权 
+ *\retval		0	参数错误或未授权
+ *
+ *\note		
+ */
+int swDot1xIsPortAuthorized_locl(user_port up)
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

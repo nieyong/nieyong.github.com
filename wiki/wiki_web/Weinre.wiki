@@ -1,0 +1,49 @@
+其实大家使用云窗调试器不需要知道Weinre是什么，不需要知道怎么搭建一个Weinre服务器。但是大家了解了Weinre就更了解了云窗调试器的原理。 所以我觉得还是有必要说一说。
+
+下面文章是转载于网络上的：
+    
+如今人们也越来越习惯在手机上浏览网页，而在手机上这些针对桌面浏览器设计的网页经常惨不忍睹。Web应用开发者需要针对手机进行界面的重新设计，但是手机上并没有称心如意的调试工具（如Firebug、web inspector），重新设计界面的工作往往事半功倍。本文介绍的调试工具Weinre 就是解决这一问题的优秀调试工具。
+
+Weinre是什么？Weinre代表Web Inspector Remote，是一种远程调试工具。举个例子，在电脑上可以即时的更改手机上对应网页的页面元素、样式表，或是查看Javascript变量，同时还可以看到手机上页面的错误和警告信息。下图所示中的例子，通过在console中运行“document.body.style.backgroundcolor = 'green';” 即时改变了手机上网页的背景色。
+
+
+图1: 桌面的debug客户端与手机上的对应页面
+
+
+使用一种工具之前，了解它的原理和结构是很有帮助的。Weinre作为一种远程调试工具，在结构上分为三层：
+* 目标页面（target）：被调试的页面，页面已嵌入weinre的远程js，下文会介绍；
+* Debug客户端（client）：本地的Web Inspector调试客户端；
+* Debug服务端（agent）：一个HTTP Server，为目标页面与Debug客户端建立通信。
+
+三层结构如下图所示：
+
+
+图2：Weinre组成结构
+
+Weinre的debug客户端是基于Web Inspector开发，而Web Inspector只与以WebKit为核心的浏览器兼容，所以Weinre的客户端只能用Chrome或者Safari打开。
+
+运行Weinre首先需要下载weinre， weinre目前支持Windows与MacOS， 本文中以Windows版为例。 下载完成之后，启动weinre的Debug服务端。在下载的weinre.jar所在文件夹中运行以下命令：`java -jar weinre.jar --httpPort 8081 --boundHost -all-`。这行命令在本机启动了weinre的Debug服务端，端口为8081。打开Chrome或Safari，访问localhost:8081，就可以看到weinre的基本信息。(设置boundHost为-all-，就可以通过IP访问Debug服务端，这点很重要)
+
+上图中的"debug client user interface"是weinre的Debug客户端，点击进入后可以看到目前还没有被测试的目标网页。
+
+如何让网页可以被localhost:8081上的weinre检测到呢？很简单，只要往网页面上添加一个js文件就可以了。如果本机的IP为192.168.0.5，那么就添加如下的js文件。target-script.js可以获得从Debug服务端传来的信息，更改当前页面的样式；也可以运行传来的js，并返回结果。
+
+{{{name="code" class="html"
+<script src="http://192.168.0.5:8081/target/target-script.js"></script>
+}}}
+
+注意，对于dojo这样的异步加载模块，上面的静态嵌入的js就会不兼容，在有dojo等异步加载模块的环境下，请在异步加载全部完成后加载target-script.js
+
+{{{name="code" class="js"
+dojo.addOnLoad(function(){
+    ...
+    dojo.create("script",{
+     src: "http://192.168.0.5:8081/target/target-script.js"
+    }, dojo.body());
+})
+}}}
+
+打开添加了这个脚本的网页后，可以看见在Debug 的客户端的里检测到了新的目标页面。之后我们就能在Elements与Console中调试远程的页面了。
+
+看了上面的文章，大家应该知道了Weinre的原理，以及Weinre服务器怎么搭建，Weinre怎么使用。 云窗调试器的调试功能也就使用的Weinre。 其实我们不用搭建Weinre服务， 因为现在已经有很多现成的Weinre服务器。
+

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>C Interview Questions</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+In this article, we will discuss some interesting problems on C language that can help students to brush up their C programming skills and help them prepare their C fundamentals for interviews.
+</p>
+
+<h2 id="toc_0.1">1. gets() function</h2>
+<p>
+Question: There is a hidden problem with the following code. Can you detect it?
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+int main(void)
+{
+    char buff[10];
+    memset(buff,0,sizeof(buff));
+
+    gets(buff);
+
+    printf("\n The buffer entered is [%s]\n",buff);
+
+    return 0;
+}
+</pre>
+
+<p>
+Answer: The hidden problem with the code above is the use of the function gets(). This function accepts a string from stdin without checking the capacity of buffer in which it copies the value. This may well result in buffer overflow. The standard function fgets() is advisable to use in these cases.
+</p>
+
+<h2 id="toc_0.2">2. strcpy() function</h2>
+<p>
+Question: Following is the code for very basic password protection. Can you break it without knowing the password?
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+int main(int argc, char *argv[])
+{
+    int flag = 0;
+    char passwd[10];
+
+    memset(passwd,0,sizeof(passwd));
+
+    strcpy(passwd, argv[1]);
+
+    if(0 == strcmp("LinuxGeek", passwd))
+    {
+        flag = 1;
+    }
+
+    if(flag)
+    {
+        printf("\n Password cracked \n");
+    }
+    else
+    {
+        printf("\n Incorrect passwd \n");
+
+    }
+    return 0;
+}
+</pre>
+
+<p>
+Answer: Yes. The authentication logic in above password protector code can be compromised by exploiting the loophole of strcpy() function. This function copies the password supplied by user to the ‘passwd’ buffer without checking whether the length of password supplied can be accommodated by the ‘passwd’ buffer or not. So if a user supplies a random password of such a length that causes buffer overflow and overwrites the memory location containing the default value ’0′ of the ‘flag’ variable then even if the password matching condition fails, the check of flag being non-zero becomes true and hence the password protection is breached.
+</p>
+
+<p>
+For example :
+</p>
+
+<pre name="code" class="c">
+$ ./psswd aaaaaaaaaaaaa
+
+ Password cracked
+</pre>
+<p>
+So you can see that though the password supplied in the above example is not correct but still it breached the password security through buffer overflow.
+</p>
+
+<p>
+To avoid these kind of problems the function strncpy() should be used.
+</p>
+
+<p>
+Note from author : These days the compilers internally detect the possibility of stack smashing and so they store variables on stack in such a way that stack smashing becomes very difficult. In my case also, the gcc does this by default so I had to use the the compile option ‘-fno-stack-protector’ to reproduce the above scenario.
+</p>
+
+<h2 id="toc_0.3">3. Return type of main()</h2>
+<p>
+Question: Will the following code compile? If yes, then is there any other problem with this code?
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+void main(void)
+{
+    char *ptr = (char*)malloc(10);
+
+    if(NULL == ptr)
+    {
+        printf("\n Malloc failed \n");
+        return;
+    }
+    else
+    {
+        // Do some processing
+
+        free(ptr);
+    }
+
+    return;
+}
+</pre>
+<p>
+Answer: The code will compile error free but with a warning (by most compilers) regarding the return type of main()function. Return type of main() should be ‘int’ rather than ‘void’. This is because the ‘int’ return type lets the program to return a status value. This becomes important especially when the program is being run as a part of a script which relies on the success of the program execution.
+</p>
+
+<p>
+4. Memory Leak
+Question: Will the following code result in memory leak?
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+void main(void)
+{
+    char *ptr = (char*)malloc(10);
+
+    if(NULL == ptr)
+    {
+        printf("\n Malloc failed \n");
+        return;
+    }
+    else
+    {
+        // Do some processing
+    }
+
+    return;
+}
+</pre>
+<p>
+Answer: Well, Though the above code is not freeing up the memory allocated to ‘ptr’ but still this would not cause a memory leak as after the processing is done the program exits. Since the program terminates so all the memory allocated by the program is automatically freed as part of cleanup. But if the above code was all inside a while loop then this would have caused serious memory leaks.
+</p>
+
+<p>
+Note : If you want to know more on memory leaks and the tool that can detect memory leaks, read our article on Valgrind.
+</p>
+
+<h2 id="toc_0.4">5. The free() function</h2>
+<p>
+Question: The following program seg-faults (crashes) when user supplies input as ‘freeze’ while it works fine with input ‘zebra’. Why?
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+int main(int argc, char *argv[])
+{
+    char *ptr = (char*)malloc(10);
+
+    if(NULL == ptr)
+    {
+        printf("\n Malloc failed \n");
+        return -1;
+    }
+    else if(argc == 1)
+    {
+        printf("\n Usage  \n");
+    }
+    else
+    {
+        memset(ptr, 0, 10);
+
+        strncpy(ptr, argv[1], 9);
+
+        while(*ptr != 'z')
+        {
+            if(*ptr == '')
+                break;
+            else
+                ptr++;
+        }
+
+        if(*ptr == 'z')
+        {
+            printf("\n String contains 'z'\n");
+            // Do some more processing
+        }
+
+       free(ptr);
+    }
+
+    return 0;
+}
+</pre>
+<p>
+Answer: The problem here is that the code changes the address in ‘ptr’ (by incrementing the ‘ptr’) inside the while loop. Now when ‘zebra’ is supplied as input, the while loop terminates before executing even once and so the argument passed to free() is the same address as given by malloc(). But in case of ‘freeze’ the address held by ptr is updated inside the while loop and hence incorrect address is passed to free() which causes the seg-fault or crash.
+</p>
+
+<h2 id="toc_0.5">6. atexit with _exit</h2>
+<p>
+Question: In the code below, the atexit() function is not being called. Can you tell why?
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+void func(void)
+{
+    printf("\n Cleanup function called \n");
+    return;
+}
+
+int main(void)
+{
+    int i = 0;
+
+    atexit(func);
+
+    for(;i&lt;0xffffff;i++);
+
+    _exit(0);
+}
+</pre>
+<p>
+Answer: This behavior is due to the use of function _exit(). This function does not call the clean-up functions like atexit() etc. If atexit() is required to be called then exit() or ‘return’ should be used.
+</p>
+
+<h2 id="toc_0.6">7. void* and C structures</h2>
+<p>
+Question: Can you design a function that can accept any type of argument and returns an integer? Also, is there a way in which more than one arguments can be passed to it?
+</p>
+
+<p>
+Answer: A function that can accept any type of argument looks like : int func(void *ptr)
+</p>
+
+<p>
+if more than one argument needs to be passed to this function then this function could be called with a structure object where-in the structure members can be populated with the arguments that need to be passed.
+</p>
+
+<h2 id="toc_0.7">8. * and ++ operators</h2>
+<p>
+Question: What would be the output of the following code and why?
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+int main(void)
+{
+    char *ptr = "Linux";
+    printf("\n [%c] \n",*ptr++);
+    printf("\n [%c] \n",*ptr);
+
+    return 0;
+}
+</pre>
+<p>
+Answer: The output of the above would be :
+</p>
+
+<p>
+[L] 
+</p>
+
+<p>
+[i]
+Since the priority of both ‘++’ and ‘*’ are same so processing of ‘*ptr++’ takes place from right to left. Going by this logic, ptr++ is evaluated first and then *ptr. So both these operations result in ‘L’. Now since a post fix ‘++’ was applied on ptr so the next printf() would print ‘i’.
+</p>
+
+<h2 id="toc_0.8">9. Making changes in Code(or read-only) segment</h2>
+<p>
+Question: The following code seg-faults (crashes). Can you tell the reason why?
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+int main(void)
+{
+    char *ptr = "Linux";
+    *ptr = 'T';
+
+    printf("\n [%s] \n", ptr);
+
+    return 0;
+}
+</pre>
+<p>
+Answer: This is because, through *ptr = ‘T’, the code is trying to change the first byte of the string ‘Linux’ kept in the code (or the read-only) segment in the memory. This operation is invalid and hence causes a seg-fault or a crash.
+</p>
+
+<h2 id="toc_0.9">10. Process that changes its own name</h2>
+<p>
+Question: Can you write a program that changes its own name when run?
+</p>
+
+<p>
+Answer: Following piece of code tries to do the required :
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+int main(int argc, char *argv[])
+{
+    int i = 0;
+    char buff[100];
+
+    memset(buff,0,sizeof(buff));
+
+    strncpy(buff, argv[0], sizeof(buff));
+    memset(argv[0],0,strlen(buff));
+
+    strncpy(argv[0], "NewName", 7);
+
+    // Simulate a wait. Check the process
+    // name at this point.
+    for(;i&lt;0xffffffff;i++);
+
+    return 0;
+}
+</pre>
+
+<h2 id="toc_0.10">11. Returning address of local variable</h2>
+<p>
+Question: Is there any problem with the following code?If yes, then how it can be rectified?
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+int* inc(int val)
+{
+  int a = val;
+  a++;
+  return &amp;a;
+}
+
+int main(void)
+{
+    int a = 10;
+
+    int *val = inc(a);
+
+    printf("\n Incremented value is equal to [%d] \n", *val);
+
+    return 0;
+}
+</pre>
+<p>
+Answer: Though the above program may run perfectly fine at times but there is a serious loophole in the function ‘inc()’. This function returns the address of a local variable. Since the life time of this local variable is that of the function ‘inc()’ so after inc() is done with its processing, using the address of its local variable can cause undesired results. This can be avoided by passing the address of variable ‘a’ from main() and then inside changes can be made to the value kept at this address.
+</p>
+
+<h2 id="toc_0.11">12. Processing printf() arguments</h2>
+<p>
+Question: What would be the output of the following code?
+</p>
+
+<pre name="code" class="c">
+#include&lt;stdio.h&gt;
+
+int main(void)
+{
+    int a = 10, b = 20, c = 30;
+
+    printf("\n %d..%d..%d \n", a+b+c, (b = b*2), (c = c*2));
+
+    return 0;
+}
+</pre>
+<p>
+Answer: The output of the above code would be :
+</p>
+
+<p>
+110..40..60
+This is because the arguments to the function are processed from right to left but are printed from left to right.
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

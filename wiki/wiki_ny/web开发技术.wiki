@@ -1,0 +1,40 @@
+== web开发语言和技术 ==
+* [[wiki]]
+* [[php]] -- php基本概念，知识
+* [[wordpress]]
+* [[JSP]] -- 网络购物系统
+* [[web2.0]]
+* [[google syntax highlighter]]
+* [[javascript的位置问题]]
+* [[css]]
+* [[mysql]]
+* [[apache]]
+
+Write Once,Debug Everywhere -- 程序员谈Java
+
+Write Once,Run Anywhere -- Sun公司形容Java的跨平台型
+
+== MVC ==
+* manage，和数据库的接口
+* view，用于页面的显示，一般使用layout
+* control，用户操作的处理，例如登录，提交等
+
+== 网站技术的几个层面 ==
+# 网页设计，或者叫做Web设计。内容为设计网页的布局，UI，UED等，并不涉及到编码，输出为设计图等。可能还涉及到网页图片的制作等工作。
+# 前端开发。根据网页设计的设计图，编码实现网页的页面。主要使用的技术有html，JavaScript，css等。
+# 后台开发。设计整个网站的管理后台，根据网站的设计需求，涉及到的技术有php，java，asp，数据库设计等。
+
+很多时候，都将网页设计和前端开发放置在了一起，而将重点转向了后台开发。这样有一个显著的缺陷，那就是网站的美工设计不足，用户体验很差。在使用开源项目做开发的时候，应该重点规避这样的问题。
+
+
+
+
+== 网站解决方案 ==
+具体的解决方案有以下几种：
+* squid + Apache + PHP + eAccelerator
+使用Apache负载PHP，使用squid进行缓存，html或图片的请求可以直接由squid返回给用户。很多大型网站都采用这种架构。
+* nginx/Apache + PHP（fastcgi） + eAccelerator
+使用nginx或Apache负载PHP，PHP使用fastcgi方式运行，效率较高。
+* nginx + Apache + PHP + eAccelerator
+此方案综合了nginx和Apache的优点，使用Apache负载PHP，nginx负责解析其他Web请求，使用nginx的rewrite模块，Apache端口不对外开放。
+

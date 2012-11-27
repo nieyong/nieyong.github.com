@@ -1,0 +1,39 @@
+== memset() ==
+{{{name="code" class="c"
+STATUS ssDot1xStateGet(void)
+{
+	SWITCH_802_1X_STRUCT pGlobalCfg;	
+
+	memset(&pGlobalCfg, 0, sizeof(SWITCH_802_1X_STRUCT));
+	/* ... */
+}
+}}}
+
+== memcpy() ==
+{{{name="code" class="c"
+int sendPktMsgToAuth(TP_PACKET_T* packet)
+{
+	int status;
+	AUTH_MSG sAuthMsg;
+
+	sAuthMsg.type = (UCHAR)AUTH_MSG_EAPOL;
+	memcpy(&(sAuthMsg.packet), packet, sizeof(TP_PACKET_T));
+	
+	/* ... */
+
+}}}
+
+== bcopy() ==
+{{{name="code" class="c"
+    /* end driver first pass init */
+    if (initString[0] == '\0') {
+        bcopy("et", initString, 3);
+        return (NULL);
+    }
+
+}}}
+
+== bzero() ==
+{{{name="code" class="c"
+    bzero((char*) et, sizeof(et_info_t));
+}}}

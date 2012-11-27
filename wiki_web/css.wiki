@@ -1,0 +1,145 @@
+* [[css基本术语]]
+* [[Response Web Design]]
+* [[css relative absolute position series]]
+* [[inline element and inline model]]
+* [[float属性和高度塌陷]]
+* [[Flexible Box Layout]]
+
+
+
+== line-height ==
+腾讯ISD团队博客上看到一篇翻译的文章“深入理解css 行高”。
+
+到底这个line-height行高怎么就产生了高度呢？在inline box模型中，有个line boxes，这玩意是看不见的，这个玩意的工作就是包裹每行文字。一行文字一个line boxes。
+
+其实line boxes不是直接的生产者，属于中层干部，真正的活儿都是它的手下 – inline boxes干的，这些手下就是文字啦，图片啊，span之类的inline属性的标签啦。line boxes只是个考察汇报人员，考察它的手下谁的实际line-height值最高，谁最高，它就要谁的值，然后向上汇报，形成高度。
+
+== background-position ==
+在CSS中，背景图片的定位方法有3种：
+* 关键字：background-position: top left;
+* 像素：background-position: 0px 0px;
+* 百分比：background-position: 0% 0%;
+
+前两种定位，都是将背景图片左上角的原点，放置在规定的位置。第三种定位，也就是百分比定位，不是这样。它的放置规则是，图片本身（x%,y%）的那个点，与背景区域的（x%,y%）的那个点重合。
+
+-- 《CSS中背景图片定位方法》
+
+== clear:left/right/none/both ==
+CSS属性clear用于控制浮动元素的后继元素的行为。缺省地，后继元素将向上移动，以填补由于前面元素的浮动而空出的可用空间。在例子中，文本自动上移到了比尔盖茨的图片旁。
+
+clear属性的值可以是left、right、both或none。原则是这样的：如果一个盒子的clear属性被设为“both”，那么该盒子的上边距将始终处于前面的浮动盒子（如果存在的话）的下边距之下。
+
+{{{name="code" class="html"
+<div id="picture">
+        <img src="bill.jpg" alt="Bill Gates">
+</div>
+<h1>Bill Gates</h1>
+<p class="floatstop">causas naturales et antecedentes, idciro etiam nostrarum voluntatum...</p>
+}}}
+
+要避免文本上移到图片旁，我们可以在CSS中添加以下代码：
+
+{{{name="code" class="css"
+#picture {
+        float:left;
+        width: 100px;
+}
+.floatstop {
+        clear:both;
+}
+}}}
+
+
+== absolute的height和width如何确定 ==
+absolute定位有包裹性，让元素inline-block化，自适应内部元素的宽度。
+
+
+== transform ==
+The default point of origin in the CSS  transform  property is the  absolute (that is, horizontal and vertical) center. You can change this using the transform-origin property:
+
+
+{{{name="code" class="css"
+E  { transform: rotate( value ); }
+h2 { transform: rotate(-25deg); }
+
+E  { transform-origin:  value(s); }
+
+E  { transform-origin: 200px 50px; }
+E  { transform-origin: 100% 100%; }
+E  { transform-origin: right bottom; }
+
+
+E  {
+    transform: translateX(value );
+    transform: translateY(value );
+}
+E  { transform: translate(translateX, translateY); }
+
+E  {
+    transform: skewX( value );
+    transform: skewY( value );
+}
+E  { transform: skew( skewX ,skewY ); }
+
+E  {
+    transform: scaleX(value );
+    transform: scaleY(value );
+}
+E  { transform: scale(scaleX, scaleY); }
+
+E  { transform: function( value ) function( value ); }
+h2 { transform: rotate(-40deg) scale(0.75) translate(-46%,-400%); }
+}}}
+
+
+== Transitions and Animations ==
+The difference between Transitions and Animations is that the former is implicit  and the latter is declared. That means Transitions only take effect when the property they are applied to ch anges value, whereas Animations are explicitly executed when applied to an element.  
+
+In CSS, a transition  is an animation that moves a property between two states.
+
+{{{name="code" class="css"
+E  { transition-property: keyword ; }
+
+h1 {
+    font-size: 150%;
+    transition-property: font-size;
+}
+}}}
+This code sets an initial value of 150%  on the font-size property and declares this is the property that w ill be transitioned when the  (not yet specified) trigger is activated. 
+
+
+{{{name="code" class="css"
+E  { transition-duration: time; }
+}}}
+The next property is transition-duration , which defines the length of time that the transition takes to co mplete. 
+
+To control the manner in which an element transitions between states we use the  transition-timing-function property. This allows for variations in speed along the duration of the transition, which gives you control over the anima-tion’s pace. This property has two different value types: a keyword or the cubic-bezier function.  
+
+{{{name="code" class="css"
+E  { transition-timing-function:  keyword ; }
+}}}
+
+The possible values for keyword  are  ease,  linear,  ease-in ,  ease-out, and ease-in-out . The default value is  ease, which starts slowly,  accelerates quickly, and slows down again at the end.  
+
+{{{name="code" class="css"
+E  { transition-timing-function: cubic-bezier(x1, y1, x2, y2);}
+}}}
+
+cubic Bezier curves
+
+{{{name="code" class="css"
+E  { transition-delay:  time; }
+}}}
+
+
+
+== Multi-column Layout Module in CSS3 == 
+two methods: either prescrip-tively by setting a specific number of  columns or dynamically by specifying 
+the width of columns and allowing the browser to calculate how many col-umns will fit into the width of the parent element.
+Prescriptive Columns: column-count
+
+E  { column-count:  columns ; }
+
+Dynamic Columns: column-width
+
+E  { column-width:  length; }

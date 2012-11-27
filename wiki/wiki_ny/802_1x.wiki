@@ -1,0 +1,18 @@
+[[dot1x基本原理]]
+
+[[dot1x代码分析记录]]
+
+[[radius为什么使用udp报文]]
+
+[[pap_chap]]
+
+[[eap]]
+
+[[dot1x堆叠设计]]
+
+== 参考文档 ==
+# 《802.1X-V2.0-概要设计.doc》		--赵斌，详细明了
+# 《PPP Authentication Protocols》（RFC1334）  --pap协议和chap协议讲解
+# 《Remote Authentication Dial In User Service (RADIUS)》（RFC2138）
+# 《PPP Extensible Authentication Protocol (EAP)》（RFC2284,RFC3748） --后一版本是对前面版本的扩展
+# 《IEEE Std 802.1X-2001 Port-Based Network Access Control》

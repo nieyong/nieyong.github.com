@@ -1,0 +1,51 @@
+== 交换机SOC芯片架构图 ==
+这部分知识来源于陈慧的PPT《交换机基本外设驱动示例.ppt》，下面整理如下，备忘。
+
+硬件架构概览，说明了CPU、MAC和PHY之间的数据，控制通路。
+
+[[image/mac_soc_arch.png||width:850px;]]
+
+控制信号流程，说明CPU是如何访问MAC寄存器、PHY寄存器。
+
+[[image/mac_soc_ctrl_bus.png||width:850px;]]
+
+数据信号流程，Tppacket收到CPU口发来的数据包。
+
+[[image/mac_soc_data_bus.png||width:850px;]]
+
+SMI总线编程，总线协议，写SLAVE寄存器，寄存器地址指PHY芯片内部寄存器的地址，由PHY芯片设计决定；PHY ID指PHY芯片在SMI总线上的编号，由board设计决定。读SLAVE寄存器。
+
+[[image/smi_bus.png||width:850px;]]
+
+[[image/smi_bus_demo1.png||width:850px;]]
+
+[[image/smi_bus_demo2.png||width:850px;]]
+
+== 网卡 ==
+PHY和MAC是网卡的主要组成部分，网卡一般用RJ-45插口，10M网卡或100M网卡RJ-45插口也只用了1、2、3、6四根针，而1000M网卡的则是八根针都是全的。除此以外，还需要其它元件，因为虽然PHY提供绝大多数模拟支持，但在一个典型实现中，仍需外接6、7只分立元件及一个局域网绝缘模块。绝缘模块一般采用一个1：1的变压器。这些部件的主要功能是为了保护PHY免遭由于电气失误而引起的损坏。
+
+
+== Ethernet transceivers ==
+The BCM54684 is based on the proven digital-signal processor technology of Broadcom, combining digital adaptive equalizers, ADCs, phase locked loops, line drivers, encoders, decoders, echo cancelers, crosstalk cancelers, and all other required support circuitry integrated into a single monolithic CMOS chip.  the BCM54684 automatically negotiates with any transceiver on the opposite end of the wire to agree on an operating speed.
+
+以太网收发器，就是我们使用的PHY芯片。
+
+== 问题 ==
+* 千兆以太网口为什么没有半双工模式？
+* 半双工是一种什么样的工作模式呢？
+* 如果一端开启自动协商，另外一端关闭自动协商（为固定速率和双工模式），协商的结果一定是半双工模式（千兆口没有半双工除外）？
+
+== 调试命令 ==
+调试流控，查看是否有pause frame发出来		getreg gtxpf.ge0
+调试jumbo功能，查看最大帧长限制			getreg frm_length.ge8
+
+== MAC PHY基本概念 ==
+在使用非屏蔽双绞线（UTP）连接时，一般使用两对线（半双工模式只使用一对线）。一对用来连接A的发送器和B非接收器，一对用来连接A的接收器和B的发送器。如果将接收器和接收器相连，发送器和发送器相连，应该如何处理呢……
+
+[[寄存器直接读写的风险]]
+
+[[Auto-MDIX]]	-- 关于MDIX方面的知识
+
+[[Flow Control]] -- 流控方面的知识
+
+[[MII GMII SGMII QSGMII]] -- 关于MAC和PHY之间的接口问题

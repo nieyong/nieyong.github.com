@@ -1,0 +1,45 @@
+ = Cache的知识 =
+ 本文档的主要知识点归纳如下：
+ * Cache原理和硬件结构 		-- _Cache的基本原理、机制，硬件实现的相关部分_
+ * Cache的软硬件接口 		-- _与Cache相关的寄存器、指令_
+ * Cache的软件开发 		-- _Cache的初始化、驱动开发等Cache软件开发知识_
+
+== Cache原理和硬件结构 ==
+=== CPU Cache Memory DMA的关系 ===
+[[image/CPU_CACHE_MEM.jpg]]
+
+通过这张图，可以清楚的看清楚CPU和Cache,内存以及DMA和内存的关系。联系到[[mips cpu|MIPS的存储管理模型]]，中间CPU和内存直接交互的为在Kseg1地址空间的操作；上下经过Cache的为Kseg0地址空间的操作（指针对不适用MMU的情况）。
+
+现代处理器的L1 Cache设计时基本上采用哈佛结构，即将指令和数据分离，分别叫做I-Cache、D-Cache，各自有独立的读写端口（I-Cache只读，不需要写端口）。
+
+=== Cache和物理地址、虚拟地址 ===
+现代体系结构的CPU多数有MMU，因而其皆有虚拟地址空间和物理地址空间。指令流中的访存地址都是VA，在访存操作送到RAM控制器前VA需要转换成PA。MIPS L1 Cache为了追求高性能，都是采用VA索引，PA匹配的方法。这就为程序员带来一个问题，需要考虑Cache别名（Aliases）问题。
+
+== Cache的软硬件接口 ==
+=== MIPS　Cache控制接口 ===
+MIPS体系结构引入了下面的寄存器和指令作为软硬件的接口，便于软件管理Cache。
+
+TagHi和TagLo用于暂存Cache行的Tag中的数据，都是32位CP0寄存器。当执行Index load tag操作的时候后，就读取Cache行Tag中的值到这对寄存器中；当执行Index store tag操作，则将寄存器中的值写入对应的Cache行的Tag中。这两个寄存器在Cache的初始化的时候时候，用于将Cache的所有行的Tag置位0。
+
+MIPS体系结构只引入了cache指令作为软件控制cache的统一接口，至于对哪个Cache（L1 I,L1 D,L2,L3）、执行何种操作皆由一个整型值ops指定：
+{{{
+cache ops, addr
+}}}
+ops编码到指令中，占有5位i，低2位指定Cache类型（L1 I,L1 D,L2,L3），高3位指定执行的操作。
+
+
+== Cache的软件开发 ==
+=== cache&DMA ===
+cache联系CPU和memory，DMA联系memory和外部设备（例如以太网卡，FLASH等）。所以，在DMA对内存中的数据进行操作的时候，需要注意。
+* 外部设备请求内存数据，DMA要将内存中的数据拿出去，首先要保证内存中的数据已经和D-Cache中的数据同步了。所以此时要先将D-Cache中的数据Write-back。
+* 外部设备加载数据到内存中，最好把D-Cache中的条目置位无效。这样CPU使用DMA加载到内存的数据的时候，就不会拿到D-Cache中的旧数据了。
+
+=== synci ===
+出现的问题：CPU在从rom加载程序段的时候，会将这些程序段的代码当做数据，首先加载到D-Cache中。而这些程序段应该被写回到内存中，然后再加载到I-Cache中。如果这些代码段还在D-Cache中没有被写回到内存中，就要去执行代码段，那么就会出现错误。
+
+解决的办法：MIPS提供了synci这条指令，意思是同步I-Cache中的数据。这条指令其实做了两节事情，一是将D-Cache中的数据（也就是程序段代码）write-back到内存，二是把I-Cache中的条目置位无效。
+
+
+=== Cache的初始化 ===
+在上电之后Cache内部的状态时未知的，对其进行初始化。X86，POWERPC的初始化都是由硬件完成的，而MIPS得需要软件来做。
+MIPS上电之后，使用Cache前，必须把Cache初始化的代码放在unCache区（KSEG1）。初始化的基本操作就是将Cache的Tag置为0。

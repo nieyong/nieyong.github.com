@@ -1,0 +1,19 @@
+== 事件冒泡 ==
+使用jquery函数bind()的时候，需要注意事件冒泡的问题。
+
+事件冒泡可以使用事件对象进行处理。事件对象是jquery中的封装。
+
+{{{name="code" class="js"
+$("element").bind("click",function(event){
+    //event为事件对象，只有在事件处理函数中才能够访问到
+    //******
+}
+}}}
+
+事件对象有以下一些方法：
+* stopPropagation()方法，停止事件冒泡
+* preventDefault()方法，阻止默认行为
+
+如果想同时阻止事件冒泡和默认行为，可以在事件处理函数中返回false，这是以上两个方法的简写。
+
+摘自《锋利的jQuery》。

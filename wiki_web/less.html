@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>less</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+<strong>什么是虚拟机？</strong> 模拟执行某种指令集体系结构的软件。我们常见的虚拟机有VMware，Java虚拟机（具体例如Android的Dalvik虚拟机），Javascript虚拟机V8等。
+</p>
+
+<h2 id="toc_0.1">java虚拟机</h2>
+<p>
+基于栈的指令集体系结构，这里的栈是指“求值栈”（又叫做operand stack或者expression stack）。并不是我们常见的调用栈。
+</p>
+<ul>
+<li>
+代码紧凑
+
+<li>
+方便实现高可移植性的解释器
+
+<li>
+直观方式解释较基于寄存器的体系结构慢
+
+</ul>
+
+
+<p>
+基于栈与基于寄存器的体系结构的区别。可以看到，这个有点儿像CPU中的RISC和CISC两种指令集体系结构的区别。
+</p>
+<ul>
+<li>
+保存临时值的位置不同
+
+<ul>
+<li>
+基于栈：将临时值保存在“求值栈”上
+
+<li>
+基于寄存器：将临时值保存在寄存器中
+
+</ul>
+<li>
+代码所占的体积不一样
+
+<ul>
+<li>
+基于栈：代码紧凑，体积小，但所需代码条数多
+
+<li>
+基于寄存器：代码相对大，但所需代码条数少
+
+</ul>
+</ul>
+
+<p>
+Dalvik就是基于寄存器的java虚拟机实现。
+</p>
+
+<p>
+摘自《JVM分享 Java Program in Action ――Java程序
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

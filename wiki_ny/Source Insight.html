@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Source Insight</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">SI的录制功能</h2>
+<p>
+和vim的q键录制功能（recording）一样，SI也有这个功能。
+</p>
+<ol>
+<li>
+Ctrl+F1	开始录制
+
+<li>
+Ctrl+F2	停止录制
+
+<li>
+Ctrl+F3	使用上次的录制内容编辑
+
+</ol>
+
+<h2 id="toc_0.2">有关Source Insight的相关使用技巧，请参考readmine上的主题讨论项目。</h2>
+
+<ul>
+<li>
+Navigation: Activate Symbol Window        :  Alt+L
+
+</ul>
+<p>
+应用举例：现在在浏览代码，需要到符号窗口搜索一个函数，使用Alt+L就可以快速定位到符号窗口的搜索栏中。
+</p>
+
+
+<ul>
+<li>
+View: Symbol Window                       :  Alt+F8
+
+</ul>
+<p>
+应用举例：只是显示符号表，但是并不会跳转到符号表，用于控制符号窗口的出现和隐藏。
+</p>
+
+
+<ul>
+<li>
+View: Highlight Word                      :  Shift+F8
+
+</ul>
+<p>
+取消高亮也是这个快捷键
+</p>
+
+<ul>
+<li>
+Navigation
+
+</ul>
+<p>
+Navigation: Go Back                       :  F1, Alt+,, Thumb 1 Click
+</p>
+
+<p>
+Navigation: Go Back Toggle                :  Alt+M
+</p>
+
+<p>
+Navigation: Go Forward                    :  F2, Alt+., Thumb 2 Click
+</p>
+
+<ul>
+<li>
+缩进（indent right/indent left）	：F9/F8
+
+</ul>
+
+<ul>
+<li>
+查找某一行，快速定位到某一行		：F5
+
+</ul>
+
+
+<ul>
+<li>
+显示当前文件的完整路径?
+
+</ul>
+
+<ul>
+<li>
+跳到函数、变量定义的地方，或者查看该函数被调用情况		: ctrl-=
+
+<li>
+对变量和宏等进行智能改名					: ctrl+'
+
+</ul>
+
+<ul>
+<li>
+Alt+L 当焦点在文本编辑框时，按ALT+L焦点会飞到Symbol Window，可选择函数名等。
+
+</ul>
+
+<ul>
+<li>
+Ctrl+O 当焦点在文本编辑框时，按Ctrl+O焦点会飞到Project Window，可选择项目文件等。
+
+</ul>
+
+<h2 id="toc_0.3">SI和SVN定制</h2>
+<p>
+下列小技巧是在工作中同事整理总结的，对提高工作效率多少有点帮助，其中有些是对应于SVN的，没有使用SVN做版本管理的人就不要白费力气了。添加定制命令的步骤是Options-&gt;Custom Cammands。
+</p>
+
+<ul>
+<li>
+ShellExecute open explorer /e,/select,%f
+
+</ul>
+<p>
+作用是在资源管理器中打开当前编辑文件并选中，设置快捷键ctrl+e，这样能很方便的在资源管理器打开对应的文件，并进行tortoiseSVN的相关操作
+</p>
+
+<ul>
+<li>
+C:\Progra~1\TortoiseSVN\bin\TortoiseProc.exe  /command:log  /path:%f
+
+</ul>
+<p>
+作用是直接查看当前文件的svn log，使用前注意更改对应的exe文件安装路径，设置快捷键如ctrl+l。其中，%f表示当前路径下的文件，而C:\Progra~1\则表示C:\Program Files\路径。
+</p>
+
+<ul>
+<li>
+C:\Progra~1\TortoiseSVN\bin\TortoiseProc.exe /command:diff /path:%f 
+
+</ul>
+<p>
+作用是直接查看当前文件和基准版本的比较，可以设置快捷键如ctrl+d。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

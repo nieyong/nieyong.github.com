@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>页面自动刷新工具</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">Live.js 和 [F5] 自动刷新页面 前端开发必备工具</h2>
+<p>
+前段时间在论坛看到有人写了一个检测文件变化并自动刷新页面的程序，如是，就可以不用一边编写页面代码一边还要alt-tab切换浏览器来查看页面效果。功能很简单，但是效果不俗，因为高速的页面编写不再因为切换和刷新而降低编写效率，如果拥有双屏显示，一边放编辑器，一边放浏览器，效率提升还是相当可观。
+然而前端也早有类似的解决方案，不用写本地程序来监控文件的改动，也不用控制浏览器的刷新，仅仅只需要一个JS就能做到这一切了，只是很多人并不知道其存在而已，它就是――Live.js <a href="http://livejs.com/">http://livejs.com/</a> 和[F5]是支持所有编辑器和浏览器的HTML/CSS实时调试工具 <a href="http://www.getf5.com/">http://www.getf5.com/</a>
+</p>
+
+<p>
+livejs是一个不依赖任何库的脚本，在编写的页面里将其引入，就会监控文件的变化然后自动刷新页面。想象一下在编辑器里ctrl+s后副屏里直接出现页面更改后的效果，对于熟练的页面coder而言，编写页面将会是一个更加行云流水的过程。
+当前其版本是version 4，已经相当稳定，可以直接下载或查看源代码以了解其工作方式。代码不多仅233行，把请求、刷新写到清清楚楚的，即使不使用它作为开发部件，扫一眼其代码也能找到不少灵感。程序的工作方式就是ajax请求文件并通过服务器返回的结果判断文件是否被修改，如果是则刷新页面。默认1000ms做一次ajax请求，这个时间间隔其实已经足够使用，相信没有人能在这么短时间里更新代码数次。
+在日常工作中，我试用了这个live.js，并得出它确实能提高效率的结论。但平心而论，如果作为一个低速页面coder的话恐怕用不上，加之零散的页面coding其实并不适合使用这么流畅的方式，注定我只有在少数情况下使用它。而且，虽然说它带来了一些方便，但同时也带来了一些限制：
+由于要靠服务器返回来判断文件状态，需要放在本地服务器上才能启用，换句话说其并不支持 file 协议
+对于随手保存文件改动，并累计然后同时看效果的coder使用起来会感觉很不契合
+编写过程虽然加快，但是开始和完成时的清理工作增加了一些成本
+</p>
+
+<p>
+总的来说 livejs 是一个不错的东西，而且对于适合使用的人来说，效率的提升带来的收益远高于上面提到的限制。我作为一个coder推荐livejs，但我并不希望它让更多的coder在高速coding的时候看起来更像是机器人。任何工具有其适用面，livejs也不例外，知道有它存在，哪一天说不定会有其用武之地。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

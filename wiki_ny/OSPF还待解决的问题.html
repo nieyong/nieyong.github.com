@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>OSPF还待解决的问题</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">编程方面知识</h2>
+<p>
+<del>C语言中双链表的基本实现，例如双链表的销毁，删除节点，添加节点等。在ospf协议中，大量使用了双链表来保存数据结果；</del>
+</p>
+<ul>
+<li>
+<a href="C语言的双链表.html">C语言的双链表</a>
+
+</ul>
+
+<p>
+<del>C语言中哈希链表的实现和使用。在rip协议的私有路由表的保存就是使用的哈希链表的形式；</del>
+</p>
+
+<ul>
+<li>
+<a href="C语言的Hash链表.html">C语言的Hash链表</a>
+
+</ul>
+
+<p>
+<del>函数颗粒问题。如何规范一个函数，使接口好用，函数不至于太臃肿、或者单薄；</del>
+</p>
+
+<ul>
+<li>
+<a href="C语言的封装.html">C语言的封装</a> -- 摘自《系统程序员成长计划.pdf》
+
+<li>
+<a href="C语言函数粒度问题.html">C语言函数粒度问题</a>
+
+</ul>
+
+<p>
+<del>C语言中位域、枚举，结构体嵌套等在网络编程中的使用；</del>
+</p>
+<ul>
+<li>
+<a href="C语言网络编程数据结构.html">C语言网络编程数据结构</a>
+
+<li>
+<a href="共用体和枚举类型.html">共用体和枚举类型</a>
+
+<li>
+<a href="字节序和字节对齐.html">字节序和字节对齐</a>
+
+</ul>
+
+<p>
+<del>RIP协议中调试信息的开启和关闭？</del>
+<del>如何定义代码段的宏，例如，定义一个宏，用于检查某个参数的范围是否正确，如果不正确，则打印信息。</del>
+</p>
+<ul>
+<li>
+<a href="C语言出错信息处理.html">C语言出错信息处理</a>
+
+<li>
+<a href="C语言调试信息处理.html">C语言调试信息处理</a>
+
+</ul>
+
+<p>
+<del>Cli Server为什么不能够使用printf函数打印信息到Talent上呢，而只能够打印到Console上？I/O端口的重映射，Vxworks的I/O系统在其中有什么变化呢？</del>
+</p>
+<ul>
+<li>
+<a href="telnet下printf的使用问题.html">telnet下printf的使用问题</a>
+
+</ul>
+
+<p>
+ospf的uc层和sw层如何实现宏的统一，数据结构的统一，如何对各自进行封装呢？
+</p>
+
+<p>
+基本数据类型int的长度问题，int,long,short型变量是如何定义的？C语言是否规定各种数据类型所占的字节数？计算机系统决定？编译器决定？如何查看编译器所确定的数据类型的字节数？
+</p>
+
+<p>
+SI能否对C语言代码的编码风格，缩进等进行整理呢？和Linux下的indent命令类似。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

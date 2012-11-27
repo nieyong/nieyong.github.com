@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Vxworks Network Stack</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+本文讲的是Network Stack，包括整个协议栈对以太网层的所有的数据包的处理，而不仅仅是IP报文。当然，IP Stack对IP报文的处理流程任然是本文想要介绍的重点。
+</p>
+
+<p>
+如果是ETHERNET_IP类型的，则交给IP协议进行处理，IP数据包就是通过ipReceiveRtn进入IP Stack的，这是我们后面讲述的重点。
+</p>
+
+
+<h2 id="toc_0.1">IP 报文的处理--IP Stack对ETHERNET_IP 类型的IP报文的处理</h2>
+<p>
+在IP报文处理阶段，IP Stack首先判断报文是否能够经过fastpath处理，如果能够，则进行快速转发；如果不能，则判断是否需要转发，如果需要，则根据路由规则对IP报文进行转发，否则经过本地协议栈处理。
+</p>
+
+<p>
+可以看到IP Stack中安装有4个挂接点，分别在IP报文处理的不同阶段安装了4个过滤器，用于在不同时期对报文进行过滤处理。实际上PNE2.2中的NAT模块就在IP Stack中用到了两个挂接点，分别是：pre_input_filter以及output_filter，分别对报文进行WAN-&gt;LAN和LAN-&gt;WAN的转换。
+</p>
+
+<p>
+本地协议栈(Local_Stack)对基于IP层以上的各类报文(如UDP、TCP、RIP、IGMP报文等)的处理。
+</p>
+
+
+<h2 id="toc_0.2">IP Stack详细处理流程</h2>
+<p>
+IP Stack的处理流程包括快速转发(fast_forward)处理流程、ip_input处理流程、ip_forward处理流程、ip_output处理流程以及本地协议栈(local_stack)的处理流程。其中本地协议栈(local_stack)处理包括对发给本地的UDP、TCP、ICMP、IGMP、RIP等报文的处理，而UDP/TCP报文最终都是通过Socket把数据交给应用层，应此在后面都有涉及到。
+</p>
+
+<p>
+另外，由于NAT、Firewall等模块都会在IP Stack的不同阶段安装Hook，因此，本章对这两部分也有涉及。
+</p>
+
+<p>
+为了保证本章的完整性，把IP Stack的总体流程从2.2章移到这里来。不过为了便于分析，根据IP Stack的处理流程，把IP Stack分成了若干模块，这些模块的作用和工作方式后面会有介绍。
+</p>
+
+
+<p>
+本地协议栈(local_stack)的处理函数pr_input，该函数实际上是一个回调函数，对于IP数据包中的不同的负载类型，对应不同的处理函数，例如，对于UDP报文处理函数为udp_input；对于TCP报文则处理函数为tcp_input；对于RIP报文处理函数为rip_input等等。
+</p>
+
+<p>
+报文输出模块有两个输出函数：ipv4FFPktSend和ether_output。ipv4FFPktSend用于快速转发的数据的输出，而ether_output则用于其它模块报文的输出。不过这两个接口最终都是通过MUX层的接口_muxTkSendEnd调用驱动层的发送接口把数据发送到网络中。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

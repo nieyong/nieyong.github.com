@@ -1,0 +1,31 @@
+下面的所有都是一些外部的链接，链接到vimwiki/extern目录下。
+
+== 交流分享 ==
+* [http://localhost/vimwiki_html//extern/android/android_new.htm android主题演讲]，2011年新员工交流用ppt。
+* [http://localhost/vimwiki_html//extern/android/struct_text_and_pkm.htm 结构化文本和个人知识管理]，2011年新员工交流用ppt。
+* [http://localhost/vimwiki_html//extern/others/正则表达式-聂勇.pdf 正则表达式-聂勇]
+* [http://localhost/vimwiki_html//extern/others/xorg安装详解_NY.pdf xorg安装详解_NY]
+
+
+== MIPS BSP ==
+* [http://localhost/vimwiki_html//extern/mips_bsd/10答辩-聂勇-MIPS-BSP研究.pdf 10答辩-聂勇-MIPS BSP研究]，TP-LINK转正答辩ppt
+* [http://localhost/vimwiki_html//extern/mips_bsd/BSP修改和简化.pdf BSP修改和简化]，BSP修改和简化
+* [http://localhost/vimwiki_html//extern/mips_bsd/MIPS汇编_NY.pdf MIPS汇编_NY]，MIPS汇编_NY
+* [http://localhost/vimwiki_html//extern/mips_bsd/编译过程研究_MIPS_NY.pdf 编译过程研究_MIPS_NY]，MIPS汇编_NY
+* [http://localhost/vimwiki_html//extern/mips_bsd/MIPS异常和中断处理机制研究v1.0.pdf MIPS异常和中断处理机制研究v1.0]，沈浩对MIPS处理器中断机制的文档
+* [http://localhost/vimwiki_html//extern/mips_bsd/Broadcom平台Flash模块.pdf Broadcom平台Flash模块]，Broadcom平台Flash模块
+* [http://localhost/vimwiki_html//extern/mips_bsd/Flash研究报告.pdf Flash研究报告]
+* [http://localhost/vimwiki_html//extern/mips_bsd/LED_Processor研究.pdf LED_Processor研究]
+
+=== vxWorks bootrom启动过程 ===
+* [http://localhost/vimwiki_html//extern/mips_bsd/启动过程研究文档/启动过程研究_MIPS_NY.pdf 启动过程研究_MIPS_NY]
+* [http://localhost/vimwiki_html//extern/mips_bsd/启动过程研究文档/romInit()函数.pdf romInit()函数]
+* [http://localhost/vimwiki_html//extern/mips_bsd/启动过程研究文档/romStart()函数.pdf romStart()函数]
+* [http://localhost/vimwiki_html//extern/mips_bsd/启动过程研究文档/usrInit()函数.pdf usrInit()函数]
+* [http://localhost/vimwiki_html//extern/mips_bsd/启动过程研究文档/usrRoot()函数.pdf usrRoot()函数]
+
+
+== 网络协议栈 ==
+* [http://localhost/vimwiki_html//extern/tcp_ip_stack/Hawkeye-End驱动研究与分析-邱俊源.pdf Hawkeye-End驱动研究与分析-邱俊源]
+* [http://localhost/vimwiki_html//extern/tcp_ip_stack/Receive_and_Send_Packets_on_xCat.pdf Receive_and_Send_Packets_on_xCat]
+* [http://localhost/vimwiki_html//extern/tcp_ip_stack/TCP_IP协议栈_NY.pdf TCP_IP协议栈_NY]

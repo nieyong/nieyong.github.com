@@ -1,0 +1,16 @@
+ = Nieyong's Knowledge Base =
+== 工作项目 ==
+ * [[ProjectGutenberg]] good books are power.
+== 知识积累 ==
+ * [[TechNotes]] -- 工作知识积累.
+ * [[KnowAbout]] -- 了解级别的知识
+ * [[Entertainment]] -- 音乐，文学，诗歌
+ * [[转载博文]] -- 一些经过整理编辑的转载博文
+== 其他 ==
+ * [[AboutWork]] [[about]]-- some idea of working.
+ * [[Navigate]] -- 本站详细导图
+ * [[wikiword]]	& [[new_wikiword]] -- 所有的wiki条目，由python脚本自动生成
+ * [[外部链接]] -- 链接一些html页面，word文档，ppt文档等
+
+
+ * [[ProjectGutenberg]] -- good books are power.

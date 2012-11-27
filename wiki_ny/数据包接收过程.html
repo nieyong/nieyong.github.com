@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>数据包接收过程</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">MUX层对数据的接收和处理</h2>
+<p>
+MUX层从END驱动中获得数据，并且根据报文的类型进行分发处理。
+</p>
+
+<h3 id="toc_0.1.1">MUX层向END驱动注册处理回调函数</h3>
+<p>
+在网络协议栈初始化阶段，<a href="协议栈初始化流程.html">初始化模块(usrNetEndLibInit)</a>遍历用户在驱动层定义的设备列表endDevTbl，并调用muxDevLoad加载用户定义的网络设备，指定接收函数以便接收驱动层传上来的数据。根据用户加载的END网络设备的类型，有不同的接收函数：
+</p>
+<ul>
+<li>
+END_STYLE_END类型的接收函数为muxReceive；
+
+<li>
+END_STYLE_NPT类型的接收函数为：muxTkReceive；
+
+<li>
+END_STYLE_MULTI类型的接收函数为：muxTkPktsReceive；
+
+</ul>
+
+<p>
+目前我们的END类型为END_STYLE_END，END驱动层的报文都是通过接口muxReceive进入mux层。
+</p>
+
+<p>
+实际上，END层在加载用户定义的网络设备时，会生成一个END_OBJ对象，用pEnd表示，END_OBJ有一成员receiveRtn，在加载时，就是通过pEnd-&gt;receiveRtn=muxReceive把MUX层的接收函数注册到网络设备对应的END_OBJ对象中。
+</p>
+
+<pre name="code" class="c">
+/* 注册mux层的接收函数到end驱动中 */
+void * muxDevLoad()
+{
+    /***/
+    
+    pNew-&gt;receiveRtn = muxReceive;
+
+    if (pNew-&gt;endStyle == END_STYLE_NPT)
+        pNew-&gt;receiveRtn = (FUNCPTR) muxTkReceive;
+    else if (pNew-&gt;endStyle == END_STYLE_MULTI)
+        pNew-&gt;receiveRtn = (FUNCPTR) muxTkPktsReceive;
+        
+    /***/
+}
+</pre>
+
+<p>
+END驱动层调用END_RCV_RTN_CALL把数据交给MUX层，而实际上END_RCV_RTN_CALL展开之后就是pEnd-&gt;receiveRtn。
+</p>
+
+<pre name="code" class="c">
+#define END_RCV_RTN_CALL(pEnd,pMblk) \
+            { \
+	    if ((pEnd)-&gt;receiveRtn) \
+		{ \
+		(pEnd)-&gt;receiveRtn ((pEnd), pMblk,NULL,NULL,NULL,NULL); \
+		} \
+            else \
+		netMblkClChainFree (pMblk); \
+            }
+</pre>
+
+<h3 id="toc_0.1.2">mux层对报文的分发处理</h3>
+<p>
+muxReceive()函数在接收到报文后，会对报文分发给相应的函数进行处理。分发的根据是报文的类型。
+</p>
+<ol>
+<li>
+通过packetDataGet接口获取报文的协议类型pktType；
+
+<li>
+匹配网络设备对应END_OBJ中的协议列表，找到第一个接收函数不为空且协议类型相匹配的协议；
+
+<li>
+把数据包交给该协议处理，例如：如果是ETHERNET_ARP类型的，则交给APR协议的接收函数arpReceiveRtn来处理；如果是ETHERNET_IP类型的，则交给IP协议进行处理。
+
+</ol>
+
+<p>
+下面是获得报文协议类型的代码。所谓报文的协议类型，也就是报文的以太网头中表明的报文类型，例如arp报文的类型为0x0806，ip报文的类型为0x0800。
+</p>
+
+<pre name="code" class="c">
+STATUS muxReceive()
+{
+    /* ... */
+
+    if (pEnd-&gt;pFuncTable-&gt;packetDataGet == NULL ||
+        pEnd-&gt;pFuncTable-&gt;packetDataGet (pMblk, &amp;llHdrInfo) != OK)
+        {
+        goto err_data_get;
+        }
+
+    type = llHdrInfo.pktType;
+    
+    /* ... */
+}
+</pre>
+
+<p>
+下面为根据报文类型进行分发处理的代码：
+</p>
+<pre name="code" class="c">
+STATUS muxReceive()
+{
+    /* ... */
+
+    for (pProto = pEnd-&gt;pSnarf; pProto &lt; pEnd-&gt;pStop; pProto++)
+	{
+	if (pProto-&gt;rr.endRcv == NULL)
+	    continue;
+
+	if (type == pProto-&gt;type ||
+	    pProto-&gt;type == MUX_PROTO_SNARF ||
+	    pProto-&gt;type == MUX_PROTO_PROMISC)
+	    {
+	    /* 报文被分发处理 */
+	    /* 例如IP报文就是在这里被回调函数ipReceiveRtn()放入IP协议栈中处理 */
+	    if (pProto-&gt;rr.endRcv (pProto-&gt;pBinding, type, pMblk,
+				   &amp;llHdrInfo, pProto-&gt;recvRtnArg))
+		goto out;
+	    }
+	}
+    /* ... */
+}
+</pre>
+
+
+<h2 id="toc_0.2">IP层对数据的接收和处理</h2>
+<p>
+如上所述，IP报文被回调函数ipReceiveRtn()从mux层转入IP协议栈中处理。
+</p>
+
+<p>
+IP Stack的处理流程包括快速转发(fast_forward)处理流程、ip_input处理流程、ip_forward处理流程、ip_output处理流程以及本地协议栈(local_stack)的处理流程。
+</p>
+
+<p>
+其中本地协议栈(local_stack)处理包括对发给本地的UDP、TCP、ICMP、IGMP、RIP等报文的处理，而UDP/TCP报文最终都是通过Socket把数据交给应用层，应此在后面都有涉及到。本地协议栈(local_stack)的对报文的分发使用函数指针pr_input，根据IP数据包中的不同的负载类型，对应不同的处理函数。例如，对于UDP报文处理函数为udp_input；对于TCP报文则处理函数为tcp_input； <del>对于RIP报文处理函数为rip_input等等。</del> rip_input()函数中的rip是raw ip（原始IP）的意思，并不是路由协议RIP。RIP报文属于udp报文，其处理函数为udp_input()函数。
+</p>
+
+<pre name="code" class="c">
+void ip_input(struct mbuf *m)
+{
+	/* ... */
+
+	/*
+	 * Switch out to protocol's input routine.
+	 */
+        WV_NET_ADDRIN_EVENT_4_4 (NETD_IP4_DATAPATH_EVENT, WV_NETD_VERBOSE, 1,
+                                 11, ip-&gt;ip_src.s_addr, ip-&gt;ip_dst.s_addr,
+                                 WV_NETDEVENT_FINISH, WV_NETD_RECV, 
+				 ip_input, 0, htonl(ip-&gt;ip_src.s_addr), 
+                                 htonl(ip-&gt;ip_dst.s_addr))
+
+	_ipstat.ips_delivered++;
+	
+	/*　报文根据tcp，udp，rip等类型不同调用相应的函数进行处理 */
+	(*inetsw[ip_protox[ip-&gt;ip_p]].pr_input)(m, hlen, ip-&gt;ip_p);
+	return;
+}
+</pre>
+
+<p>
+下图是摘自研究报告的一张报文在ip协议栈中的处理流程图。其中，红色为处理函数。
+</p>
+
+<p>
+<a href="image/vxworks_tcp_ip/IP协议栈报文处理流程图.png.html">image/vxworks_tcp_ip/IP协议栈报文处理流程图.png</a>
+</p>
+
+
+<h2 id="toc_0.3">应用程序如何获得报文</h2>
+<p>
+下面以rip协议为例，说明应用程序如何获得报文。RIP报文为udp报文，下面为udp报文处理函数的片段。
+</p>
+
+<pre name="code" class="c">
+void udp_input()
+{
+	/* ... */
+	
+	append_sa = (struct sockaddr *)&amp;priv_udp_in;
+	
+	/* sbappendaddr()函数将接收到的udp报文信息等放置到套接字接收队列中 */
+	if (sbappendaddr(&amp;inp-&gt;inp_socket-&gt;so_rcv, append_sa, m, opts) == 0) {
+                WV_NET_PORTIN_EVENT_2 (NETD_IP4_DATAPATH_EVENT, WV_NETD_WARNING,
+                                       1, 9, uh-&gt;uh_sport, uh-&gt;uh_dport,
+                                       WV_NETDEVENT_WARNING, WV_NETD_RECV,
+                                       udp_input, WV_NETD_FULLSOCK)
+
+		udpStat.udps_fullsock++;
+		goto bad;
+	}
+	
+	/* 唤醒套接字接收队列中的所有睡眠进程  */
+	sorwakeup(inp-&gt;inp_socket);
+
+	/* ... */
+}
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

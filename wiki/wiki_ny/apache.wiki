@@ -1,0 +1,42 @@
+一个apache网站，在不同目录下有不同网站，但在同一个域名下，这时可以配置alias，这与多域名不一样。
+
+在http.conf里增加：
+{{{name="code" class="css"
+
+Alias /fb  d:/myphp/fb/  
+ 
+<Directory "d:/myphp/fb/">  
+    Options Indexes FollowSymLinks Includes ExecCGI  
+    AllowOverride All  
+    Order allow,deny  
+    Allow from all    
+</Directory>
+
+}}}
+
+
+今天终于将这个问题解决了，以后就可以将apache的路径直接指向eclipse工程下的文件夹，再也不需要拷贝到apache的www目录单独调试。下面是mbooke工程的配置情况：
+
+{{{name="code" class="css"
+Alias /mbook  C:/Users/tzm/workspace/mbooke/assets/www/
+
+<Directory "C:/Users/tzm/workspace/mbooke/assets/www/">  
+    Options Indexes FollowSymLinks Includes ExecCGI  
+    AllowOverride All  
+    Order allow,deny  
+    Allow from all    
+</Directory>
+
+Alias /t2700 E:/Project/trunk/Src/StackSource/appl/ui/http/web_v4_rc/web-page/
+
+<Directory "E:/Project/trunk/Src/StackSource/appl/ui/http/web_v4_rc/web-page/">
+	Options Indexes FollowSymLinks Includes ExecCGI
+	AllowOverride All
+	Order allow,deny
+	Allow from all
+</Directory>
+
+}}}
+
+注意：目录分隔符号是右斜杠/，不能够是左斜杠\。另外，一定需要设置改目录的权限。
+

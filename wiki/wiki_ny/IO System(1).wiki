@@ -1,0 +1,22 @@
+I/O System是操作系统的一部分，但是又和底层设备驱动有着千丝万缕的联系。做设备驱动开发，了解关于I/O System的知识，能够在驱动开发，调试中带来很大的帮助
+
+== I/O System ==
+那么，什么是I/O System？I/O System是操作系统中不可或缺的部分，管理着所有的外部设备。至少，在unix和vxWorks中是如此。
+
+I/O System提供与设备无关的用户接口，统一应用程序（APP）对设备驱动的访问。
+
+== I/O System和应用程序，设备驱动的关系 ==
+为什么说做底层，做驱动开发，不了解I/O System不行呢？现在的嵌入式系统，基本上都有操作系统，在这种情况下，APP想要和驱动程序打交道，就必须通过操作系统，如果APP需要操作外部设备，那么就必须要通过操作系统中的I/O System。可以用下面这个图来说明它们之间的关系。
+
+[[image/io_system.png]]
+
+== I/O Device ==
+说到I/O System，那么就不得不说说I/O Device。I/O Device也就是I/O System所需要管理的那些外部设备。I/O Device有两种典型的连接方式：
+* Point-to-Point
+* Bus
+I/O Device一般都有自己的控制单元（controller）。I/O Device controller和CPU的连接方式有两种：
+* Special I/O instructions
+* Memory mapped registers
+对于我们的PC系统，也就是在X86下，以上两种连接方式都存在。对于SoC系统，也就是嵌入式系统，大部分情况下都是使用的第二种连接方式，Memory mapped registers。
+
+注意区别I/O Device和I/O System的概念。I/O System是操作系统中的一部分，如果不涉及到操作系统，就不会有I/O System的存在。I/O Device则是指除去CPU之外的所有外部设备，可以是SoC上的集成IC，也可以是连接在外部的独立IC。

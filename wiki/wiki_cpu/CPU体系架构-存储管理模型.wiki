@@ -1,0 +1,108 @@
+== MIPS的存储管理模型 == 
+MIPS32中的存储器模型被划分为四个大块，如下表所示： 
+| 虚拟地址范围                             | 命名    | 描述                                                                                  |
+|------------------------------------+-------+-------------------------------------------------------------------------------------|
+| 0x0000,0000~0x7fff,ffff(0~2G-1)    | USEG  | must be mapped (set page table and TLB)and set cache before use                     |
+| 0x8000,0000~0x9fff,ffff(2G~2.5G-1) | KSEG0 | directly mapped(no need to set page table and TLB) but need to set cache before use |
+| 0xa000,0000~0xbfff,ffff(2.5G~3G-1) | KSEG1 | directly mapped(no need to set page table and TLB) and never use cache              |
+| 0xc000,0000~0xffff,ffff(3G~4G-1)   | KSEG2 | muse be mapped(set page table and TLB) and set cache before use                     |
+
+下面在给出一个存储器管理模型图，又叫做虚拟内存映射图，该图和上面的表是一一对应关系。如下图所示：
+
+[[CPU体系架构-image/cpu_memory_map/MIPS_mem_map.png]]
+
+这样的存储器管理模型和X86差距比较大，X86有实模式和保护模式之分，CPU刚启动时运行在实模式之下，直到设定了保护模式之后才能运行在保护模式下。在MIPS32中没有保护模式那么系统是如何启动的呢？ 
+
+MIPS32中的 *处理器启动向量* 位于KSEG1中0xbfc0,0000。由于KSEG1是directly mapped的，所以直接对应了物理地址0x1fc0,0000。你可以在内核中一直使用0xa000,0000~0xbfff,ffff之间的虚拟地址来访问0~512M-1物理地址空间，在设置了KSEG0的cache之后，也可以使用0x8000,0000~0x9fff,ffff之间的虚拟地址来访问0~512M-1之间的物理地址空间，上面两片虚拟地址对应同一片物理地址空间。对于512M以上的物理地址空间只能由KSEG2和USEG通过页表访问。
+    x86处理器启动向量为0xffff,fff0；ARM处理器启动向量为0x0000,0000；MIPS处理器的启动向量为0xbfc0,0000。
+
+    虚拟内存映射图又叫做存储器管理模型、内存模型、内存地址策略等等。例如，Intel 的8086就是使用20位地址线的寻址策略，即16位段地址+16位偏移地址。
+
+== X86的存储器管理模型 ==
+待续
+
+== ARM的存储器管理模型 ==
+待续
+
+== 虚拟地址和物理地址 ==
+对于底层软件工程师来说，很多时候都在和地址打交道。由于以前学习不够系统，各种技术资料专业术语不统一，以及现代SOC芯片的模块集成的复杂，在开发和阅读中，地址的概念可能比较混淆。下面以bcm5836芯片为例，说明其中需要使用到的各类地址的关系。其中重点是虚拟地址（Virtual Address VA）和物理地址（Physical Address PA）。
+
+=== Virtual Address ===
+在谈及CPU体系架构（ARM体系，MIPS体系，X86体系等等）时，通常会涉及到地址空间（address space）的概念。此时，需要了解的是该处理器核的地址线宽度，例如16位地址线，32位地址线，或者64位。此时，可能会给出一个内存映射图（memory map）。其实，这些就是上面几节所说的CPU存储器管理模型。
+
+内存映射图给出的地址，是虚拟地址（virtual address）。因为这里的地址，表示的是CPU核在运算时使用的寻址的地址，也就是程序计数指针（PC）的值。该地址还会被经过一系列的转化（例如，MMU转化，丢弃最高位N根地址线等操作），才会变为实际对其他外围器件（这里的外围是指除CPU核之外，最常见的是内存，Flash等）进行寻址时使用的地址。
+ 
+必须强调，对于软件开发，我们使用的地址都是虚拟地址。无论是在汇编代码中，还是在C语言代码中。如果涉及到一些物理地址的操作，我们也要将之转化为虚拟地址。例如：
+{{{name="code" class="c"
+romInit.s Line 1038
+……
+/*
+ * Memory segments (32bit kernel mode addresses)
+ */
+#define KUSEG			0x00000000
+#define KSEG0			0x80000000
+#define KSEG1			0xa0000000
+#define KSEG2			0xc0000000
+#define KSEG3			0xe0000000
+/*
+ * Map an address to a certain kernel segment
+ */
+#define _KSEG0ADDR(a)		(((a) & 0x1fffffff) | KSEG0)
+#define _KSEG1ADDR(a)		(((a) & 0x1fffffff) | KSEG1)
+#define _KSEG2ADDR(a)		(((a) & 0x1fffffff) | KSEG2)
+#define _KSEG3ADDR(a)		(((a) & 0x1fffffff) | KSEG3)
+……
+}}}
+
+“kernel segment”就是指MIPS的虚拟地址空间，宏_KSEG0ADDR(a)等就是将物理地址a（显然，物理地址有效范围只有512M）转化成为对应MIPS的虚拟地址空间段的虚拟地址。下面是BootROM中的一个实际应用。
+{{{name="code" class="c"
+romInit.s Line 1065
+……
+#define SB_ENUM_BASE    0x18000000	/* Enumeration space base */
+……
+board_draminit:	
+	SYSLED(LED_RED)
+	/* Save return address */
+	move	t6,ra    	# change v0 to t6
+	/* Scan for an SDRAM controller (a0) */
+	li	a0, _KSEG1ADDR(SB_ENUM_BASE)
+……
+}}}
+在对RAM的初始化的时候，就用到了物理地址到虚拟地址的转化。SB_ENUM_BASE定义在Sbconfig.h文件中。有关0x18000000物理地址的相关知识，参考下一节中的SOC的内存映射关系表，可以看到，这其实是SOC片上模块的起始地址，在下一节中将会讲到，这就是一个物理地址。
+
+=== Physical Address ===
+在SOC上，都有很多功能模块的集成，例如SDRAM控制模块，AD模块，GPIO模块等。这个时候，就涉及到各个模块的地址。通俗讲，就是CPU核是如何找到这些模块的呢，是如何配置这些模块相关寄存器，如何向这些模块存取数据？
+
+这个时候，关系到SOC片上资源地址空间的划分问题。例如，对于芯片bcm5836来说，地址映射关系如下表：
+ 
+[[CPU体系架构-image/cpu_memory_map/image002.jpg]]
+
+[[CPU体系架构-image/cpu_memory_map/image003.jpg]]
+
+每一个地址范围对应什么资源都是由上表确定的。在这里的地址，就是物理地址。
+
+=== VA和PA的映射关系 ===
+首先，我们看bcm5836地址映射关系图。这是bcm5836这片SOC芯片上，虚拟地址到物理地址的映射关系图。
+
+左边的虚拟地址分布，就是MIPS CPU架构的基本地址空间的情况，对于某一固定的CPU架构，一般是不会变化的。参考《See MIPS Run》P47。右边的物理地址分布，主要是由SOC芯片来决定的。对于采用同一MIPS CPU架构的不同SOC，可能不会相同。具体的分布，需要参考的是SOC的设计说明书。
+
+[[CPU体系架构-image/cpu_memory_map/image004.jpg]]
+ 
+下面图 2 5 TL-SL5428的FLASH和SDRAM虚拟物理地址映射，介绍的是采用harrier方案的交换机TL-SL5428中，有关VA和PA的映射关系图。需要对照上面两节的图表来分析。
+ 
+[[CPU体系架构-image/cpu_memory_map/va_pa_flash.png]]
+
+上图中，需要说明的一点就是FLASH空间的映射关系。可以看到，从0xbfc0.0000到0xc000.0000的4M空间和从0xbc00.0000到0xbc80,0000的8M空间是由重合的。其实，我们可以翻过去看到，在图 2 3 bcm5836地址映射关系（2）中，有这么一段：
+ 
+[[CPU体系架构-image/cpu_memory_map/image006.jpg]]
+
+那上面这两行是什么意思呢？其实，就是说，物理地址从0x1fc0.0000到0x1fff.ffff的4M空间和从0x1c00.0000开始的32M空间，被flash控制模块映射到实际的flash器件的时候，是属于同一位置。其实，这里是MIPS CPU的虚拟地址转化成物理地址（在这里就是kseg1段去掉高位3根地址线）之后，flash控制模块又将物理地址映射到实际器件的时候，将某一部分物理地址进行了重合。
+在开发过程中，常说，CPU上电之后的开始运行的地址是0xbfc0.0000（又叫做系统启动向量），所以我们bootrom的第一行代码就放在虚拟地址0xbfc0.0000所对应的物理地址处（对于软件开发，可能无需了解该地址。因为芯片设计的原因，可能有多个虚拟地址对应此处的同一个物理地址）。
+如上所述，可能有多个虚拟地址对应此处的同一个物理地址。我们在使用windriver bench 进行bootrom烧写flash的时候，可以看到需要选择的flash的基地址为0xbc00.0000，结束地址为0xbc7f.ffff（一共8M）。其实，这个虚拟地址0xbc00.0000也是对应flash器件的起始地址。
+
+=== 其它地址 ===
+在开发过程中，还会遇到其它的一些关于地址的概念，下面列举出一些。其实，只要了解了虚拟地址和物理地址的关系，这些名字都是虚拟地址或者物理地址在特定环境下的别名。
+* logical address
+* running address
+* compiling address
+

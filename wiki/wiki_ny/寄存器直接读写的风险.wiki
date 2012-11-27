@@ -1,0 +1,99 @@
+在维护交换机端口模块的过程中，经常直接读写PHY，或者MAC芯片的寄存器，以配置相关端口功能。例如，在hawkeye机器中，有esw.c文件，在xcat机器中，有xcat.c文件。在我维护的过程中发现，直接对寄存器的修改是存在很大风险的，可能会导致某些意想不到的问题，为后来的开发，调试造成很大麻烦。
+
+== 两个读写寄存器带来的bug ==
+首先列出两个由读写寄存器带来的bug：
+# 【TL-SL3428(欧)_3.0】DUT端口设置为强制速率100MF模式，G4800多次协商，DUT的指示灯显示不正确，bug编号为[http://172.31.89.40/bugzilla/show_bug.cgi?id=11348 Bug 11348]。
+# 【TL-SG3424E 1.0】复用口概率性出现强制在SFP模式现象，bug编号为[http://172.31.89.40/bugzilla/show_bug.cgi?id=13433 Bug 13433]。
+
+下面是第一个bug的修复记录：
+{{{
+【bug修复情况】：已修复
+【对应SVN版本】：SVN 8620
+【bug原因分析】：解决giga端口LED操作在于G4800协商的时候I2C会发生致命错误0X38，然后相应的giga端口的LED显示不正确
+【bug问题根源】：对I2C core的初始化不正确
+【bug修复方法】：调用SDK中提供的I2C模块初始化接口函数，规避直接配置I2C core的寄存器的风险。和张兵一起使用G4800测试了200次，都正常。
+}}}
+该bug出现的原因是直接对I2C Core的寄存器赋值进行初始化，导致后面的某些I2C操作出现错误。后来改为了调用CPSS中的I2C驱动函数进行初始化，对I2C的读写也都调用这一套驱动。（CPSS中I2C的驱动符合标准的I2C驱动架构，可以对比Linux下的I2C驱动代码）。
+
+下面是第二个bug的修复记录：
+{{{
+【bug修复情况】：已修复
+【对应SVN版本】：SVN hawkeye_release 10734
+【bug原因分析】：在hawkeye机型在开发初期，为了解决端口流控无法关闭的问题，引入了函数bcm_port_advert_get/set（），而该函数对修改PHY寄存器中模式控制寄存器，但是读取的端口介质变为Fiber。
+【bug问题根源】：bcm_port_advert_get/set（）函数的使用错误
+【bug修复方法】：for the external PHY,from port 9 to 24(TL-SG3424),do not use the SDK function bcm_port_advert_get/set(),directly write the PHY register at address 0x04(Auto-negotiation     Advertisement Register).Pay attetion,for the combo ports,the Auto-negotiation Advertisement Register in SGMII Registers mode and Copper Registers mode should set in the same time.  
+
+【bug修复情况】：已修复
+【对应SVN版本】：SVN hawkeye_release 10958/SVN hawkeye POE 10959
+【bug原因分析】：linkscan中一个一个我们自己添加的函数tp_linkscan_led_change（）需要对PHY寄存器AUTO_DETECT_MEDIUMr进行读写。而调用接口函数的读写不正确，而且会导致介质比特位变化。
+【bug问题根源】：PHY寄存器的读写出现了混乱（暂定）
+【bug修复方法】：The runtine READ/WRITE_PHY54684_AUTO_DETECT_MEDIUMr() would cause the Mode Control Register bit[4] set unexpectly,whitch means the fiber signal detect,even no SFP module insert.More test,we find that:
+        1.get the register value by READ_PHY54684_AUTO_DETECT_MEDIUMr();
+        2.set the register value getted above by WRITE_PHY54684_AUTO_DETECT_MEDIUMr();
+        3.get the register value by READ_PHY54684_AUTO_DETECT_MEDIUMr() again.
+        then we find the value get at 1 and 3 is different.So we use the runtine MODIFY_PHY54682_AUTO_DETECT_MEDIUMr() instead the READ/WRITE--- runtines.
+
+        The bit[6] int Auto-Detect Medium Register is used to "You shared the LED for both copper and fiber mode. So you have to modify the LED mode to Fiber LED mode when the port is link at fiber mode. You need to set PHY register 1Ch, shadow 1Eh, bit 6 to 1 when the port link at fiber mode"(By Broadcom, CASE#334700).But in my test,it seams useless.
+}}}
+该bug出现的原因是在PHY寄存器中，有一个指示当前端口介质（Copper，Fiber，None）的只读比特位错误的变化为Fiber类型。可以看到，对于这个bug，做了两次修改。下面分别解释这两次修改的原因和导致的问题。
+
+首先测试，发现配置流控，调用SDK中的接口函数bcm_port_advert_get/set（）会导致介质检测比特位改变，而修改为直接对PHY寄存器的读写则不会出现。当然，绕开SDK的接口函数，直接修改寄存器是冒很大风险的。而且，事实也是如此，很快就发现配置端口双工流控也会导致介质检测比特位的改变。这就导致不得不再次测试该bug，于是有了第二次的修改。
+
+第二次修改，发现linkscan任务调用了我们自己实现的一个对寄存器修改的函数，如果注释掉该函数，则不会出现该bug。进一步的测试发现，读出该寄存器中的值，然后再将该值写回到寄存器，也会出错。在这里，使用的是PHY驱动中的两个函数READ_PHY54684_AUTO_DETECT_MEDIUMr()和WRITE_PHY54684_AUTO_DETECT_MEDIUMr()对寄存器进行的直接读写。最后测试显示，如果使用PHY驱动中的函数MODIFY_PHY54682_AUTO_DETECT_MEDIUMr()就不会出现这个问题，所以最后的修改也就是使用的这种办法。这样也是直接修改寄存器，所以风险仍然比较大。
+
+== 常见直接操控寄存器的方法 ==
+所以我们来看看一般我们的代码中是如何直接修改寄存器的呢？一般由两种方法：
+* 直接寄存器地址赋值，例如bug1中的I2C初始化函数：
+
+{{{
+static int tpI2CxcatInit(void)
+{
+	int val;
+	int i;
+	
+	/* baud set */
+	i2cBaudSet();
+	/* soft reset */
+	CPU_REG_WRITE(0xF101101C, 0);
+	/* int enable */
+	CPU_REG_READ(0xF1011008, val);
+	val |= (1 << 7);
+	CPU_REG_WRITE(0xF1011008, val);
+
+	for(i=0; i<1000; i++)
+	{
+		;
+	}
+	
+	return ERR_NO_ERROR;
+}
+}}}
+
+* 调用已经实现好的驱动层代码，例如bug2中的phy54682.c驱动中的寄存器修改函数：
+
+{{{
+READ_PHY54684_AUTO_DETECT_MEDIUMr()
+WRITE_PHY54684_AUTO_DETECT_MEDIUMr()
+}}}
+
+== 为什么直接修改寄存器风险大 ==
+那么为什么直接寄存器修改的风险大呢？下面是我凭个人经验总结的几点原因：
+* 寄存器的修改，一般都是某个具体功能的配置，可能牵涉到多个寄存器，特定的配置步骤，不同的配置技巧。而我们可能没有将这些了解清楚，更多的只是专注于寄存器比特位的含义，然后就进行了寄存器操作。
+
+这些特定的技巧可能包括下面这些。例如：某个寄存器的配置必须首先配置另外一个寄存器，又例如，某个寄存器配置之后，必须加入延时才能够配置另一个寄存器；再例如，配置完一个功能之后，又必须将寄存器切换到原来的模式，因为寄存器都是一个状态量；再再例如，某个寄存器的操作必须保证互斥，否则会导致总线错误。
+
+* 驱动层的寄存器修改函数虽然进行了封装，也许只是适用于PHY驱动调用（配合其它驱动逻辑），而并不适合于被上层随意的调用。
+
+为什么会这样呢，因为驱动层的寄存器修改函数是属于驱动中的最底层了，驱动层肯定还有很多其它的逻辑的配置才能够保证这个寄存器修改函数正常执行。例如上面讲到的寄存器操作互斥保证。
+
+* 本身芯片设计就存在缺陷，和datasheet上的描述不相符合。某些芯片的寄存器的描述可能和datasheet上描述的不一致，例如功能，位置，操控方式。这些都需要芯片厂商在其发布的驱动中进行修正，然后由方案提供商集成到SDK中，而这些可能正好我们作为设备集成方所无法得知和了解的。
+
+总之，对寄存器的操控并不是一件简单的事情，最后附上一张讲座《交换机基本外设驱动介绍》中关于控制信号流的截图：
+
+[[image/mac_soc_ctrl_bus.png]]
+
+== 如何避免直接调用寄存器引起的风险 ==
+直接调用寄存器因为的bug，一般都是很难重现，表现诡异，不容易定位和跟踪。如何规避这方面的风险呢？
+* 直接操控寄存器，一般都是在SDK提供的API不起作用，或者没有相应的API。对于API不起作用的情况，在没有了解API接口为什么无效的情况下，不要直接修改寄存器。也就是说，相对于自己修改寄存器，更应该修改API接口，或者驱动程序，而不是自己直接操控寄存器。自己直接操作寄存器就等于埋下了一颗定时炸弹。对于没有相应API的情况，可以从下面几个方面考虑：一是看能否通过多个API或者修改API达到该功能，二是看能在SDK中添加API函数实现该功能，如果上面的方法都无效，那可能不得不在我们的代码中直接操控寄存器。
+* 如果一定需要直接修改寄存器，那么也应该小心谨慎。最重要的，对这些修改应该有一个详尽的注释和说明。因为寄存器修改的测试，验证时最繁琐，最费时。也许是一个比特位的问题，要盘查出问题，那可不容易。
+* 对于项目而言，底层最好能够一个人负责该部分到底，几易其手，必然混乱不堪。

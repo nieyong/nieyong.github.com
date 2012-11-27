@@ -1,0 +1,13 @@
+The Point-to-Point Protocol (PPP) provides a standard method of encapsulating Networ Layer protocol information over point-to-point links.  PPP also defines an extensible Link Control Protocol, which allows negotiation of an Authentication Protocol for authenticating its peer before allowing Network Layer protocols to transmit over the link.
+
+This document defines two protocols for Authentication: the Password Authentication Protocol and the Challenge-Handshake Authentication Protocol.
+
+a stronger authentication method
+
+The Password Authentication Protocol (PAP) provides a simple method for the peer to establish its identity using a 2-way handshake.  This is done only upon initial link establishment.
+
+
+PAP is not a strong authentication method.  Passwords are sent over the circuit "in the clear", and there is no protection from playback or repeated trial and error attacks. 
+
+The Challenge-Handshake Authentication Protocol (CHAP) is used to periodically verify the identity of the peer using a 3-way handshake.  This is done upon initial link establishment, and MAY be repeated anytime after the link has been established.
+

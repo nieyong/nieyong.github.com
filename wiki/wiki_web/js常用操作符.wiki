@@ -1,0 +1,54 @@
+== typeof ==
+The values produced by typeof are 'number', 'string', 'boolean', 'undefined' , 'function', and 'object'. If the operand is an array or null, then the result is 'object', which is wrong. There will be more about typeof in Chapter 6 and Appendix A.
+
+=== typeof about object & array ===
+JavaScript itself is confused about the difference between arrays and objects. The typeofoperator reports that the type of an array is 'object', which isn’t very helpful.
+
+JavaScript does not have a good mechanism for distinguishing between arrays and objects. We can work around that deficiency by defining our ownis_array function:
+
+{{{name="code" class="js"
+var is_array = function (value) {
+    return value && typeof value === 'object' && value.constructor === Array;
+};
+}}}
+
+Unfortunately, it fails to identify arrays that were constructed in a different window or frame. If we want to accurately detect those foreign arrays, we have to work a lit-tle harder:
+
+{{{name="code" class="js"
+var is_array = function (value) {
+    return Object.prototype.toString.apply(value) === '[object Array]';
+ };
+}}}
+
+<javascript the good parts> chapter 6 array page 61.
+
+=== typeof about object & null ===
+The typeof operator returns a string that identifies the type of its operand. So:
+{{{name="code" class="js"
+typeof 98.6
+}}}
+
+produces 'number'. Unfortunately:
+{{{name="code" class="js"
+typeof null
+}}}
+returns 'object' instead of 'null'. Oops. A better test for null is simply:
+{{{name="code" class="js"
+my_value === null
+}}}
+
+A bigger problem is testing a value for objectness. typeofcannot distinguish between null and objects, but you can because null is falsy and all objects are truthy:
+{{{name="code" class="js"
+if (my_value && typeof my_value === 'object') {
+    // my_value is an object or an array!
+}
+}}}
+Also see the later sections “NaN” and “Phony Arrays.”
+
+Implementations disagree on the type of regular expression objects. Some implemen-tations report that:
+{{{name="code" class="js"
+typeof /a/
+}}}
+
+is 'object', and others say that it is 'function'. It might have been more useful to report 'regexp', but the standard does not allow that.
+

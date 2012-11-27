@@ -1,0 +1,113 @@
+== 求主网络，子网掩码 ==
+下面为自己写的代码，直接根据有类网络IP地址的定义进行解析。
+{{{name="code" class="c"
+/*!
+ *\fn			UINT32 ucRipGetNetIP()
+ *\brief		get network ip address by a ip address
+ *\details	
+ *\param[in]	UINT32 ipAddr		the ip address
+ *\return		UINT32 
+ *\retval		the network ip address
+ *\author		NieYong <NieYong@tp-link.net>
+ */
+UINT32 ucRipGetNetIP(UINT32 ipAddr)
+{
+	UINT32 net_ipAddr = 0;
+	char *byte;
+	char *net_byte;
+
+	byte = (char*)&ipAddr;
+	net_byte = (char*)&net_ipAddr;
+
+	/* get the network ip address  */
+	if(0x00 == (0x80 & (*byte)))		/* 1~127 */
+	{
+		*(net_byte) = *(byte);
+	}
+	else if(0x00 == (0x40 & (*byte)))		/* 128~191 */
+	{
+		*(net_byte) = *(byte);
+		*(net_byte + 1) = *(byte + 1);
+	}
+	else if(0x00 == (0x20 & (*byte)))		/* 192~223 */
+	{
+		*(net_byte) = *(byte);
+		*(net_byte + 1) = *(byte + 1);
+		*(net_byte + 2) = *(byte + 2);
+	}
+	else
+	{
+		*(net_byte) = *(byte);
+		*(net_byte + 1) = *(byte + 1);
+		*(net_byte + 2) = *(byte + 2);
+		*(net_byte + 3) = *(byte + 3);
+	}
+	
+	return net_ipAddr;
+}
+}}}
+
+下面是使用in.h中的宏重写的版本。
+{{{name="code" class="c"
+/*!
+ *\fn			UINT32 swRipNetAddr()
+ *\brief		get network address part of ip address
+ *\details	
+ *\param[in]	UINT32 ipAddr		the ip address
+ *\return		UINT32 
+ *\retval		the network  address part
+ *\author		NieYong <NieYong@tp-link.net>
+ */
+UINT32 swRipNetAddr(UINT32 ipAddr)
+{
+	/* get the network  address part  */
+	if(IN_CLASSA(ipAddr))		/* 1~127 */
+	{
+		return (ipAddr & IN_CLASSA_NET);
+	}
+	else if(IN_CLASSB(ipAddr))		/* 128~191 */
+	{
+		return (ipAddr & IN_CLASSB_NET);
+	}
+	else if(IN_CLASSC(ipAddr))		/* 192~223 */
+	{
+		return (ipAddr & IN_CLASSC_NET);
+	}
+	else
+	{
+		return (ipAddr);
+	}
+}
+}}}
+
+在in.h文件中，宏的定义如下：
+{{{name="code" class="c"
+/*
+ * Definitions of bits in internet address integers.
+ * On subnets, the decomposition of addresses to host and net parts
+ * is done according to subnet mask, not the masks here.
+ */
+#define	IN_CLASSA(i)		(((u_int32_t)(i) & 0x80000000) == 0)
+#define	IN_CLASSA_NET		0xff000000
+#define	IN_CLASSA_NSHIFT	24
+#define	IN_CLASSA_HOST		0x00ffffff
+#define	IN_CLASSA_MAX		128
+
+#define	IN_CLASSB(i)		(((u_int32_t)(i) & 0xc0000000) == 0x80000000)
+#define	IN_CLASSB_NET		0xffff0000
+#define	IN_CLASSB_NSHIFT	16
+#define	IN_CLASSB_HOST		0x0000ffff
+#define	IN_CLASSB_MAX		65536
+
+#define	IN_CLASSC(i)		(((u_int32_t)(i) & 0xe0000000) == 0xc0000000)
+#define	IN_CLASSC_NET		0xffffff00
+#define	IN_CLASSC_NSHIFT	8
+#define	IN_CLASSC_HOST		0x000000ff
+
+#define	IN_CLASSD(i)		(((u_int32_t)(i) & 0xf0000000) == 0xe0000000)
+#define	IN_CLASSD_NET		0xf0000000	/* These ones aren't really */
+#define	IN_CLASSD_NSHIFT	28		/* net and host fields, but */
+#define	IN_CLASSD_HOST		0x0fffffff	/* routing needn't know.    */
+#define	IN_MULTICAST(i)		IN_CLASSD(i)
+
+}}}

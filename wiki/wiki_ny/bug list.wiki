@@ -1,0 +1,39 @@
+== bug01 ==
+内存错误，进程挂起，原因是mtu没有初始化，为0。
+{{{
+OSPF: Entering ospf_process_neighbor_negotiation_done_event
+OSPF: Entering ospf_free_neighbor_database_summary_list
+OSPF: Entering ospf_free_neighbor_ls_request_list
+OSPF: Entering ospf_update_designated_router_state_if_necessary
+OSPF: Entering ospf_update_neighbor_state_counters
+OSPF: Entering ospf_neighbor_state_transition_printf
+OSPF: Entering ospf_accept_as_next_in_sequence
+
+
+OSPF: Entering ospf_send_database_summary
+OSPF: Entering ospf_initialize_database_header
+OSPF: Entering ospf_get_an_ospf_send_packet
+OSPF: Entering ospf_tx_packet
+OSPF: Entering ospf_initialize_ospf_packet_header
+OSPF: Entering ospf_initialize_checksum_and_authentication
+OSPF: Entering calculate_ip_checksum
+OSPF: Entering calculate_word_checksum
+OSPF: Entering end_around_carry
+OSPF: Entering end_around_carry
+OSPF: Entering ospf_send_packet
+OSPF: Entering ospf_free_an_ospf_send_packet
+0x37cd8cc (tOspfInput): memPartFree: invalid block 0x2f18b50 in partition 0x37d4650.
+OSPF: Entering ospf_get_an_ospf_send_packet
+OSPF: Entering ospf_tx_packet
+OSPF: Entering ospf_initialize_ospf_packet_header
+OSPF: Entering ospf_initialize_checksum_and_authentication
+OSPF: Entering calculate_ip_checksum
+OSPF: Entering calculate_word_checksum
+OSPF: Entering end_around_carry
+OSPF: Entering end_around_carry
+OSPF: Entering ospf_send_packet
+OSPF: Entering ospf_free_an_ospf_send_packet
+OSPF: Entering ospf_get_an_ospf_send_packet
+OSPF: Entering ospf_tx_packet
+OSPF: Entering ospf_initialize_ospf_packet_header
+}}}

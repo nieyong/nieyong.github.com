@@ -1,0 +1,59 @@
+== igmp代码code review记录 ==
+igmp的code reviw记录，主要是其编码风格方面。
+
+igmpv3PacketProcess.c		文件阅读完毕，无
+
+函数名将近50个字符，在SI中，输入参数基本上到了窗口的最右端，大部分不可见。
+{{{name="code" class="c"
+void igmpRouterProcessNonQuerierModeGroupStateTransition(unsigned int port ,
+														 unsigned int groupIpAddress,
+														 struct igmp   *igmpMsg ,
+														 int reporter,
+														 UINT8 panelPort,
+														 enum IGMP_ROUTER_GROUP_EVENT event)
+{
+}
+}}}
+
+
+变量，全局变量的名字特别长
+{{{name="code" class="c"
+nextState = g_igmpRouterQuerierModeGroupStateTransitionTable[state][event].next_state;
+}}}
+
+
+太多的#if 0 #endif注释
+
+== cpp test规则记录 ==
+* switch case语句一定要有default分支吗？
+
+* 指针之间的比较是否被允许呢？
+
+* sizeof操作符的输入参数问题
+
+{{{name="code" class="c"
+char *p;
+sizeof(p);
+}}}
+
+* 下面代码段的宏定义，输入参数是否需要括号呢？
+{{{name="code" class="c"
+#define OSPF_VLANID_VALID_CHECK(vlanID)\
+		do{\
+		if(vlanID > 4094 || vlanID < 1)\
+		{\
+			RCC_EXT_WriteStrLine(pCliEnv, "Error:invalid parameter");\
+			return OK;\
+		}\
+		}while(0)
+}}}
+
+
+* 全局变量声明时就需要初始化？
+
+* 对于全局变量，静态的要l_开头，全局的要g_开头？
+{{{name="code" class="c"
+    #ifdef _UC_OSPF_DEBUG_
+    BOOL ospfDbgEnable;
+    #endif
+}}}

@@ -1,0 +1,38 @@
+以工作项目存放相关工作资料。关于[[SMB交换机]]。
+
+== 工作项目 ==
+* [[MIPS BSP 前期研究]] -- 有关bcm5836平台下mips的bootrom,BSP方面的研究，同时也是转正答辩题目。
+* [[MIPS BSP 后期研究]] -- 区别于上面的研究，重点是vxWorks启动过程，END网络驱动的研究。
+* [[Flash的研究]] --了解Flash的相关知识
+* [[系统管理模块]] -- 维护模块，和系统管理相关
+* [[MAC PHY]] -- 关于MAC，PHY芯片知识积累
+* [[交换机路由]] --  交换机路由，RIP学习笔记
+* [[802_1x]]
+* [[2011届培训计划]]
+* [[OS]] -- 学习vxWorks等OS的笔记
+
+
+== 机型和芯片方案 ==
+=== TL-SL3428欧3.0 ===
+* 两片千兆FHY芯片：88E1543
+* 三片百兆FPY芯片：88E3083
+* 主控芯片（CPU+MAC）：98DX3165
+
+=== TL-SG5428 ===
+* 六片千兆PHY芯片：88E1545
+* 主控芯片（CPU+MAC）：98DX3165
+
+=== TL-SG3424 ===
+* PHY芯片：MCS54685
+* 驱动文件：PHY54682.c，使用的是MCS54682芯片的驱动
+* 文档：MCS54685-DS03-RDS.pdf
+
+=== TL-SG3216 ===
+* PHY芯片：PHY54684   
+* 驱动文件：PHY54684.c
+* 使用文档：54684-DS05-RDS.pdf
+
+=== TL-SG6428S ===
+* 主控芯片（CPU+MAC）：BCM56330，整体介绍的文档：56330-PG102-RDS.pdf，关于该芯片的寄存器，参考文档：56130_56330-PR101-RDS.pdf（专门为TP-LINK公司的）和56130_56330-PR101-RDS_NoRestriction.pdf。
+* SDK 5.10.0：介绍的文档为56XX-PG624-RDS.pdf
+* 堆叠原理需要参考的文档由：《HiGig-AN104-RDS.pdf》，又名《The Complete Guide to the HiGig Stacking Protocol》，文中详细的介绍了Broadcom方案的堆叠实现协议HiGig。对于该文档的了解，硬件工程师应该比软件工程师更加了解。如果需要了解SDK 5.10.0中关于堆叠的相关内容，文档为56XX-PG624-RDS.pdf，其中的Section 11:Fabric一章可以作为参考。

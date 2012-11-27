@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>web开发技术</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">web开发语言和技术</h2>
+<ul>
+<li>
+<a href="wiki.html">wiki</a>
+
+<li>
+<a href="php.html">php</a> -- php基本概念，知识
+
+<li>
+<a href="wordpress.html">wordpress</a>
+
+<li>
+<a href="JSP.html">JSP</a> -- 网络购物系统
+
+<li>
+<a href="web2.0.html">web2.0</a>
+
+<li>
+<a href="google syntax highlighter.html">google syntax highlighter</a>
+
+<li>
+<a href="javascript的位置问题.html">javascript的位置问题</a>
+
+<li>
+<a href="css.html">css</a>
+
+<li>
+<a href="mysql.html">mysql</a>
+
+<li>
+<a href="apache.html">apache</a>
+
+</ul>
+
+<p>
+Write Once,Debug Everywhere -- 程序员谈Java
+</p>
+
+<p>
+Write Once,Run Anywhere -- Sun公司形容Java的跨平台型
+</p>
+
+<h2 id="toc_0.2">MVC</h2>
+<ul>
+<li>
+manage，和数据库的接口
+
+<li>
+view，用于页面的显示，一般使用layout
+
+<li>
+control，用户操作的处理，例如登录，提交等
+
+</ul>
+
+<h2 id="toc_0.3">网站技术的几个层面</h2>
+<ol>
+<li>
+网页设计，或者叫做Web设计。内容为设计网页的布局，UI，UED等，并不涉及到编码，输出为设计图等。可能还涉及到网页图片的制作等工作。
+
+<li>
+前端开发。根据网页设计的设计图，编码实现网页的页面。主要使用的技术有html，JavaScript，css等。
+
+<li>
+后台开发。设计整个网站的管理后台，根据网站的设计需求，涉及到的技术有php，java，asp，数据库设计等。
+
+</ol>
+
+<p>
+很多时候，都将网页设计和前端开发放置在了一起，而将重点转向了后台开发。这样有一个显著的缺陷，那就是网站的美工设计不足，用户体验很差。在使用开源项目做开发的时候，应该重点规避这样的问题。
+</p>
+
+
+
+
+<h2 id="toc_0.4">网站解决方案</h2>
+<p>
+具体的解决方案有以下几种：
+</p>
+<ul>
+<li>
+squid + Apache + PHP + eAccelerator
+
+</ul>
+<p>
+使用Apache负载PHP，使用squid进行缓存，html或图片的请求可以直接由squid返回给用户。很多大型网站都采用这种架构。
+</p>
+<ul>
+<li>
+nginx/Apache + PHP（fastcgi） + eAccelerator
+
+</ul>
+<p>
+使用nginx或Apache负载PHP，PHP使用fastcgi方式运行，效率较高。
+</p>
+<ul>
+<li>
+nginx + Apache + PHP + eAccelerator
+
+</ul>
+<p>
+此方案综合了nginx和Apache的优点，使用Apache负载PHP，nginx负责解析其他Web请求，使用nginx的rewrite模块，Apache端口不对外开放。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

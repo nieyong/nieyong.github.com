@@ -1,0 +1,7 @@
+vxworks协议栈的初始化暂时不作为研究的重点，下面给出其流程图。下图出自杨晓强笔记。
+
+[[image/vxworks_tcp_ip/协议栈启动流程图1.png]]
+
+[[image/vxworks_tcp_ip/协议栈启动流程图2.png]]
+
+[[image/vxworks_tcp_ip/协议栈启动流程图3.png]]

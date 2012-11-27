@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>markdown用法</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+markdown工具，可以将txt转化成html格式。这一类工具的作用是将按一定格式写成的可读性强的文本文件 转化为结构化的标准xhtml或html。markdown最初用perl写成，后来移植到python,java,php.这里主要 介绍下python-markdown的用法。
+</p>
+
+<p>
+python-markdown模块使用有两个模式，一种是做为独立的命令行，另外一种是做为python的模块使用。
+</p>
+
+<h2 id="toc_0.1">命令行模式</h2>
+<p>
+在Fedora下，命令行名称是markdown: [ray@localhost markdown]$ markdown。
+</p>
+<pre>
+[ray@localhost markdown]$ markdown
+Usage: markdown INPUTFILE [options]
+ 
+Options:
+  -h, --help            show this help message and exit
+  -f OUTPUT_FILE, --file=OUTPUT_FILE
+                        write output to OUTPUT_FILE
+  -e ENCODING, --encoding=ENCODING
+                        encoding for input and output files
+  -q, --quiet           suppress all messages
+  -v, --verbose         print info messages
+  -s SAFE_MODE, --safe=SAFE_MODE
+                        same mode ('replace', 'remove' or 'escape'  user's
+                        HTML tag)
+  --noisy               print debug messages
+  -x EXTENSION, --extension=EXTENSION
+                        load extension EXTENSION
+</pre>
+
+<p>
+使用起来很简单， 直接运行markdown input.txt &gt; output.html即可。例如： [ray@localhost markdown]$ cat notes.txt
+</p>
+<pre>
+[ray@localhost markdown]$ cat notes.txt
+Who am I?
+===========
+This is Ray Chen speaking.
+ 
+Where am I from?
+====================
+I'm from SH, China. I love this place.
+ 
+What's next?
+=================
+  * nothing
+  * sleep
+  * study
+  * reading book
+ 
+[ray@localhost markdown]$ markdown notes.txt &gt; notes.html
+[ray@localhost markdown]$ cat notes.html
+&lt;h1&gt;Who am I?&lt;/h1&gt;
+&lt;p&gt;This is Ray Chen speaking.
+&lt;/p&gt;
+ 
+&lt;h1&gt;Where am I from?&lt;/h1&gt;
+&lt;p&gt;I'm from SH, China. I love this place.
+&lt;/p&gt;
+ 
+&lt;h1&gt;What's next?&lt;/h1&gt;
+&lt;ul&gt;
+ &lt;li&gt;
+     nothing
+ &lt;/li&gt;
+ 
+ &lt;li&gt;
+     sleep
+ &lt;/li&gt;
+ 
+ &lt;li&gt;
+     study
+ &lt;/li&gt;
+ 
+ &lt;li&gt;
+     reading book
+ &lt;/li&gt;
+</pre>
+
+<h2 id="toc_0.2">模块用法</h2>
+<p>
+[ray@localhost markdown]$ cat test_markdown.py
+</p>
+<pre>
+[ray@localhost markdown]$ cat test_markdown.py
+#!/usr/bin/python
+ 
+import markdown
+import codecs
+ 
+# Open input file in read, utf-8 mode
+input_file = codecs.open("notes.txt", mode="r", encoding="utf8")
+text = input_file.read()
+html = markdown.markdown(text)
+ 
+# print
+print html
+ 
+# Write string html to disk
+output_file = codecs.open("notes_py.html", mode="w", encoding="utf8")
+output_file.write(html)
+</pre>
+
+<p>
+[ray@localhost markdown]$ python test_markdown.py
+</p>
+<pre>
+[ray@localhost markdown]$ python test_markdown.py
+&lt;h1&gt;Who am I?&lt;/h1&gt;
+&lt;p&gt;This is Ray Chen speaking.
+&lt;/p&gt;
+ 
+&lt;h1&gt;Where am I from?&lt;/h1&gt;
+&lt;p&gt;I'm from SH, China. I love this place.
+&lt;/p&gt;
+ 
+&lt;h1&gt;What's next?&lt;/h1&gt;
+&lt;ul&gt;
+ &lt;li&gt;
+     nothing
+ &lt;/li&gt;
+ 
+ &lt;li&gt;
+     sleep
+ &lt;/li&gt;
+ 
+ &lt;li&gt;
+     study
+ &lt;/li&gt;
+ 
+ &lt;li&gt;
+     reading book
+ &lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+
+<p>
+[ray@localhost markdown]$ cat notes_py.html
+</p>
+<pre>
+[ray@localhost markdown]$ cat notes_py.html
+&lt;h1&gt;Who am I?&lt;/h1&gt;
+&lt;p&gt;This is Ray Chen speaking.
+&lt;/p&gt;
+ 
+&lt;h1&gt;Where am I from?&lt;/h1&gt;
+&lt;p&gt;I'm from SH, China. I love this place.
+&lt;/p&gt;
+ 
+&lt;h1&gt;What's next?&lt;/h1&gt;
+&lt;ul&gt;
+ &lt;li&gt;
+     nothing
+ &lt;/li&gt;
+ 
+ &lt;li&gt;
+     sleep
+ &lt;/li&gt;
+ 
+ &lt;li&gt;
+     study
+ &lt;/li&gt;
+ 
+ &lt;li&gt;
+     reading book
+ &lt;/li&gt;
+</pre>
+
+<h2 id="toc_0.3">后记</h2>
+<p>
+markdown工具在很多程序中用到，比如说wordpress, pybb等，特别适合wiki， blog，forum等。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

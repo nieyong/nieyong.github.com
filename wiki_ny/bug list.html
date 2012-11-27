@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>bug list</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">bug01</h2>
+<p>
+内存错误，进程挂起，原因是mtu没有初始化，为0。
+</p>
+<pre>
+OSPF: Entering ospf_process_neighbor_negotiation_done_event
+OSPF: Entering ospf_free_neighbor_database_summary_list
+OSPF: Entering ospf_free_neighbor_ls_request_list
+OSPF: Entering ospf_update_designated_router_state_if_necessary
+OSPF: Entering ospf_update_neighbor_state_counters
+OSPF: Entering ospf_neighbor_state_transition_printf
+OSPF: Entering ospf_accept_as_next_in_sequence
+
+
+OSPF: Entering ospf_send_database_summary
+OSPF: Entering ospf_initialize_database_header
+OSPF: Entering ospf_get_an_ospf_send_packet
+OSPF: Entering ospf_tx_packet
+OSPF: Entering ospf_initialize_ospf_packet_header
+OSPF: Entering ospf_initialize_checksum_and_authentication
+OSPF: Entering calculate_ip_checksum
+OSPF: Entering calculate_word_checksum
+OSPF: Entering end_around_carry
+OSPF: Entering end_around_carry
+OSPF: Entering ospf_send_packet
+OSPF: Entering ospf_free_an_ospf_send_packet
+0x37cd8cc (tOspfInput): memPartFree: invalid block 0x2f18b50 in partition 0x37d4650.
+OSPF: Entering ospf_get_an_ospf_send_packet
+OSPF: Entering ospf_tx_packet
+OSPF: Entering ospf_initialize_ospf_packet_header
+OSPF: Entering ospf_initialize_checksum_and_authentication
+OSPF: Entering calculate_ip_checksum
+OSPF: Entering calculate_word_checksum
+OSPF: Entering end_around_carry
+OSPF: Entering end_around_carry
+OSPF: Entering ospf_send_packet
+OSPF: Entering ospf_free_an_ospf_send_packet
+OSPF: Entering ospf_get_an_ospf_send_packet
+OSPF: Entering ospf_tx_packet
+OSPF: Entering ospf_initialize_ospf_packet_header
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

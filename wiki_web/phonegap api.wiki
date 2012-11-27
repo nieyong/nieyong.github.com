@@ -1,0 +1,46 @@
+== Geolocation ==
+Common sources of location information include Global Positioning System (GPS) and location inferred from network signals such as IP address, RFID, WiFi and Bluetooth MAC addresses, and GSM/CDMA cell IDs. 
+
+This API is based on the *W3C Geolocation API Specification*.
+
+The Coordinates object is created and populated by Cordova, and attached to the Position object. The Position object is then returned to the user through a callback function.
+
+The Positon object contains Position coordinates and timestamp, created by the geolocation API.
+
+A PositionError object is returned to the geolocationError callback when an error occurs.Error code:{{{
+PositionError.PERMISSION_DENIED
+PositionError.POSITION_UNAVAILABLE
+PositionError.TIMEOUT
+}}}
+
+enableHighAccuracy: Provides a hint that the application would like to receive the best possible results. By default, the device will attempt to retrieve a Position using *network-based methods*. Setting this property to true tells the framework to use more accurate methods, such as satellite positioning. 
+
+问题：
+* 如果没有开启GPS，甚至没有开启移动网络，phonegap接口是否仍然能够定位？《百度地图》这个应用在没有开启上述两个功能的情况下也能够比较准确的定位，使用的是什么办法，是基站吗？
+* enableHighAccuracy这个参数是用来提高定位精度的，默认设备是使用network-based methods，这是指上面提到的location inferred from network signals吗？是否包括GPS定位？后面提到的statellite positoning（卫星定位）是指什么，和GPS定位有什么区别。
+* W3C Geolocation API Specification具体的内容是什么？HTML5标准中是否有此定义。 
+
+
+
+== Domain Whitelist Guide ==
+whitelist:列入优良者名单
+
+每一个平台上的实现不一样，暂时没有按照W3C的标准设计。
+
+Android平台的实现：The whitelisting rules are found in res/xml/cordova.xml and declared with the element <access origin="..." />.
+
+
+
+
+
+This is called a  single origin policy―you can read further about single origin policies at 
+http://en.wikipedia.org/wiki/Same_origin_policy . 
+The same is not true for a PhoneGap applicat ion. A PhoneGap app lication bundles the 
+required HTML, JavaScript, and CSS files, and PhoneGap applications do not have 
+domains like “abc.com.” This allows PhoneGap to be a platform for the easy 
+development of mashups, whi ch can freely make Ajax calls to various other sites.  
+Think about your PhoneGap app lication integrating  Facebook, Twitter, and  Flickr all into 
+one mashup, with just a few lines of JavaScript code. 
+This makes PhoneGap an ideal platform for creating mobile applications for the web 
+services listed on programmableweb.com. 
+

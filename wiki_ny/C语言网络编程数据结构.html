@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>C语言网络编程数据结构</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+在C语言的网络编程中，很多数据结构都有些习惯的用法，这里就记录一下一些常见的用法，备忘。
+</p>
+
+
+<p>
+下面是在OSPF协议代码中定义的一个共用体，并且使用到了段域。而且，每一个段域的定义都使用了_pack这个修饰词。
+</p>
+<pre name="code" class="c">
+#if (_BYTE_ORDER == _LITTLE_ENDIAN )
+typedef _struct
+
+{
+        BIT_FIELD (enum, BOOLEAN)       transit:1;                      /* This is a transit area */
+        BIT_FIELD (enum, BOOLEAN)       virtual_up:1;           /* One or more virtual links in this area are up */
+        BIT_FIELD (enum, BOOLEAN)       stub:1;                         /* This is a  area (no external routes) */
+        BIT_FIELD (enum, BOOLEAN)       nssa:1;                         /* This is a not so stubby area */
+        BIT_FIELD (enum, BOOLEAN)       stub_default:1;         /* Inject default into this stub area */
+        BIT_FIELD (enum,BOOLEAN)        not_used:3;
+} _pack OSPF_AREA_FLAGS;
+#else /* _BYTE_ORDER == _BIG_ENDIAN */
+typedef _struct OSPF_AREA_FLAGS
+{
+        BIT_FIELD (enum,BOOLEAN)        not_used:3;
+        BIT_FIELD (enum, BOOLEAN)       stub_default:1;         /* Inject default into this stub area */
+        BIT_FIELD (enum, BOOLEAN)       nssa:1;                         /* This is a not so stubby area */
+        BIT_FIELD (enum, BOOLEAN)       stub:1;                         /* This is a  area (no external routes) */
+        BIT_FIELD (enum, BOOLEAN)       virtual_up:1;           /* One or more virtual links in this area are up */
+        BIT_FIELD (enum, BOOLEAN)       transit:1;                      /* This is a transit area */
+} _pack OSPF_AREA_FLAGS;
+#endif /* _BYTE_ORDER == _LITTLE_ENDIAN */
+
+typedef _union  UNION_OSPF_AREA_FLAGS
+{
+        OSPF_AREA_FLAGS _bit;
+        BYTE                    _byte;
+} _pack UNION_OSPF_AREA_FLAGS;
+</pre>
+
+<p>
+下面是定义的枚举类型在结构体中的应用。
+</p>
+
+<pre name="code" class="c">
+typedef struct OSPF_AREA_ENTRY
+{
+        struct OSPF_AREA_ENTRY           *sptr_forward_link;
+        struct OSPF_AREA_ENTRY           *sptr_backward_link;
+        
+        ......
+
+        UNION_OSPF_AREA_FLAGS            flags;                /* Various state bits */
+	
+	......
+
+} OSPF_AREA_ENTRY;
+
+OSPF_AREA_ENTRY  *pOspfArea;
+pOspfArea-&gt;flags._bit.nssa = TRUE;
+
+</pre>
+
+<h2 id="toc_0.1">_pack的用法</h2>
+<p>
+在上面的段域和共用体的定义中，使用到了_pack这个关键字。_pack的定义如下所示：
+</p>
+<pre name="code" class="c">
+#if defined (__VXWORKS__)
+    #if !defined (WIN32)
+        #define _pack __attribute__ ((packed))  /* gnu cc pack attribute */
+    #endif
+#else
+    #define _pack
+#endif
+</pre>
+<p>
+_pack用于是否字节对齐，如何字节对齐。在这里，就是默认使用1个字节的对齐方式，这样提高代码的可移植性。
+</p>
+
+<h2 id="toc_0.2">共用体和段域</h2>
+<p>
+在结构体OSPF_AREA_ENTRY中，使用一个字节的空间实现变量flag的枚举。这里就是巧妙的使用了共用体的枚举类型实现。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>js正则表达式</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+可以通过在一对分隔符之间放入表达式模式的各种组件来构造一个正则表达式。对 JScript 而言，分隔符为一对正斜杠 (/) 字符。例如：
+/expression/
+</p>
+
+<p>
+对 VBScript 而言，则采用一对引号 (“”) 来确定正则表达式的边界。例如：
+"expression"
+</p>
+
+
+<p>
+JScript	VBScript	匹配
+/^\[ \t]*\(/	“^\[ \t]*\)”	匹配一个空白行。
+/\d{2}-\d{5}/	“\d{2}-\d{5}”	验证一个ID 号码是否由一个2位数字，一个连字符以及一个5位数字组成。
+/&lt;(.<strong>)&gt;.</strong>&lt;\/\1&gt;/	“&lt;(.<strong>)&gt;.</strong>&lt;\/\1&gt;”	匹配一个 HTML 标记。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

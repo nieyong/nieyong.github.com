@@ -1,0 +1,37 @@
+在uc模块中，使用到了C语言中的位域。整理如下。
+
+{{{name="code" class="c"
+/* 位域的申明 */
+typedef struct UC_OSPF_INTERFACE_VALID
+{
+	UINT8 deadInter : 1;
+	UINT8 tranDelay : 1;
+	UINT8 prio : 1;
+	UINT8 cost : 1;
+	UINT8 helloInter : 1;
+	UINT8 retrInter : 1;
+	UINT8 intfType : 1;
+	UINT8 reserve :2;
+}UC_OSPF_INTERFACE_VALID;
+
+typedef struct UC_OSPF_INTERFACE{
+
+	//Something else
+	UC_OSPF_INTERFACE_VALID		valid;
+} UC_OSPF_INTERFACE;
+
+}}}
+
+
+位域的引用。
+{{{name="code" class="c"
+static STATUS swOspfAsbrAggre2Uc(ULONG pID,ULONG ipNum,ULONG maskNum,
+				UINT32 paraMask,UINT32 tag,BOOL noCmd)
+{
+	int rv = ERR_NO_ERROR;
+	UC_OSPF_SUMMARY_ADDR*  ucSummAddr = NULL;
+
+
+	ucSummAddr->valid.tag = FALSE;		//直接复制为TRUE或者FALSE
+}
+}}}

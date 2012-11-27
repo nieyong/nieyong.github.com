@@ -1,0 +1,11 @@
+== Flash的基本概念 ==
+FLASH存储也常被译做“快闪”、“闪存”等，这是源于它能快速擦写存储阵列块的特点。其基本工作原理就是通过浮栅（Float Gate）的俘获和释放电子来改变晶体管的阈值电压，以使晶体管在某一控制栅电压下分别处于导通和截止两种不同的状态，来分别表示逻辑上的“1”和“0”。
+
+目前，不同的厂商对于FLASH存储单元所采用的制作工艺和技术有所不同。按照存储结构分为NAND、NOR、DINOR等，按擦写和编程方式有FN（Fowler-Nordheim）擦写、CHE（Channel Hot Electron）编程、SSI（Source Side Injection）编程等，他们都使用了不同的技术来达到存储器非易失性的功能。
+
+
+== Flash芯片的封装技术和存储原理 ==
+[[Flash芯片封装技术和存储原理技术介绍]]
+
+摘要：介绍了现在Flash芯片的封装形式TSOP、FBGA和LGA，然后分析了NAND Flash中两种不同的存储技术SLC和MLC。
+

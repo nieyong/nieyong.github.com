@@ -1,0 +1,85 @@
+VxWorks操作系统包括以下五大部分：任务管理、内存管理、设备管理、文件系统管理和网络协议栈
+
+
+== I/O System学习笔记 ==
+在工作中，遇到了下面两个问题：
+# 重构代码将配置文件保存，配置文件导入导出，Firmware升级3个使用巨大内存（M级别）的部分整合为一个。由于这几个过程都涉及到系统重启，所以在调试的时候就将复位信号的输出关闭。结果导致一个问题，在第二次操作的时候，使用printf()函数打印的调试信息没有打印到串口终端上，而是打印到了Web页面。如下图所示：[[image/printf_web_err.gif]] 
+# TL-SL3428和TL-SG3210两款型号的交换机添加了硬件看门狗电路，在软件的复位信号输出1.6S之后硬件看门狗才会使CPU复位。为了不让复位信号输出之后再出现命令行提示符，需要关闭串口终端。在TL-SL3428机型上能够成功实现，但是在TL-SG3210上却不能够实现。
+# 现在代码中的cli命令调试系统输出，不能够使用printf函数，而必须使用cli提供的RCC_EXT_WriteStrLine等函数。否则，在telent和ssh下，printf函数的输出就不能够输出到telent或者ssh终端上，而仍然输出到了标准输出，console上。
+
+在对以上问题进行进一步的跟踪之后发现，都和标准输入，标准输出，标准错误输出有关系，最后归根到底是I/O System的知识。介于如此，所以系统的学习了操作系统的I/O System部分内容。
+
+* [[IO System(1)]]
+* [[IO System(2)]]
+* [[stdin_stdout_stderr]] -- 标准输入，标准输出，标准错误输出
+
+== 内存管理 ==
+在工作中，在vxWorks的内存管理部分，遇到了下面的问题：
+# 在做系统升级，配置文件保存，配置文件导出的时候，出现了内存不足的问题（32M内存机型，需要申请4M左右的空间）。详见bug 11830，bug修复情况描述如下：
+{{{
+    【对应SVN版本】：SVN 8780
+    【bug原因分析】：存在内存不足和加减锁不正确的情况
+    【bug问题根源】：内存不足，在所有的机型上（32M内存）都存在这个问题
+    【bug修复方法】：重构系统升级，配置文件导入，配置文件保存三部分的对大内存使用部分，使用同一片内存空间，不在分别进行内存申请。
+}}}
+
+内存不足的打印信息如下：
+{{{
+WEB界面提示"Failed to save the config
+file."，串口打印"0x817b4ed0(mud1_t0):memPartAlloc:block too big - 1572880 in
+partition 0x80afa580."
+
+-> memShow
+ status    bytes     blocks   avg block  max block
+ ------ ---------- --------- ---------- ----------
+current
+   free    6154560       104      59178    6090096
+  alloc   15027104      4265       3523          -
+cumulative
+  alloc   18914224     11103       1703          -
+value = 0 = 0x0
+->
+
+
+TP-LINK#MallocJumboMem() user:0
+MallocJumboMem() user:0
+MallocJumboMem() user:3
+0x8121c950 (mud1_t0): memPartAlloc: block too big - 65552 in partition 0x80b005c0.
+0x8121c950 (mud1_t0): memPartAlloc: block too big - 65552 in partition 0x80b005c0.
+0x8121c950 (mud1_t0): memPartAlloc: block too big - 65552 in partition 0x80b005c0.
+compress error
+FreeJumboMem()
+
+-> memShow
+ status    bytes     blocks   avg block  max block
+ ------ ---------- --------- ---------- ----------
+current
+   free    1158768      1178        983     692288
+  alloc   20022896      6135       3263          -
+cumulative
+  alloc   75651344    111293        679          -
+value = 0 = 0x0
+}}}
+
+[[ospf内存管理研究]]
+
+
+
+# 11届新员工C语言培训习题4，基于伙伴系统算法（buddy system）模拟实现一个内存管理器。
+
+以上两个问题都涉及到OS，vxWorks的内存管理，尤其是动态内存分配问题。介于如此，所以有选择的学习了操作系统的内存管理部分内容。
+
+*参考资料*
+* 《深入理解Linux内核》		第六章 内存管理
+* vxWorks源码			memLib.c memPartLib.c memShow.c
+
+== 网络协议栈学习笔记 ==
+主要参考资料：
+# 《VxWorks协议栈研究报告》 杨晓强
+# 《Wind River Network Stack 2.0数据处理流程》吕祝雄 
+VxWorks中的网络协议栈叫作SENS（Scalable Enhanced Network Stack），即可裁减增强性网络协议栈。SENS是基于BSD4.4 TCP/IP协议栈发展而来的，但是包含了许多BSD4.4 TCP/IP协议栈没有的协议，同时SENS在实现一些协议功能时候增加了许多新特性，比如在IP协议实现时增加了多播功能。
+
+== 其它 ==
+[[栈内存溢出的调试总结]] -- 邝国燊，李铁辉邮件总结
+
+[[思科和华为的OS]]
