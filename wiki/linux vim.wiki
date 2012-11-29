@@ -4,3 +4,6 @@ bufexplorer	:查看buffer中打开的文件列表
 
 == 命令 ==
 :g/^$/d
+
+更多的关于vim的使用，参考[[wiki_ny/Vim|Nie Yong Note's VIM]]。
+
