@@ -7,6 +7,7 @@ CPU体系架构 & OS 笔记：[[wiki_cpu/|CPU & OS Note]]
 
 WEB笔记：[[wiki_web/|Web Note]]
 
+
 == 最近编辑 ==
 最近经常编辑的文章，一般是最近的工作内容或者学习领域。
 * [[sae]]
@@ -26,3 +27,4 @@ WEB笔记：[[wiki_web/|Web Note]]
 * [[about]] -- 关于本站
 * [[Navigate]] -- 本站导图
 * [[wikiword|所有wiki条目]]
+* [[diary/diary|每日随手记]]

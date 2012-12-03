@@ -2,8 +2,6 @@
 * [[git基本操作记录]]
 * [[Windows下msysGit的配置]]
 
-
-
 == 其它git相关 ==
 * [[一个成功的git分支模型]]
 * [[A successful Git branching model]]

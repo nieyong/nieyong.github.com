@@ -1,6 +1,7 @@
 == 插件 ==
 vimwiki
 bufexplorer	:查看buffer中打开的文件列表
+calendar	:显示日历，并且可以和vimwiki配合使用diary功能
 
 == 命令 ==
 :g/^$/d
