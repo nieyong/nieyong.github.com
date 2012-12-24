@@ -84,7 +84,7 @@ find . -type f -name "*.wiki" \
 把一个文件abc.txt和一个目录dir1压缩成为yasuo.zip：
 {{{
 # zip -r yasuo.zip abc.txt dir1  //压缩的是个文件夹，则要加上-r参数，表示调用递归压缩
-# zip -r yasuo abc.txt dir1	//不许要增加.zip后缀，也可以达到同样压缩成yasuo.zip文件的目的
+# zip -r yasuo abc.txt dir1	//不需要增加.zip后缀，也可以达到同样压缩成yasuo.zip文件的目的
 }}}
 查看某个zip包中的内容，但是不解压缩：
     unzip -t test.zip

@@ -1,0 +1,266 @@
+== 定时器循环 ==
+{{{
+NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(scanMainControllerAssistantCmd) userInfo:nil repeats:NO];
+[[NSRunLoop currentRunLoop] addTimer:timer forMode:UITrackingRunLoopMode];
+[timer fire];
+[timer performSelector:@selector(invalidate) withObject:nil afterDelay:5.0f];
+}}}
+
+== 清空数组对象 ==
+清空已经发现的BLE外设数组，清空已经已经获得deviceInfo信息的BLE外设数组
+{{{
+foundPeripherals = nil;
+authenPeripherals = nil;
+}}}
+authenPeripherals是NSMutableArray数组对象，对其清空不能够直接付值nil，而应该使用对象的方法。
+{{{
+[authenPeripherals removeAllObjects];
+}}}
+
+
+== IOS中view页面的堆栈操作 ==
+{{{
+[self.navigationController popViewControllerAnimated:YES];
+}}}
+
+== headView使用addSubview之后，不能够delease ==
+{{{
+UIView* headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
+
+headView.backgroundColor = [UIColor redColor];
+
+UILabel* headLabel        = [[UILabel alloc] initWithFrame:CGRectMake(20,10, 200, 21)];
+headLabel.backgroundColor = [UIColor greenColor];
+headLabel.text            = @"Available control system";
+headLabel.textColor       = [[UIColor alloc] initWithRed:128.0/255.0 green:133.0/255.0 blue:141.0/255.0 alpha:1.0];
+//headLabel.center          = CGPointMake(headLabel.frame.size.width/2+18, headView.frame.size.height-headLabel.frame.size.height/2);
+headLabel.shadowColor = [UIColor whiteColor];
+headLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
+
+[headView addSubview:headLabel];
+[headView addSubview:self.scaningIndicatorView];
+
+//[headView release];
+}}}
+
+
+== performSelector和respondsToSelector ==
+{{{
+[self performSelector:@selector(_onScanMainCtrlTimer:)];
+}}}
+
+如果是optional，需要这样回调应用层的接口：
+
+{{{
+if ([self.delegate respondsToSelector:@selector(didScanMainControllerPeripheral:)]) {
+    [self.delegate performSelector:@selector(didScanMainControllerPeripheral:) withObject:mainControllerPeripheral];
+}
+}}}
+
+否则，如果应用层未实现didScanMainControllerPeripheral:函数，程序就会崩溃。
+
+{{{
+if (self.delegate && [self.delegate respondsToSelector:@selector(on_clickgo_paning)])
+}}}
+
+== 在cell中添加subview图片 ==
+{{{
+cell.inputView  或者 cell.contentView
+
+// Configure the cell...
+
+for (UIImageView *item in [cell.contentView subviews]) {
+    if ([item isKindOfClass:[UIImageView class]]) {
+	[item removeFromSuperview];
+    }
+}
+}}}
+
+== no appropriate for no-gc object ==
+
+警告信息：“No 'assign', 'retain', or 'copy' attribute is specified - 'assign' is assumed”和“Default property attribute 'assign' not appropriate for non-gc object”。警告信息的意思是：“没有明确指出应该是assign还是retain或者是copy，却省的是assign”和“缺省得属性设置assign不适合非gc对象 ”
+
+== objc中的for循环 ==
+for(CBPeripheral* tmpPeripheral in foundPeripherals){
+
+
+== char a[20] -> NSString ==
+== char* str -> NSString ==
+{{{
+NSString* deviceName = [NSString stringWithFormat:@"%s", mcPeripheral.deviceInfo.deviceName];//以'\0'结尾的
+NSString* password = [[NSString alloc] initWithData:[NSData dataWithBytes:(const void *)mcPeripheral.deviceInfo.password length:sizeof(mcPeripheral.deviceInfo.password)] encoding:NSASCIIStringEncoding];;//不以'\0'结尾的
+NSLog(@" [ 008 ] hardwareID = %@, deviceName = %@, password = %@", hardwareID, deviceName, password);
+}}}
+
+== NSData -->  NSString ==
+{{{
+NSMutableData *data;  //NSData *data;
+NSString *tmpdata=[[NSString alloc] init WithData:data encoding:NSACIIStringEncoding];
+NSString* hardwareID = [[NSString alloc] initWithData:mcPeripheral.hardwareID encoding:NSASCIIStringEncoding];//不以'\0'结尾的
+}}}
+
+== NSSting --> NSData ==
+{{{
+    NSString * str=@"test string";
+    NSData *data=[str dataUsingEncoding:NSUTF8StringEncoding]; 
+}}}
+
+== ios程序基本的起始代码 ==
+{{{
+self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+// Override point for customization after application launch.
+
+self.listViewController = [[BLEListViewController alloc] initWithStyle:UITableViewStyleGrouped];
+self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.listViewController];
+
+self.window.rootViewController = self.navigationController;
+//[self.window addSubview:[self.navigationController view]];
+[self.window makeKeyAndVisible];
+}}}
+
+
+== 模态视图 presentModalViewController ==
+{{{
+-(void)firstpressed
+{
+    //[[(ASSAppDelegate*)[UIApplication sharedApplication].delegate topStatusBar] setHidden:NO];
+    [self.navigationController presentModalViewController:[[ASSRootViewController alloc] init] animated:YES];
+}
+}}}
+
+
+== 内存管理问题，成员变量 ==
+{{{
+
+@interface LoginRegist:NSObject {
+    MainControllerPeripheral* _connectedMainCtrl;
+    
+    //统计字段
+    NSString* _type;
+    NSString* _appVersion;
+    NSString* _sysVersion;
+    NSString* _language;
+    NSString* _locale;
+    NSString* _sysDeviceID;
+    NSString* _sysDeviceType;
+    NSString* _command;
+    
+}
+
+- (id) init {
+    
+    if (self = [super init]) {
+        
+        //这样是不正确的，在init这个scope之外，所有如此声明的NSString都已经销毁了，也就是野指针了。
+	_type = [NSString stringWithFormat:@"assistant"];
+	_command = [NSString stringWithFormat:@"connected"];
+	_appVersion = [NSString stringWithFormat:@"1.0.0"];
+	_sysVersion = [[UIDevice currentDevice] systemVersion];
+	_language = [[NSLocale preferredLanguages] objectAtIndex:0];
+	
+
+	//这样才正确，使用alloc函数
+        _type = [[NSString alloc] initWithFormat:@"assistant"];
+        _command = [[NSString alloc] initWithFormat:@"connected"];
+        _appVersion = [[NSString alloc] initWithFormat:@"1.0.0"];
+        _sysVersion = [[[UIDevice currentDevice] systemVersion] retain];
+        _language = [[[NSLocale preferredLanguages] objectAtIndex:0] retain];
+        _locale = [[NSString alloc] initWithFormat:@"china"];
+        _sysDeviceID = [[NSString alloc] initWithFormat:@"abcdddd"];
+        
+    	......
+    }
+    
+    return self;
+    
+}
+
+}}}
+
+== nil指针被调用不会报错，而野指针则不 ==
+{{{
+//如果不存在该成员，则返回的值为nil，后面的调用也不会报错
+NSMutableArray * activeMainCtrl = [[NSUserDefaults standardUserDefaults] objectForKey:@"activeMainCtrl"];
+[activeMainCtrl addObject:infoItem];
+
+NSLog(@"[001] saved mc : %@",activeMainCtrl);
+}}}
+
+
+== 阻塞线程，sleep ==
+[NSThread sleepForTimeInterval:30];
+
+== http get请求 ==
+{{{
+    //登陆
+    NSError *error;
+    
+    NSString *baseurl = [NSString stringWithFormat:@"http://test.skypedia.net/app/signin?user=%@&password=%@",yourEmail.inputField.text,password.inputField.text];
+    
+    NSLog(@"base url: %@",baseurl);
+    
+    NSURL *url = [NSURL URLWithString:baseurl];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    [request setHTTPMethod:@"GET"];
+    [request setTimeoutInterval:8];
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+    
+    if (!returnData) {
+        NSLog(@"login failed: %@",[error localizedDescription]);
+        
+        UIAlertView* alter = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"login failed" ,@"") message:[error localizedDescription] delegate:self cancelButtonTitle:NSLocalizedString(@"OK" ,@"") otherButtonTitles:nil];
+        [alter show];
+        [alter release];
+        return;
+        
+    }
+    else{
+        NSString *returnMsg = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+        NSLog(@"return msg %@",returnMsg);
+        
+        //解析返回信息
+        if ([returnMsg hasPrefix:@"0 "]) {
+            //登陆成功，修改默认登陆名和密码
+            [[NSUserDefaults standardUserDefaults] setObject:yourEmail.inputField.text forKey:@"UserName"];
+            [[NSUserDefaults standardUserDefaults] setObject:password.inputField.text forKey:@"password"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            NSLog(@"Login action finish");
+        }
+        else{
+            UIAlertView* alter = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"login failed" ,@"") message:returnMsg delegate:self cancelButtonTitle:NSLocalizedString(@"OK" ,@"") otherButtonTitles:nil];
+            [alter show];
+            [alter release];
+        }
+    }
+}}}
+
+== 列举目录下的文件 ==
+{{{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSLog(@"paths: %@",paths);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSLog(@"documentsDirectory: %@",documentsDirectory);
+    NSFileManager *fileManage = [NSFileManager defaultManager];
+    NSArray *file = [fileManage subpathsOfDirectoryAtPath: documentsDirectory error:nil];
+    NSLog(@"%@",file);
+    NSArray *files = [fileManage subpathsAtPath: documentsDirectory ];
+    NSLog(@"%@",files);
+}}}
+document目录
+{{{
+NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,                                                        NSUserDomainMask, YES) objectAtIndex:0];
+    
+NSLog(@"rootPath %@",rootPath);
+
+结果：rootPath /var/mobile/Applications/D14CF626-40EF-484D-A94D-72C649A483FD/Documents
+
+
+NSString *path =  [[NSBundle mainBundle] pathForResource:@"Config" ofType:@"plist"];
+NSLog(@"path: %@",path);
+
+结果：2012-12-15 14:03:50.236 AssistantForIphone[15065:907] path: /var/mobile/Applications/D14CF626-40EF-484D-A94D-72C649A483FD/AssistantForIphone.app/Config.plist
+}}}

@@ -1,0 +1,16 @@
+== BLE coreBluetooth 常见异常 ==
+didDisconnectPeripheral fail,Error Domain=CBErrorDomain Code=6 "The connection has timed out unexpectedly." UserInfo=0x21066120 {NSLocalizedDescription=The connection has timed out unexpectedly.
+
+
+CoreBluetooth[WARNING] Unknown error: 1309
+
+
+didDisconnectPeripheral fail,Error Domain=CBErrorDomain Code=6 "The connection has timed out unexpectedly." UserInfo=0x1fd75280 {NSLocalizedDescription=The connection has timed out unexpectedly.}
+
+
+Did connect to peripheral: <CBConcretePeripheral: 0x1d857d60 UUID = <CFUUID 0x1cdac600> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES>
+didDisconnectPeripheral fail,Error Domain=CBErrorDomain Code=7 "The specified device has disconnected from us." UserInfo=0x1cdd2050 {NSLocalizedDescription=The specified device has disconnected from us.}
+
+
+== objc中的for循环 ==
+for(CBPeripheral* tmpPeripheral in foundPeripherals){

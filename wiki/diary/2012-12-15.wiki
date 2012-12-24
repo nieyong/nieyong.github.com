@@ -1,0 +1,13 @@
+== review ==
+NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,                                                        NSUserDomainMask, YES) objectAtIndex:0];
+    
+NSLog(@"rootPath %@",rootPath);
+
+结果：rootPath /var/mobile/Applications/D14CF626-40EF-484D-A94D-72C649A483FD/Documents
+
+
+NSString *path =  [[NSBundle mainBundle] pathForResource:@"Config" ofType:@"plist"];
+NSLog(@"path: %@",path);
+
+结果：2012-12-15 14:03:50.236 AssistantForIphone[15065:907] path: /var/mobile/Applications/D14CF626-40EF-484D-A94D-72C649A483FD/AssistantForIphone.app/Config.plist
+

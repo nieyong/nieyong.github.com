@@ -1,0 +1,62 @@
+== review ==
+self.navigationItem.backBarButtonItem = [[CustomBarButtonItem alloc] initBackItemWithTitle:@"Back" target:self];
+[self.navigationController pushViewController:[[FeedbackViewController alloc] init] animated:YES];
+
+
+dyld: lazy symbol binding failed: Symbol not found: _objc_setProperty_nonatomic
+  Referenced from: /var/mobile/Applications/F88D016C-B2C8-4608-8F68-74678F11A68B/AssistantForIphone.app/AssistantForIphone
+  Expected in: /usr/lib/libobjc.A.dylib
+
+dyld: Symbol not found: _objc_setProperty_nonatomic
+  Referenced from: /var/mobile/Applications/F88D016C-B2C8-4608-8F68-74678F11A68B/AssistantForIphone.app/AssistantForIphone
+  Expected in: /usr/lib/libobjc.A.dylib
+
+
+
+nieyong@mac:~/github/DJIAssistantForIphone > git st
+# Not currently on any branch.
+# You are currently rebasing.
+#   (fix conflicts and then run "git rebase --continue")
+#   (use "git rebase --skip" to skip this patch)
+#   (use "git rebase --abort" to check out the original branch)
+#
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   AssistantForIphone/AssistantForIphone/ASSMore/ASSMore.m
+#	modified:   AssistantForIphone/AssistantForIphone/ASSMore/subView/AccountsViewController.h
+#	modified:   AssistantForIphone/AssistantForIphone/ASSMore/subView/AccountsViewController.m
+#	new file:   AssistantForIphone/AssistantForIphone/ASSMore/subView/FeedbackViewController.h
+#	new file:   AssistantForIphone/AssistantForIphone/ASSMore/subView/FeedbackViewController.m
+#	new file:   AssistantForIphone/AssistantForIphone/ASSMore/subView/ImportExportParametersViewController.h
+#	new file:   AssistantForIphone/AssistantForIphone/ASSMore/subView/ImportExportParametersViewController.m
+#	modified:   AssistantForIphone/AssistantForIphone/ASSMore/subView/UserRegisterController.h
+#	modified:   AssistantForIphone/AssistantForIphone/ASSMore/subView/UserRegisterController.m
+#
+# Unmerged paths:
+#   (use "git reset HEAD <file>..." to unstage)
+#   (use "git add <file>..." to mark resolution)
+#
+#	both modified:      AssistantForIphone/AssistantForIphone.xcodeproj/project.pbxproj
+
+
+
+nieyong@mac:~/github/DJIAssistantForIphone > git st
+# On branch refact
+# Your branch and 'origin/refact' have diverged,
+# and have 3 and 2 different commits each, respectively.
+#
+nothing to commit, working directory clean
+
+
+
+
+
+
+
+
+-(void)firstpressed
+{
+    //[[(ASSAppDelegate*)[UIApplication sharedApplication].delegate topStatusBar] setHidden:NO];
+    [self.navigationController presentModalViewController:[[ASSRootViewController alloc] init] animated:YES];
+}

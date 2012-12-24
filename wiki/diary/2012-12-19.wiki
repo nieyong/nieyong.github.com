@@ -1,0 +1,9 @@
+== review ==
+    [NSThread sleepForTimeInterval:30];
+
+NSData -->  NSString
+    NSMutableData *data;  //NSData *data;
+    NSString *tmpdata=[[NSString alloc] init WithData:data encoding:NSACIIStringEncoding];
+NSSting --> NSData
+    NSString * str=@"test string";
+    NSData *data=[str dataUsingEncoding:NSUTF8StringEncoding]; 

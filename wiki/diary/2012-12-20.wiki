@@ -1,0 +1,53 @@
+== review ==
+- (id) init {
+    
+    if (self = [super init]) {
+        
+        //这样是不正确的，在init这个scope之外，所有如此声明的NSString都已经销毁了，也就是野指针了。
+	_type = [NSString stringWithFormat:@"assistant"];
+	_command = [NSString stringWithFormat:@"connected"];
+	_appVersion = [NSString stringWithFormat:@"1.0.0"];
+	_sysVersion = [[UIDevice currentDevice] systemVersion];
+	_language = [[NSLocale preferredLanguages] objectAtIndex:0];
+	
+
+	//这样才正确，使用alloc函数
+        _type = [[NSString alloc] initWithFormat:@"assistant"];
+        _command = [[NSString alloc] initWithFormat:@"connected"];
+        _appVersion = [[NSString alloc] initWithFormat:@"1.0.0"];
+        _sysVersion = [[[UIDevice currentDevice] systemVersion] retain];
+        _language = [[[NSLocale preferredLanguages] objectAtIndex:0] retain];
+        _locale = [[NSString alloc] initWithFormat:@"china"];
+        _sysDeviceID = [[NSString alloc] initWithFormat:@"abcdddd"];
+        
+    	......
+    }
+    
+    return self;
+    
+}
+
+
+
+
+@interface LoginRegist:NSObject {
+    MainControllerPeripheral* _connectedMainCtrl;
+    
+    //统计字段
+    NSString* _type;
+    NSString* _appVersion;
+    NSString* _sysVersion;
+    NSString* _language;
+    NSString* _locale;
+    NSString* _sysDeviceID;
+    NSString* _sysDeviceType;
+    NSString* _command;
+    
+}
+
+
+
+NSMutableArray * activeMainCtrl = [[NSUserDefaults standardUserDefaults] objectForKey:@"activeMainCtrl"];
+[activeMainCtrl addObject:infoItem];
+
+NSLog(@"[001] saved mc : %@",activeMainCtrl);

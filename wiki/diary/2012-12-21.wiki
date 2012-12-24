@@ -1,0 +1,13 @@
+== review ==
+# 配置导入／导出的gui页面以及对Config.plist文件的显示，以及实际的导入操作（需要陈晓帮助）
+# 提取对Device.plist文件的所有操作到单例中，完成两个地方的修改：
+    # 主控显示页面以及主控详细信息页面
+    # 扫瞄连接页面，包括两点：1.连接时获取保存在Device.plist中的密码；2.添加新主控到Device.plist文件
+# 新登陆（注册）的用户跳转到view页面的实现
+# 对所有网络操作添加网络是否通的判断
+
+
+
+NSString *mcHeadwareID = [[NSString alloc] initWithData:mc.hardwareID encoding:NSASCIIStringEncoding];
+NSString *mcDeviceName = [NSString stringWithFormat:@"%s", mc.deviceInfo.deviceName];
+NSString *mcPassword = [[NSString alloc] initWithData:[NSData dataWithBytes:(const void *)mc.deviceInfo.password length:sizeof(mc.deviceInfo.password)] encoding:NSASCIIStringEncoding];

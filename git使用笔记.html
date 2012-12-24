@@ -351,6 +351,13 @@ git commit -m "delete files"
 git push
 </pre>
 
+<p>
+下面这两种写法的区别：
+<strong>.xcodeproj/</strong>
+<strong>.xcodeproj/</strong>
+</p>
+
+
 <h2 id="toc_0.11">git log的用法</h2>
 <p>
 以适当的形式显示整个工程，或者多个文件，整个目录等的log信息。
@@ -393,7 +400,82 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 测试一下，确实中文就能够正常输出。但是，使用git diff命令，还是有着个问题。
 </p>
 
-<h2 id="toc_0.13">参考资料</h2>
+<h2 id="toc_0.13">github mac gui的sync操作</h2>
+<p>
+两人合作开发，从某个共同的节点开始，A做了几次提交，并且上传github。B也做了几次提交，在本地。然后B使用github的mac端gui做一个syn（同步到github）。如果A和B的修改没有冲突，那么B的提交就会rebase到A的提交上，并且上传github成功，这样看上去就是一个线性的提交纪录。如果B的修改和A有冲突，那么有冲突的提交版本就会rebase失败。
+</p>
+
+<p>
+此时，可以查看到git的状态如下。
+</p>
+
+<pre>
+nieyong@mac:~/github/DJIAssistantForIphone &gt; git st
+# Not currently on any branch.
+# You are currently rebasing.
+#   (fix conflicts and then run "git rebase --continue")
+#   (use "git rebase --skip" to skip this patch)
+#   (use "git rebase --abort" to check out the original branch)
+#
+# Changes to be committed:
+#   (use "git reset HEAD &lt;file&gt;..." to unstage)
+#
+#	modified:   AssistantForIphone/AssistantForIphone/ASSMore/ASSMore.m
+#	modified:   AssistantForIphone/AssistantForIphone/ASSMore/subView/AccountsViewController.h
+#	modified:   AssistantForIphone/AssistantForIphone/ASSMore/subView/AccountsViewController.m
+#	new file:   AssistantForIphone/AssistantForIphone/ASSMore/subView/FeedbackViewController.h
+#	new file:   AssistantForIphone/AssistantForIphone/ASSMore/subView/FeedbackViewController.m
+#	new file:   AssistantForIphone/AssistantForIphone/ASSMore/subView/ImportExportParametersViewController.h
+#	new file:   AssistantForIphone/AssistantForIphone/ASSMore/subView/ImportExportParametersViewController.m
+#	modified:   AssistantForIphone/AssistantForIphone/ASSMore/subView/UserRegisterController.h
+#	modified:   AssistantForIphone/AssistantForIphone/ASSMore/subView/UserRegisterController.m
+#
+# Unmerged paths:
+#   (use "git reset HEAD &lt;file&gt;..." to unstage)
+#   (use "git add &lt;file&gt;..." to mark resolution)
+#
+#	both modified:      AssistantForIphone/AssistantForIphone.xcodeproj/project.pbxproj
+</pre>
+
+<p>
+此时，我们不想rabase存在，那么就使用<code>git rebase --abort</code>放弃所作的其它rebase。使用该动作之后，就可以看到下面的信息，显示refact分支和origin/refact分支分叉了。
+</p>
+
+<pre>
+nieyong@mac:~/github/DJIAssistantForIphone &gt; git st
+# On branch refact
+# Your branch and 'origin/refact' have diverged,
+# and have 3 and 2 different commits each, respectively.
+#
+nothing to commit, working directory clean
+</pre>
+
+<p>
+此时，使用merge的方式合并A和B做的提交。使用命令<code>git merge origin/refact</code>，然后解决冲突提交就OK。
+</p>
+
+<p>
+整个过程，只需要明白一点，那就是github的mac gui在sync的时候，默认是做的rebase操作。知晓了这一点，其他的就迎刃而解了。
+</p>
+
+<h2 id="toc_0.14">merge 时没有合并到origin分支的警告</h2>
+<p>
+nieyong@mac:~/github/DJIAssistantForIphone &gt; git br -d I18N
+warning: not deleting branch 'I18N' that is not yet merged to
+</p>
+<blockquote>
+'refs/remotes/origin/I18N', even though it is merged to HEAD.
+</blockquote>
+<p>
+error: The branch 'I18N' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D I18N'.
+</p>
+
+<p>
+it knows that I18N is a tracking branch for origin/I18N, so it wants to know that changes done on I18N have been pushed to origin. 
+</p>
+
+<h2 id="toc_0.15">参考资料</h2>
 
 <ul>
 <li>

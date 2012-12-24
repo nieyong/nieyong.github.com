@@ -1,0 +1,34 @@
+== review ==
+no appropriate for no-gc object
+
+
+if (![peripheral isConnected]) {
+    [_centralManager retrievePeripherals:[NSArray arrayWithObject:(id)peripheral.UUID]];
+}
+
+
+
+2012-12-08 15:54:52.333 AssistantForIphone[7065:907] CoreBluetooth[WARNING] Unknown error: 1309
+2012-12-08 15:54:52.336 AssistantForIphone[7065:907] CoreBluetooth[WARNING] Unknown error: 1309
+
+
+[_centralManager retrieveConnectedPeripherals];
+for( peripheral in foundPeripherals){
+    
+    if (![peripheral isConnected]) {
+	[_centralManager retrievePeripherals:[NSArray arrayWithObject:(id)peripheral.UUID]];
+    }
+    
+}
+
+# 对retrieve/connectedRetrieve的处理
+# 对CFUUID可能为null，同一个BLE外设可能多次发现，并且实例不相同
+# dataBuffer需要添加字典
+# 新加入connectedMainCtrl成员，处理其与scan操作的关系
+# disconnectToMainController添加参数
+# GroundStation的scan存在延时问题
+# 对3种异常的处理
+ ＃CoreBluetooth[WARNING] Unknown error: 1309（必须重启itouch的蓝牙）
+ ＃didDisconnectPeripheral fail,Error Domain=CBErrorDomain Code=6 "The connection has timed out unexpectedly." UserInfo=0x21066120 {NSLocalizedDescription=The connection has timed out unexpectedly.
+ # CoreBluetooth[ERROR] XPC connection interrupted, resetting
+ 

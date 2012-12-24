@@ -1,13 +1,22 @@
-dispatch_get_main_queue
+== dispatch_get_main_queue ==
 
 centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
 
+- (CBCentralManager *)initWithDelegate:(id<CBCentralManagerDelegate>)delegate
+queue:(dispatch_queue_t)queue
 
-singleton
+Description	
+
+queue	
+The dispatch queue on which the *events will be dispatched* . If nil, the *main queue* will be used by default.
+
+再ios中，events的分发机制是怎样的，如何影响app的开呢？
+
+== singleton ==
 
 // We are a singleton and as such, dealloc shouldn't be called.
 
-
+== 获取用户名和密码的ack报文 ==
 2f00
 28
 00 7b		sequence number
@@ -35,7 +44,7 @@ ffffff ffffff			password
 
 72 6577f3			checksum
 
-/****** new packet ********/
+== new packet ==
 33002802 000a06cd a0000405 080f
 
 4632 37313038 3230		hardware ID
@@ -52,3 +61,28 @@ ffffff ffffff			password
 6d 012500			device name checksum
 
 00 009003
+
+
+
+34002804 000a06cd a8000405 080f
+
+4632 37313038 3230
+
+0000 0200
+
+//头结束
+01
+
+01 01010101 63632777 02
+
+616263 646566		password
+
+66 4f7905		checksum
+
+04 
+
+0000869f
+
+
+
+34002803 000a06cd a8000405 080f4632 37313038 32300000 02000163 63676700 00000000 00616263 64656666 037e0d04 00008971

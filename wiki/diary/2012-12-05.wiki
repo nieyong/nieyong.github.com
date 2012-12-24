@@ -1,0 +1,93 @@
+== CoreBluetooth[ERROR] XPC connection interrupted, resetting ==
+[739:907] refresh action
+[739:907] No 1 <CBConcretePeripheral: 0x1ed51110 UUID = <CFUUID 0x1ed511f0> 82A03A0D-27F2-1B7C-1E23-8B462AA58567, Name = "DJI Config", IsConnected = NO> 
+[739:907] No 2 <CBConcretePeripheral: 0x20042900 UUID = <CFUUID 0x20042a50> 0DC20F2A-B15F-547D-C15E-6F79E09C8D68, Name = "DJI Config", IsConnected = YES> 
+[739:907] Totally 2 peripherals found.
+[739:112f] CoreBluetooth[ERROR] XPC connection interrupted, resetting
+[739:907] fail connect
+[739:907] No 1 <CBConcretePeripheral: 0x1ed51110 UUID = <CFUUID 0x1ed511f0> 82A03A0D-27F2-1B7C-1E23-8B462AA58567, Name = "DJI Config", IsConnected = NO> 
+[739:907] No 2 <CBConcretePeripheral: 0x20042900 UUID = <CFUUID 0x20042a50> 0DC20F2A-B15F-547D-C15E-6F79E09C8D68, Name = "DJI Config", IsConnected = YES> 
+[739:907] No 3 <CBConcretePeripheral: 0x1ed55f40 UUID = <CFUUID 0x1ed511f0> 82A03A0D-27F2-1B7C-1E23-8B462AA58567, Name = "DJI Config", IsConnected = NO> 
+[739:907] No 4 <CBConcretePeripheral: 0x200344f0 UUID = <CFUUID 0x20042a50> 0DC20F2A-B15F-547D-C15E-6F79E09C8D68, Name = "DJI Config", IsConnected = NO> 
+[739:907] Totally 4 peripherals found.
+[739:907] Did connect to peripheral: <CBConcretePeripheral: 0x1ed55f40 UUID = <CFUUID 0x1ed511f0> 82A03A0D-27F2-1B7C-1E23-8B462AA58567, Name = "DJI Config", IsConnected = YES>
+[739:907] Did connect to peripheral: <CBConcretePeripheral: 0x200344f0 UUID = <CFUUID 0x20042a50> 0DC20F2A-B15F-547D-C15E-6F79E09C8D68, Name = "DJI Config", IsConnected = YES>
+[739:907] Service found with service UUID: Generic Access Profile
+[739:907] Service found with service UUID: Generic Attribute Profile
+[739:907] Service found with service UUID: Unknown (<180a>)
+[739:907] Service found with service UUID: Unknown (<55f1>)
+[739:907] Service found with service UUID: Generic Access Profile
+[739:907] Service found with service UUID: Generic Attribute Profile
+[739:907] Service found with service UUID: Unknown (<180a>)
+[739:907] Service found with service UUID: Unknown (<55f1>)
+[739:907] Found a characteristic for wirte, properties = 8
+[739:907] Found a characteristic for notify, properties = 16
+[739:907] send sn = 1
+[739:907] encodedData = <55aa55aa 1e000101 000b0600 80000000 00000000 00000000 00000000 00000000 fb47>
+[739:907] sendData = <55aa55aa 1e000101 000b0600 80000000 00000000>
+[739:907] sendData = <00000000 00000000 00000000 fb47>
+[739:907] Found a characteristic for wirte, properties = 8
+[739:907] Found a characteristic for notify, properties = 16
+[739:907] send sn = 1
+[739:907] encodedData = <55aa55aa 1e000101 000b0600 80000000 00000000 00000000 00000000 00000000 fb47>
+[739:907] sendData = <55aa55aa 1e000101 000b0600 80000000 00000000>
+[739:907] sendData = <00000000 00000000 00000000 fb47>
+[739:907] onReceiveData :<55aa55aa 33002801 000a06cd a8000405 080f4632>
+[739:907] CommApiTypeAssistant data
+[739:907] data is not a complete cmd yet,break2
+[739:907] onReceiveData :<37313038 32300040 68000163 64667267 68000000>
+[739:907] CommApiTypeAssistant data
+[739:907] data is not a complete cmd yet,break2
+[739:907] onReceiveData :<00353634 3635006d 01250000 00d6d3>
+[739:907] CommApiTypeAssistant data
+[739:907] 处理本条命令
+[739:907] success receive a command, data = <33002801 000a06cd a8000405 080f4632 37313038 32300040 68000163 64667267 68000000 00353634 3635006d 01250000 00d6d3>
+[739:907] recv sn = 1
+[739:907] cmd id = 0x060a
+[739:907] no HeaderSig,break
+[739:907] onReceiveData :<55aa55aa 33002801 000a06cd a8000405 080f4632>
+[739:907] CommApiTypeAssistant data
+[739:907] data is not a complete cmd yet,break2
+[739:907] onReceiveData :<37303731 30300400 02000161 62636465 66000000>
+[739:907] CommApiTypeAssistant data
+[739:907] data is not a complete cmd yet,break2
+[739:907] onReceiveData :<00313233 0018ca68 00250000 00e9b7>
+[739:907] CommApiTypeAssistant data
+[739:907] 处理本条命令
+[739:907] success receive a command, data = <33002801 000a06cd a8000405 080f4632 37303731 30300400 02000161 62636465 66000000 00313233 0018ca68 00250000 00e9b7>
+[739:907] recv sn = 1
+[739:907] cmd id = 0x060a
+[739:907] no HeaderSig,break
+[739:907] cancelPeripheralConnection success
+[739:907] cancelPeripheralConnection success
+[739:907] device information for <CBConcretePeripheral: 0x1ed55f40 UUID = <CFUUID 0x1ed511f0> 82A03A0D-27F2-1B7C-1E23-8B462AA58567, Name = "DJI Config", IsConnected = NO> 
+[739:907] hardware ID: 0x<46323731 30383230>
+[739:907] device name: 0x<63646672 67680000 0000>
+[739:907] password: 0x<35363436 3500>
+[739:907] device information for <CBConcretePeripheral: 0x200344f0 UUID = <CFUUID 0x20042a50> 0DC20F2A-B15F-547D-C15E-6F79E09C8D68, Name = "DJI Config", IsConnected = NO> 
+[739:907] hardware ID: 0x<46323730 37313030>
+[739:907] device name: 0x<61626364 65660000 0000>
+[739:907] password: 0x<31323300 18ca>
+
+
+
+[1080:907] send sn = 1
+[1080:907] encodedData = <55aa55aa 1e000101 000b0600 80000000 00000000 00000000 00000000 00000000 fb47>
+[1080:907] sendData = <55aa55aa 1e000101 000b0600 80000000 00000000>
+[1080:907] sendData = <00000000 00000000 00000000 fb47>
+[1080:907] onReceiveData :<55bb55bb 33004e40 124f678e 3260e7bf 88ed8864>
+[1080:907] CommApiTypeAssistant data
+[1080:907] no HeaderSig,break
+[1080:907] onReceiveData :<919d0bc9 d512d793 aa7a915a 7d5d2d74 cfa56826>
+[1080:907] CommApiTypeAssistant data
+[1080:907] no HeaderSig,break
+[1080:907] onReceiveData :<8f2d379f 57224f8f f75800ab 63abcd55 bb>
+
+
+
+
+[1100:907] No 1 <CBConcretePeripheral: 0x1d841410 UUID = <CFUUID 0x1d844130> 0DC20F2A-B15F-547D-C15E-6F79E09C8D68, Name = "DJI Config", IsConnected = NO> 
+[1100:907] No 2 <CBConcretePeripheral: 0x1d849fd0 UUID = <CFUUID 0x1d849f60> 82A03A0D-27F2-1B7C-1E23-8B462AA58567, Name = "DJI Config", IsConnected = NO> 
+
+
+
