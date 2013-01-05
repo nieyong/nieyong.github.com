@@ -1,6 +1,8 @@
 == 分类 ==
 分类浏览本站，请点击 [[Navigate|本站导图]]。
 
+Bluetooth笔记：[[wiki_ble/|Bluetooth Note]]
+
 CPU体系架构 & OS 笔记：[[wiki_cpu/|CPU & OS Note]]
 
 第一份工作时的笔记：[[wiki_ny/|Nie Yong Note]]

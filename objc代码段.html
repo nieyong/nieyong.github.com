@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>objc代码段</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">定时器循环</h2>
+<pre>
+NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(scanMainControllerAssistantCmd) userInfo:nil repeats:NO];
+[[NSRunLoop currentRunLoop] addTimer:timer forMode:UITrackingRunLoopMode];
+[timer fire];
+[timer performSelector:@selector(invalidate) withObject:nil afterDelay:5.0f];
+</pre>
+
+<h2 id="toc_0.2">清空数组对象</h2>
+<p>
+清空已经发现的BLE外设数组，清空已经已经获得deviceInfo信息的BLE外设数组
+</p>
+<pre>
+foundPeripherals = nil;
+authenPeripherals = nil;
+</pre>
+<p>
+authenPeripherals是NSMutableArray数组对象，对其清空不能够直接付值nil，而应该使用对象的方法。
+</p>
+<pre>
+[authenPeripherals removeAllObjects];
+</pre>
+
+
+<h2 id="toc_0.3">IOS中view页面的堆栈操作</h2>
+<pre>
+[self.navigationController popViewControllerAnimated:YES];
+</pre>
+
+<h2 id="toc_0.4">headView使用addSubview之后，不能够delease</h2>
+<pre>
+UIView* headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
+
+headView.backgroundColor = [UIColor redColor];
+
+UILabel* headLabel        = [[UILabel alloc] initWithFrame:CGRectMake(20,10, 200, 21)];
+headLabel.backgroundColor = [UIColor greenColor];
+headLabel.text            = @"Available control system";
+headLabel.textColor       = [[UIColor alloc] initWithRed:128.0/255.0 green:133.0/255.0 blue:141.0/255.0 alpha:1.0];
+//headLabel.center          = CGPointMake(headLabel.frame.size.width/2+18, headView.frame.size.height-headLabel.frame.size.height/2);
+headLabel.shadowColor = [UIColor whiteColor];
+headLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
+
+[headView addSubview:headLabel];
+[headView addSubview:self.scaningIndicatorView];
+
+//[headView release];
+</pre>
+
+
+<h2 id="toc_0.5">performSelector和respondsToSelector</h2>
+<pre>
+[self performSelector:@selector(_onScanMainCtrlTimer:)];
+</pre>
+
+<p>
+如果是optional，需要这样回调应用层的接口：
+</p>
+
+<pre>
+if ([self.delegate respondsToSelector:@selector(didScanMainControllerPeripheral:)]) {
+    [self.delegate performSelector:@selector(didScanMainControllerPeripheral:) withObject:mainControllerPeripheral];
+}
+</pre>
+
+<p>
+否则，如果应用层未实现didScanMainControllerPeripheral:函数，程序就会崩溃。
+</p>
+
+<pre>
+if (self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(on_clickgo_paning)])
+</pre>
+
+<h2 id="toc_0.6">在cell中添加subview图片</h2>
+<pre>
+cell.inputView  或者 cell.contentView
+
+// Configure the cell...
+
+for (UIImageView *item in [cell.contentView subviews]) {
+    if ([item isKindOfClass:[UIImageView class]]) {
+	[item removeFromSuperview];
+    }
+}
+</pre>
+
+<h2 id="toc_0.7">no appropriate for no-gc object</h2>
+
+<p>
+警告信息：“No 'assign', 'retain', or 'copy' attribute is specified - 'assign' is assumed”和“Default property attribute 'assign' not appropriate for non-gc object”。警告信息的意思是：“没有明确指出应该是assign还是retain或者是copy，却省的是assign”和“缺省得属性设置assign不适合非gc对象 ”
+</p>
+
+<h2 id="toc_0.8">objc中的for循环</h2>
+<p>
+for(CBPeripheral* tmpPeripheral in foundPeripherals){
+</p>
+
+
+<h2 id="toc_0.9">char a[20] -&gt; NSString</h2>
+<h2 id="toc_0.10">char* str -&gt; NSString</h2>
+<pre>
+NSString* deviceName = [NSString stringWithFormat:@"%s", mcPeripheral.deviceInfo.deviceName];//以'\0'结尾的
+NSString* password = [[NSString alloc] initWithData:[NSData dataWithBytes:(const void *)mcPeripheral.deviceInfo.password length:sizeof(mcPeripheral.deviceInfo.password)] encoding:NSASCIIStringEncoding];;//不以'\0'结尾的
+NSLog(@" [ 008 ] hardwareID = %@, deviceName = %@, password = %@", hardwareID, deviceName, password);
+</pre>
+
+<h2 id="toc_0.11">NSData --&gt;  NSString</h2>
+<pre>
+NSMutableData *data;  //NSData *data;
+NSString *tmpdata=[[NSString alloc] init WithData:data encoding:NSACIIStringEncoding];
+NSString* hardwareID = [[NSString alloc] initWithData:mcPeripheral.hardwareID encoding:NSASCIIStringEncoding];//不以'\0'结尾的
+</pre>
+
+<h2 id="toc_0.12">NSSting --&gt; NSData</h2>
+<pre>
+    NSString * str=@"test string";
+    NSData *data=[str dataUsingEncoding:NSUTF8StringEncoding]; 
+</pre>
+
+<h2 id="toc_0.13">ios程序基本的起始代码</h2>
+<pre>
+self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+// Override point for customization after application launch.
+
+self.listViewController = [[BLEListViewController alloc] initWithStyle:UITableViewStyleGrouped];
+self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.listViewController];
+
+self.window.rootViewController = self.navigationController;
+//[self.window addSubview:[self.navigationController view]];
+[self.window makeKeyAndVisible];
+</pre>
+
+
+<h2 id="toc_0.14">模态视图 presentModalViewController</h2>
+<pre>
+-(void)firstpressed
+{
+    //[[(ASSAppDelegate*)[UIApplication sharedApplication].delegate topStatusBar] setHidden:NO];
+    [self.navigationController presentModalViewController:[[ASSRootViewController alloc] init] animated:YES];
+}
+</pre>
+
+
+<h2 id="toc_0.15">内存管理问题，成员变量</h2>
+<pre>
+
+@interface LoginRegist:NSObject {
+    MainControllerPeripheral* _connectedMainCtrl;
+    
+    //统计字段
+    NSString* _type;
+    NSString* _appVersion;
+    NSString* _sysVersion;
+    NSString* _language;
+    NSString* _locale;
+    NSString* _sysDeviceID;
+    NSString* _sysDeviceType;
+    NSString* _command;
+    
+}
+
+- (id) init {
+    
+    if (self = [super init]) {
+        
+        //这样是不正确的，在init这个scope之外，所有如此声明的NSString都已经销毁了，也就是野指针了。
+	_type = [NSString stringWithFormat:@"assistant"];
+	_command = [NSString stringWithFormat:@"connected"];
+	_appVersion = [NSString stringWithFormat:@"1.0.0"];
+	_sysVersion = [[UIDevice currentDevice] systemVersion];
+	_language = [[NSLocale preferredLanguages] objectAtIndex:0];
+	
+
+	//这样才正确，使用alloc函数
+        _type = [[NSString alloc] initWithFormat:@"assistant"];
+        _command = [[NSString alloc] initWithFormat:@"connected"];
+        _appVersion = [[NSString alloc] initWithFormat:@"1.0.0"];
+        _sysVersion = [[[UIDevice currentDevice] systemVersion] retain];
+        _language = [[[NSLocale preferredLanguages] objectAtIndex:0] retain];
+        _locale = [[NSString alloc] initWithFormat:@"china"];
+        _sysDeviceID = [[NSString alloc] initWithFormat:@"abcdddd"];
+        
+    	......
+    }
+    
+    return self;
+    
+}
+
+</pre>
+
+<h2 id="toc_0.16">nil指针被调用不会报错，而野指针则不</h2>
+<pre>
+//如果不存在该成员，则返回的值为nil，后面的调用也不会报错
+NSMutableArray * activeMainCtrl = [[NSUserDefaults standardUserDefaults] objectForKey:@"activeMainCtrl"];
+[activeMainCtrl addObject:infoItem];
+
+NSLog(@"[001] saved mc : %@",activeMainCtrl);
+</pre>
+
+
+<h2 id="toc_0.17">阻塞线程，sleep</h2>
+<p>
+[NSThread sleepForTimeInterval:30];
+</p>
+
+<h2 id="toc_0.18">http get请求</h2>
+<pre>
+    //登陆
+    NSError *error;
+    
+    NSString *baseurl = [NSString stringWithFormat:@"http://test.skypedia.net/app/signin?user=%@&amp;password=%@",yourEmail.inputField.text,password.inputField.text];
+    
+    NSLog(@"base url: %@",baseurl);
+    
+    NSURL *url = [NSURL URLWithString:baseurl];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    [request setHTTPMethod:@"GET"];
+    [request setTimeoutInterval:8];
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&amp;error];
+    
+    if (!returnData) {
+        NSLog(@"login failed: %@",[error localizedDescription]);
+        
+        UIAlertView* alter = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"login failed" ,@"") message:[error localizedDescription] delegate:self cancelButtonTitle:NSLocalizedString(@"OK" ,@"") otherButtonTitles:nil];
+        [alter show];
+        [alter release];
+        return;
+        
+    }
+    else{
+        NSString *returnMsg = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+        NSLog(@"return msg %@",returnMsg);
+        
+        //解析返回信息
+        if ([returnMsg hasPrefix:@"0 "]) {
+            //登陆成功，修改默认登陆名和密码
+            [[NSUserDefaults standardUserDefaults] setObject:yourEmail.inputField.text forKey:@"UserName"];
+            [[NSUserDefaults standardUserDefaults] setObject:password.inputField.text forKey:@"password"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            NSLog(@"Login action finish");
+        }
+        else{
+            UIAlertView* alter = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"login failed" ,@"") message:returnMsg delegate:self cancelButtonTitle:NSLocalizedString(@"OK" ,@"") otherButtonTitles:nil];
+            [alter show];
+            [alter release];
+        }
+    }
+</pre>
+
+<h2 id="toc_0.19">列举目录下的文件</h2>
+<pre>
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSLog(@"paths: %@",paths);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSLog(@"documentsDirectory: %@",documentsDirectory);
+    NSFileManager *fileManage = [NSFileManager defaultManager];
+    NSArray *file = [fileManage subpathsOfDirectoryAtPath: documentsDirectory error:nil];
+    NSLog(@"%@",file);
+    NSArray *files = [fileManage subpathsAtPath: documentsDirectory ];
+    NSLog(@"%@",files);
+</pre>
+<p>
+document目录
+</p>
+<pre>
+NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,                                                        NSUserDomainMask, YES) objectAtIndex:0];
+    
+NSLog(@"rootPath %@",rootPath);
+
+结果：rootPath /var/mobile/Applications/D14CF626-40EF-484D-A94D-72C649A483FD/Documents
+
+
+NSString *path =  [[NSBundle mainBundle] pathForResource:@"Config" ofType:@"plist"];
+NSLog(@"path: %@",path);
+
+结果：2012-12-15 14:03:50.236 AssistantForIphone[15065:907] path: /var/mobile/Applications/D14CF626-40EF-484D-A94D-72C649A483FD/AssistantForIphone.app/Config.plist
+</pre>
+
+
+
+<h2 id="toc_0.20">retain并未创建新对象，只是对象的生命值改变</h2>
+<p>
+类A中定义了一个delegate。
+</p>
+<pre>
+-(void) getDevicePlist
+{
+    self.devicePlistMainCtrl = [self _readDevicePlist];
+    
+    NSLog(@"[006] %@",self.devicePlistMainCtrl);
+    
+    //delegate通知上层应用
+    if ([self.delegate respondsToSelector:@selector(didDevicePlistChanged:)]) {
+        [self.delegate performSelector:@selector(didDevicePlistChanged:) withObject:self.devicePlistMainCtrl];
+    }
+    
+    NSLog(@"[005] %@",self.devicePlistMainCtrl);
+    
+}
+
+</pre>
+
+<p>
+下面是再另外一个类B中对上面类A的delegate的实现：
+</p>
+<pre name="code" class="c">
+#pragma mark - DevicePlistDelegate
+- (void) didDevicePlistChanged:(NSMutableDictionary*) devicePlistMainCtrl
+{
+    //这里对出入的dict进行了retain，但是其实还是指向的同一个dict，所以在类B中对self.devicePlistMainCtrl的任何操作，都会影响类A中的该dict。
+    self.devicePlistMainCtrl = devicePlistMainCtrl;
+
+    //在类B中删除了dict的一个key，在类A中的［005］和［006］处打印可以看出。
+    [self.devicePlistMainCtrl removeObjectForKey:DEVICE_KEY_USERNAME];
+
+}
+</pre>
+
+<h2 id="toc_0.21">app跳转到浏览器，并且打开链接</h2>
+<pre name="code" class="c">
+#define FORGET_PASSWORD_URL     @"http://login.dji-innovations.com/member/forget/en_US"
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:FORGET_PASSWORD_URL]];
+</pre>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

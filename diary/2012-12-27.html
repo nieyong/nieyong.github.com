@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>2012-12-27</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+dji的设计中，主控，蓝牙，电台等是挂在can总线上，所有的通信都是通过can总线；
+</p>
+
+<p>
+测试了连续发包导致无法收到ack报文，ble蓝牙断开等问题
+</p>
+
+<p>
+测试了touch连续发包（也就是调参软件的view等页面的通信需求），导致无法收到ack报文，ble断开的问题。结果是can总线上无法测试到主控发出的ack报文，但是ble通过can总线发给主控的信息仍然能够测到。
+</p>
+
+<p>
+这样基本可以肯定是can总线，或者主控出了问题；
+</p>
+
+
+<h3 id="toc_0.0.1">扫描失败率高的测试纪录</h3>
+<p>
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ new ble
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ didWriteValueForCharacteristic Unknown (&lt;33f0&gt;) error: Unknown error.
+ didWriteValueForCharacteristic Unknown (&lt;33f0&gt;) error: Unknown error.
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1f85f4e0 UUID = &lt;CFUUID 0x1f85f730&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+</p>
+
+
+
+
+
+
+
+
+
+
+<p>
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ new ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ delete ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1c58b330 UUID = &lt;CFUUID 0x1c57b3f0&gt; 636F2A28-D0E1-D93E-EFA0-1A5AD7C45431, Name = "DJI Config", IsConnected = YES&gt;
+ new ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07e270 UUID = &lt;CFUUID 0x1d055480&gt; 636F2A28-D0E1-D93E-EFA0-1A5AD7C45431, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07e270 UUID = &lt;CFUUID 0x1d055480&gt; 636F2A28-D0E1-D93E-EFA0-1A5AD7C45431, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ CoreBluetooth[WARNING] Unknown error: 14
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ delete ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ new ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ delete ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ new ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ delete ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ new ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ CoreBluetooth[WARNING] Unknown error: 14
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ delete ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ new ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ delete ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ new ble
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ CoreBluetooth[WARNING] Unknown error: 14
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [001] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = YES&gt;
+ [003] &lt;CBConcretePeripheral: 0x1d07a290 UUID = &lt;CFUUID 0x1d07e7f0&gt; DC9DE924-C4A0-6713-B73F-CB40ABDB8E6C, Name = "DJI Config", IsConnected = NO&gt;
+ [004] (null)
+ [004] (null)
+ [004] (null)
+ delete ble
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

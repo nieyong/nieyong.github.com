@@ -15,6 +15,7 @@
 	<script language="javascript" src="templates/shBrushJava.js"></script>
 	<script language="javascript" src="templates/shBrushXml.js"></script>
 	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
 	
 	<script language="javascript" src="templates/vimwiki.js"></script>
 </head>
@@ -36,24 +37,41 @@
     <div class="container">
 	<div id="content">
 	
-<p>
-dispatch_get_main_queue
-</p>
+<h2 id="toc_0.1">dispatch_get_main_queue</h2>
 
 <p>
 centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
 </p>
 
+<ul>
+<li>
+(CBCentralManager *)initWithDelegate:(id&lt;CBCentralManagerDelegate&gt;)delegate
+
+</ul>
+<p>
+queue:(dispatch_queue_t)queue
+</p>
 
 <p>
-singleton
+Description	
 </p>
+
+<p>
+queue	
+The dispatch queue on which the <strong>events will be dispatched</strong> . If nil, the <strong>main queue</strong> will be used by default.
+</p>
+
+<p>
+再ios中，events的分发机制是怎样的，如何影响app的开呢？
+</p>
+
+<h2 id="toc_0.2">singleton</h2>
 
 <p>
 // We are a singleton and as such, dealloc shouldn't be called.
 </p>
 
-
+<h2 id="toc_0.3">获取用户名和密码的ack报文</h2>
 <p>
 2f00
 28
@@ -103,8 +121,8 @@ ffffff ffffff			password
 72 6577f3			checksum
 </p>
 
+<h2 id="toc_0.4">new packet</h2>
 <p>
-/****** new packet ********/
 33002802 000a06cd a0000405 080f
 </p>
 
@@ -135,6 +153,51 @@ ffffff ffffff			password
 
 <p>
 00 009003
+</p>
+
+
+
+<p>
+34002804 000a06cd a8000405 080f
+</p>
+
+<p>
+4632 37313038 3230
+</p>
+
+<p>
+0000 0200
+</p>
+
+<p>
+//头结束
+01
+</p>
+
+<p>
+01 01010101 63632777 02
+</p>
+
+<p>
+616263 646566		password
+</p>
+
+<p>
+66 4f7905		checksum
+</p>
+
+<p>
+04 
+</p>
+
+<p>
+0000869f
+</p>
+
+
+
+<p>
+34002803 000a06cd a8000405 080f4632 37313038 32300000 02000163 63676700 00000000 00616263 64656666 037e0d04 00008971
 </p>
 
 	</div>

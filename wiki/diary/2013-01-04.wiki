@@ -1,0 +1,12 @@
+== review ==
+2013-01-04 11:54:10.490 AssistantForIphone[17060:907] -[__NSCFString objectForKey:]: unrecognized selector sent to instance 0x51fce0
+2013-01-04 11:54:10.492 AssistantForIphone[17060:907] *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[__NSCFString objectForKey:]: unrecognized selector sent to instance 0x51fce0'
+
+
+Bluetooth Application Developer’s Guide
+
+UIApplication sharedApplication] openURL:[NSURL URLWithString:FORGET_PASSWORD_URL;
+
+
+
+

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>2012-12-26</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h3 id="toc_0.0.1">关于BLE通信问题的纪录</h3>
+
+<p>
+昨天测试了BLE通信的速度丢包问题
+</p>
+
+<p>
+测试方式：
+touch以100ms的间隔向主控发送通道数据包（34bytes），主控需要回复的ack报文有66bytes，这样，一个交互过程为100字节的数据量，这应该也是对BLE缓存区buffer的要求。
+</p>
+
+<p>
+然后以125ms，160ms，200ms做同样的测试
+</p>
+
+<p>
+测试结果：
+</p>
+
+<p>
+在125ms和100ms的时候，出现了丢包的现象，也就是某些SN的报文没有回复，丢包的原因在于BLE接收到的某些包出现了错误。发包速度越快，丢包越严重。
+</p>
+
+<p>
+在发送速度为100ms，125ms，160ms的时候，ack报文回复的速度不能够保证在改时间内收到。
+</p>
+
+<p>
+一些结论和思考：
+1.发送速度是引起丢包的原因；
+2.丢包问题是由蓝牙接收到的数据有错误引起；
+3.ack报文回复的速度（从发出某个SN的报文，到收到该SN报文）大概在130ms~180ms左右；
+4.ack报文回复速度为200ms的原因尚未清楚：BLE的传输速率？BLE的处理速率？主控处理速率？can总线速率？等等
+</p>
+
+
+<p>
+一些其他的异常问题：
+在使用过程中，touch一直扫描不到主控，发现是在连接成功之后，无法发现蓝牙的service。最后，解决的办法是重启了设备的蓝牙，就一切ok。
+</p>
+
+
+<h3 id="toc_0.0.2">通道命令ack报文</h3>
+<p>
+55aa55aa 3e002839 001006cd a8000405 080f4632
+37313038 32300000 0000010a e903000f 0000feff
+01000000 18fc00e6 ff01e903 00e90300 4e0000e9
+03000000 bbbd
+</p>
+
+<p>
+一个ack报文的长度是66bytes。
+</p>
+
+
+<p>
+ send sn = 52
+ encodedData = &lt;55aa55aa 1e000134 000f0600 80000000 00000000 00000000 00000000 00000000 bd48&gt;
+ send sn = 53
+ encodedData = &lt;55aa55aa 1e000135 000f0600 80000000 00000000 00000000 00000000 00000000 74c1&gt;
+ [001] 当前发包的序号是：53;收到包序号:52
+ send sn = 54
+ encodedData = &lt;55aa55aa 1e000136 000f0600 80000000 00000000 00000000 00000000 00000000 3e53&gt;
+ [001] 当前发包的序号是：54;收到包序号:53
+ send sn = 55
+ encodedData = &lt;55aa55aa 1e000137 000f0600 80000000 00000000 00000000 00000000 00000000 f7da&gt;
+ [001] 当前发包的序号是：55;收到包序号:54
+ send sn = 56
+ encodedData = &lt;55aa55aa 1e000138 000f0600 80000000 00000000 00000000 00000000 00000000 b711&gt;
+ [001] 当前发包的序号是：56;收到包序号:55
+ send sn = 57
+ encodedData = &lt;55aa55aa 1e000139 000f0600 80000000 00000000 00000000 00000000 00000000 7e98&gt;
+ [001] 当前发包的序号是：57;收到包序号:56
+ send sn = 58
+ encodedData = &lt;55aa55aa 1e00013a 000f0600 80000000 00000000 00000000 00000000 00000000 340a&gt;
+ [001] 当前发包的序号是：58;收到包序号:57
+ send sn = 59
+ encodedData = &lt;55aa55aa 1e00013b 000f0600 80000000 00000000 00000000 00000000 00000000 fd83&gt;
+ [001] 当前发包的序号是：59;收到包序号:58
+ send sn = 60
+ encodedData = &lt;55aa55aa 1e00013c 000f0600 80000000 00000000 00000000 00000000 00000000 b126&gt;
+ send sn = 61
+ encodedData = &lt;55aa55aa 1e00013d 000f0600 80000000 00000000 00000000 00000000 00000000 78af&gt;
+ send sn = 62
+ encodedData = &lt;55aa55aa 1e00013e 000f0600 80000000 00000000 00000000 00000000 00000000 323d&gt;
+ [001] 当前发包的序号是：62;收到包序号:61
+ send sn = 63
+</p>
+
+
+
+
+<p>
+encodedData = &lt;55aa55aa 1e000135 000f0600 80000000 00000000 00000000 00000000 00000000 74c1&gt;
+send sn = 54
+encodedData = &lt;55aa55aa 1e000136 000f0600 80000000 00000000 00000000 00000000 00000000 3e53&gt;
+updatedValue = &lt;55aa55aa 3e002835 001006cd a8000405 080f4632&gt;
+updatedValue = &lt;37313038 32300000 0000010a e903000f 0000feff&gt;
+updatedValue = &lt;01000000 18fc00e6 ff01e903 00e90300 4e0000e9&gt;
+updatedValue = &lt;03000000 12d155aa 55aa3e00 28360010 06cda800&gt;
+[001] 当前发包的序号是：54;收到包序号:53
+updatedValue = &lt;0405080f 46323731 30383230 00000000 010ae903&gt;
+updatedValue = &lt;000f0000 feff0100 000018fc 00e6&gt;
+send sn = 55
+encodedData = &lt;55aa55aa 1e000137 000f0600 80000000 00000000 00000000 00000000 00000000 f7da&gt;
+send sn = 56
+encodedData = &lt;55aa55aa 1e000138 000f0600 80000000 00000000 00000000 00000000 00000000 b711&gt;
+updatedValue = &lt;55aa55aa 3e002837 001006cd a8000405 080f4632&gt;
+updatedValue = &lt;37313038 32300000 0000010a e903000f 0000feff&gt;
+updatedValue = &lt;01000000 18fc00e6 ff01e903 00e90300 4e&gt;
+updatedValue = &lt;0000e9&gt;
+updatedValue = &lt;03000000 294755aa 55aa3e00 28380010 06cda800&gt;
+updatedValue = &lt;0405080f 46323731 30383230 00000000 010ae903&gt;
+updatedValue = &lt;000f0000 feff0100 000018fc 00e6ff01&gt;
+updatedValue = &lt;e90300e9&gt;
+send sn = 57
+encodedData = &lt;55aa55aa 1e000139 000f0600 80000000 00000000 00000000 00000000 00000000 7e98&gt;
+updatedValue = &lt;03004e00 00e90300 0000ae72&gt;
+[001] 当前发包的序号是：57;收到包序号:56
+send sn = 58
+encodedData = &lt;55aa55aa 1e00013a 000f0600 80000000 00000000 00000000 00000000 00000000 340a&gt;
+updatedValue = &lt;55aa55aa 3e002839 001006cd a8000405 080f4632&gt;
+updatedValue = &lt;37313038 32300000 0000010a e903000f 0000feff&gt;
+updatedValue = &lt;01000000 18fc00e6 ff01e903 00e90300 4e&gt;
+updatedValue = &lt;0000e9&gt;
+updatedValue = &lt;03000000 bbbd55aa 55aa3e00 283a0010 06cda800&gt;
+[001] 当前发包的序号是：58;收到包序号:57
+updatedValue = &lt;0405080f 46323731 30383230 00000000 010ae903&gt;
+updatedValue = &lt;000f0000 feff0100 000018fc 00e6ff01 e9&gt;
+updatedValue = &lt;0300e9&gt;
+send sn = 59
+encodedData = &lt;55aa55aa 1e00013b 000f0600 80000000 00000000 00000000 00000000 00000000 fd83&gt;
+updatedValue = &lt;03004e00 00e90300 000095e4&gt;
+[001] 当前发包的序号是：59;收到包序号:58
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

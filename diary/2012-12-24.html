@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>2012-12-24</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+调参app后台云端还需要做的工作：
+</p>
+<ol>
+<li>
+网络是否存在的的判定
+
+<ol>
+<li>
+方案1:提供一个函数，每次网络操作时都做一次判定
+
+<li>
+方案2:另起一个线程，定时监测网络，更新一个全局变量（或者user default）
+
+</ol>
+<li>
+对统计上传操作添加多线程，不要阻塞gui（已经完成）
+
+<li>
+对aws s3的错误delegate进行处理，这部分可能有导致app奔溃的风险（已经完成）
+
+<li>
+用户登陆／注册时的阻塞操作要有提示符（已经完成）
+
+</ol>
+<p>
+#
+</p>
+
+
+<p>
+-(void) statisticForActiveMainCtrl
+{
+</p>
+<blockquote>
+//新开线程，线程中的操作时同步的上传统计信息
+[NSThread detachNewThreadSelector:@selector(threadForActiveMainCtrl) toTarget:self withObject:nil]; 
+</blockquote>
+<p>
+}
+</p>
+
+
+<p>
+//新线程，将当前连接的主控信息统计上传
+-(void) threadForActiveMainCtrl
+{
+</p>
+<blockquote>
+NSAutoreleasePool *pool = [ [ NSAutoreleasePool alloc ] init ];
+</blockquote>
+<blockquote>
+//hardwareID &amp; mcType
+self.connectedMainCtrl = [Comm sharedInstance].activeMainControllerPeripheral;
+</blockquote>
+<blockquote>
+if (nil == self.connectedMainCtrl) {
+[pool release];
+return;
+}
+</blockquote>
+<blockquote>
+NSMutableArray * activeMainCtrl = [[NSUserDefaults standardUserDefaults] objectForKey:@"activeMainCtrl"];
+NSLog(@"[006] %@",activeMainCtrl);
+</blockquote>
+<blockquote>
+[activeMainCtrl addObject:infoItem];
+[[NSUserDefaults standardUserDefaults] setObject:activeMainCtrl forKey:@"activeMainCtrl"];
+</blockquote>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

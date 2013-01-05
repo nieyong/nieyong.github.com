@@ -15,6 +15,7 @@
 	<script language="javascript" src="templates/shBrushJava.js"></script>
 	<script language="javascript" src="templates/shBrushXml.js"></script>
 	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
 	
 	<script language="javascript" src="templates/vimwiki.js"></script>
 </head>
@@ -52,7 +53,7 @@
 其中--hard选项会造成修改内容不可恢复的后果，原因是该选项会将当前HEAD所指的内容覆盖掉缓存区域和工作空间中的内容；
 
 <li>
---mixed选项则只会用HEAD所指内容将缓存区域的内容覆盖，这就是为什么使用命令<code>git reset</code>能够将已经缓存的内容清除掉。
+--mixed选项则只会用HEAD所指内容将缓存区域的内容覆盖，这就是为什么使用命令<code>git reset</code>能够将已经缓存的内容清除掉，--mixed为reset的默认选项。
 
 <li>
 选项--soft则只会将HEAD移动，并不会将现在HEAD所指的内容覆盖缓存空间和工作空间。如果使用reset命令之后工作空间并未用HEAD所指的内容覆盖（--soft、--mixed选项），就会存在工作空间处于修改状态，需要提交。

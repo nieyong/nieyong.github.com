@@ -264,3 +264,45 @@ NSLog(@"path: %@",path);
 
 结果：2012-12-15 14:03:50.236 AssistantForIphone[15065:907] path: /var/mobile/Applications/D14CF626-40EF-484D-A94D-72C649A483FD/AssistantForIphone.app/Config.plist
 }}}
+
+
+
+== retain并未创建新对象，只是对象的生命值改变 ==
+类A中定义了一个delegate。
+{{{
+-(void) getDevicePlist
+{
+    self.devicePlistMainCtrl = [self _readDevicePlist];
+    
+    NSLog(@"[006] %@",self.devicePlistMainCtrl);
+    
+    //delegate通知上层应用
+    if ([self.delegate respondsToSelector:@selector(didDevicePlistChanged:)]) {
+        [self.delegate performSelector:@selector(didDevicePlistChanged:) withObject:self.devicePlistMainCtrl];
+    }
+    
+    NSLog(@"[005] %@",self.devicePlistMainCtrl);
+    
+}
+
+}}}
+
+下面是再另外一个类B中对上面类A的delegate的实现：
+{{{name="code" class="c"
+#pragma mark - DevicePlistDelegate
+- (void) didDevicePlistChanged:(NSMutableDictionary*) devicePlistMainCtrl
+{
+    //这里对出入的dict进行了retain，但是其实还是指向的同一个dict，所以在类B中对self.devicePlistMainCtrl的任何操作，都会影响类A中的该dict。
+    self.devicePlistMainCtrl = devicePlistMainCtrl;
+
+    //在类B中删除了dict的一个key，在类A中的［005］和［006］处打印可以看出。
+    [self.devicePlistMainCtrl removeObjectForKey:DEVICE_KEY_USERNAME];
+
+}
+}}}
+
+== app跳转到浏览器，并且打开链接 ==
+{{{name="code" class="c"
+#define FORGET_PASSWORD_URL     @"http://login.dji-innovations.com/member/forget/en_US"
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:FORGET_PASSWORD_URL]];
+}}}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>2012-12-06</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">singleton的设计模式</h2>
+<p>
+再BLE的demo中，使用到这种模式，需要好好学习一下。
+</p>
+
+<ul>
+<li>
+document
+
+<li>
+js的singleton模式
+
+<li>
+《设计模式》中的改模式
+
+<li>
+stackoverflow网站
+
+</ul>
+
+
+
+<p>
+[[NSUserDefaults standardUserDefaults] setObject:peripheral forKey:@"viewDeviceInfo"];
+</p>
+
+
+<p>
+peripheral = (MainControllerPeripheral* )[[NSUserDefaults standardUserDefaults] objectForKey:@"viewDeviceInfo"];
+</p>
+
+
+
+
+<p>
+2012-12-06 19:33:28.207 testBluetoothLowEnergy[5359:907] No 1 &lt;CBConcretePeripheral: 0x1c54dfc0 UUID = &lt;CFUUID 0x1c54df70&gt; 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO&gt; 
+2012-12-06 19:33:28.212 testBluetoothLowEnergy[5359:907] No 2 &lt;CBConcretePeripheral: 0x1c53f440 UUID = &lt;CFUUID 0x1c53f1e0&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = NO&gt; 
+2012-12-06 19:33:28.217 testBluetoothLowEnergy[5359:907] Totally 2 peripherals found.
+2012-12-06 19:33:28.242 testBluetoothLowEnergy[5359:907] Did connect to peripheral: &lt;CBConcretePeripheral: 0x1c53f440 UUID = &lt;CFUUID 0x1c53f1e0&gt; 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES&gt;
+2012-12-06 19:33:28.538 testBluetoothLowEnergy[5359:907] cancelPeripheralConnection fail,Error Domain=CBErrorDomain Code=7 "The specified device has disconnected from us." UserInfo=0x1d0414c0 {NSLocalizedDescription=The specified device has disconnected from us.}
+2012-12-06 19:33:29.363 testBluetoothLowEnergy[5359:907] Did connect to peripheral: &lt;CBConcretePeripheral: 0x1c54dfc0 UUID = &lt;CFUUID 0x1c54df70&gt; 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = YES&gt;
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

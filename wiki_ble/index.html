@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>index</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">Bluetooth笔记</h2>
+
+<ul>
+<li>
+Dual-mode bluetooth:Devices that can support BR and BLE are referred to as “dual-mode” devices. Typically in a Bluetooth system, a mobile phone or laptop computer will be a dual-mode device. 
+
+<li>
+Single-mode bluetooth:Devices that only support BLE are referred to as “single-mode” devices. These single-mode devices are generally used for application in which low power consumption is a primary concern, such as those that run on coin cell batteries.The CC2540 is a certified single-mode Bluetooth low energy  device. 
+
+</ul>
+
+<p>
+可以开发ble应用的手机需要满足的条件。
+</p>
+
+<p>
+In order to write an application on a smartphone that can communicate with the CC2540, the smartphone must:
+</p>
+<ul>
+<li>
+Contain hardware that supports dual-mode Bluetooth (traditional BT and Bluetooth low energy)
+
+<li>
+Have some kind of support in their SDK for using the Bluetooth low energy
+
+</ul>
+
+<h2 id="toc_0.2">BLE的连接参数</h2>
+<p>
+<strong>connection event &amp; connection interval</strong>
+</p>
+
+<p>
+Even if there is no application data to be sent or received, the two devices will still exchange link layer data to maintain the connection. The connection interval is the amount of time between two connection events, in units of 1.25ms. The connection interval can range from a minimum value of 6 (7.5ms) to a maximum of 3200 (4.0s).
+</p>
+
+<p>
+设备必须在连接事件发生的时候，才能够收发数据。
+</p>
+
+<p>
+<strong>Slave Latency</strong>
+</p>
+
+<p>
+This parameter gives the slave (peripheral) device the option of skipping a number of connection events.跳过连接事件的前提是自己没有数据要发送，所以该参数只会影响对方发送数据给自己的时间，例如设置slave latency为5，而它自己又正好没有数据要发送出去，结果它就要等5个connection interval才应答一次对方，接收对方发来的数据。
+</p>
+
+<p>
+<strong>Supervision Timeout</strong>
+</p>
+
+<p>
+This is the maximum amount of time between two successful connection events. 
+</p>
+
+<h2 id="toc_0.3">Apple的蓝牙外设连接参数要求</h2>
+<p>
+Interval Max * (Slave Latency + 1) ≤ 2 seconds
+Interval Min ≥ 20 ms
+Interval Min + 20 ms ≤ Interval Max 
+Slave Latency ≤ 4
+connSupervisionTimeout ≤ 6 seconds
+Interval Max * (Slave Latency + 1) * 3 &lt; connSupervisionTimeout
+</p>
+
+
+<h2 id="toc_0.4">GATT server</h2>
+<p>
+A GATT server consists of one or more GATT services, which are collections of data to accomplish a particular function or feature.
+</p>
+
+<p>
+The characteristic values, along with their properties and their configuration data (known as “descriptors”) on the GATT Server are stored in the attribute table. The attribute table is simply a database containing small pieces of data called attributes. In addition to the value itself, each attribute has the following properties associated with it:
+</p>
+
+<p>
+There are a few special attribute types that are found in the GATT attribute table, with values defined by the Bluetooth SIG:（由蓝牙技术联盟规定的一些attribute）
+</p>
+
+<ul>
+<li>
+GATT_PRIMARY_SERVICE_UUID – This indicates the start of a new service, and the type of the service provided
+
+<li>
+GATT_CHARACTER_UUID – This is known as the “characteristic declaration”, and it indicates that the attribute immediately following it is a GATT characteristic value
+
+<li>
+GATT_CLIENT_CHAR_CFG_UUID – This attribute represents a characteristic descriptor that corresponds to the nearest preceding (by handle) characteristic value in the attribute table. It allows the GATT client to enable notifications of the characteristic value
+
+<li>
+GATT_CHAR_USER_DESC_UUID – This attribute represents a characteristic descriptor that corresponds to the nearest preceding (by handle) characteristic value in the attribute table. It contains an ASCII string with a description of the corresponding characteristic
+
+</ul>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+
