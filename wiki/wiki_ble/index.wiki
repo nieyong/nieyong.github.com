@@ -1,3 +1,6 @@
+[[bluetooth essentials for programmers]]
+
+
 == Bluetooth笔记 ==
 
 * Dual-mode bluetooth:Devices that can support BR and BLE are referred to as “dual-mode” devices. Typically in a Bluetooth system, a mobile phone or laptop computer will be a dual-mode device. 

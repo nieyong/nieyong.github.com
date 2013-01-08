@@ -1,0 +1,126 @@
+=== iphone 5 ===
+2013-01-08 14:38:23.408 [001] <cbconcreteperipheral: 0x1c59da00 uuid = <cfuuid 0x1c59dae0> 24901126-bde0-163f-a875-a908f581dd4a, name = "dji config", isconnected = yes>
+2013-01-08 14:38:23.424 [002] didDiscoverServices
+2013-01-08 14:38:23.434 [005] Unknown (<55f1>)
+2013-01-08 14:38:23.446 [004] didDiscoverCharacteristics
+2013-01-08 14:38:23.563 [001] <CBConcretePeripheral: 0x1c5a2090 UUID = <CFUUID 0x1c5a0420> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:38:23.613 [003] (null) <CBConcretePeripheral: 0x1c59da00 UUID = <CFUUID 0x1c59dae0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = NO>
+2013-01-08 14:38:23.794 [003] Error Domain=CBErrorDomain Code=6 "The connection has timed out unexpectedly." UserInfo=0x1d094ba0 {NSLocalizedDescription=The connection has timed out unexpectedly.} <CBConcretePeripheral: 0x1c5a2090 UUID = <CFUUID 0x1c5a0420> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+2013-01-08 14:38:26.378 new ble
+2013-01-08 14:38:29.389 [001] <CBConcretePeripheral: 0x1c59da00 UUID = <CFUUID 0x1c59dae0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:38:29.398 [002] didDiscoverServices
+2013-01-08 14:38:29.401 [005] Unknown (<55f1>)
+2013-01-08 14:38:29.407 [004] didDiscoverCharacteristics
+2013-01-08 14:38:29.535 [003] (null) <CBConcretePeripheral: 0x1c59da00 UUID = <CFUUID 0x1c59dae0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = NO>
+2013-01-08 14:38:29.755 [001] <CBConcretePeripheral: 0x1c5a2090 UUID = <CFUUID 0x1c5a0420> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:38:29.978 [003] Error Domain=CBErrorDomain Code=6 "The connection has timed out unexpectedly." UserInfo=0x1d0973a0 {NSLocalizedDescription=The connection has timed out unexpectedly.} <CBConcretePeripheral: 0x1c5a2090 UUID = <CFUUID 0x1c5a0420> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+2013-01-08 14:38:35.386 [001] <CBConcretePeripheral: 0x1c59da00 UUID = <CFUUID 0x1c59dae0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:38:35.397 [002] didDiscoverServices
+2013-01-08 14:38:35.400 [005] Unknown (<55f1>)
+2013-01-08 14:38:35.405 [004] didDiscoverCharacteristics
+2013-01-08 14:38:35.552 [003] (null) <CBConcretePeripheral: 0x1c59da00 UUID = <CFUUID 0x1c59dae0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = NO>
+2013-01-08 14:38:35.564 [001] <CBConcretePeripheral: 0x1c5a2090 UUID = <CFUUID 0x1c5a0420> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:38:35.790 [003] Error Domain=CBErrorDomain Code=6 "The connection has timed out unexpectedly." UserInfo=0x1d0a4a10 {NSLocalizedDescription=The connection has timed out unexpectedly.} <CBConcretePeripheral: 0x1c5a2090 UUID = <CFUUID 0x1c5a0420> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+2013-01-08 14:38:41.387 [001] <CBConcretePeripheral: 0x1c59da00 UUID = <CFUUID 0x1c59dae0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:38:41.395 [002] didDiscoverServices
+2013-01-08 14:38:41.398 [005] Unknown (<55f1>)
+2013-01-08 14:38:41.403 [004] didDiscoverCharacteristics
+2013-01-08 14:38:41.516 [001] <CBConcretePeripheral: 0x1c5a2090 UUID = <CFUUID 0x1c5a0420> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:38:41.538 [003] (null) <CBConcretePeripheral: 0x1c59da00 UUID = <CFUUID 0x1c59dae0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = NO>
+2013-01-08 14:38:41.962 [002] didDiscoverServices
+2013-01-08 14:38:41.964 [005] Unknown (<55f1>)
+2013-01-08 14:38:42.033 [004] didDiscoverCharacteristics
+2013-01-08 14:38:42.222 [003] (null) <CBConcretePeripheral: 0x1c5a2090 UUID = <CFUUID 0x1c5a0420> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+
+
+=== lg iphone 4s ===
+2013-01-08 14:41:21.659 SB:Notice: PandaHome,identifier:com.dji-innovations.testBluetoothLowEnergy
+2013-01-08 14:41:21.664 initprofile [begin]
+2013-01-08 14:41:21.672 begin hook
+2013-01-08 14:41:22.464 [Springtomize]: Loading into sb-external process
+2013-01-08 14:41:23.619 [001] <CBConcretePeripheral: 0x2087fab0>
+2013-01-08 14:41:26.284 [003] (null) <CBConcretePeripheral: 0x2087fab0>
+2013-01-08 14:41:29.431 [001] <CBConcretePeripheral: 0x20883170>
+2013-01-08 14:41:32.051 [002] didDiscoverServices
+2013-01-08 14:41:32.054 [005] Unknown (<55f1>)
+2013-01-08 14:41:32.279 [003] (null) <CBConcretePeripheral: 0x20883170>
+2013-01-08 14:41:35.426 [001] <CBConcretePeripheral: 0x20885cc0>
+2013-01-08 14:41:38.038 [002] didDiscoverServices
+2013-01-08 14:41:38.040 [005] Unknown (<55f1>)
+2013-01-08 14:41:38.281 [003] (null) <CBConcretePeripheral: 0x20885cc0>
+2013-01-08 14:41:41.493 [001] <CBConcretePeripheral: 0x1f581d00>
+2013-01-08 14:41:44.233 [002] didDiscoverServices
+2013-01-08 14:41:44.235 [005] Unknown (<55f1>)
+2013-01-08 14:41:44.281 [003] (null) <CBConcretePeripheral: 0x1f581d00>
+2013-01-08 14:41:47.614 [001] <CBConcretePeripheral: 0x1f584e00>
+
+
+=== zhl iphone 4s ===
+2013-01-08 14:44:35.896 [001] <CBConcretePeripheral: 0x1ed421b0 UUID = <CFUUID 0x1ed36af0> 8250D075-0E56-C941-BB23-4E16FFC49345, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:44:36.263 [003] Error Domain=CBErrorDomain Code=6 "The connection has timed out unexpectedly." UserInfo=0x20055480 {NSLocalizedDescription=The connection has timed out unexpectedly.} <CBConcretePeripheral: 0x1ed421b0 UUID = <CFUUID 0x1ed36af0> 8250D075-0E56-C941-BB23-4E16FFC49345, Name = "DJI Config", IsConnected = NO>
+2013-01-08 14:44:41.959 [001] <CBConcretePeripheral: 0x1ed421b0 UUID = <CFUUID 0x1ed36af0> 8250D075-0E56-C941-BB23-4E16FFC49345, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:44:42.322 [003] Error Domain=CBErrorDomain Code=6 "The connection has timed out unexpectedly." UserInfo=0x20059190 {NSLocalizedDescription=The connection has timed out unexpectedly.} <CBConcretePeripheral: 0x1ed421b0 UUID = <CFUUID 0x1ed36af0> 8250D075-0E56-C941-BB23-4E16FFC49345, Name = "DJI Config", IsConnected = NO>
+2013-01-08 14:44:48.045 [001] <CBConcretePeripheral: 0x1ed421b0 UUID = <CFUUID 0x1ed36af0> 8250D075-0E56-C941-BB23-4E16FFC49345, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:44:48.413 [003] Error Domain=CBErrorDomain Code=6 "The connection has timed out unexpectedly." UserInfo=0x2005c3a0 {NSLocalizedDescription=The connection has timed out unexpectedly.} <CBConcretePeripheral: 0x1ed421b0 UUID = <CFUUID 0x1ed36af0> 8250D075-0E56-C941-BB23-4E16FFC49345, Name = "DJI Config", IsConnected = NO>
+
+
+=== 可以连接上ble的iphone 4s ===
+2013-01-08 14:45:43.381  [001] <CBConcretePeripheral: 0x208382d0 UUID = <CFUUID 0x20838390> DF2A0D68-A470-B238-2C82-CC5DCC09F250, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:45:44.030  [002] didDiscoverServices
+2013-01-08 14:45:44.033  [005] Unknown (<55f1>)
+2013-01-08 14:45:44.147  [004] didDiscoverCharacteristics
+2013-01-08 14:45:44.390  [003] (null) <CBConcretePeripheral: 0x208382d0 UUID = <CFUUID 0x20838390> DF2A0D68-A470-B238-2C82-CC5DCC09F250, Name = "DJI Config", IsConnected = NO>
+2013-01-08 14:45:45.961  new ble
+2013-01-08 14:45:48.969  [001] <CBConcretePeripheral: 0x208382d0 UUID = <CFUUID 0x20838390> DF2A0D68-A470-B238-2C82-CC5DCC09F250, Name = "DJI Config", IsConnected = YES>
+2013-01-08 14:45:48.971  [002] didDiscoverServices
+2013-01-08 14:45:48.973  [005] Unknown (<55f1>)
+2013-01-08 14:45:48.978  [004] didDiscoverCharacteristics
+2013-01-08 14:45:49.148  [003] (null) <CBConcretePeripheral: 0x208382d0 UUID = <CFUUID 0x20838390> DF2A0D68-A470-B238-2C82-CC5DCC09F250, Name = "DJI Config", IsConnected = NO>
+
+
+
+
+2013-01-08 17:01:43.852 testBluetoothLowEnergy[4068:907] [003] (null) <CBConcretePeripheral: 0x1cd5f920 UUID = <CFUUID 0x1cd5f6f0> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+2013-01-08 17:01:43.861 testBluetoothLowEnergy[4068:907] [help] <CBConcretePeripheral: 0x1cd5f920 UUID = <CFUUID 0x1cd5f6f0> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+2013-01-08 17:01:45.886 testBluetoothLowEnergy[4068:907] new ble
+2013-01-08 17:01:49.064 testBluetoothLowEnergy[4068:907] [003] (null) <CBConcretePeripheral: 0x1cd5f920 UUID = <CFUUID 0x1cd5f6f0> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+2013-01-08 17:01:49.066 testBluetoothLowEnergy[4068:907] [help] <CBConcretePeripheral: 0x1cd5f920 UUID = <CFUUID 0x1cd5f6f0> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+2013-01-08 17:01:55.064 testBluetoothLowEnergy[4068:907] [003] (null) <CBConcretePeripheral: 0x1cd5f920 UUID = <CFUUID 0x1cd5f6f0> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+2013-01-08 17:01:55.066 testBluetoothLowEnergy[4068:907] [help] <CBConcretePeripheral: 0x1cd5f920 UUID = <CFUUID 0x1cd5f6f0> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+2013-01-08 17:02:01.045 testBluetoothLowEnergy[4068:907] [003] (null) <CBConcretePeripheral: 0x1cd5f920 UUID = <CFUUID 0x1cd5f6f0> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+2013-01-08 17:02:01.047 testBluetoothLowEnergy[4068:907] [help] <CBConcretePeripheral: 0x1cd5f920 UUID = <CFUUID 0x1cd5f6f0> 47363458-CF77-BE2A-0BE4-7F49E9A7A460, Name = "DJI Config", IsConnected = NO>
+
+
+
+
+
+2013-01-08 17:46:27.996 AssistantForIphone[440:707] +[NSIndexPath indexPathForItem:inSection:]: unrecognized selector sent to class 0x3f336cb4
+
+
+
+2013-01-08 18:30:38.433 AssistantForIphone[4328:907] Send Ping Command
+2013-01-08 18:30:38.460 AssistantForIphone[4328:907] Send Ping Command
+2013-01-08 18:30:38.805 AssistantForIphone[4328:3933] CoreBluetooth[ERROR] XPC connection interrupted, resetting
+2013-01-08 18:30:38.845 AssistantForIphone[4328:907] CoreBluetooth[WARNING] <CBConcretePeripheral: 0x1e853100 UUID = <CFUUID 0x1e883dc0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES> is not a valid peripheral
+2013-01-08 18:30:38.848 AssistantForIphone[4328:907]  tabBarController:willSelectViewController: 
+2013-01-08 18:30:38.849 AssistantForIphone[4328:907]  tabBarController:didSelectViewController: 
+2013-01-08 18:30:38.850 AssistantForIphone[4328:907] Send Ping Command
+2013-01-08 18:30:38.885 AssistantForIphone[4328:907] CoreBluetooth[WARNING] <CBConcretePeripheral: 0x1e853100 UUID = <CFUUID 0x1e883dc0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES> is not a valid peripheral
+2013-01-08 18:30:38.887 AssistantForIphone[4328:907] CoreBluetooth[WARNING] <CBConcretePeripheral: 0x1e853100 UUID = <CFUUID 0x1e883dc0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES> is not a valid peripheral
+2013-01-08 18:30:39.248 AssistantForIphone[4328:907]  tabBarController:willSelectViewController: 
+2013-01-08 18:30:39.250 AssistantForIphone[4328:907]  tabBarController:didSelectViewController: 
+2013-01-08 18:30:39.251 AssistantForIphone[4328:907]  ASSVIEW
+
+
+2013-01-08 21:39:27.955 AssistantForIphone[4663:907] Send Ping Command
+2013-01-08 21:39:28.955 AssistantForIphone[4663:907] Send Ping Command
+2013-01-08 21:39:29.555 AssistantForIphone[4663:907] disconnectBySystem
+2013-01-08 21:39:47.955 AssistantForIphone[4663:907] [001]:didConnect
+2013-01-08 21:39:47.956 AssistantForIphone[4663:907] finish connect: <CBConcretePeripheral: 0x1e975bc0 UUID = <CFUUID 0x1e84a7a0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES>
+2013-01-08 21:39:47.958 AssistantForIphone[4663:56a7] statistic threadForActiveMainCtrl
+2013-01-08 21:39:48.351 AssistantForIphone[4663:56a7] upload statics success
+2013-01-08 21:40:03.397 AssistantForIphone[4663:3e17] CoreBluetooth[ERROR] XPC connection interrupted, resetting
+2013-01-08 21:40:03.550 AssistantForIphone[4663:907] CoreBluetooth[WARNING] <CBConcretePeripheral: 0x1e975bc0 UUID = <CFUUID 0x1e84a7a0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES> is not a valid peripheral
+2013-01-08 21:40:04.550 AssistantForIphone[4663:907] CoreBluetooth[WARNING] <CBConcretePeripheral: 0x1e975bc0 UUID = <CFUUID 0x1e84a7a0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES> is not a valid peripheral
+2013-01-08 21:40:05.151 AssistantForIphone[4663:907] CoreBluetooth[WARNING] <CBConcreteCentralManager: 0x1d572160> is not powered on
+2013-01-08 21:40:05.550 AssistantForIphone[4663:907] CoreBluetooth[WARNING] <CBConcretePeripheral: 0x1e975bc0 UUID = <CFUUID 0x1e84a7a0> 24901126-BDE0-163F-A875-A908F581DD4A, Name = "DJI Config", IsConnected = YES> is not a valid peripheral

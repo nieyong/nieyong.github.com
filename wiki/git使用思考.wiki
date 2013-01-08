@@ -14,19 +14,21 @@ git的分支管理在本地建立分支，和SVN的分支不是同一个概念�
 
 git则可以帮你轻松搞定这个问题。你在本地就可以建立多个分支，然后你在使用分支1解决问题1，分支2解决问题2。你可以轻松在分支之间切换，而且你还可以保持从服务器上pull下来的那个master分支的干净（也就是不做任何修改）。
 
-举另外一个实际的例子，以前我所在的小组使用SVN作为版本控制工具，当我正在试图增强一个模块，工作做到一半，由于会改变原模块的行为导致代码服务器上许多测试的失败，所以并没有提交代码。这时候上级对我说，现在有一个很紧急的Bug需要处理， 必须在两个小时内完成。我只好将本地的所有修改diff，并输出成为一个patch文件，然后回滚有关当前任务的所有代码，再开始修改Bug的任务，等到修改好后，在将patch应用回来。前前后后要完成多个繁琐的步骤，这还不计中间代码发生冲突所要进行的工作量。可是如果使用Git， 我们只需要开一个分支或者转回到主分支上，就可以随时开始Bug修改的任务，完成之后，只要切换到原来的分支就可以优雅的继续以前的任务。只要你愿意，每一个新的任务都可以开一个分支，完成后，再将它合并到主分支上，轻松而优雅。（摘自[http://phoenixtoday.blogbus.com/logs/33458940.html 活灵活现用Git-基础篇]）
+举另外一个实际的例子，以前我所在的小组使用SVN作为版本控制工具，当我正在试图增强一个模块，工作做到一半，由于会改变原模块的行为导致代码服务器上许多测试的失败，所以并没有提交代码。这时候上级对我说，现在有一个很紧急的Bug需要处理， 必须在两个小时内完成。我只好将本地的所有修改diff，并输出成为一个patch文件，然后回滚有关当前任务的所有代码，再开始修改Bug的任务，等到修改好后，在将patch应用回来。前前后后要完成多个繁琐的步骤，这还不计中间代码发生冲突所要进行的工作量。可是如果使用Git， 我们只需要开一个分支或者转回到主分支上，就可以随时开始Bug修改的任务，完成之后，只要切换到原来的分支就可以优雅的继续以前的任务。只要你愿意，每一个新的任务都可以开一个分支，完成后，再将它合并到主分支上，轻松而优雅。（摘自[[http://phoenixtoday.blogbus.com/logs/33458940.html|活灵活现用Git-基础篇]]）
 
 注：在上面的实例中，使用SVN，另外checkout一个copy就可以解决你老板给的紧急任务的切换问题。
 
 == 网络资料 ==
 git的的特点介绍，分布式版本控制，方便的本地分支管理
-* [http://phoenixtoday.blogbus.com/logs/33458940.html 活灵活现用Git-基础篇]
+* [[http://phoenixtoday.blogbus.com/logs/33458940.html|活灵活现用Git-基础篇]]
+
 个性化定制你的Git，更酷更巧妙的使用Git，以及如何在Git Hub上开启你自己的开源项目
-* [http://phoenixtoday.blogbus.com/logs/35149540.html 活灵活现用Git-技巧篇] 
+* [[http://phoenixtoday.blogbus.com/logs/35149540.html|活灵活现用Git-技巧篇]]
+
 介绍如何使用git的分支来建设团队软件开发流程，对于团队软件开发流程建设有参考价值。
-* [http://nvie.com/posts/a-successful-git-branching-model/ A successful Git branching model]
-* [http://www.juvenxu.com/2010/11/28/a-successful-git-branching-model/ 一个成功的Git分支模型] 中文翻译版本
+* [[http://nvie.com/posts/a-successful-git-branching-model/|A successful Git branching model]]
+* [[http://www.juvenxu.com/2010/11/28/a-successful-git-branching-model/|一个成功的Git分支模型]] 中文翻译版本
 来自书籍《Pro Git》，关于git分支的原理，深入了解git是如何实现本地分支管理，有利于阅读git源代码。
-* [http://progit.org/book/zh/ch3-1.html 《Pro Git》 git分支]
+* [[http://progit.org/book/zh/ch3-1.html|《Pro Git》 git分支]]
 最近出版的一本关于git的书，由中国人自己写的。可惜我还没有看过，无法评价。下面给出本书介绍的链接。
-* [http://www.ossxp.com/doc/gotgit/ 《Git权威指南》]
+* [[http://www.ossxp.com/doc/gotgit/|《Git权威指南》]]

@@ -1,0 +1,17 @@
+Every Bluetooth chip ever manufactured is imprinted with a globally unique 48-bit address, referred to as the Bluetooth address or device address.
+
+The source of this aggravation stems from the fact that it can take a long time to detect nearby Bluetooth devices. To be specific, given a Bluetooth cell phone and a Bluetooth laptop sitting next to each other on a desk, it will usually take an average of 5 seconds before the phone detects the presence of the laptop, and it sometimes can take upward of 10–15 seconds. This might not seem like that much time, but put in context it is suprising. During the device discovery process, the phone is changing frequencies more than a thousand times a second, and there are only 79 possible frequencies on which it can transmit. It is a wonder why they don’t find each other in the blink of an eye.
+
+
+∗ Bluetooth 2.1 introduces the Extended Inquiry Response, where the most commonly requested in- formation, such as the name of a responding device and a summary of the services it offers, can be transmitted directly in the inquiry response, saving some time.
+
+
+
+Note: A common misconception is that when a Bluetooth de- vice enters an area, it somehow “announces” its presence so that other devices will know that it’s around. This never happens (even though it’s not a bad idea), and the only way for one device to de- tect the presence of another is to conduct a device discovery.
+
+
+Inquiry Scan
+Page Scan
+
+
+The two factors that distinguish the protocols here are guarantees and semantics. 
