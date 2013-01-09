@@ -38,165 +38,166 @@
 	<div id="content">
 	
 <p>
-更多详细使用，参考<a href="wiki_ny/Git.html">Nie Yong Note's Git</a>。
+更多详细使用，参考<a href="wiki_ny/git.html">Nie Yong Note's Git</a>。
 </p>
 
-<h2 id="toc_0.1">git管理仓库</h2>
-<p>
-如无特别说明，下面的git命令都是在git的版本库目录下执行的。所谓的git的版本库目录，就是管理的文件所在的目录。如何确定是否是git管理的版本库呢？在该目录下，使用命令ls -a，如果有.git这样一个文件夹，那么就说明该目录是git的版本库目录。而.git这个文件夹下，就是存放着该版本库的版本信息等，所以，.git文件夹又叫做该git版本库的git管理仓库。
-</p>
-
-<h2 id="toc_0.2">git用户信息</h2>
-<p>
-查看git用户信息，使用命令 <strong>git config --list</strong>
-</p>
-<pre>
-[root@localhost jzcode]# git config --list
-core.repositoryformatversion=0
-core.filemode=true
-core.bare=false
-core.logallrefupdates=true
-remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
-remote.origin.url=git@github.com:jzcode/jzcode-x11.git
-branch.master.remote=origin
-branch.master.merge=refs/heads/master
-
-[root@localhost jzcode]# exit
-[ny@localhost jzcode]$ git config --list
-user.name=Yong Nie
-user.email=nieyong_1947@126.com
-core.repositoryformatversion=0
-core.filemode=true
-core.bare=false
-core.logallrefupdates=true
-remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
-remote.origin.url=git@github.com:jzcode/jzcode-x11.git
-branch.master.remote=origin
-branch.master.merge=refs/heads/master
-[ny@localhost jzcode]$ 
-</pre>
-<p>
-在同一个目录jzcode下，根用户root和普通用户ny分别使用git config --list查看用户信息，打印出来的信息有差别。可以看到，使用普通用户ny打印出来的信息，多了两行：
-</p>
-<pre>
-user.name=Yong Nie
-user.email=nieyong_1947@126.com
-</pre>
-<p>
-这是为什么呢？
-</p>
-
-<p>
-在使用git链接到github之前，必须先配置好git的用户名和邮箱。否则，虽然ssh密码配对成功，也是不能够从github获取代码的。
-</p>
-<pre>
-
-</pre>
-
-<h2 id="toc_0.3">git状态查看</h2>
-<p>
-查看一个git源的状态，使用命令git status。命令很简单，关键是要能够明白命令输出的各种状态代表什么含义。下面列举出几种常用的状态。
-</p>
 <ul>
 <li>
-受管理的文件没有被修改（增删改），和git管理仓库（就是当前路径下的隐形文件夹.git）中的记录是一致的。
+<a href="wiki_ny/git基本配置记录.html">wiki_ny/git基本配置记录</a>
+
+<li>
+<a href="wiki_ny/git基本概念记录.html">wiki_ny/git基本概念记录</a>
 
 </ul>
 
-<pre>
-[root@localhost jzcode]# git status
-# On branch master
-nothing to commit (working directory clean)
-</pre>
+<h2 id="toc_0.1">删除某一次提交</h2>
+<p>
+   git reset HEAD^ 	//回退第一个记录 
+   git reset HEAD~2 	//回退第二个记录 
+   git reset --hard HEAD~2 	//回退第二个记录，工作目录下的文件也回退
+</p>
+
+<p>
+使用<code>git reset</code>或者<code>git revert</code>命令。注意两点：
+</p>
+<ol>
+<li>
+<code>git reset</code>和<code>git revert</code>的区别，<code>git reset</code>是直接删除提交记录进行回溯，在graph上可以看到，被回溯的那几个提交记录已经不再任何分支的控制范围内。在这种情况下，默认情况下，是无法看到这几次提交的记录的。而<code>git revert</code>是使用一次相反的提交覆盖上次提交；
+
+<li>
+<code>git reset</code>命令有3个重要的参数，分别是--mixed（默认）、--soft、--hard：
+
 <ul>
 <li>
-删除了一个文件/文件夹。下面就以删除版本库中一个已经受控的文件nieyong.c为例，说明在各个阶段git状态的含义。重点是区分Changed but not updated和Changes to be committed的异同。
+其中--hard选项会造成修改内容不可恢复的后果，原因是该选项会将当前HEAD所指的内容覆盖掉缓存区域和工作空间中的内容；
+
+<li>
+--mixed选项则只会用HEAD所指内容将缓存区域的内容覆盖，这就是为什么使用命令<code>git reset</code>能够将已经缓存的内容清除掉，--mixed为reset的默认选项。
+
+<li>
+选项--soft则只会将HEAD移动，并不会将现在HEAD所指的内容覆盖缓存空间和工作空间。如果使用reset命令之后工作空间并未用HEAD所指的内容覆盖（--soft、--mixed选项），就会存在工作空间处于修改状态，需要提交。
+
+</ul>
+</ol>
+
+<h2 id="toc_0.2">清除已经缓存的（staged）文件</h2>
+<blockquote>
+git reset filename		//相当于git reset --mixed HEAD filename
+</blockquote>
+<p>
+修改了两个文件，然后使用命令<code>git add .</code>将这两个文件的修改都提交为缓存，也就是出于staged状态。这时，如果你想撤销掉某个文件的staged状态，使用命令<code>git reset filename</code>，其实这条命令的完整表达应该是<code>git reset --mixed HEAD filename</code>。
+</p>
+
+<p>
+参见《progit》的p28。
+</p>
+
+<h2 id="toc_0.3">tag记录发布版本</h2>
+<ul>
+<li>
+git tag -a v1.0 -m 'my version 1.0'
+
+</ul>
+<p>
+创建一个tag
+</p>
+
+<ul>
+<li>
+git push origin --tags 
+
+</ul>
+<p>
+要将在本地创建的tag提交到github上
+</p>
+
+<h2 id="toc_0.4">多份代码拷贝的合并</h2>
+<ul>
+<li>
+git pull ../mbooke_usb/
+
+</ul>
+<p>
+区别于一份代码中有多个分支的合并，这里的应用场景描述如下：
+</p>
+
+<p>
+有一份代码， <strong>使用了git做版本控制</strong>  。然后这份代码被拷贝了两份，然后在每一份上分别有多次提交。最后，需要把两份代码上做的修改合并到同一份代码上。
+</p>
+
+<p>
+一般用于没有server端的多人协作开发，一份代码用U盘拷贝给多人开发。
+</p>
+
+<p>
+使用命令git pull可以达到目的。
+</p>
+
+<h2 id="toc_0.5">git分支与合并</h2>
+<p>
+git分支与合并主要阅读了《pro git》一书的分支一章，强烈建议。
+</p>
+
+<p>
+查看现在所有分支，分支前带有*号，表示现在所在分支
+</p>
+<ul>
+<li>
+#git branch
 
 </ul>
 
-<pre>
-[root@localhost jzcode]# git status
-# On branch master
-# Changed but not updated:
-#   (use "git add/rm &lt;file&gt;..." to update what will be committed)
-#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
-#
-#       deleted:    linux-2.6.24.3/drivers/video/nieyong.c
-#
-no changes added to commit (use "git add" and/or "git commit -a")
-/***************
-可以看到，显示nieyong.c文件不在当前目录下，被删除了，但是这个删除操作并没有记录在git管理仓库中，也就是changed but not updated的含义。因为没有操作（例如添加，更改，删除等）记录在案，所以，git认为并不需要更新git管理仓库中的版本，或者说，git应该先将这个改变（nieyong.c文件被删除了）记录在案（update），然后再提交到管理仓库中（commit）。因为现在还没有记录在案，也就有no changes added to commit。
-****************/
+<p>
+创建一个新的分支
+</p>
+<ul>
+<li>
+#git branch hotfix	//hotfix为新创建分支名
 
-[root@localhost jzcode]# git rm linux-2.6.24.3/drivers/video/nieyong.c
-rm 'linux-2.6.24.3/drivers/video/nieyong.c'
-/***************
-在git管理仓库中删除nieyong.c文件
-***************/
+</ul>
 
-[root@localhost jzcode]# git status
-# On branch master
-# Changes to be committed:
-#   (use "git reset HEAD &lt;file&gt;..." to unstage)
-#
-#       deleted:    linux-2.6.24.3/drivers/video/nieyong.c
-#
-/***************
-nieyong.c文件已经在git管理仓库中删除，下面，你就需要将这个改变提交，得到一个新的版本。
-***************/
+<p>
+切换到另外一个分支
+</p>
+<ul>
+<li>
+#git checkout hotfix	//hotfix为已经创建的分支
 
-[root@localhost jzcode]# git commit -m "删除SLCD调试时的临时文件nieyong.c"
-[master a3a54a7] 删除SLCD调试时的临时文件nieyong.c
-Committer: root &lt;root@localhost.localdomain&gt;
-Your name and email address were configured automatically based
-on your username and hostname. Please check that they are accurate.
-You can suppress this message by setting them explicitly:
+</ul>
 
-git config --global user.name "Your Name"
-git config --global user.email you@example.com
+<p>
+创建一个新的分支并且同时切换到该分支
+</p>
+<ul>
+<li>
+#git checkout -b 'hotfix' //hotfix为新创建分支名
 
-If the identity used for this commit is wrong, you can fix it with:
+</ul>
 
-git commit --amend --author='Your Name &lt;you@example.com&gt;'
+<p>
+删除一个分支
+</p>
+<ul>
+<li>
+#git branch -d hotfix	//删除hotfix分支
 
-1 files changed, 0 insertions(+), 95 deletions(-)
-delete mode 100644 linux-2.6.24.3/drivers/video/nieyong.c
-/****************
-提交这一次操作到git管理仓库中，获得一个新的版本。
-*****************/
+</ul>
 
-[root@localhost jzcode]# git status
-# On branch master
-# Your branch is ahead of 'origin/master' by 1 commit.
-#
-nothing to commit (working directory clean)
-/***************
-又恢复到版本库中的文件和git管理仓库中的描述是一致的状态。
-***************/
+<p>
+合并某一个分支到本身所在的分支
+</p>
+<ul>
+<li>
+#git merge hotfix	 //合并hotfix分支的修改到本身所在的分支
 
-[root@localhost jzcode]# git push
-Counting objects: 9, done.
-Delta compression using up to 2 threads.
-Compressing objects: 100% (5/5), done.
-Writing objects: 100% (5/5), 470 bytes, done.
-Total 5 (delta 4), reused 0 (delta 0)
-To git@github.com:jzcode/jzcode-x11.git
-   2e7a6f8..a3a54a7  master -&gt; master
-[root@localhost jzcode]# git status
-# On branch master
-nothing to commit (working directory clean)
-/***************
-git push之前的操作都是在本地，目的是为了保持版本库和管理仓库的一致性。而git push就是把本地的这一个新的版本发送到github服务器端。
-***************/
-</pre>
+<li>
+#git merge --no-ff hotfix	//使用非fastfoward的方式合并分支
 
-<h2 id="toc_0.4">git使用小技巧</h2>
+</ul>
+
+<h2 id="toc_0.6">git使用小技巧</h2>
 <p>
 将修改添加到版本库中，使用git add .命令，而不要使用git add *命令。因为*代表所有的文件，那么别.gitignore文件忽略的文件（或者文件夹）也会被添加。
-</p>
-
-<p>
-查看文件的修改情况，使用命令 git diff src。
 </p>
 
 <p>
@@ -212,7 +213,6 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 #git config --global core.pager 'less -+$LESS -FRX'
 </blockquote>
 
-
 <p>
 中文无法显示，使用8进制字符编码来显示的问题：
 </p>
@@ -221,7 +221,11 @@ git push之前的操作都是在本地，目的是为了保持版本库和管理
 </blockquote>
 
 
-<h2 id="toc_0.5">git diff的用法</h2>
+<h2 id="toc_0.7">git diff的用法</h2>
+<p>
+查看文件的修改情况，使用命令 git diff src。
+</p>
+
 <p>
 git diff命令没有选项，不会去比较已经位于暂存区（staged）的文件和上次提交的文件的区别。所以，查看使用命令git add加载到暂存区的文件（staged）所做的修改，使用命令：
 </p>
@@ -229,49 +233,7 @@ git diff命令没有选项，不会去比较已经位于暂存区（staged）的
 git diff --cached
 </blockquote>
 
-<h2 id="toc_0.6">git分支与合并</h2>
-<p>
-git分支与合并主要阅读了《pro git》一书的分支一章，强烈建议。
-</p>
-
-<p>
-查看现在所有分支，分支前带有*号，表示现在所在分支
-</p>
-<blockquote>
-#git branch
-</blockquote>
-<p>
-创建一个新的分支
-</p>
-<blockquote>
-#git branch hotfix	//hotfix为新创建分支名
-</blockquote>
-<p>
-切换到另外一个分支
-</p>
-<blockquote>
-#git checkout hotfix	//hotfix为已经创建的分支
-</blockquote>
-<p>
-创建一个新的分支并且同时切换到该分支
-</p>
-<blockquote>
-#git checkout -b 'hotfix'  //hotfix为新创建分支名
-</blockquote>
-<p>
-删除一个分支
-</p>
-<blockquote>
-#git branch -d hotfix	//删除hotfix分支
-</blockquote>
-<p>
-合并某一个分支到本身所在的分支
-</p>
-<blockquote>
-#git merge hotfix		//合并hotfix分支的修改到本身所在的分支
-</blockquote>
-
-<h2 id="toc_0.7">detached HEAD</h2>
+<h2 id="toc_0.8">detached HEAD</h2>
 <p>
 使用下面的命令，会出现该情况：
 </p>
@@ -279,66 +241,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 git checkout master~2
 </blockquote>
 
-<h2 id="toc_0.8">git revert 和 git reset的区别</h2>
-<ol>
-<li>
-git revert是用一次新的commit来回滚之前的commit，git reset是直接删除指定的commit。 
-
-<li>
-在回滚这一操作上看，效果差不多。但是在日后继续merge以前的老版本时有区别。因为git revert是用一次逆向的commit“中和”之前的提交，因此日后合并老的branch时，导致这部分改变不会再次出现，但是git reset是之间把某些commit在某个branch上删除，因而和老的branch再次merge时，这些被回滚的commit应该还会被引入。 
-
-<li>
-git reset 是把HEAD向后移动了一下，而git revert是HEAD继续前进，只是新的commit的内容和要revert的内容正好相反，能够抵消要被revert的内容。 
-
-</ol>
-
-<h2 id="toc_0.9">Git reset</h2>
-<p>
-库的逆转与恢复除了用来进行一些废弃的研发代码的重置外，还有一个重要的作用。比如我们从远程clone了一个代码库，在本地开发后，准备提交回远程。但是本地代码库在开发时，有功能性的commit，也有出于备份目的的commit等等。总之，commit的日志中有大量无用log，我们并不想把这些 log在提交回远程时也提交到库中。 因此，就要用到git reset。 
-</p>
-
-<p>
-git reset的概念比较复杂。它的命令形式：git reset [--mixed | --soft | --hard] [&lt;commit-ish&gt;] 
-</p>
-
-<p>
-命令的选项： 
-</p>
-<ul>
-<li>
---mixed 这个是默认的选项。如git reset [--mixed] dev<sup><small>(dev</small></sup>的定义可以参见2.6.5)。它的作用仅是重置分支状态到dev1<sup><small>, 但是却不改变任何工作文件的内容。即，从dev1</small></sup>到dev1的所有文件变化都保留了，但是dev1^到dev1之间的所有commit日志都被清除了， 而且，发生变化的文件内容也没有通过git add标识，如果您要重新commit，还需要对变化的文件做一次git add。 这样，commit后，就得到了一份非常干净的提交记录。 （回退了index和仓库中的内容） 
-
-<li>
---soft相当于做了git reset –mixed，后，又对变化的文件做了git add。如果用了该选项， 就可以直接commit了。（回退了仓库中的内容） 
-
-<li>
---hard这个命令就会导致所有信息的回退， 包括文件内容。 一般只有在重置废弃代码时，才用它。 执行后，文件内容也无法恢复回来了。（回退了工作目录、index和仓库中的内容） 
-
-</ul>
-
-<p>
-例如： 
-切换到使用的分支上； 
-</p>
-<blockquote>
-git reset HEAD^ 回退第一个记录 
-git reset HEAD~2 回退第二个记录 
-</blockquote>
-<p>
-如果想把工作目录下的文件也回退，则使用git reset - - hard HEAD^ 回退第一个记录 
-</p>
-<blockquote>
-git reset - - hard HEAD~2 回退第二个记录 
-</blockquote>
-<p>
-还可以使用如下方法： 
-</p>
-
-<p>
-将当前的工作目录完全回滚到指定的版本号，假设如下图，我们有A-G五次提交的版本，其中C的版本号是 bbaf6fb5060b4875b18ff9ff637ce118256d6f20，我们执行了'git reset bbaf6fb5060b4875b18ff9ff637ce118256d6f20'那么结果就只剩下了A-C三个提交的版本 
-</p>
-
-<h2 id="toc_0.10">git ignore</h2>
+<h2 id="toc_0.9">git ignore</h2>
 <p>
 The idea is to keep locally your ".DS_Store", while removing them from the git repo.
 </p>
@@ -359,7 +262,7 @@ git push
 </p>
 
 
-<h2 id="toc_0.11">git log的用法</h2>
+<h2 id="toc_0.10">git log的用法</h2>
 <p>
 以适当的形式显示整个工程，或者多个文件，整个目录等的log信息。
 </p>
@@ -381,27 +284,8 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 详细的显示某次提交的log信息。
 </p>
 
-<h2 id="toc_0.12">msysGit使用笔记</h2>
-<p>
-在Windows下使用git，然后和Linux下进行协作开发，最让我恼火的是编码的问题。下面记录在msysGit配置过程中的一些知识点。
-</p>
 
-<p>
-虽然使用了日本人改进的sysGit，在Windows下完全使用utf-8进行编码，在使用git log命令时，中文还是显示为乱码（注意，不是中文显示为反斜杠加数字的问题，如果中文显示为反斜杠加数字，那是因为终端不支持中文显示）。提交到github上显示又是OK的，这是问什么呢？
-</p>
-
-<p>
-原来，git log是使用的LESS输出log信息的，而Windows下的bash只能够输出gbk格式的中文。这就说明，在git中，log信息是使用utf-8存放的，需要使用git log命令输出到bash终端，需要将log信息由utf-8编码转化为gbk编码。在gitconfig文件中加入：
-</p>
-<pre>
-[i18n]
-	logoutputencoding = gbk
-</pre>
-<p>
-测试一下，确实中文就能够正常输出。但是，使用git diff命令，还是有着个问题。
-</p>
-
-<h2 id="toc_0.13">github mac gui的sync操作</h2>
+<h2 id="toc_0.11">github mac gui的sync操作</h2>
 <p>
 两人合作开发，从某个共同的节点开始，A做了几次提交，并且上传github。B也做了几次提交，在本地。然后B使用github的mac端gui做一个syn（同步到github）。如果A和B的修改没有冲突，那么B的提交就会rebase到A的提交上，并且上传github成功，这样看上去就是一个线性的提交纪录。如果B的修改和A有冲突，那么有冲突的提交版本就会rebase失败。
 </p>
@@ -459,18 +343,17 @@ nothing to commit, working directory clean
 整个过程，只需要明白一点，那就是github的mac gui在sync的时候，默认是做的rebase操作。知晓了这一点，其他的就迎刃而解了。
 </p>
 
-<h2 id="toc_0.14">merge 时没有合并到origin分支的警告</h2>
+<h2 id="toc_0.12">merge 时没有合并到origin分支的警告</h2>
 <p>
+在开发过程中，出现下面这样的警告
+</p>
+<pre>
 nieyong@mac:~/github/DJIAssistantForIphone &gt; git br -d I18N
 warning: not deleting branch 'I18N' that is not yet merged to
-</p>
-<blockquote>
-'refs/remotes/origin/I18N', even though it is merged to HEAD.
-</blockquote>
-<p>
+         'refs/remotes/origin/I18N', even though it is merged to HEAD.
 error: The branch 'I18N' is not fully merged.
 If you are sure you want to delete it, run 'git branch -D I18N'.
-</p>
+</pre>
 
 <p>
 it knows that I18N is a tracking branch for origin/I18N, so it wants to know that changes done on I18N have been pushed to origin. 
@@ -484,8 +367,33 @@ git reset --hard # removes staged and working directory changes
 git clean -f -d # remove untracked files
 git clean -f -x -d # CAUTION: as above but removes ignored files like config.
 </p>
-<h2 id="toc_0.15">参考资料</h2>
 
+
+<h2 id="toc_0.13">git中不可恢复的操作</h2>
+<p>
+删除工作空间中的某个文件的所有修改，恢复到上一次提交时的状态。
+</p>
+<ul>
+<li>
+git checkout -- filename
+
+</ul>
+
+<p>
+如果该文件的修改已经使用<code>git add</code>提交为缓存，则不会起作用，这是需要使用<code>git reset HEAD .</code>将文件由缓存空间unstage到工作空间，然后再使用该命令撤销所有的修改。注意，对于删除了的文件，该命令也一样起效。对于新加入的文件，还处于Untrack状态，则不会起作用。
+</p>
+
+
+<p>
+恢复到某一次提交之后的状态，删除在这次提交之后到所有提交、修改记录。
+</p>
+<ul>
+<li>
+git reset --hard HEAD~2
+
+</ul>
+
+<h2 id="toc_0.14">参考资料</h2>
 <ul>
 <li>
 <a href="http://zhwen.org/?p=articles/git">git使用总结 作者：许振文</a>

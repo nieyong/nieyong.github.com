@@ -1,3 +1,40 @@
+== git用户信息 ==
+查看git用户信息，使用命令 *git config --list*
+{{{
+[root@localhost jzcode]# git config --list
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+remote.origin.url=git@github.com:jzcode/jzcode-x11.git
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+
+[root@localhost jzcode]# exit
+[ny@localhost jzcode]$ git config --list
+user.name=Yong Nie
+user.email=nieyong_1947@126.com
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+remote.origin.url=git@github.com:jzcode/jzcode-x11.git
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+[ny@localhost jzcode]$ 
+}}}
+在同一个目录jzcode下，根用户root和普通用户ny分别使用git config --list查看用户信息，打印出来的信息有差别。可以看到，使用普通用户ny打印出来的信息，多了两行：
+{{{
+user.name=Yong Nie
+user.email=nieyong_1947@126.com
+}}}
+这是为什么呢？
+
+在使用git链接到github之前，必须先配置好git的用户名和邮箱。否则，虽然ssh密码配对成功，也是不能够从github获取代码的。
+
+
 == git配置文件 ==
 * /etc/gitconfig文件，对应MS下的安装路径下的gitconfig文件。命令`git config`的--system选项就是配置该文件，例如：`git config --system i18n.logOutputEncoding gbk`。
 * ~/.gitconfig文件，对应于MS下的当前用户目录（例如C:\Documents and Settings\Administrator）下的.gitconfig文件。命令`git config`的--global选项就是配置该文件，例如：`git config --global user.name "nieyong"`。
@@ -21,3 +58,15 @@ git config --global mergetool.p4merge.path "C:/Progra~1/Perfoce/p4merge.exe"
 }}}
 
 最后实验的结果，不需要配置也没有关系，在安装了p4merge之后，直接使用命令`git difftool 232e 21dk`就可以切换到p4merge查看。但是如果使用`git diff 232e 21dk`，则无论配置与否，都不能够切换到p4merge查看。
+
+== msysGit使用笔记 ==
+在Windows下使用git，然后和Linux下进行协作开发，最让我恼火的是编码的问题。下面记录在msysGit配置过程中的一些知识点。
+
+虽然使用了日本人改进的sysGit，在Windows下完全使用utf-8进行编码，在使用git log命令时，中文还是显示为乱码（注意，不是中文显示为反斜杠加数字的问题，如果中文显示为反斜杠加数字，那是因为终端不支持中文显示）。提交到github上显示又是OK的，这是问什么呢？
+
+原来，git log是使用的LESS输出log信息的，而Windows下的bash只能够输出gbk格式的中文。这就说明，在git中，log信息是使用utf-8存放的，需要使用git log命令输出到bash终端，需要将log信息由utf-8编码转化为gbk编码。在gitconfig文件中加入：
+{{{
+[i18n]
+	logoutputencoding = gbk
+}}}
+测试一下，确实中文就能够正常输出。但是，使用git diff命令，还是有着个问题。

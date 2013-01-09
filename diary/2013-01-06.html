@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>2013-01-06</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+2013-01-06 10:29:30.613 AssistantForIphone[317:907]  tabBarController:didSelectViewController: 
+2013-01-06 10:29:31.438 AssistantForIphone[317:907] *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** setObjectForKey: object cannot be nil (key: 2012-12-19-12)'
+*** First throw call stack:
+</p>
+<blockquote>
+self.configPlist = [self _readConfigPlist];
+</blockquote>
+<blockquote>
+for(id key in self.configPlist){
+if ([key isEqualToString:CONFIG_KEY_USERNAME]) {
+continue;
+}
+</blockquote>
+<blockquote>
+NSDictionary* headDict = [[self.configPlist objectForKey:key] objectForKey:CONFIG_KEY_HEADINFO];
+</blockquote>
+<blockquote>
+if ([[headDict objectForKey:CONFIG_KEY_MCTYPE] isEqualToString:mcType]) {
+</blockquote>
+<blockquote>
+if (nil == [headDict objectForKey:CONFIG_KEY_CONFIGNAME]) {
+continue;
+}
+</blockquote>
+<blockquote>
+[basicConfigItems setObject:[headDict objectForKey:CONFIG_KEY_CONFIGNAME] forKey:key];
+}
+}
+</blockquote>
+
+
+<p>
+So guys, I think I may have sussed it.
+Try disabling siri, then look for your Bluetooth device to pair.
+</p>
+ 
+<p>
+Let me know how you get on, as I don't have my headphones with me right now, but aree keen to know if this works.
+</p>
+ 
+<p>
+Thank you Apple for your help (NOT!) - it took some normal guy on this forum to work it out.
+</p>
+
+
+
+
+
+<p>
+2013-01-06 14:35:26.940 testBluetoothLowEnergy[10450:907] [002] &lt;CBConcretePeripheral: 0x1e830720 UUID = &lt;CFUUID 0x1e83b590&gt; 8250D075-0E56-C941-BB23-4E16FFC49345, Name = "DJI Config", IsConnected = NO&gt;
+2013-01-06 14:35:27.269 testBluetoothLowEnergy[10450:907] [003] &lt;CBConcretePeripheral: 0x1e830720 UUID = &lt;CFUUID 0x1e83b590&gt; 8250D075-0E56-C941-BB23-4E16FFC49345, Name = "DJI Config", IsConnected = YES&gt;
+</p>
+
+
+
+<p>
+2013-01-06 20:01:53.495 testBluetoothLowEnergy[9737:907] [help] xpxpxpxpxp
+2013-01-06 20:01:53.499 testBluetoothLowEnergy[9737:907] [help] xpxpxpxpxp
+2013-01-06 20:01:53.502 testBluetoothLowEnergy[9737:907] delete ble
+2013-01-06 20:01:53.505 testBluetoothLowEnergy[9737:907] *** Terminating app due to uncaught exception 'NSGenericException', reason: '*** Collection &lt;__NSArrayM: 0x2005ca50&gt; was mutated while being enumerated.'
+*** First throw call stack:
+(0x38eeb2a3 0x3721597f 0x38eead85 0xb7e9b 0x3a9cd74b 0x38ec05df 0x38ec0291 0x38ebef01 0x38e31ebd 0x38e31d49 0x37c682eb 0x3a4032f9 0xaf337 0xaf2d8)
+libc++abi.dylib: terminate called throwing an exception
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+
