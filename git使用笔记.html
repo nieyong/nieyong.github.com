@@ -51,11 +51,17 @@
 </ul>
 
 <h2 id="toc_0.1">删除某一次提交</h2>
-<p>
-   git reset HEAD^ 	//回退第一个记录 
-   git reset HEAD~2 	//回退第二个记录 
-   git reset --hard HEAD~2 	//回退第二个记录，工作目录下的文件也回退
-</p>
+<ul>
+<li>
+<code>git reset HEAD^</code> 	//回退第一个记录 
+
+<li>
+<code>git reset HEAD~2</code> 	//回退第二个记录 
+
+<li>
+<code>git reset --hard HEAD~2</code> 	//回退第二个记录，工作目录下的文件也回退
+
+</ul>
 
 <p>
 使用<code>git reset</code>或者<code>git revert</code>命令。注意两点：
@@ -81,9 +87,11 @@
 </ol>
 
 <h2 id="toc_0.2">清除已经缓存的（staged）文件</h2>
-<blockquote>
-git reset filename		//相当于git reset --mixed HEAD filename
-</blockquote>
+<ul>
+<li>
+<code>git reset filename</code>		//相当于git reset --mixed HEAD filename
+
+</ul>
 <p>
 修改了两个文件，然后使用命令<code>git add .</code>将这两个文件的修改都提交为缓存，也就是出于staged状态。这时，如果你想撤销掉某个文件的staged状态，使用命令<code>git reset filename</code>，其实这条命令的完整表达应该是<code>git reset --mixed HEAD filename</code>。
 </p>
@@ -95,26 +103,17 @@ git reset filename		//相当于git reset --mixed HEAD filename
 <h2 id="toc_0.3">tag记录发布版本</h2>
 <ul>
 <li>
-git tag -a v1.0 -m 'my version 1.0'
+<code>git tag -a v1.0 -m 'my version 1.0</code>		//创建一个tag
 
-</ul>
-<p>
-创建一个tag
-</p>
-
-<ul>
 <li>
-git push origin --tags 
+<code>git push origin --tags</code>			//要将在本地创建的tag提交到github上
 
 </ul>
-<p>
-要将在本地创建的tag提交到github上
-</p>
 
 <h2 id="toc_0.4">多份代码拷贝的合并</h2>
 <ul>
 <li>
-git pull ../mbooke_usb/
+<code>git pull ../mbooke_usb/</code>
 
 </ul>
 <p>
@@ -143,7 +142,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 </p>
 <ul>
 <li>
-#git branch
+<code>#git branch</code>
 
 </ul>
 
@@ -152,7 +151,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 </p>
 <ul>
 <li>
-#git branch hotfix	//hotfix为新创建分支名
+<code>#git branch hotfix</code>	//hotfix为新创建分支名
 
 </ul>
 
@@ -161,7 +160,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 </p>
 <ul>
 <li>
-#git checkout hotfix	//hotfix为已经创建的分支
+<code>#git checkout hotfix</code>	//hotfix为已经创建的分支
 
 </ul>
 
@@ -170,7 +169,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 </p>
 <ul>
 <li>
-#git checkout -b 'hotfix' //hotfix为新创建分支名
+<code>#git checkout -b 'hotfix'</code> //hotfix为新创建分支名
 
 </ul>
 
@@ -179,7 +178,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 </p>
 <ul>
 <li>
-#git branch -d hotfix	//删除hotfix分支
+<code>#git branch -d hotfix</code>	//删除hotfix分支
 
 </ul>
 

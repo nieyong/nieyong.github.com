@@ -4,9 +4,9 @@
 * [[wiki_ny/git基本概念记录]]
 
 == 删除某一次提交 ==
-   git reset HEAD^ 	//回退第一个记录 
-   git reset HEAD~2 	//回退第二个记录 
-   git reset --hard HEAD~2 	//回退第二个记录，工作目录下的文件也回退
+* `git reset HEAD^` 	//回退第一个记录 
+* `git reset HEAD~2` 	//回退第二个记录 
+* `git reset --hard HEAD~2` 	//回退第二个记录，工作目录下的文件也回退
 
 使用`git reset`或者`git revert`命令。注意两点：
 # `git reset`和`git revert`的区别，`git reset`是直接删除提交记录进行回溯，在graph上可以看到，被回溯的那几个提交记录已经不再任何分支的控制范围内。在这种情况下，默认情况下，是无法看到这几次提交的记录的。而`git revert`是使用一次相反的提交覆盖上次提交；
@@ -16,20 +16,17 @@
     * 选项--soft则只会将HEAD移动，并不会将现在HEAD所指的内容覆盖缓存空间和工作空间。如果使用reset命令之后工作空间并未用HEAD所指的内容覆盖（--soft、--mixed选项），就会存在工作空间处于修改状态，需要提交。
 
 == 清除已经缓存的（staged）文件 ==
-    git reset filename		//相当于git reset --mixed HEAD filename
+* `git reset filename`		//相当于git reset --mixed HEAD filename
 修改了两个文件，然后使用命令`git add .`将这两个文件的修改都提交为缓存，也就是出于staged状态。这时，如果你想撤销掉某个文件的staged状态，使用命令`git reset filename`，其实这条命令的完整表达应该是`git reset --mixed HEAD filename`。
 
 参见《progit》的p28。
 
 == tag记录发布版本 ==
-* git tag -a v1.0 -m 'my version 1.0'
-创建一个tag
-
-* git push origin --tags 
-要将在本地创建的tag提交到github上
+* `git tag -a v1.0 -m 'my version 1.0`		//创建一个tag
+* `git push origin --tags`			//要将在本地创建的tag提交到github上
 
 == 多份代码拷贝的合并 ==
-* git pull ../mbooke_usb/
+* `git pull ../mbooke_usb/`
 区别于一份代码中有多个分支的合并，这里的应用场景描述如下：
 
 有一份代码， *使用了git做版本控制*  。然后这份代码被拷贝了两份，然后在每一份上分别有多次提交。最后，需要把两份代码上做的修改合并到同一份代码上。
@@ -42,19 +39,19 @@
 git分支与合并主要阅读了《pro git》一书的分支一章，强烈建议。
 
 查看现在所有分支，分支前带有*号，表示现在所在分支
-* #git branch
+* `#git branch`
 
 创建一个新的分支
-* #git branch hotfix	//hotfix为新创建分支名
+* `#git branch hotfix`	//hotfix为新创建分支名
 
 切换到另外一个分支
-* #git checkout hotfix	//hotfix为已经创建的分支
+* `#git checkout hotfix`	//hotfix为已经创建的分支
 
 创建一个新的分支并且同时切换到该分支
-* #git checkout -b 'hotfix' //hotfix为新创建分支名
+* `#git checkout -b 'hotfix'` //hotfix为新创建分支名
 
 删除一个分支
-* #git branch -d hotfix	//删除hotfix分支
+* `#git branch -d hotfix`	//删除hotfix分支
 
 合并某一个分支到本身所在的分支
 * #git merge hotfix	 //合并hotfix分支的修改到本身所在的分支
