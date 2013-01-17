@@ -39,10 +39,7 @@ Thank you Apple for your help (NOT!) - it took some normal guy on this forum to 
 
 
 
-2013-01-06 20:01:53.495 testBluetoothLowEnergy[9737:907] [help] xpxpxpxpxp
-2013-01-06 20:01:53.499 testBluetoothLowEnergy[9737:907] [help] xpxpxpxpxp
-2013-01-06 20:01:53.502 testBluetoothLowEnergy[9737:907] delete ble
-2013-01-06 20:01:53.505 testBluetoothLowEnergy[9737:907] *** Terminating app due to uncaught exception 'NSGenericException', reason: '*** Collection <__NSArrayM: 0x2005ca50> was mutated while being enumerated.'
+[9737:907] *** Terminating app due to uncaught exception 'NSGenericException', reason: '*** Collection <__NSArrayM: 0x2005ca50> was mutated while being enumerated.'
 *** First throw call stack:
 (0x38eeb2a3 0x3721597f 0x38eead85 0xb7e9b 0x3a9cd74b 0x38ec05df 0x38ec0291 0x38ebef01 0x38e31ebd 0x38e31d49 0x37c682eb 0x3a4032f9 0xaf337 0xaf2d8)
 libc++abi.dylib: terminate called throwing an exception

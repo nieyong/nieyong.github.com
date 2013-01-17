@@ -232,13 +232,33 @@ git diff命令没有选项，不会去比较已经位于暂存区（staged）的
 git diff --cached
 </blockquote>
 
-<h2 id="toc_0.8">detached HEAD</h2>
+<h2 id="toc_0.8">git checkout</h2>
+<p>
+代码在回溯时，到了一个未命名的分支。
+</p>
+
 <p>
 使用下面的命令，会出现该情况：
 </p>
-<blockquote>
-git checkout master~2
-</blockquote>
+<pre>
+ylqmatoMac-mini:CommLibrary ylq$ git checkout 563b17
+Note: checking out '563b17'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b new_branch_name
+
+HEAD is now at 563b178... ＊测试首页显示当前连接的mc
+ylqmatoMac-mini:CommLibrary ylq$ git branch
+* (no branch)
+  master
+  refact
+</pre>
 
 <h2 id="toc_0.9">git ignore</h2>
 <p>

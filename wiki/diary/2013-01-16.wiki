@@ -1,0 +1,173 @@
+=== crash symbolicate ===
+$ dwarfdump --uuid <PATH_TO_APP_EXECUTABLE>
+
+ylqmatoMac-mini:test ylq$ dwarfdump  --uuid AssistantForIphone.app/AssistantForIphone 
+UUID: BE6DE594-A4D7-328B-A3BC-43D031FB45C9 (armv7) AssistantForIphone.app/AssistantForIphone
+
+ylqmatoMac-mini:test ylq$ dwarfdump  --uuid AssistantForIphone.app.dSYM/
+UUID: BE6DE594-A4D7-328B-A3BC-43D031FB45C9 (armv7) AssistantForIphone.app.dSYM/Contents/Resources/DWARF/AssistantForIphone
+
+
+$ dwarfdump --uuid AssistantForIphone.app/AssistantForIphone
+
+
+=== iphone 5 chrash纪录 ===
+
+Last Exception Backtrace:
+0   CoreFoundation                	0x3768b3e2 __exceptionPreprocess + 158
+1   libobjc.A.dylib               	0x340c395e objc_exception_throw + 26
+2   CoreFoundation                	0x3768b298 +[NSException raise:format:arguments:] + 96
+3   Foundation                    	0x33f677ae -[NSAssertionHandler handleFailureInMethod:object:file:lineNumber:description:] + 86
+4   CoreBluetooth                 	0x34a3a688 -[CBConcreteCentralManager cancelPeripheralConnection:force:] + 132
+5   AssistantForIphone            	0x0014fa60 0x2f000 + 1182304
+6   Foundation                    	0x33fa9b06 __NSFireTimer + 58
+7   CoreFoundation                	0x37660852 __CFRUNLOOP_IS_CALLING_OUT_TO_A_TIMER_CALLBACK_FUNCTION__ + 10
+8   CoreFoundation                	0x376604fe __CFRunLoopDoTimer + 270
+9   CoreFoundation                	0x3765f172 __CFRunLoopRun + 1226
+10  CoreFoundation                	0x375d2238 CFRunLoopRunSpecific + 352
+11  CoreFoundation                	0x375d20c4 CFRunLoopRunInMode + 100
+12  GraphicsServices              	0x3191c336 GSEventRunModal + 70
+13  UIKit                         	0x3848c28c UIApplicationMain + 1116
+14  AssistantForIphone            	0x00041a6a 0x2f000 + 76394
+15  AssistantForIphone            	0x00030e6c 0x2f000 + 7788
+
+
+
+Last Exception Backtrace:
+0   CoreFoundation                	0x398a33e2 __exceptionPreprocess + 158
+1   libobjc.A.dylib               	0x362db95e objc_exception_throw + 26
+2   CoreFoundation                	0x398a3298 +[NSException raise:format:arguments:] + 96
+3   Foundation                    	0x3617f7ae -[NSAssertionHandler handleFailureInMethod:object:file:lineNumber:description:] + 86
+4   CoreBluetooth                 	0x36c52688 -[CBConcreteCentralManager cancelPeripheralConnection:force:] + 132
+5   AssistantForIphone            	0x0020ba60 0xeb000 + 1182304
+6   Foundation                    	0x361c1b06 __NSFireTimer + 58
+7   CoreFoundation                	0x39878852 __CFRUNLOOP_IS_CALLING_OUT_TO_A_TIMER_CALLBACK_FUNCTION__ + 10
+8   CoreFoundation                	0x398784fe __CFRunLoopDoTimer + 270
+9   CoreFoundation                	0x39877172 __CFRunLoopRun + 1226
+10  CoreFoundation                	0x397ea238 CFRunLoopRunSpecific + 352
+11  CoreFoundation                	0x397ea0c4 CFRunLoopRunInMode + 100
+12  GraphicsServices              	0x33b34336 GSEventRunModal + 70
+13  UIKit                         	0x3a6a428c UIApplicationMain + 1116
+14  AssistantForIphone            	0x000fda6a 0xeb000 + 76394
+15  AssistantForIphone            	0x000ece6c 0xeb000 + 7788
+
+Last Exception Backtrace:
+0   CoreFoundation                	0x398a33e2 __exceptionPreprocess + 158
+1   libobjc.A.dylib               	0x362db95e objc_exception_throw + 26
+2   CoreFoundation                	0x398a3298 +[NSException raise:format:arguments:] + 96
+3   Foundation                    	0x3617f7ae -[NSAssertionHandler handleFailureInMethod:object:file:lineNumber:description:] + 86
+4   CoreBluetooth                 	0x36c52688 -[CBConcreteCentralManager cancelPeripheralConnection:force:] + 132
+5   AssistantForIphone            	0x00210a60 0xf0000 + 1182304
+6   Foundation                    	0x361c1b06 __NSFireTimer + 58
+7   CoreFoundation                	0x39878852 __CFRUNLOOP_IS_CALLING_OUT_TO_A_TIMER_CALLBACK_FUNCTION__ + 10
+8   CoreFoundation                	0x398784fe __CFRunLoopDoTimer + 270
+9   CoreFoundation                	0x39877172 __CFRunLoopRun + 1226
+10  CoreFoundation                	0x397ea238 CFRunLoopRunSpecific + 352
+11  CoreFoundation                	0x397ea0c4 CFRunLoopRunInMode + 100
+12  GraphicsServices              	0x33b34336 GSEventRunModal + 70
+13  UIKit                         	0x3a6a428c UIApplicationMain + 1116
+14  AssistantForIphone            	0x00102a6a 0xf0000 + 76394
+15  AssistantForIphone            	0x000f1e6c 0xf0000 + 7788
+
+Last Exception Backtrace:
+0   CoreFoundation                	0x398a33e2 __exceptionPreprocess + 158
+1   libobjc.A.dylib               	0x362db95e objc_exception_throw + 26
+2   CoreFoundation                	0x398a3298 +[NSException raise:format:arguments:] + 96
+3   Foundation                    	0x3617f7ae -[NSAssertionHandler handleFailureInMethod:object:file:lineNumber:description:] + 86
+4   CoreBluetooth                 	0x36c52688 -[CBConcreteCentralManager cancelPeripheralConnection:force:] + 132
+5   AssistantForIphone            	0x00180a60 0x60000 + 1182304
+6   Foundation                    	0x361c1b06 __NSFireTimer + 58
+7   CoreFoundation                	0x39878852 __CFRUNLOOP_IS_CALLING_OUT_TO_A_TIMER_CALLBACK_FUNCTION__ + 10
+8   CoreFoundation                	0x398784fe __CFRunLoopDoTimer + 270
+9   CoreFoundation                	0x39877172 __CFRunLoopRun + 1226
+10  CoreFoundation                	0x397ea238 CFRunLoopRunSpecific + 352
+11  CoreFoundation                	0x397ea0c4 CFRunLoopRunInMode + 100
+12  GraphicsServices              	0x33b34336 GSEventRunModal + 70
+13  UIKit                         	0x3a6a428c UIApplicationMain + 1116
+14  AssistantForIphone            	0x00072a6a 0x60000 + 76394
+15  AssistantForIphone            	0x00061e6c 0x60000 + 7788
+
+Last Exception Backtrace:
+0   CoreFoundation                	0x398a33e2 __exceptionPreprocess + 158
+1   libobjc.A.dylib               	0x362db95e objc_exception_throw + 26
+2   AssistantForIphone            	0x0015c3c8 0x5e000 + 1041352
+3   AssistantForIphone            	0x0015e270 0x5e000 + 1049200
+4   AssistantForIphone            	0x0015c710 0x5e000 + 1042192
+5   AssistantForIphone            	0x0015c760 0x5e000 + 1042272
+6   AssistantForIphone            	0x0006ed80 0x5e000 + 68992
+7   Foundation                    	0x361af7f2 __block_global_6 + 98
+8   libdispatch.dylib             	0x32f7678e _dispatch_call_block_and_release + 6
+9   libdispatch.dylib             	0x32f7a652 _dispatch_root_queue_drain + 274
+10  libdispatch.dylib             	0x32f7a7d4 _dispatch_worker_thread2 + 88
+11  libsystem_c.dylib             	0x359917ec _pthread_wqthread + 356
+12  libsystem_c.dylib             	0x35991680 start_wqthread + 4
+
+
+Last Exception Backtrace:
+0   CoreFoundation                	0x398a33e2 __exceptionPreprocess + 158
+1   libobjc.A.dylib               	0x362db95e objc_exception_throw + 26
+2   AssistantForIphone            	0x001cb3c8 0xcd000 + 1041352
+3   AssistantForIphone            	0x001cd270 0xcd000 + 1049200
+4   AssistantForIphone            	0x001cb710 0xcd000 + 1042192
+5   AssistantForIphone            	0x001cb760 0xcd000 + 1042272
+6   AssistantForIphone            	0x000ddd80 0xcd000 + 68992
+7   Foundation                    	0x361af7f2 __block_global_6 + 98
+8   libdispatch.dylib             	0x32f7678e _dispatch_call_block_and_release + 6
+9   libdispatch.dylib             	0x32f7a652 _dispatch_root_queue_drain + 274
+10  libdispatch.dylib             	0x32f7a7d4 _dispatch_worker_thread2 + 88
+11  libsystem_c.dylib             	0x359917ec _pthread_wqthread + 356
+12  libsystem_c.dylib             	0x35991680 start_wqthread + 4
+
+
+=== aws crash的问题纪录 ===
+Anyson  14:25:17
+2013-01-16 14:23:35.300 AssistantForIphone[14757:907] no user and password
+2013-01-16 14:23:35.309 AssistantForIphone[14757:907] config.plist init begin
+2013-01-16 14:23:35.318 AssistantForIphone[14757:907] Device.plist init begin
+2013-01-16 14:23:35.336 AssistantForIphone[14757:1803] AsyncFileDownloader Config.plist
+2013-01-16 14:23:35.341 AssistantForIphone[14757:3a0b] AsyncFileDownloader Device.plist
+2013-01-16 14:23:35.367 AssistantForIphone[14757:4a07] statistic threadForSavedMainCtrl
+2013-01-16 14:23:35.424 AssistantForIphone[14757:3a0b] AsyncFileUploader Config.plist
+2013-01-16 14:23:35.431 AssistantForIphone[14757:3807] AsyncFileUploader Device.plist
+2013-01-16 14:23:35.452 AssistantForIphone[14757:3807] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
+2013-01-16 14:23:35.452 AssistantForIphone[14757:3a0b] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
+2013-01-16 14:23:35.469 AssistantForIphone[14757:3807] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
+2013-01-16 14:23:38.628 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLStringKey = https://s3.amazonaws.com/www.assistant.com/device/
+2013-01-16 14:23:38.630 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLKey = https://s3.amazonaws.com/www.assistant.com/device/
+2013-01-16 14:23:38.631 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSLocalizedDescription = The Internet connection appears to be offline.
+2013-01-16 14:23:38.635 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSUnderlyingError = Error Domain=kCFErrorDomainCFNetwork Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008eb90 {NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline.}
+2013-01-16 14:23:38.639 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|265|An error occured in the request: Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}
+2013-01-16 14:23:38.644 AssistantForIphone[14757:3807] *** Terminating app due to uncaught exception 'AmazonClientException', reason: 'Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}'
+*** First throw call stack:
+(0x378502a3 0x35b7a97f 0x112165 0x11400d 0x1124ad 0x1124fd 0x20765 0x393203db 0x34b0c11f 0x34b10961 0x34b10ac1 0x32619a11 0x326198a4)
+libc++abi.dylib: terminate called throwing an exception
+
+
+
+
+2013-01-16 14:23:35.300 AssistantForIphone[14757:907] no user and password
+2013-01-16 14:23:35.309 AssistantForIphone[14757:907] config.plist init begin
+2013-01-16 14:23:35.318 AssistantForIphone[14757:907] Device.plist init begin
+2013-01-16 14:23:35.336 AssistantForIphone[14757:1803] AsyncFileDownloader Config.plist
+2013-01-16 14:23:35.341 AssistantForIphone[14757:3a0b] AsyncFileDownloader Device.plist
+2013-01-16 14:23:35.367 AssistantForIphone[14757:4a07] statistic threadForSavedMainCtrl
+2013-01-16 14:23:35.424 AssistantForIphone[14757:3a0b] AsyncFileUploader Config.plist
+2013-01-16 14:23:35.431 AssistantForIphone[14757:3807] AsyncFileUploader Device.plist
+2013-01-16 14:23:35.452 AssistantForIphone[14757:3807] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
+2013-01-16 14:23:35.452 AssistantForIphone[14757:3a0b] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
+2013-01-16 14:23:35.469 AssistantForIphone[14757:3807] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
+2013-01-16 14:23:38.628 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLStringKey = https://s3.amazonaws.com/www.assistant.com/device/
+2013-01-16 14:23:38.630 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLKey = https://s3.amazonaws.com/www.assistant.com/device/
+2013-01-16 14:23:38.631 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSLocalizedDescription = The Internet connection appears to be offline.
+2013-01-16 14:23:38.635 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSUnderlyingError = Error Domain=kCFErrorDomainCFNetwork Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008eb90 {NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline.}
+2013-01-16 14:23:38.639 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|265|An error occured in the request: Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}
+2013-01-16 14:23:38.644 AssistantForIphone[14757:3807] *** Terminating app due to uncaught exception 'AmazonClientException', reason: 'Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}'
+*** First throw call stack:
+(0x378502a3 0x35b7a97f 0x112165 0x11400d 0x1124ad 0x1124fd 0x20765 0x393203db 0x34b0c11f 0x34b10961 0x34b10ac1 0x32619a11 0x326198a4)
+libc++abi.dylib: terminate called throwing an exception
+  以上是聊天历史记录  
+Anyson  20:55:47
+AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
+2013-01-16 20:54:54.672 AssistantForIphone[16202:390f] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
+2013-01-16 20:54:54.688 AssistantForIphone[16202:1103] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 
+

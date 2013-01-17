@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>2013-01-11</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h3 id="toc_0.0.1">关于调参app的后台（debug和release）</h3>
+<p>
+我们的调参app使用了亚马逊的4个服务，一个Elastic Beanstalk服务（assTVM），一个是S3服务，2个是数据库服务。
+</p>
+
+<p>
+assTVM服务用于app端亚马逊帐户登陆，S3服务用于保存配置文件和设备信息文件，一个数据库用于保存调参app点亮多少主控的统计信息，另外一个用于测试版本的注册登陆。（见设计文档）
+</p>
+
+<p>
+对于debug和release的调参app，各服务器使用如下：
+</p>
+
+<ul>
+<li>
+登陆注册服务器区分debug版本和release版本，debug版本的url为http://test.skypedia.net/app/（搭建在aws上），release版本的url为http://Login.dji-innovations.com/ios/（DJI提供）
+
+<li>
+assTVM服务不变，url为http://asstvm.elasticbeanstalk.com
+
+<li>
+S3服务分为debug版本和release版本，debug版本的路径为buckets/www.debug.assistant.com，release版本的路径为buckets/www.assistant.com
+
+<li>
+统计数据库服务现在使用的是<a href="http://test.skypedia.net/app/stat">http://test.skypedia.net/app/stat</a> ，请周剑雄和陈成确定是否需要区分搭建一个release版本的统计服务器
+
+</ul>
+
+
+
+<p>
+Process 7791 resuming
+2013-01-11 14:24:44.169 AssistantForIphone[7791:5e2f] *** Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: '-[__NSCFArray insertObject:atIndex:]: mutating method sent to immutable object'
+*** First throw call stack:
+(0x36a9c2a3 0x34dc697f 0x36a9c1c5 0x36a14893 0x607cd 0x3857d67d 0x31870311 0x318701d8)
+libc++abi.dylib: terminate called throwing an exception
+</p>
+
+<p>
+NSMutableArray *arr= [NSMutableArray arrayWithObjects:@"asd",@"dsa",nil];
+</p>
+<blockquote>
+[[NSUserDefaults standardUserDefaults] setObject:arr forKey:@"12345"];
+</blockquote>
+<p>
+NSMutableArray *abc = [NSMutableArray arrayWithArray:<a href="NSUserDefaults standardUserDefaults] objectForKey:@"12345".html">NSUserDefaults standardUserDefaults] objectForKey:@"12345"</a>;
+//[[NSUserDefaults standardUserDefaults] objectForKey:@"12345"];
+</p>
+<blockquote>
+int n = [abc count];
+[abc insertObject:@"aaa" atIndex:n];
+NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+[[NSUserDefaults standardUserDefaults] setObject:abc forKey:@"12345"];
+[defaults synchronize];
+[abc release];
+</blockquote>
+
+
+
+
+<p>
+2013-01-11 12:00:11.539 AssistantForIphone[1770:907] Login action finish
+2013-01-11 12:00:11.540 AssistantForIphone[1770:907] config.plist init begin
+2013-01-11 12:00:11.542 AssistantForIphone[1770:907] Device.plist init begin
+2013-01-11 12:00:11.554 AssistantForIphone[1770:4f17] AsyncFileDownloader Config.plist
+2013-01-11 12:00:11.557 AssistantForIphone[1770:301b] AsyncFileDownloader Device.plist
+2013-01-11 12:00:11.580 AssistantForIphone[1770:4f17] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1357888705267, 2013-01-11 07:18:25 +0000
+2013-01-11 12:00:11.581 AssistantForIphone[1770:301b] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1357888705267, 2013-01-11 07:18:25 +0000
+2013-01-11 12:00:24.674 AssistantForIphone[1770:301b] didCompleteWithResponse download
+2013-01-11 12:00:24.687 AssistantForIphone[1770:570b] AsyncFileUploader Device.plist
+2013-01-11 12:00:24.690 AssistantForIphone[1770:570b] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1357888705267, 2013-01-11 07:18:25 +0000
+2013-01-11 12:00:37.499 AssistantForIphone[1770:570b] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1357888705267, 2013-01-11 07:18:25 +0000
+2013-01-11 12:00:38.062 AssistantForIphone[1770:570b] didCompleteWithResponse upload
+2013-01-11 12:00:55.384 AssistantForIphone[1770:4f17] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLStringKey = <a href="https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?">https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?</a>
+2013-01-11 12:00:55.385 AssistantForIphone[1770:4f17] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLKey = <a href="https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?">https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?</a>
+2013-01-11 12:00:55.386 AssistantForIphone[1770:4f17] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSLocalizedDescription = 未能找到使用指定主机名的服务器。
+2013-01-11 12:00:55.387 AssistantForIphone[1770:4f17] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSUnderlyingError = Error Domain=kCFErrorDomainCFNetwork Code=-1003 "未能找到使用指定主机名的服务器。" UserInfo=0x1fdf9410 {NSErrorFailingURLKey=<a href="https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,">https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,</a> NSErrorFailingURLStringKey=<a href="https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,">https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,</a> NSLocalizedDescription=未能找到使用指定主机名的服务器。}
+2013-01-11 12:00:55.388 AssistantForIphone[1770:4f17] S3Response.m|-[S3Response connection:didFailWithError:]|265|An error occured in the request: Error Domain=NSURLErrorDomain Code=-1003 "未能找到使用指定主机名的服务器。" UserInfo=0x210028b0 {NSErrorFailingURLStringKey=<a href="https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,">https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,</a> NSErrorFailingURLKey=<a href="https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,">https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,</a> NSLocalizedDescription=未能找到使用指定主机名的服务器\343\200\202, NSUnderlyingError=0x1fdd1450 "未能找到使用指定主机名的服务器。"}
+2013-01-11 12:00:55.390 AssistantForIphone[1770:4f17] didFailWithError Error Domain=NSURLErrorDomain Code=-1003 "未能找到使用指定主机名的服务器。" UserInfo=0x210028b0 {NSErrorFailingURLStringKey=<a href="https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,">https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,</a> NSErrorFailingURLKey=<a href="https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,">https://s3.amazonaws.com/www.assistant.com/config/test%40126.com?,</a> NSLocalizedDescription=未能找到使用指定主机名的服务器。, NSUnderlyingError=0x1fdd1450 "未能找到使用指定主机名的服务\345\231\250。"}
+</p>
+
+
+<p>
+2013-01-11 17:08:43.449 AssistantForIphone[2346:470b] [002] (
+</p>
+<blockquote>
+{
+hardwareID = F2714450;
+mcType = 4;
+},
+{
+hardwareID = F2714450;
+mcType = 4;
+},
+{
+hardwareID = F2714450;
+mcType = 4;
+},
+{
+hardwareID = F2714450;
+mcType = 4;
+},
+{
+hardwareID = F2714450;
+mcType = 4;
+}
+</blockquote>
+<p>
+) 5
+2013-01-11 17:08:43.450 AssistantForIphone[2346:470b] [003] {
+</p>
+<blockquote>
+hardwareID = F2714450;
+mcType = 4;
+</blockquote>
+<p>
+}
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

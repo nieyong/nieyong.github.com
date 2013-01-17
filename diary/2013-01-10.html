@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>2013-01-10</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+-(void)startPendingTimer
+{
+</p>
+<blockquote>
+if (![[Comm sharedInstance] activeMainControllerPeripheral]) {
+//连接中断时
+[[ASSTopStatusBar sharedInstance] stopCommunicationLaunchAnimation];//通信灯
+[[ASSTopStatusBar sharedInstance] stopConnectToMainControllerLaunchAnimation];//连接灯
+[[ASSTopStatusBar sharedInstance] changeBluetoothSignals:BluetoothSignalsTypeNon];//蓝牙
+[[ASSTopStatusBar sharedInstance] changeModeDisplay:AircraftModeTypeNon];//模式
+return;
+}
+_pendingRequestsTimer = [NSTimer scheduledTimerWithTimeInterval:0.2f target:self selector:@selector(onPendingRequestsTimer:) userInfo:nil repeats:YES];
+[[NSRunLoop currentRunLoop] addTimer:_pendingRequestsTimer forMode:UITrackingRunLoopMode];
+</blockquote>
+    
+<p>
+}
+</p>
+
+
+<ul>
+<li>
+(void) onPendingRequestsTimer: (NSTimer*) timer
+
+</ul>
+<p>
+{
+}
+</p>
+
+
+<p>
+Mac OS X：~/Library/Logs/CrashReporter/MobileDevice
+</p>
+
+
+<p>
+对于每个IOS程序来说，[[UIApplication sharedApplication] delegate]就是一个非常理想的单例啊，直接把成员变量往里面塞就是了。在delegate里面的变量不一定就要在delegate初始化的时候初始化，在第一次用到的地方初始化就行了。
+所以在delegate里面放成员变量这种行为本身是不会对delegate的启动造成影响的，delegate本身只是作为一个比较方便的单例引用方式而已。
+</p>
+
+<h4 id="toc_0.0.0.1">问题描述</h4>
+<p>
+现在蓝牙固件的设计为10s钟未收到app发来的数据，则主动断开连接。所以，在连接成功之后，无论在哪个页面，都在周期性的发送命令（ping命令，1Hz）。
+</p>
+
+<p>
+现在的问题时，在页面如果有操作（例如一直按住tableview页面拖动，或者选择数值），则周期性发送ping命令的定时器会无法调用，因为进入了forMode:UITrackingRunLoopMode模式。该问题容易解决，设置定时器也进入该模式，此时，ping命令发送到蓝牙，蓝牙恢复ack命令。此时，测试看到，ios的corebluetooth框架的没有将收到的数据通过delegate函数didUpdateValueForCharacteristic没有被回调。如果该时间比较长（5s以上），则蓝牙会被主动断开。
+</p>
+
+<h4 id="toc_0.0.0.2">bug推测分析</h4>
+<p>
+ios的corebluetooth库中对收到的数据的分发也是通过timer进行的，在main thread进入forMode:UITrackingRunLoopMode模式之后，该定时器运行，导致收数据的buffer溢出而断开连接；
+</p>
+
+<h4 id="toc_0.0.0.3">测试和结果</h4>
+<p>
+将蓝牙通信部分使用单独的thread，结果发现，上述操作情况下，仍然无法收到数据。
+</p>
+
+<p>
+由此可见，ios的corebluetooth库中的运行机制，不仅仅是上面推测的简单。
+</p>
+
+<p>
+另外，在网上找到唯一和corebluetooth库多线程的有关的信息是关于函数[[CBCentralManager alloc] initWithDelegate:self queue:myCustomQueue];，但是粗糙的测试之后，还是没能够解决问题。详见：<a href="http://stackoverflow.com/questions/13188882/corebluetooth-delegates-on-main-queue-main-thread">http://stackoverflow.com/questions/13188882/corebluetooth-delegates-on-main-queue-main-thread</a>
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

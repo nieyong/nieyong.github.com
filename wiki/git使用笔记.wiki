@@ -75,9 +75,29 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 git diff命令没有选项，不会去比较已经位于暂存区（staged）的文件和上次提交的文件的区别。所以，查看使用命令git add加载到暂存区的文件（staged）所做的修改，使用命令：
     git diff --cached
 
-== detached HEAD ==
+== git checkout ==
+代码在回溯时，到了一个未命名的分支。
+
 使用下面的命令，会出现该情况：
-    git checkout master~2
+{{{
+ylqmatoMac-mini:CommLibrary ylq$ git checkout 563b17
+Note: checking out '563b17'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b new_branch_name
+
+HEAD is now at 563b178... ＊测试首页显示当前连接的mc
+ylqmatoMac-mini:CommLibrary ylq$ git branch
+* (no branch)
+  master
+  refact
+}}}
 
 == git ignore ==
 The idea is to keep locally your ".DS_Store", while removing them from the git repo.

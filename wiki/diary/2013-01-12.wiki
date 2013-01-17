@@ -1,0 +1,6 @@
+        [_overlay removeFromSuperview];
+        [_transition removeFromSuperview];
+
+
+
+
