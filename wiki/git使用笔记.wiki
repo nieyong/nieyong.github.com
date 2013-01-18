@@ -24,6 +24,7 @@
 == tag记录发布版本 ==
 * `git tag -a v1.0 -m 'my version 1.0`		//创建一个tag
 * `git push origin --tags`			//要将在本地创建的tag提交到github上
+* `git fetch --tags`				//下载github上的tags到本地
 
 == 多份代码拷贝的合并 ==
 * `git pull ../mbooke_usb/`

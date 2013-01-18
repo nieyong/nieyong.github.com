@@ -1,3 +1,4 @@
+== review ==
 === crash symbolicate ===
 $ dwarfdump --uuid <PATH_TO_APP_EXECUTABLE>
 
@@ -10,9 +11,10 @@ UUID: BE6DE594-A4D7-328B-A3BC-43D031FB45C9 (armv7) AssistantForIphone.app.dSYM/C
 
 $ dwarfdump --uuid AssistantForIphone.app/AssistantForIphone
 
-
+== todo ==
 === iphone 5 chrash纪录 ===
-
+这几个crash log没有能够完全符号化，尚未解决，初步判断是ios的corebluetooth库中出了问题。
+{{{
 Last Exception Backtrace:
 0   CoreFoundation                	0x3768b3e2 __exceptionPreprocess + 158
 1   libobjc.A.dylib               	0x340c395e objc_exception_throw + 26
@@ -117,9 +119,13 @@ Last Exception Backtrace:
 10  libdispatch.dylib             	0x32f7a7d4 _dispatch_worker_thread2 + 88
 11  libsystem_c.dylib             	0x359917ec _pthread_wqthread + 356
 12  libsystem_c.dylib             	0x35991680 start_wqthread + 4
+}}}
 
 
 === aws crash的问题纪录 ===
+这些奔溃问题主要处在aws中，尚未深入跟踪
+
+{{{
 Anyson  14:25:17
 2013-01-16 14:23:35.300 AssistantForIphone[14757:907] no user and password
 2013-01-16 14:23:35.309 AssistantForIphone[14757:907] config.plist init begin
@@ -165,9 +171,5 @@ libc++abi.dylib: terminate called throwing an exception
 *** First throw call stack:
 (0x378502a3 0x35b7a97f 0x112165 0x11400d 0x1124ad 0x1124fd 0x20765 0x393203db 0x34b0c11f 0x34b10961 0x34b10ac1 0x32619a11 0x326198a4)
 libc++abi.dylib: terminate called throwing an exception
-  以上是聊天历史记录  
-Anyson  20:55:47
-AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
-2013-01-16 20:54:54.672 AssistantForIphone[16202:390f] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
-2013-01-16 20:54:54.688 AssistantForIphone[16202:1103] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 
+}}}
 

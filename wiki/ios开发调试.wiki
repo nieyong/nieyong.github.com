@@ -1,0 +1,9 @@
+=== crash symbolicate ===
+$ dwarfdump --uuid <PATH_TO_APP_EXECUTABLE>
+{{{
+ylqmatoMac-mini:test ylq$ dwarfdump  --uuid AssistantForIphone.app/AssistantForIphone 
+UUID: BE6DE594-A4D7-328B-A3BC-43D031FB45C9 (armv7) AssistantForIphone.app/AssistantForIphone
+
+ylqmatoMac-mini:test ylq$ dwarfdump  --uuid AssistantForIphone.app.dSYM/
+UUID: BE6DE594-A4D7-328B-A3BC-43D031FB45C9 (armv7) AssistantForIphone.app.dSYM/Contents/Resources/DWARF/AssistantForIphone
+}}}

@@ -1,0 +1,29 @@
++ (NSMutableArray *)getFacets:(NSString *)withName
+{
+  @try 
+  {
+    AmazonS3Client * s3 = 
+      [[AmazonS3Client alloc] 
+      initWithAccessKey:ACCESS_KEY_ID withSecretKey:SECRET_KEY];
+ 
+    S3GetObjectRequest * request = 
+      [[S3GetObjectRequest alloc] 
+      initWithKey:withName withBucket:MODEL_BUCKET];   
+ 
+    S3GetObjectResponse * response = [s3 getObject:request];
+ 
+    NSData * data = [response body];
+ 
+    // Convert it to list of points
+    return [self getFacetsFromData:data];
+  }
+  @catch (AmazonClientException * exception) 
+  {
+    [self showAlert:exception.message withTitle:@"Download Error"];
+  }
+ 
+  return [[NSMutableArray alloc] init];
+}
+
+
+
