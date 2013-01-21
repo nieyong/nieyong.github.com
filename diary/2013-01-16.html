@@ -37,7 +37,8 @@
     <div class="container">
 	<div id="content">
 	
-<h3 id="toc_0.0.1">crash symbolicate</h3>
+<h2 id="toc_0.1">review</h2>
+<h3 id="toc_0.1.1">crash symbolicate</h3>
 <p>
 $ dwarfdump --uuid &lt;PATH_TO_APP_EXECUTABLE&gt;
 </p>
@@ -57,10 +58,12 @@ UUID: BE6DE594-A4D7-328B-A3BC-43D031FB45C9 (armv7) AssistantForIphone.app.dSYM/C
 $ dwarfdump --uuid AssistantForIphone.app/AssistantForIphone
 </p>
 
-
-<h3 id="toc_0.0.2">iphone 5 chrash纪录</h3>
-
+<h2 id="toc_0.2">todo</h2>
+<h3 id="toc_0.2.1">iphone 5 chrash纪录</h3>
 <p>
+这几个crash log没有能够完全符号化，尚未解决，初步判断是ios的corebluetooth库中出了问题。
+</p>
+<pre>
 Last Exception Backtrace:
 0   CoreFoundation                	0x3768b3e2 __exceptionPreprocess + 158
 1   libobjc.A.dylib               	0x340c395e objc_exception_throw + 26
@@ -78,11 +81,9 @@ Last Exception Backtrace:
 13  UIKit                         	0x3848c28c UIApplicationMain + 1116
 14  AssistantForIphone            	0x00041a6a 0x2f000 + 76394
 15  AssistantForIphone            	0x00030e6c 0x2f000 + 7788
-</p>
 
 
 
-<p>
 Last Exception Backtrace:
 0   CoreFoundation                	0x398a33e2 __exceptionPreprocess + 158
 1   libobjc.A.dylib               	0x362db95e objc_exception_throw + 26
@@ -100,9 +101,7 @@ Last Exception Backtrace:
 13  UIKit                         	0x3a6a428c UIApplicationMain + 1116
 14  AssistantForIphone            	0x000fda6a 0xeb000 + 76394
 15  AssistantForIphone            	0x000ece6c 0xeb000 + 7788
-</p>
 
-<p>
 Last Exception Backtrace:
 0   CoreFoundation                	0x398a33e2 __exceptionPreprocess + 158
 1   libobjc.A.dylib               	0x362db95e objc_exception_throw + 26
@@ -120,9 +119,7 @@ Last Exception Backtrace:
 13  UIKit                         	0x3a6a428c UIApplicationMain + 1116
 14  AssistantForIphone            	0x00102a6a 0xf0000 + 76394
 15  AssistantForIphone            	0x000f1e6c 0xf0000 + 7788
-</p>
 
-<p>
 Last Exception Backtrace:
 0   CoreFoundation                	0x398a33e2 __exceptionPreprocess + 158
 1   libobjc.A.dylib               	0x362db95e objc_exception_throw + 26
@@ -140,9 +137,7 @@ Last Exception Backtrace:
 13  UIKit                         	0x3a6a428c UIApplicationMain + 1116
 14  AssistantForIphone            	0x00072a6a 0x60000 + 76394
 15  AssistantForIphone            	0x00061e6c 0x60000 + 7788
-</p>
 
-<p>
 Last Exception Backtrace:
 0   CoreFoundation                	0x398a33e2 __exceptionPreprocess + 158
 1   libobjc.A.dylib               	0x362db95e objc_exception_throw + 26
@@ -157,10 +152,8 @@ Last Exception Backtrace:
 10  libdispatch.dylib             	0x32f7a7d4 _dispatch_worker_thread2 + 88
 11  libsystem_c.dylib             	0x359917ec _pthread_wqthread + 356
 12  libsystem_c.dylib             	0x35991680 start_wqthread + 4
-</p>
 
 
-<p>
 Last Exception Backtrace:
 0   CoreFoundation                	0x398a33e2 __exceptionPreprocess + 158
 1   libobjc.A.dylib               	0x362db95e objc_exception_throw + 26
@@ -175,11 +168,15 @@ Last Exception Backtrace:
 10  libdispatch.dylib             	0x32f7a7d4 _dispatch_worker_thread2 + 88
 11  libsystem_c.dylib             	0x359917ec _pthread_wqthread + 356
 12  libsystem_c.dylib             	0x35991680 start_wqthread + 4
+</pre>
+
+
+<h3 id="toc_0.2.2">aws crash的问题纪录</h3>
+<p>
+这些奔溃问题主要处在aws中，尚未深入跟踪
 </p>
 
-
-<h3 id="toc_0.0.3">aws crash的问题纪录</h3>
-<p>
+<pre>
 Anyson  14:25:17
 2013-01-16 14:23:35.300 AssistantForIphone[14757:907] no user and password
 2013-01-16 14:23:35.309 AssistantForIphone[14757:907] config.plist init begin
@@ -192,21 +189,19 @@ Anyson  14:25:17
 2013-01-16 14:23:35.452 AssistantForIphone[14757:3807] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
 2013-01-16 14:23:35.452 AssistantForIphone[14757:3a0b] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
 2013-01-16 14:23:35.469 AssistantForIphone[14757:3807] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
-2013-01-16 14:23:38.628 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLStringKey = <a href="https://s3.amazonaws.com/www.assistant.com/device/">https://s3.amazonaws.com/www.assistant.com/device/</a>
-2013-01-16 14:23:38.630 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLKey = <a href="https://s3.amazonaws.com/www.assistant.com/device/">https://s3.amazonaws.com/www.assistant.com/device/</a>
+2013-01-16 14:23:38.628 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLStringKey = https://s3.amazonaws.com/www.assistant.com/device/
+2013-01-16 14:23:38.630 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLKey = https://s3.amazonaws.com/www.assistant.com/device/
 2013-01-16 14:23:38.631 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSLocalizedDescription = The Internet connection appears to be offline.
-2013-01-16 14:23:38.635 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSUnderlyingError = Error Domain=kCFErrorDomainCFNetwork Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008eb90 {NSErrorFailingURLKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSErrorFailingURLStringKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSLocalizedDescription=The Internet connection appears to be offline.}
-2013-01-16 14:23:38.639 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|265|An error occured in the request: Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSErrorFailingURLKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}
-2013-01-16 14:23:38.644 AssistantForIphone[14757:3807] *** Terminating app due to uncaught exception 'AmazonClientException', reason: 'Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSErrorFailingURLKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}'
+2013-01-16 14:23:38.635 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSUnderlyingError = Error Domain=kCFErrorDomainCFNetwork Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008eb90 {NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline.}
+2013-01-16 14:23:38.639 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|265|An error occured in the request: Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}
+2013-01-16 14:23:38.644 AssistantForIphone[14757:3807] *** Terminating app due to uncaught exception 'AmazonClientException', reason: 'Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}'
 *** First throw call stack:
 (0x378502a3 0x35b7a97f 0x112165 0x11400d 0x1124ad 0x1124fd 0x20765 0x393203db 0x34b0c11f 0x34b10961 0x34b10ac1 0x32619a11 0x326198a4)
 libc++abi.dylib: terminate called throwing an exception
-</p>
 
 
 
 
-<p>
 2013-01-16 14:23:35.300 AssistantForIphone[14757:907] no user and password
 2013-01-16 14:23:35.309 AssistantForIphone[14757:907] config.plist init begin
 2013-01-16 14:23:35.318 AssistantForIphone[14757:907] Device.plist init begin
@@ -218,21 +213,16 @@ libc++abi.dylib: terminate called throwing an exception
 2013-01-16 14:23:35.452 AssistantForIphone[14757:3807] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
 2013-01-16 14:23:35.452 AssistantForIphone[14757:3a0b] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
 2013-01-16 14:23:35.469 AssistantForIphone[14757:3807] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
-2013-01-16 14:23:38.628 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLStringKey = <a href="https://s3.amazonaws.com/www.assistant.com/device/">https://s3.amazonaws.com/www.assistant.com/device/</a>
-2013-01-16 14:23:38.630 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLKey = <a href="https://s3.amazonaws.com/www.assistant.com/device/">https://s3.amazonaws.com/www.assistant.com/device/</a>
+2013-01-16 14:23:38.628 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLStringKey = https://s3.amazonaws.com/www.assistant.com/device/
+2013-01-16 14:23:38.630 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSErrorFailingURLKey = https://s3.amazonaws.com/www.assistant.com/device/
 2013-01-16 14:23:38.631 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSLocalizedDescription = The Internet connection appears to be offline.
-2013-01-16 14:23:38.635 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSUnderlyingError = Error Domain=kCFErrorDomainCFNetwork Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008eb90 {NSErrorFailingURLKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSErrorFailingURLStringKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSLocalizedDescription=The Internet connection appears to be offline.}
-2013-01-16 14:23:38.639 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|265|An error occured in the request: Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSErrorFailingURLKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}
-2013-01-16 14:23:38.644 AssistantForIphone[14757:3807] *** Terminating app due to uncaught exception 'AmazonClientException', reason: 'Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSErrorFailingURLKey=<a href="https://s3.amazonaws.com/www.assistant.com/device/,">https://s3.amazonaws.com/www.assistant.com/device/,</a> NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}'
+2013-01-16 14:23:38.635 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|262|UserInfo.NSUnderlyingError = Error Domain=kCFErrorDomainCFNetwork Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008eb90 {NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline.}
+2013-01-16 14:23:38.639 AssistantForIphone[14757:3807] S3Response.m|-[S3Response connection:didFailWithError:]|265|An error occured in the request: Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}
+2013-01-16 14:23:38.644 AssistantForIphone[14757:3807] *** Terminating app due to uncaught exception 'AmazonClientException', reason: 'Error Domain=NSURLErrorDomain Code=-1009 "The Internet connection appears to be offline." UserInfo=0x2008ecc0 {NSErrorFailingURLStringKey=https://s3.amazonaws.com/www.assistant.com/device/, NSErrorFailingURLKey=https://s3.amazonaws.com/www.assistant.com/device/, NSLocalizedDescription=The Internet connection appears to be offline., NSUnderlyingError=0x2008eaf0 "The Internet connection appears to be offline."}'
 *** First throw call stack:
 (0x378502a3 0x35b7a97f 0x112165 0x11400d 0x1124ad 0x1124fd 0x20765 0x393203db 0x34b0c11f 0x34b10961 0x34b10ac1 0x32619a11 0x326198a4)
 libc++abi.dylib: terminate called throwing an exception
-  以上是聊天历史记录  
-Anyson  20:55:47
-AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
-2013-01-16 20:54:54.672 AssistantForIphone[16202:390f] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 +0000
-2013-01-16 20:54:54.688 AssistantForIphone[16202:1103] AmazonKeyChainWrapper.m|+[AmazonKeyChainWrapper areCredentialsExpired]|57|expirationDate : 1358387641729, 2013-01-17 01:54:01 
-</p>
+</pre>
 
 	</div>
     </div>

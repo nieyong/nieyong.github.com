@@ -108,6 +108,14 @@ connSupervisionTimeout ≤ 6 seconds
 Interval Max * (Slave Latency + 1) * 3 &lt; connSupervisionTimeout
 </p>
 
+<h3 id="toc_0.3.1">dji对ble的配置参数</h3>
+<p>
+看了上次你给我的ble固件源代码，其中ble的一些参数配置为：
+Interval Max为16（20ms）
+Interval Min为8（10ms）
+Slave Latency为0
+connSupervisionTimeout为10（100ms）
+</p>
 
 <h2 id="toc_0.4">GATT server</h2>
 <p>

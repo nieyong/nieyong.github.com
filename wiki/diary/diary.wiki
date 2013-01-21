@@ -7,6 +7,11 @@
 * [[corebluetooth note]]
 * [[调参app奔溃bug纪录]]
 * [[日报]]
+* [[调参app工作安排]]
+* [[HELP页面]]
+* [[HELP EN]]
+* [[Error页面]]
+* [[Error EN]]
 
 帐号：15999960445
 密码：010101

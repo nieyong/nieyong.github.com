@@ -37,7 +37,20 @@
     <div class="container">
 	<div id="content">
 	
-<h2 id="toc_0.1">定时器循环</h2>
+<h2 id="toc_0.1">removeFromSuperview</h2>
+<pre>
+[_overlay removeFromSuperview];
+[_transition removeFromSuperview];
+</pre>
+
+<p>
+_overlay等在removeFromSupperview之后就会被释放掉（release）。
+</p>
+<blockquote>
+If the receiver’s superview is not nil, the superview releases the receiver. If you plan to reuse a view, be sure to retain it before calling this method and release it again later as appropriate.
+</blockquote>
+
+<h2 id="toc_0.2">定时器循环</h2>
 <pre>
 NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(scanMainControllerAssistantCmd) userInfo:nil repeats:NO];
 [[NSRunLoop currentRunLoop] addTimer:timer forMode:UITrackingRunLoopMode];
@@ -45,7 +58,7 @@ NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self select
 [timer performSelector:@selector(invalidate) withObject:nil afterDelay:5.0f];
 </pre>
 
-<h2 id="toc_0.2">清空数组对象</h2>
+<h2 id="toc_0.3">清空数组对象</h2>
 <p>
 清空已经发现的BLE外设数组，清空已经已经获得deviceInfo信息的BLE外设数组
 </p>
@@ -61,12 +74,12 @@ authenPeripherals是NSMutableArray数组对象，对其清空不能够直接付�
 </pre>
 
 
-<h2 id="toc_0.3">IOS中view页面的堆栈操作</h2>
+<h2 id="toc_0.4">IOS中view页面的堆栈操作</h2>
 <pre>
 [self.navigationController popViewControllerAnimated:YES];
 </pre>
 
-<h2 id="toc_0.4">headView使用addSubview之后，不能够delease</h2>
+<h2 id="toc_0.5">headView使用addSubview之后，不能够delease</h2>
 <pre>
 UIView* headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
 
@@ -87,7 +100,7 @@ headLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
 </pre>
 
 
-<h2 id="toc_0.5">performSelector和respondsToSelector</h2>
+<h2 id="toc_0.6">performSelector和respondsToSelector</h2>
 <pre>
 [self performSelector:@selector(_onScanMainCtrlTimer:)];
 </pre>
@@ -110,7 +123,7 @@ if ([self.delegate respondsToSelector:@selector(didScanMainControllerPeripheral:
 if (self.delegate &amp;&amp; [self.delegate respondsToSelector:@selector(on_clickgo_paning)])
 </pre>
 
-<h2 id="toc_0.6">在cell中添加subview图片</h2>
+<h2 id="toc_0.7">在cell中添加subview图片</h2>
 <pre>
 cell.inputView  或者 cell.contentView
 
@@ -123,40 +136,40 @@ for (UIImageView *item in [cell.contentView subviews]) {
 }
 </pre>
 
-<h2 id="toc_0.7">no appropriate for no-gc object</h2>
+<h2 id="toc_0.8">no appropriate for no-gc object</h2>
 
 <p>
 警告信息：“No 'assign', 'retain', or 'copy' attribute is specified - 'assign' is assumed”和“Default property attribute 'assign' not appropriate for non-gc object”。警告信息的意思是：“没有明确指出应该是assign还是retain或者是copy，却省的是assign”和“缺省得属性设置assign不适合非gc对象 ”
 </p>
 
-<h2 id="toc_0.8">objc中的for循环</h2>
+<h2 id="toc_0.9">objc中的for循环</h2>
 <p>
 for(CBPeripheral* tmpPeripheral in foundPeripherals){
 </p>
 
 
-<h2 id="toc_0.9">char a[20] -&gt; NSString</h2>
-<h2 id="toc_0.10">char* str -&gt; NSString</h2>
+<h2 id="toc_0.10">char a[20] -&gt; NSString</h2>
+<h2 id="toc_0.11">char* str -&gt; NSString</h2>
 <pre>
 NSString* deviceName = [NSString stringWithFormat:@"%s", mcPeripheral.deviceInfo.deviceName];//以'\0'结尾的
 NSString* password = [[NSString alloc] initWithData:[NSData dataWithBytes:(const void *)mcPeripheral.deviceInfo.password length:sizeof(mcPeripheral.deviceInfo.password)] encoding:NSASCIIStringEncoding];;//不以'\0'结尾的
 NSLog(@" [ 008 ] hardwareID = %@, deviceName = %@, password = %@", hardwareID, deviceName, password);
 </pre>
 
-<h2 id="toc_0.11">NSData --&gt;  NSString</h2>
+<h2 id="toc_0.12">NSData --&gt;  NSString</h2>
 <pre>
 NSMutableData *data;  //NSData *data;
 NSString *tmpdata=[[NSString alloc] init WithData:data encoding:NSACIIStringEncoding];
 NSString* hardwareID = [[NSString alloc] initWithData:mcPeripheral.hardwareID encoding:NSASCIIStringEncoding];//不以'\0'结尾的
 </pre>
 
-<h2 id="toc_0.12">NSSting --&gt; NSData</h2>
+<h2 id="toc_0.13">NSSting --&gt; NSData</h2>
 <pre>
     NSString * str=@"test string";
     NSData *data=[str dataUsingEncoding:NSUTF8StringEncoding]; 
 </pre>
 
-<h2 id="toc_0.13">ios程序基本的起始代码</h2>
+<h2 id="toc_0.14">ios程序基本的起始代码</h2>
 <pre>
 self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 // Override point for customization after application launch.
@@ -170,7 +183,7 @@ self.window.rootViewController = self.navigationController;
 </pre>
 
 
-<h2 id="toc_0.14">模态视图 presentModalViewController</h2>
+<h2 id="toc_0.15">模态视图 presentModalViewController</h2>
 <pre>
 -(void)firstpressed
 {
@@ -180,7 +193,7 @@ self.window.rootViewController = self.navigationController;
 </pre>
 
 
-<h2 id="toc_0.15">内存管理问题，成员变量</h2>
+<h2 id="toc_0.16">内存管理问题，成员变量</h2>
 <pre>
 
 @interface LoginRegist:NSObject {
@@ -228,7 +241,7 @@ self.window.rootViewController = self.navigationController;
 
 </pre>
 
-<h2 id="toc_0.16">nil指针被调用不会报错，而野指针则不</h2>
+<h2 id="toc_0.17">nil指针被调用不会报错，而野指针则不</h2>
 <pre>
 //如果不存在该成员，则返回的值为nil，后面的调用也不会报错
 NSMutableArray * activeMainCtrl = [[NSUserDefaults standardUserDefaults] objectForKey:@"activeMainCtrl"];
@@ -238,12 +251,12 @@ NSLog(@"[001] saved mc : %@",activeMainCtrl);
 </pre>
 
 
-<h2 id="toc_0.17">阻塞线程，sleep</h2>
+<h2 id="toc_0.18">阻塞线程，sleep</h2>
 <p>
 [NSThread sleepForTimeInterval:30];
 </p>
 
-<h2 id="toc_0.18">http get请求</h2>
+<h2 id="toc_0.19">http get请求</h2>
 <pre>
     //登陆
     NSError *error;
@@ -290,7 +303,7 @@ NSLog(@"[001] saved mc : %@",activeMainCtrl);
     }
 </pre>
 
-<h2 id="toc_0.19">列举目录下的文件</h2>
+<h2 id="toc_0.20">列举目录下的文件</h2>
 <pre>
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     
@@ -322,7 +335,7 @@ NSLog(@"path: %@",path);
 
 
 
-<h2 id="toc_0.20">retain并未创建新对象，只是对象的生命值改变</h2>
+<h2 id="toc_0.21">retain并未创建新对象，只是对象的生命值改变</h2>
 <p>
 类A中定义了一个delegate。
 </p>
@@ -360,7 +373,7 @@ NSLog(@"path: %@",path);
 }
 </pre>
 
-<h2 id="toc_0.21">app跳转到浏览器，并且打开链接</h2>
+<h2 id="toc_0.22">app跳转到浏览器，并且打开链接</h2>
 <pre name="code" class="c">
 #define FORGET_PASSWORD_URL     @"http://login.dji-innovations.com/member/forget/en_US"
 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:FORGET_PASSWORD_URL]];
