@@ -33,3 +33,7 @@
 *** First throw call stack:
 (0x36a9c2a3 0x34dc697f 0x36a9fe07 0x36a9e531 0x369f5f68 0x3857e74b 0x36a715df 0x36a71291 0x36a6ff01 0x369e2ebd 0x369e2d49 0x358192eb 0x37fb42f9 0x43243 0x34710)
 libc++abi.dylib: terminate called throwing an exception
+
+
+#define mylog(fmt, ...)    NSLog("%d"fmt,__LINE__,##__VA_ARGS__)
+mylog("[000] test %d",10);
