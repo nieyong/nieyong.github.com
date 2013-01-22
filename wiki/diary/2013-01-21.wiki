@@ -1,4 +1,6 @@
-    if ([[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"zh_Hans"]) {
+== review ==
+{{{
+    if ([[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"zh-Hans"]) {
         //中文用户
         path = [[NSBundle mainBundle] pathForResource:@"Error" ofType:@"html"];
     }
@@ -7,5 +9,5 @@
         //其他语言用户，都配置为英文
         path = [[NSBundle mainBundle] pathForResource:@"Error_en" ofType:@"html"];
     }
-
+}}}
 

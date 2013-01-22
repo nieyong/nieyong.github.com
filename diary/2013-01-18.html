@@ -37,49 +37,35 @@
     <div class="container">
 	<div id="content">
 	
-<p>
+<h2 id="toc_0.1">review</h2>
+<pre>
 + (NSMutableArray *)getFacets:(NSString *)withName
 {
   @try 
   {
-</p>
-<blockquote>
-AmazonS3Client * s3 = 
-[[AmazonS3Client alloc] 
-initWithAccessKey:ACCESS_KEY_ID withSecretKey:SECRET_KEY];
-</blockquote>
-<blockquote>
-S3GetObjectRequest * request = 
-[[S3GetObjectRequest alloc] 
-initWithKey:withName withBucket:MODEL_BUCKET];   
-</blockquote>
-<blockquote>
-S3GetObjectResponse * response = [s3 getObject:request];
-</blockquote>
-<blockquote>
-NSData * data = [response body];
-</blockquote>
-<blockquote>
-// Convert it to list of points
-return [self getFacetsFromData:data];
-</blockquote>
-<p>
+    AmazonS3Client * s3 = 
+      [[AmazonS3Client alloc] 
+      initWithAccessKey:ACCESS_KEY_ID withSecretKey:SECRET_KEY];
+ 
+    S3GetObjectRequest * request = 
+      [[S3GetObjectRequest alloc] 
+      initWithKey:withName withBucket:MODEL_BUCKET];   
+ 
+    S3GetObjectResponse * response = [s3 getObject:request];
+ 
+    NSData * data = [response body];
+ 
+    // Convert it to list of points
+    return [self getFacetsFromData:data];
   }
   @catch (AmazonClientException * exception) 
   {
-</p>
-<blockquote>
-[self showAlert:exception.message withTitle:@"Download Error"];
-</blockquote>
-<p>
+    [self showAlert:exception.message withTitle:@"Download Error"];
   }
-</p>
  
-<p>
   return [[NSMutableArray alloc] init];
 }
-</p>
-
+</pre>
 
 <p>
 2013-01-18 14:51:43.817 AssistantForIphone[15629:907] Start connect
@@ -89,6 +75,12 @@ return [self getFacetsFromData:data];
 *** First throw call stack:
 (0x36a9c2a3 0x34dc697f 0x36a9fe07 0x36a9e531 0x369f5f68 0x3857e74b 0x36a715df 0x36a71291 0x36a6ff01 0x369e2ebd 0x369e2d49 0x358192eb 0x37fb42f9 0x43243 0x34710)
 libc++abi.dylib: terminate called throwing an exception
+</p>
+
+
+<p>
+#define mylog(fmt, ...)    NSLog("%d"fmt,_<em>LINE</em><em>,##</em>_VA_ARGS__)
+mylog("[000] test %d",10);
 </p>
 
 	</div>

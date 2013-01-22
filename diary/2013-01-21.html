@@ -37,17 +37,18 @@
     <div class="container">
 	<div id="content">
 	
-<blockquote>
-if ([[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"zh_Hans"]) {
-//中文用户
-path = [[NSBundle mainBundle] pathForResource:@"Error" ofType:@"html"];
-}
-else
-{
-//其他语言用户，都配置为英文
-path = [[NSBundle mainBundle] pathForResource:@"Error_en" ofType:@"html"];
-}
-</blockquote>
+<h2 id="toc_0.1">review</h2>
+<pre>
+    if ([[[NSLocale preferredLanguages] objectAtIndex:0] isEqualToString:@"zh-Hans"]) {
+        //中文用户
+        path = [[NSBundle mainBundle] pathForResource:@"Error" ofType:@"html"];
+    }
+    else
+    {
+        //其他语言用户，都配置为英文
+        path = [[NSBundle mainBundle] pathForResource:@"Error_en" ofType:@"html"];
+    }
+</pre>
 
 	</div>
     </div>
