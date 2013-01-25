@@ -373,8 +373,14 @@ NSLog(@"path: %@",path);
 }
 }}}
 
-== app跳转到浏览器，并且打开链接 ==
+== app跳转到系统程序 ==
+app跳转到浏览器，并且打开链接
 {{{name="code" class="c"
 #define FORGET_PASSWORD_URL     @"http://login.dji-innovations.com/member/forget/en_US"
 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:FORGET_PASSWORD_URL]];
 }}}
+app跳转到email，并且设置收件人
+{{{name="code" class="c"
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto://app@dji-innovations.com"]];
+}}}
+
