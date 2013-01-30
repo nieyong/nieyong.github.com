@@ -32,7 +32,7 @@ blockquote {
 }
 
 h1,h2 { border-bottom:1px solid #CCCCCC; margin-bottom:8px; padding-bottom:4px; }
-h1,h2,h3,h4,h5,h6 { color:#333; text-shadow:2px 2px 2px #E6E6E6; clear:both; font-family:"微软雅黑";}
+h1,h2,h3,h4,h5,h6 { color:#333; text-shadow:2px 2px 2px #E6E6E6; clear:both; font-family:"微软雅黑",Helvetica,"Arial Black",Impact;}
 h1 { font-size:24px; border-bottom:3px solid #CCCCCC;}
 h2 { font-size:18px; }
 h3 { font-size:16px; }
