@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.9: http://docutils.sourceforge.net/" />
+<meta name="version" content="S5 1.1" />
+<title>Android主题演讲</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 7056 2011-06-17 10:50:48Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+<!-- configuration parameters -->
+<meta name="defaultView" content="slideshow" />
+<meta name="controlVis" content="hidden" />
+<!-- style sheet links -->
+<script src="ui/default/slides.js" type="text/javascript"></script>
+<link rel="stylesheet" href="ui/default/slides.css"
+      type="text/css" media="projection" id="slideProj" />
+<link rel="stylesheet" href="ui/default/outline.css"
+      type="text/css" media="screen" id="outlineStyle" />
+<link rel="stylesheet" href="ui/default/print.css"
+      type="text/css" media="print" id="slidePrint" />
+<link rel="stylesheet" href="ui/default/opera.css"
+      type="text/css" media="projection" id="operaFix" />
+
+<style type="text/css">
+#currentSlide {display: none;}
+</style>
+</head>
+<body>
+<div class="layout">
+<div id="controls"></div>
+<div id="currentSlide"></div>
+<div id="header">
+
+</div>
+<div id="footer">
+<h1>Android主题演讲</h1>
+
+</div>
+</div>
+<div class="presentation">
+<div class="slide" id="slide0">
+<h1 class="title">Android主题演讲</h1>
+
+<!-- Definitions of interpreted text roles (classes) for S5/HTML data. -->
+<!-- This data file has been placed in the public domain. -->
+<!-- Colours
+======= -->
+<!-- Text Sizes
+========== -->
+<!-- Display in Slides (Presentation Mode) Only
+========================================== -->
+<!-- Display in Outline Mode Only
+============================ -->
+<!-- Display in Print Only
+===================== -->
+<!-- Display in Handout Mode Only
+============================ -->
+<!-- Incremental Display
+=================== -->
+<ul class="orange huge simple">
+<li>Android版本简介</li>
+<li>Android UI</li>
+<li>Android ROM</li>
+</ul>
+<img alt="images/google-android-logo.png" class="align-right" src="images/google-android-logo.png" style="width: 220px;" />
+
+</div>
+<div class="slide" id="id1">
+<h1>Android诞生</h1>
+<p>Android一词最先出现在科幻小说《未来夏娃》中，作者将外表像人类的机器起名为Android。</p>
+<img alt="images/android.jpg" src="images/android.jpg" style="width: 350px;" />
+<p>2007年11月5日这天，谷歌公司正式向外界展示了这款名为Android的操作系统。</p>
+</div>
+<div class="slide" id="android-1-0">
+<h1>Android 1.0</h1>
+<p>2008年9月，谷歌正式发布了Android 1.0系统。代表机型HTC Dream（G1）。</p>
+<img alt="images/htc_dream.jpg" src="images/htc_dream.jpg" />
+<p class="small orange">T-Mobile G1是世界上第一款使用Android操作系统的手机。</p>
+</div>
+<div class="slide" id="android-1-5">
+<h1>Android 1.5</h1>
+<p>Cupcake（纸杯蛋糕），代表机型HTC Magic（G2）</p>
+<img alt="images/android_1_5.jpg" src="images/android_1_5.jpg" />
+<p class="small orange">从Android 1.5版本开始，谷歌开始将Android的版本以甜品的名字命名。</p>
+</div>
+<div class="slide" id="android-1-6">
+<h1>Android 1.6</h1>
+<p>Donut（甜甜圈），代表机型HTC Hero(G3)</p>
+<img alt="images/android_1_6.jpg" src="images/android_1_6.jpg" />
+</div>
+<div class="slide" id="android-2-0">
+<h1>Android 2.0</h1>
+<p>Eclair（松饼），代表机型Motorola ME600</p>
+<img alt="images/android_2_0.jpg" src="images/android_2_0.jpg" />
+</div>
+<div class="slide" id="android-2-1">
+<h1>Android 2.1</h1>
+<p>Eclair（松饼），代表机型NEXUS One（G5）</p>
+<img alt="images/android_2_1.jpg" src="images/android_2_1.jpg" />
+</div>
+<div class="slide" id="android-2-2">
+<h1>Android 2.2</h1>
+<p>Froyo（冻酸奶），代表机型HTC Desire HD(G10)，SAMSUNG Galaxy S</p>
+<img alt="images/android_2_2.jpg" src="images/android_2_2.jpg" />
+<p class="small orange">2010年2月，Android的驱动程序从Linux内核状态树上除去，Android与Linux开发主流将分道扬镳。</p>
+</div>
+<div class="slide" id="android-2-3">
+<h1>Android 2.3</h1>
+<p>Gingerbread (姜饼），代表机型三星GALAXY SII，HTC Sensation(G14)，Nexus S</p>
+<img alt="images/android_2_3.jpg" src="images/android_2_3.jpg" />
+</div>
+<div class="slide" id="android-3-0">
+<h1>Android 3.0</h1>
+<p>Honercomb（蜂巢），专用于平板。</p>
+<img alt="images/android_3_0.jpg" src="images/android_3_0.jpg" />
+</div>
+<div class="slide" id="android-4-0">
+<h1>Android 4.0</h1>
+<p>Ice Cream Sandwich（冰激凌三明治），代表机型GALAXY Nexus</p>
+<img alt="images/android_4_0.jpg" src="images/android_4_0.jpg" />
+</div>
+<div class="slide" id="android-ui">
+<h1>Android UI</h1>
+<p>Android <span class="orange">{UI/界面/桌面/Launcher}</span></p>
+<img alt="images/android_ui.jpg" src="images/android_ui.jpg" style="width: 500px;" />
+<p class="small orange">Launcher俗称HomeScreen，也就是我们启动Android手机，第一眼看到的应用程序。</p>
+</div>
+<div class="slide" id="android-lanucher">
+<h1>民间第三方Android Lanucher</h1>
+<ul class="orange simple">
+<li>ADW Launcher</li>
+<li>Launcher Pro</li>
+<li>GO Launcher</li>
+</ul>
+<img alt="images/adw_launcher_ex.png" src="images/adw_launcher_ex.png" style="width: 200px;" />
+<img alt="images/go_launcher_ex.png" src="images/go_launcher_ex.png" style="width: 200px;" />
+<img alt="images/launcher_pro.png" src="images/launcher_pro.png" style="width: 200px;" />
+</div>
+<div class="slide" id="id2">
+<h1>国际手机厂商Android Lanucher</h1>
+<ul class="orange huge simple">
+<li>Motoblur</li>
+<li>HTC Sense</li>
+<li>Samsung TouchWiz</li>
+<li>Sony Ericsson Rachael</li>
+</ul>
+<img alt="images/samsung_logo.jpg" src="images/samsung_logo.jpg" style="width: 200px;" />
+<img alt="images/motoblur.png" src="images/motoblur.png" style="width: 200px;" />
+<img alt="images/htc_logo.jpg" src="images/htc_logo.jpg" style="width: 200px;" />
+</div>
+<div class="slide" id="samsung-touchwiz">
+<h1>Samsung TouchWiz</h1>
+<p>Samsung’s TouchWiz is used not only for Android devices, but also internally developed systems and their <strong>bada operating system</strong>.</p>
+<img alt="images/samsung_logo.jpg" src="images/samsung_logo.jpg" />
+</div>
+<div class="slide" id="motoblur">
+<h1>Motoblur</h1>
+<p>Motoblur, sometimes written as MOTOBLUR, is Motorola’s customized Android interface. It has a heavy emphasis placed on social networking activities.</p>
+<img alt="images/motoblur.png" src="images/motoblur.png" />
+</div>
+<div class="slide" id="htc-sense">
+<h1>HTC Sense</h1>
+<p>HTC phones come with an interface named “Sense”.  It is based off of the company’s TouchFLO 3D user interface.</p>
+<p>“a design experience, an architecture that is all about how people use the device, making their content personal to how they use the device.”</p>
+<img alt="images/htc_logo.jpg" src="images/htc_logo.jpg" />
+</div>
+<div class="slide" id="sony-ericsson-rachael">
+<h1>Sony Ericsson Rachael</h1>
+<p>大家习惯叫其Rachael界面，索爱自定义界面正式命名应该是Nexus。Nexus界面包括索爱招牌式的Timescape应用程序。</p>
+<img alt="images/sony-ericsson-ui.jpg" class="align-center" src="images/sony-ericsson-ui.jpg" />
+</div>
+<div class="slide" id="id3">
+<h1>战略问题-四个屏幕的战争</h1>
+<p>UI的战斗将蔓延到你的整个生活——不止是手机，还要加上电视，电脑，平板。由多屏幕组成的“用户体验生态系统”（Experience Ecosystem），能让用户把操作经验和习惯轻松地由一个屏幕过渡到另外一个屏幕。</p>
+<p class="right"><a class="reference external" href="http://www.moandroid.com/?p=2039">Android UI 之困境：统一还是分化</a></p>
+</div>
+<div class="slide" id="id5">
+<h1>Android系统二次开发</h1>
+<p>Android <span class="orange">{ROM/刷机包/二次开发/深度二次定制}</span></p>
+<p>Android足够的开放性让很多开发者投身到第三方ROM的开发中，相比Google提供的标准Android ROM，摩托罗拉、HTC、三星这些手机厂商在自己的产品中会进行大量的改进以融入自身特色形成特殊的用户体验，而第三方ROM开发团队会要求自己比所有手机厂商做得更好。</p>
+<img alt="images/android-rom.jpg" src="images/android-rom.jpg" />
+</div>
+<div class="slide" id="id6">
+<h1>国际手机厂商对Android的定制</h1>
+<ul class="huge orange simple">
+<li>HTC</li>
+<li>SAMSUNG</li>
+<li>MOTOROLA</li>
+</ul>
+</div>
+<div class="slide" id="android-android">
+<h1>国内厂商对Android的定制-Android衍生系统</h1>
+<ul class="huge orange simple">
+<li>OPhone（中国移动）</li>
+<li>阿里云OS（阿里巴巴）</li>
+<li>乐Phone（联想）</li>
+<li>百度易（百度）</li>
+<li>中兴/华为</li>
+<li>魅族/OPPO/步步高/酷派</li>
+</ul>
+</div>
+<div class="slide" id="ophone">
+<h1>OPhone</h1>
+<p>中移动和播思通讯自2008年开始在谷歌Android操作系统基础上，主导开发了OPhone系统，该系统直接内置了中移动的服务菜单、音乐随身听、手机导航、号簿管家、139邮箱、飞信、快讯和移动梦网等特色业务。</p>
+<p>代表机型：Moto MT620</p>
+<img alt="images/ophone-moto.jpg" src="images/ophone-moto.jpg" />
+</div>
+<div class="slide" id="os">
+<h1>阿里云OS</h1>
+<p>与其它手机操作系统不同的是，云智能OS采用Cloud App方式，使用户不需要在手机端下载应用，而只在网络环境下，登陆统一的云账号后，即可运行OS平台上的各种应用。</p>
+<p>阿里云OS并非如外界所言系基于Android的二次开发，其系统程序中包含阿里云自行设计的虚拟机、云服务资源库、云应用运行框架和界面框架以及上层应用，并将全面兼容Android应用程序。</p>
+</div>
+<div class="slide" id="os-w700">
+<h1>阿里云OS-天语W700</h1>
+<img alt="images/aliyum_w700.png" class="align-center" src="images/aliyum_w700.png" />
+</div>
+<div class="slide" id="phone">
+<h1>乐Phone</h1>
+<p>联想推出的跨越Windows和Android两个平台的操作系统，英文名为LeOS。该系统是一个来自基于Linux内核的Android的操作系统，给终端用户的操作界面将是统一的。</p>
+<img alt="images/lephone.jpg" class="align-center" src="images/lephone.jpg" />
+</div>
+<div class="slide" id="osandroid">
+<h1>技术性问题-这些OS到底是不是Android系统</h1>
+<img alt="images/isandroid.jpg" src="images/isandroid.jpg" />
+<p><a class="reference external" href="http://bbs.xiaomi.com/thread-182634-1-1.html">自主研发的百度易阿里云和MIUI与Android的关系</a></p>
+</div>
+<div class="slide" id="id8">
+<h1>技术性问题-这些OS到底是不是Android系统</h1>
+<p>阿里云OS是一个兼容Android系统，或者说是“类Android”、“山寨Android”系统，这种兼容系统不是没有先例的。Linux就是一个著名的兼容Unix操作系统。</p>
+<p><a class="reference external" href="http://www.angeeks.com/viewthread.php?tid=1080211">阿里云OS和android的真实关系</a></p>
+</div>
+<div class="slide" id="id10">
+<h1>轻量级新锐势力</h1>
+<ul class="huge orange simple">
+<li>CyanogenMod（国外）</li>
+<li>MIUI</li>
+<li>点心OS</li>
+<li>乐蛙</li>
+<li>众多创业公司</li>
+<li>众多业余爱好者</li>
+</ul>
+</div>
+<div class="slide" id="cyanogenmod">
+<h1>CyanogenMod</h1>
+<p>CyanogenMod is an aftermarket firmware for a number of cell phones based on the open-source Android operating system. It offers features not found in the official Android based firmwares of vendors of these cell phones.</p>
+<img alt="images/cyanogenmod.png" src="images/cyanogenmod.png" />
+</div>
+<div class="slide" id="miui-os">
+<h1>MIUI &amp; 小米OS</h1>
+<p>MIUI是一个基于CyanogenMod进行二次修改的衍生项目，MIUI已经成为国内最大的第三方Android ROM。</p>
+<img alt="images/miui_1.jpg" src="images/miui_1.jpg" />
+<img alt="images/miui_2.jpg" src="images/miui_2.jpg" />
+</div>
+<div class="slide" id="id11">
+<h1>小米手机</h1>
+<img alt="images/miui_phone.jpg" class="align-center" src="images/miui_phone.jpg" style="width: 900px;" />
+</div>
+<div class="slide" id="id12">
+<h1>点心OS &amp; 点心</h1>
+<p>点心专注于提供移动互联网智能终端整体解决方案，致力于打造最纯正的Android系统，最专业的操作系统解决方案。</p>
+<img alt="images/dianxin_os.png" src="images/dianxin_os.png" />
+</div>
+<div class="slide" id="os-sh7218u">
+<h1>点心OS手机-夏普SH7218U</h1>
+<p>该机搭载的是基于Android的点心OS。</p>
+<img alt="images/sharp-sh7218u.jpg" src="images/sharp-sh7218u.jpg" />
+</div>
+<div class="slide" id="id13">
+<h1>乐蛙</h1>
+<p>乐蛙专注于为千元安卓手机提供最有价值的本地化Android OS。</p>
+<img alt="images/lewa.png" src="images/lewa.png" />
+</div>
+<div class="slide" id="rom">
+<h1>乐蛙ROM &amp; 乐蛙</h1>
+<img alt="images/lewa_v880.png" src="images/lewa_v880.png" />
+<p>中兴V880全称ZTE-U V880，也叫Blade（刀锋），包括英国的Orange定制橘子版，以及中国联通定制的国内版。</p>
+</div>
+<div class="slide" id="id14">
+<h1>刷机包制作爱好者</h1>
+<p>如何去制作一个系统ROM，把自己喜欢的应用、讨厌的服务等等都体现在ROM文件中，对系统的内核进行编译使其达到最优，或供数以万计的用户下来来刷机。而这种类型的系统ROM其实是底层高深的高手才能做到的事情。</p>
+<p class="right"><a class="reference external" href="http://it.sohu.com/20100906/n274745854.shtml">专访Xdan：国内Android系统民间ROM制作第一人</a></p>
+</div>
+<div class="slide" id="id16">
+<h1>刷机包哪里找？</h1>
+<p>各种论坛，一般都是刷机包聚集的地方。</p>
+<p>我常上的论坛： <a class="reference external" href="http://bbs.xda.cn/forum.php">XDA论坛</a> <a class="reference external" href="http://www.5irom.com/forum.php">5iROM</a></p>
+<p>其它有名的论坛： <a class="reference external" href="http://bbs.gfan.com/">机锋论坛</a> <a class="reference external" href="http://www.nduoa.com/">N多网</a></p>
+</div>
+<div class="slide" id="id21">
+<h1>技术问题-刷机包/ROM/衍生系统</h1>
+<p><span class="orange">刷机包制作：</span> 基本上不涉及到源代码，个人就可以入手</p>
+<p><span class="orange">ROM：</span> 需要了解一些Android系统原理，对系统有一定的修改/优化</p>
+<p><span class="orange">xxOS:</span> 深入了解Android系统原理，进行二次开发/深度定制</p>
+</div>
+<div class="slide" id="id22">
+<h1>回顾历史</h1>
+<div class="handout container">
+<p>雨林木风， 曾被业界称为“三大XP盗版集团”之一，与番茄花园齐名。</p>
+<p>三大XP盗版集团：番茄花园、雨林木风、深度</p>
+</div>
+<img alt="images/yulinmufeng.png" src="images/yulinmufeng.png" />
+</div>
+<div class="slide" id="id23">
+<h1>现在未来</h1>
+<p>“对计算机专业的同学们来说，今天是你们最好的创业时机，是最适合你们的创业时机。”</p>
+<p>“这个机会，我可以保证，绝对比1999年的更大，也许大五倍，也许大十倍，或者五十倍，具体大多少我不好说，但是我肯定，绝对比当年丁磊马云的机会要大很多。”</p>
+<p class="right"><a class="reference external" href="http://zhichang.umiwi.com/2011/1021/44282.shtml">创新工场2012浙大招聘宣讲会-李开复</a></p>
+</div>
+<div class="slide" id="id25">
+<h1>Android其它</h1>
+<ul class="huge orange simple">
+<li>Android APP开发</li>
+<li>Android系统原理</li>
+<li>Android体系架构</li>
+</ul>
+</div>
+</div>
+</body>
+</html>

@@ -9,3 +9,39 @@
 	status = auto
 	branch = auto
 	ui = auto
+
+
+
+
+[core]
+	symlinks = false
+	autocrlf = true
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = true
+[alias]
+	co = checkout
+	ci = commit -a
+	st = status
+	br = branch
+	oneline = log --pretty=oneline -n 5
+	onelog = log -p -1
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+[pack]
+	packSizeLimit = 2g
+[help]
+	format = html
+[http]
+	sslCAinfo = /bin/curl-ca-bundle.crt
+[sendemail]
+	smtpserver = /bin/msmtp.exe
+
+[diff "astextplain"]
+	textconv = astextplain
+[rebase]
+	autosquash = true
+[i18n]
+	logoutputencoding = gbk
+
