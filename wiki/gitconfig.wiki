@@ -1,0 +1,11 @@
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	ll = log --pretty=oneline 
+	ol = log -p -1
+[color]
+	status = auto
+	branch = auto
+	ui = auto
