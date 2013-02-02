@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>附近的小区</title>
+	<title>2013-01-31</title>
 
   	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
 	<link rel="stylesheet" href="templates/style.css">
@@ -38,14 +38,37 @@
 	<div id="content">
 	
 <p>
-润恒御园
-万科兰乔圣菲
-新岸线
+1. iPhone 4S下，遥控器界面，开始按钮有一部分未显示。
 </p>
 
 <p>
-豪业华庭，中英公学边上
+2. More -&gt; 意见反馈，跳到发邮件界面，点击取消或完成，都已经返回到WM Assistant，而不是返回到邮件程序。这个是容易实现的，试用一下“我在这儿”这个应用，点击+号，选择邮件。
 </p>
+<blockquote>
+MFMailComposeViewController *mailPicker = [[MFMailComposeViewController alloc] init];
+mailPicker.mailComposeDelegate = self;
+</blockquote>
+<blockquote>
+//设置主题
+[mailPicker setSubject: @"eMail主题"];
+//添加收件人
+NSArray *toRecipients = [NSArray arrayWithObject: @"app@dji-innovations.com"];
+[mailPicker setToRecipients: toRecipients];
+</blockquote>
+<blockquote>
+NSString *emailBody = @"&lt;font color='red'&gt;eMail&lt;/font&gt; 正文";
+[mailPicker setMessageBody:emailBody isHTML:YES];
+</blockquote>
+<blockquote>
+UIViewController *theMailViewController = [[mailPicker viewControllers] lastObject];
+[self.navigationController pushViewController:theMailViewController animated:YES];
+</blockquote>
+<blockquote>
+//[self presentModalViewController: mailPicker animated:YES];
+</blockquote>
+<blockquote>
+[mailPicker release];
+</blockquote>
 
 	</div>
     </div>

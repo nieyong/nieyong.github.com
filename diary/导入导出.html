@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>导入导出</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+导入导出
+#define CMDID_EXPORT       0x0292
+#define CMDID_EXPORT_ACK   0x0293
+</p>
+ 
+<p>
+// Export Command
+</p>
+<blockquote>
+typedef struct tagExport
+{
+INT32U start_address;   // 请求的EEPROM起始地址
+INT32U length;              // 请求的长度(一般写)
+}export_body;
+</blockquote>
+<blockquote>
+typedef struct tagExportCommand
+{
+COMMON_HEADER header;
+export_body body;
+} SET_EXPORT, *PSET_EXPORT;
+</blockquote>
+<blockquote>
+typedef struct tagExportAck
+{
+INT32U start_address;   // 请求的EEPROM起始地址
+INT32U length;              // 请求的长度(一般写)
+INT8U  data[128];       // 数据
+INT8U  section_index;   // 0-31
+INT8U  data_checksum;
+}exportack_body;
+</blockquote>
+<blockquote>
+typedef struct tagAckExport
+{
+COMMON_HEADER header;
+INT8U  result;
+exportack_body body;
+} ACK_EXPORT, *PACK_EXPORT;
+</blockquote>
+ 
+ 
+ 
+ 
+ 
+ 
+<p>
+#define CMDID_IMPORT       0x0294
+#define CMDID_IMPORT_ACK   0x0295
+</p>
+<blockquote>
+// Import command
+typedef struct tagImport
+{
+INT32U start_address;   // 请求的EEPROM起始地址
+INT32U length;              // 请求的长度(一般写)
+INT8U  data[128];       // 数据
+INT8U  section_index;   // 0-31
+INT8U  data_checksum;
+}import_body;
+</blockquote>
+<blockquote>
+typedef struct tagSetImport
+{
+COMMON_HEADER header;
+import_body body;
+</blockquote>
+<blockquote>
+} SET_IMPORT, *PSET_IMPORT;
+</blockquote>
+<blockquote>
+typedef struct tagImportAck
+{
+INT32U start_address;   // 请求的EEPROM起始地址
+INT32U length;              // 请求的长度(一般写)
+}importack_body;
+</blockquote>
+<blockquote>
+typedef struct tagAckImport
+{
+COMMON_HEADER header;
+INT8U  result;
+importack_body body;
+</blockquote>
+<blockquote>
+} ACK_IMPORT, *PACK_IMPORT;
+</blockquote>
+ 
+<p>
+需要配置的数据：
+</p>
+ 
+<p>
+ConfigureExtName = "wkm";  //导入导出前需要判断是wkm的后缀才进行导入导出
+</p>
+<blockquote>
+m_EPPROMSection = 0x20;
+m_startaddress = 0x0000;
+</blockquote>
+<blockquote>
+Firmwareversion_Minor = 0x05;
+Firmwareversion_Update = 0x08;
+SoftwareCode = 20110323;
+EEPROM_DATA_LENGTH =  130；
+</blockquote>
+ 
+<p>
+导出流程：
+</p>
+ 
+<p>
+包头数据:SoftwareCode(INT32U), Firmwareversion_Minor(INT8U), Firmwareversion_Update(INT8U)
+</p>
+ 
+<p>
+然后用CMDID_EXPORT命令请求导出包：
+第一个包：
+</p>
+<blockquote>
+_Export.body.start_address = m_startaddress;
+_Export.body.length = 128;
+</blockquote>
+<p>
+收到ack后处理：
+把ack中的以下3个字段的数据拼到包头后面
+</p>
+<blockquote>
+INT8U  data[128];       // 数据
+INT8U  section_index;   // 0-31
+INT8U  data_checksum;   //主控自行校验
+</blockquote>
+ 
+<p>
+收到ack之后请求剩余包的数据：
+</p>
+<blockquote>
+_Export.body.start_address = (exportack.section_index+1)*128;
+_Export.body.length = 128;
+</blockquote>
+ 
+<p>
+当收到的ack的start_address
+</p>
+<blockquote>
+if( exportack.start_address == m_startaddress+0x80*(m_EPPROMSection-1))
+</blockquote>
+<p>
+则判断为包已经收完了。
+</p>
+ 
+<p>
+导入流程：
+</p>
+ 
+<p>
+解出包头：
+SoftwareCode(INT32U), Firmwareversion_Minor(INT8U), Firmwareversion_Update(INT8U)
+</p>
+ 
+<p>
+解包头：
+INT8U m_verMinor;
+</p>
+<blockquote>
+INT8U m_verUpdate;
+INT32U m_Signature;
+dataStream &gt;&gt; m_Signature;
+dataStream &gt;&gt; m_verMinor;
+dataStream &gt;&gt; m_verUpdate;
+</blockquote>
+ 
+<p>
+if (m_Signature != SoftwareCode           ||
+</p>
+<blockquote>
+m_verMinor != Firmwareversion_Minor  ||
+m_verUpdate != Firmwareversion_Update)
+{
+QMessageBox msgBox(QMessageBox::Information, tr("Info"), tr("Configuration file version does not match."), QMessageBox::Ok,g_pMainFrame);
+</blockquote>
+<blockquote>
+}
+Else
+</blockquote>
+<p>
+｛
+</p>
+<blockquote>
+校验通过，开始导入
+</blockquote>
+<p>
+第一个包：
+</p>
+ 
+<p>
+_Import.body.start_address = m_startaddress;
+</p>
+<blockquote>
+_Import.body.length = 128;
+</blockquote>
+<p>
+for (int m=0; m&lt;EEPROM_DATA_LENGTH; m++) {
+</p>
+<blockquote>
+dataStream &gt;&gt; _Import.body.data[m];
+}
+</blockquote>
+<p>
+//取出130个字节，写入
+</p>
+<blockquote>
+devIo().Write(&amp;_Import,sizeof(_Import));
+</blockquote>
+ 
+<p>
+收到ack之后写入剩余包的数据：
+</p>
+<blockquote>
+_Import.body.start_address = importack.start_address+128;
+_Import.body.length = 128;
+</blockquote>
+<p>
+for (int m=0; m&lt;EEPROM_DATA_LENGTH; m++) {
+</p>
+<blockquote>
+dataStream &gt;&gt; _Import.body.data[m];
+}
+</blockquote>
+<blockquote>
+devIo().Write(&amp;_Import,sizeof(_Import));
+</blockquote>
+ 
+ 
+<p>
+当收到的ack的start_address
+if( importack.start_address == m_startaddress+0x80*(m_EPPROMSection-1))
+则判断为包已经收完了。
+</p>
+<blockquote>
+如果ack.result ==0,则表示写eprom失败，提示导出失败
+</blockquote>
+ 
+ 
+<p>
+｝  
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

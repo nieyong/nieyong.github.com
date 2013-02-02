@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>附近的小区</title>
+	<title>gitconfig</title>
 
   	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
 	<link rel="stylesheet" href="templates/style.css">
@@ -38,13 +38,56 @@
 	<div id="content">
 	
 <p>
-润恒御园
-万科兰乔圣菲
-新岸线
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	ll = log --pretty=oneline 
+	ol = log -p -1
+[color]
+	status = auto
+	branch = auto
+	ui = auto
+</p>
+
+
+
+
+<p>
+[core]
+	symlinks = false
+	autocrlf = true
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = true
+[alias]
+	co = checkout
+	ci = commit -a
+	st = status
+	br = branch
+	oneline = log --pretty=oneline -n 5
+	onelog = log -p -1
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit --
+[pack]
+	packSizeLimit = 2g
+[help]
+	format = html
+[http]
+	sslCAinfo = /bin/curl-ca-bundle.crt
+[sendemail]
+	smtpserver = /bin/msmtp.exe
 </p>
 
 <p>
-豪业华庭，中英公学边上
+[diff "astextplain"]
+	textconv = astextplain
+[rebase]
+	autosquash = true
+[i18n]
+	logoutputencoding = gbk
 </p>
 
 	</div>

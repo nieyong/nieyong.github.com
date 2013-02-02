@@ -443,10 +443,19 @@ NSLog(@"path: %@",path);
 }
 </pre>
 
-<h2 id="toc_0.25">app跳转到浏览器，并且打开链接</h2>
+<h2 id="toc_0.25">app跳转到系统程序</h2>
+<p>
+app跳转到浏览器，并且打开链接
+</p>
 <pre name="code" class="c">
 #define FORGET_PASSWORD_URL     @"http://login.dji-innovations.com/member/forget/en_US"
 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:FORGET_PASSWORD_URL]];
+</pre>
+<p>
+app跳转到email，并且设置收件人
+</p>
+<pre name="code" class="c">
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto://app@dji-innovations.com"]];
 </pre>
 
 	</div>

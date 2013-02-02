@@ -107,6 +107,23 @@ ios的corebluetooth库中对收到的数据的分发也是通过timer进行的�
 另外，在网上找到唯一和corebluetooth库多线程的有关的信息是关于函数[[CBCentralManager alloc] initWithDelegate:self queue:myCustomQueue];，但是粗糙的测试之后，还是没能够解决问题。详见：<a href="http://stackoverflow.com/questions/13188882/corebluetooth-delegates-on-main-queue-main-thread">http://stackoverflow.com/questions/13188882/corebluetooth-delegates-on-main-queue-main-thread</a>
 </p>
 
+<p>
+我以前的做法：
+</p>
+
+<p>
+建立一条后台线程，线程控制一个队列，队列里面存放命令，ping命令单独存在
+</p>
+
+<p>
+在队列为空时，发送ping命令
+队列有命令时，取出队列中的命令发送
+</p>
+
+<p>
+因为同在一个线程中，当队列有命令时，ping就停止了，当队列为空时，ping就会发送，保证通讯连接
+</p>
+
 	</div>
     </div>
 

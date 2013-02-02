@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>2013-01-23</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<ul>
+<li>
+(void)didReceiveMemoryWarning  
+
+</ul>
+<p>
+{  
+</p>
+<blockquote>
+// Releases the view if it doesn't have a superview.  
+[super didReceiveMemoryWarning];  
+</blockquote>
+<blockquote>
+// Release any cached data, images, etc that aren't in use.  
+</blockquote>
+<p>
+}  
+</p>
+  
+<p>
+#pragma mark - View lifecycle  
+</p>
+  
+  
+<p>
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.  
+</p>
+<ul>
+<li>
+(void)viewDidLoad  
+
+</ul>
+<p>
+{  
+</p>
+<blockquote>
+[super viewDidLoad];  
+</blockquote>
+<blockquote>
+//创建一个导航栏  
+UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];    
+</blockquote>
+<blockquote>
+//创建一个导航栏集合  
+UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:nil];    
+</blockquote>
+<blockquote>
+//创建一个左边按钮  
+UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithTitle:@"左边"     
+style:UIBarButtonItemStyleBordered     
+target:self     
+action:@selector(clickLeftButton)];    
+</blockquote>
+<blockquote>
+//创建一个右边按钮  
+UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithTitle:@"右边"     
+style:UIBarButtonItemStyleDone     
+target:self     
+action:@selector(clickRightButton)];    
+//设置导航栏内容  
+[navigationItem setTitle:@"雨松MOMO程序世界"];  
+</blockquote>
+<blockquote>
+//把导航栏集合添加入导航栏中，设置动画关闭  
+[navigationBar pushNavigationItem:navigationItem animated:NO];   
+</blockquote>
+<blockquote>
+//把左右两个按钮添加入导航栏集合中  
+[navigationItem setLeftBarButtonItem:leftButton];   
+[navigationItem setRightBarButtonItem:rightButton];  
+</blockquote>
+<blockquote>
+//把导航栏添加到视图中  
+[self.view addSubview:navigationBar];    
+</blockquote>
+<blockquote>
+//释放对象  
+[navigationItem release];    
+[leftButton release];    
+[rightButton release];  
+</blockquote>
+  
+<p>
+}  
+</p>
+
+
+
+<p>
++    //[self.navigationController.view.layer addAnimation:[Global generateNavigationPushViewControllerForButtomToTopWithDelegate:self] forKey:nil];
++    ASSHelpViewController* helpViewCtrl = [[ASSHelpViewController alloc] initWithAnchor:@"#fs"];
++    helpViewCtrl.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
++    [self.navigationController presentModalViewController:helpViewCtrl animated:YES];
++    
++    //[self.navigationController pushViewController:[[ASSHelpViewController alloc] initWithAnchor:@"#fs"] animated:NO];&lt;D-1&gt;
+</p>
+<blockquote>
+_webView.opaque = NO;
+_webView.backgroundColor = [UIColor clearColor];
+for(UIView *view in _webView.subviews){
+if ([view isKindOfClass:[UIImageView class]]) {
+// to transparent
+[view removeFromSuperview];
+}
+if ([view isKindOfClass:[UIScrollView class]]) {
+UIScrollView *sView = (UIScrollView *)view;
+for (UIView* shadowView in [sView subviews]){
+//to remove shadow
+if ([shadowView isKindOfClass:[UIImageView class]]) {
+[shadowView setHidden:YES];
+}
+}
+}
+}
+</blockquote>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+
