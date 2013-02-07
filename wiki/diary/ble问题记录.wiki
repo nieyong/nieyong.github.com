@@ -1,0 +1,58 @@
+我们现在的做法是扫瞄主控阶段，就连接上蓝牙，给主控发命令，获取设备名和密码，再断开蓝牙。
+
+尝试一下新建一个代码分支或另外写一个测试程序，改成：
+1. 蓝牙上电，蓝牙给主控发命令，获取设备名，并存储在内存。（谢鹏）
+2. 蓝牙发AD包的时候，将设备名广播出去。（谢鹏）
+3. iPhone扫描阶段不连接蓝牙，只把AD包中的设备名显示给用户。（聂勇）
+
+我不知道这样改会不会对扫描成功率和连接成功率有帮助，请谢鹏和聂勇讨论并实验一下。
+
+AD中一起发出的应该包括设备名，密码，hardwareID。如果只有设备名，那么无法进行自动登陆，保存密码等等操作。
+
+AD包中只有128bit，16字节，在长度上可能有问题
+
+== ble导致设备蓝牙模块奔溃的问题 ==
+查看了Apple Mailing List 中关于Bluetooth的所有邮件（2012一年以来），发现其他人也遇到的该问题。详见下面该邮件：
+
+[[http://lists.apple.com/archives/bluetooth-dev/2012/Aug/msg00130.html|BTLE reconnection problems]]
+
+
+在邮件中使用“messing with the state of the BTLE stacA”描述该问题。别人的回复中提到，反复的scan，connect，disconnect并不是corebluetooth库建议方式。其中提到了下面这两个视频。有点困难就是该视频没有字幕。
+
+For more info, please see the two WWDC2012 talks about Core Bluetooth.
+
+
+一些测试和结论：
+a）出现该问题的情况一般都发生在重连的过程中，确实和邮件中提到的一致；
+b）按照我们现在的ble设计，扫瞄主控就必须连接它，获取用户名和密码，也就是回出现上面的scan－discover－connect设计问题；
+c）谢鹏已经将设备名从AD中广播出来，我们也进行了简单的测试，如此将绕过上面的反复scan－discover－connect的过程；如果后续的开发顺利，ble通信计划在app第二次提交apple store时修改；同时，地面站也需要修改。
+
+== 附件：邮件内容 ==
+=== ASK by RAM ===
+I repeatedly face connection problems where the only way to discover a BTLE device which is constantly advertising is to turn On/Off Bluetooth in the iPhone through settings or in rare cases restart the phone itself. My app runs in the background and is scanning for devices with a specific list of services and it works most of the time. With one of the BTLE devices were using we had some reliability issues so I have retry logic which will repeatedly attempt to connect to a recently discovered UUID for a short while before giving up, Iam not sure if this behavior is messing up the stack.
+
+Is there a way to debug the discovery issue or any recommended steps to ensure we are not messing with the state of the BTLE stack [ like not doing repeated connection attempts etc ] ?
+
+=== ANSWER by Joakim ===
+Hi Ram,
+Let me see if I can help you.
+
+- While in background mode, you will see get notified once if a new device comes within range.
+- If you got that notification while the app was in the foreground you may not get any notification when the app enters the background.
+- Connection request "pend" forever and will not timeout (they can be cancelled)
+- No need to scan for the device every time
+- You simply can connect to the device without scanning for it if you have previously connected to or paired with the device using it's UUID.
+
+For more info, please see the two WWDC2012 talks about Core Bluetooth.
+
+=== by RAM ===
+Thanks for the reply. Much appreciated. I understand the below pointers about the BT api. The logic I use is scan forever, once a device is discovered stop scanning and connect to the device. Once the device disconnects, scan again. The retries to repeatedly connect is an aberration in my question [ please ignore it ]. The above loop of scan,connect,scan seems to cause a problem of no device being discovered unless I restart BT through the Settings app. Of course this is not a consistent problem, I have had it work for days before this happened but sometimes it will show up in hours during my development .
+
+I am wondering if this is a known bug or are there anything I need to take special care about to avoid messing up the BT stack. I would also like to point out that the BTLE device I am using does follow the Apple Bluetooth guidelines for advertisement intervals and connection parameters.
+
+Ram
+
+=== by Joakim ===
+Hi Ram,
+
+I suggest you only scan for the device the first time. After connecting to it the first time, simply just try to connect to it using it's UUID instead of scan-discover-connect.

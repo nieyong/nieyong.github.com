@@ -17,7 +17,7 @@
 
 == 清除已经缓存的（staged）文件 ==
 * `git reset filename`		//相当于git reset --mixed HEAD filename
-修改了两个文件，然后使用命令`git add .`将这两个文件的修改都提交为缓存，也就是出于staged状态。这时，如果你想撤销掉某个文件的staged状态，使用命令`git reset filename`，其实这条命令的完整表达应该是`git reset --mixed HEAD filename`。
+修改了两个文件，然后使用命令`git add .`将这两个文件的修改都提交为缓存，也就是处于staged状态。这时，如果你想撤销掉某个文件的staged状态，使用命令`git reset filename`，其实这条命令的完整表达应该是`git reset --mixed HEAD filename`。
 
 参见《progit》的p28。
 

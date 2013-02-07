@@ -1,3 +1,8 @@
+== Mac OS下的包管理器 ==
+[[http://mxcl.github.com/homebrew/ |homebrew]]
+
+安装homebrew，`ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"`
+
 === crash symbolicate ===
 $ dwarfdump --uuid <PATH_TO_APP_EXECUTABLE>
 {{{
