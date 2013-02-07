@@ -1,18 +1,20 @@
+MAC下的配置
+{{{
 [alias]
 	co = checkout
 	ci = commit
 	st = status
 	br = branch
-	ll = log --pretty=oneline 
+	ll = log --oneline --decorate --since='2 days ago'
 	ol = log -p -1
 [color]
 	status = auto
 	branch = auto
 	ui = auto
+}}}
 
-
-
-
+windows下的配置
+{{{
 [core]
 	symlinks = false
 	autocrlf = true
@@ -45,3 +47,4 @@
 [i18n]
 	logoutputencoding = gbk
 
+}}}

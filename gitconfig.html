@@ -38,23 +38,26 @@
 	<div id="content">
 	
 <p>
+MAC下的配置
+</p>
+<pre>
 [alias]
 	co = checkout
 	ci = commit
 	st = status
 	br = branch
-	ll = log --pretty=oneline 
+	ll = log --oneline --decorate --since='2 days ago'
 	ol = log -p -1
 [color]
 	status = auto
 	branch = auto
 	ui = auto
-</p>
-
-
-
+</pre>
 
 <p>
+windows下的配置
+</p>
+<pre>
 [core]
 	symlinks = false
 	autocrlf = true
@@ -79,16 +82,15 @@
 	sslCAinfo = /bin/curl-ca-bundle.crt
 [sendemail]
 	smtpserver = /bin/msmtp.exe
-</p>
 
-<p>
 [diff "astextplain"]
 	textconv = astextplain
 [rebase]
 	autosquash = true
 [i18n]
 	logoutputencoding = gbk
-</p>
+
+</pre>
 
 	</div>
     </div>
