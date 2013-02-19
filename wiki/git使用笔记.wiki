@@ -217,3 +217,4 @@ git clean -f -x -d # CAUTION: as above but removes ignored files like config.
 * [[http://www.worldhello.net/gotgithub/index.html|GotGitHub 作者：蒋鑫]]
 * [[http://progit.org/|Pro Git]]
 * [[http://gitx.laullon.com/|gitx下载地址]]
+* [[http://mac.github.com/|Github for MAC]]
