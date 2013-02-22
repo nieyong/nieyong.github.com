@@ -166,7 +166,7 @@ NSLog(@" [ 008 ] hardwareID = %@, deviceName = %@, password = %@", hardwareID, d
 == NSData -->  NSString ==
 {{{name="code" class="c"
 NSMutableData *data;  //NSData *data;
-NSString *tmpdata=[[NSString alloc] init WithData:data encoding:NSACIIStringEncoding];
+NSString *tmpdata=[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 NSString* hardwareID = [[NSString alloc] initWithData:mcPeripheral.hardwareID encoding:NSASCIIStringEncoding];//不以'\0'结尾的
 }}}
 

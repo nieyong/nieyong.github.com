@@ -30,6 +30,6 @@ It is possible to send Manufacturer Specific Data (see BT Spec Version 4.0, Volu
 [[http://lists.apple.com/archives/bluetooth-dev/2012/Sep/msg00064.html|All Bluetooth LE Apps crash with a new BLE device]]
 
 
-[[http://lists.apple.com/archives/bluetooth-dev/2012/Sep/msg00085.html|iOS6 not disconnecting for 30-60seconds after	cancelPeripheralConnection]]
+[[http://lists.apple.com/archives/bluetooth-dev/2012/Sep/msg00085.html|iOS6 not disconnecting for 30-60seconds after cancelPeripheralConnection]]
 
 

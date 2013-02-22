@@ -1,0 +1,22 @@
+@protocol CommDelegate <NSObject>
+
+@optional
+//当调用通信库的startScanMainController:函数时，如果发生错误（例如设备不支持BLE或iOS的蓝牙功能关闭），将回调该函数
+- (void) failStartScanMainController: (Comm*) comm withError: (NSError*) err;
+
+//每当扫描到蓝牙主控有改变，将回调这个函数
+- (void) didScanMainController:(NSArray*) mainCtrls;
+
+//当连接到主控成功，将回调这个函数
+- (void) didConnect: (Comm*) comm mainController:(MainController*) mainCtrl;
+
+//当连接到主控失败，将回调这个函数
+- (void) failConnect: (Comm*) comm withError: (NSError*) err;
+
+//当蓝牙设备断电，或者蓝牙设备离iOS设备太远，或者主动调用断开连接接口，将回调这个函数
+- (void) disconnectBySystem: (Comm*) comm;
+
+//当接收到来自主控的命令，将回调这个函数
+- (void) receiveCommandDataFromMainController: (Comm*) comm data: (NSData*) data;
+
+@end
