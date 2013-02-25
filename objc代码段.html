@@ -226,7 +226,7 @@ NSLog(@" [ 008 ] hardwareID = %@, deviceName = %@, password = %@", hardwareID, d
 <h2 id="toc_0.15">NSData --&gt;  NSString</h2>
 <pre name="code" class="c">
 NSMutableData *data;  //NSData *data;
-NSString *tmpdata=[[NSString alloc] init WithData:data encoding:NSACIIStringEncoding];
+NSString *tmpdata=[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 NSString* hardwareID = [[NSString alloc] initWithData:mcPeripheral.hardwareID encoding:NSASCIIStringEncoding];//不以'\0'结尾的
 </pre>
 

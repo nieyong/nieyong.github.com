@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>2013-02-20</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<p>
+@protocol CommDelegate &lt;NSObject&gt;
+</p>
+
+<p>
+@optional
+//当调用通信库的startScanMainController:函数时，如果发生错误（例如设备不支持BLE或iOS的蓝牙功能关闭），将回调该函数
+</p>
+<ul>
+<li>
+(void) failStartScanMainController: (Comm*) comm withError: (NSError*) err;
+
+</ul>
+
+<p>
+//每当扫描到蓝牙主控有改变，将回调这个函数
+</p>
+<ul>
+<li>
+(void) didScanMainController:(NSArray*) mainCtrls;
+
+</ul>
+
+<p>
+//当连接到主控成功，将回调这个函数
+</p>
+<ul>
+<li>
+(void) didConnect: (Comm*) comm mainController:(MainController*) mainCtrl;
+
+</ul>
+
+<p>
+//当连接到主控失败，将回调这个函数
+</p>
+<ul>
+<li>
+(void) failConnect: (Comm*) comm withError: (NSError*) err;
+
+</ul>
+
+<p>
+//当蓝牙设备断电，或者蓝牙设备离iOS设备太远，或者主动调用断开连接接口，将回调这个函数
+</p>
+<ul>
+<li>
+(void) disconnectBySystem: (Comm*) comm;
+
+</ul>
+
+<p>
+//当接收到来自主控的命令，将回调这个函数
+</p>
+<ul>
+<li>
+(void) receiveCommandDataFromMainController: (Comm*) comm data: (NSData*) data;
+
+</ul>
+
+<p>
+@end
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+
