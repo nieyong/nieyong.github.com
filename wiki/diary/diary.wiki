@@ -25,7 +25,23 @@
 
 该问题暂时无法跟进和解决，我们只能够看以后出现的概率和用户的反馈。
 
-做了一个公司招聘的ppt，放在地址http://df.didian.me/intro/index.html上
+做了一个公司招聘的ppt，放在地址http://df.didian.me/intro/index.html 上，图片和字体等还没有做好。主要有以下几个slide：
+* 欢迎页面
+* 我们的团队
+* 我们的产品
+* 我们的机会
+* 招聘的职位（多个slide）
+* 联系方式
+
+该ppt是一个单网页生成的，所以可以直接做成一个站点，使用到了github上impress.js这个库。
+
+拿这个库做网站的几个案例：
+
+http://www.hupoz.com/#/main
+http://valeka.net/#/cover
+http://remiescola.fr/curriculum/index.html#/titre
+http://www.pongoweb.it/#/project
+http://www.ava-bausoftware.de/#/overview
 
 * [[2012-11-30]] -- 收发报文的结构和实例
 * [[2012-12-03]]
