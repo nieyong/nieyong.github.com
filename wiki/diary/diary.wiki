@@ -2,7 +2,6 @@
 * [[日报]]
 * [[工作日志]]
 * [[附近的小区]]
-* [[0111目标点]]
 * [[导入导出]]
 * [[ble问题记录]]
 * [[调参app的aws云端设计]]
@@ -10,38 +9,15 @@
 * [[corebluetooth note]]
 * [[调参app奔溃bug纪录]]
 * [[调参app工作安排]]
+* [[iphone调参的git分支模型]]
+* [[公司相关纪录]]
+
+
+== Help文档 ==
 * [[HELP页面]]
 * [[HELP EN]]
 * [[Error页面]]
 * [[Error EN]]
-* [[iphone调参的git分支模型]]
-
-完成了tag 1.1.13，并且已经上传。
-该版本是一些bug修复。
-
-该版本是WM iphone调参发布版本，下一阶段将开始NM iphone调参开发，李南宁需要提供开发的文档。明天iphone调参小组回宝安上班。
-
-另外，使用新的ble库之后，出现了一次手机设备的蓝牙无法使用的问题，iphone 4S，重启蓝牙无法恢复，重启手机之后解决蓝牙又可以使用。
-
-该问题暂时无法跟进和解决，我们只能够看以后出现的概率和用户的反馈。
-
-做了一个公司招聘的ppt，放在地址http://df.didian.me/intro/index.html 上，图片和字体等还没有做好。主要有以下几个slide：
-* 欢迎页面
-* 我们的团队
-* 我们的产品
-* 我们的机会
-* 招聘的职位（多个slide）
-* 联系方式
-
-该ppt是一个单网页生成的，所以可以直接做成一个站点，使用到了github上impress.js这个库。
-
-拿这个库做网站的几个案例：
-
-http://www.hupoz.com/#/main
-http://valeka.net/#/cover
-http://remiescola.fr/curriculum/index.html#/titre
-http://www.pongoweb.it/#/project
-http://www.ava-bausoftware.de/#/overview
 
 * [[2012-11-30]] -- 收发报文的结构和实例
 * [[2012-12-03]]
