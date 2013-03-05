@@ -38,7 +38,7 @@ AD包中只有128bit，16字节，在长度上可能有问题
 [[http://lists.apple.com/archives/bluetooth-dev/2012/Aug/msg00130.html|BTLE reconnection problems]]
 
 
-在邮件中使用“messing with the state of the BTLE stacA”描述该问题。别人的回复中提到，反复的scan，connect，disconnect并不是corebluetooth库建议方式。其中提到了下面这两个视频。有点困难就是该视频没有字幕。
+在邮件中使用“messing with the state of the BTLE stack”描述该问题。别人的回复中提到，反复的scan，connect，disconnect并不是corebluetooth库建议方式。其中提到了下面这两个视频。有点困难就是该视频没有字幕。
 
 For more info, please see the two WWDC2012 talks about Core Bluetooth.
 
