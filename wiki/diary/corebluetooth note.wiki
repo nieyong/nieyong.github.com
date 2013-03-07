@@ -1,5 +1,0 @@
-When you disconnect a device with cancelPeripheralConnection the didDisconnectPeripheral delegate method will be invoked. However from iOS 6.0 the device remains connected for about 40-50 seconds (or more), so no didDiscoverPeripheral will be invoked in that timeframe. If you want to "discover" it again just call the retrieveConnectedPeripherals method and you will get the reference in didRetrieveConnectedPeripherals.
-
-However, the best solution is to save the device's UUID and use that to reconnect with the retrievePeripherals method. This will invoke didRetrievePeripherals and you can reconnect with connectPeripheral. This is the fastest way to reconnect to a device, no scanning is required in this case.
-
-http://stackoverflow.com/questions/13286487/how-can-i-reconnect-to-device-after-disconnecting-in-core-bluetooth

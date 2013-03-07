@@ -6,11 +6,12 @@
 * [[ble问题记录]]
 * [[调参app的aws云端设计]]
 * [[调参app开发纪录]]
-* [[corebluetooth note]]
 * [[调参app奔溃bug纪录]]
 * [[调参app工作安排]]
 * [[iphone调参的git分支模型]]
 * [[公司相关纪录]]
+
+Bluetooth笔记：[[../wiki_ble/|Bluetooth Note]]
 
 
 == Help文档 ==
