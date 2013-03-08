@@ -37,7 +37,7 @@
     <div class="container">
 	<div id="content">
 	
-<h2 id="toc_0.1">CoreBluetooth库接口断开还需等待60s才能够收到AD包</h2>
+<h2 id="toc_0.1">CoreBluetooth库接口断开需60s</h2>
 <p>
 When you disconnect a device with cancelPeripheralConnection the didDisconnectPeripheral delegate method will be invoked. However from iOS 6.0 the device remains connected for about 40-50 seconds (or more), so no didDiscoverPeripheral will be invoked in that timeframe. If you want to "discover" it again just call the retrieveConnectedPeripherals method and you will get the reference in didRetrieveConnectedPeripherals.
 </p>
@@ -47,7 +47,7 @@ However, the best solution is to save the device's UUID and use that to reconnec
 </p>
 
 <p>
-<a href="http://stackoverflow.com/questions/13286487/how-can-i-reconnect-to-device-after-disconnecting-in-core-bluetooth">http://stackoverflow.com/questions/13286487/how-can-i-reconnect-to-device-after-disconnecting-in-core-bluetooth</a>
+<a href="http://stackoverflow.com/questions/13286487/how-can-i-reconnect-to-device-after-disconnecting-in-core-bluetooth">链接地址</a>
 </p>
 
 <h2 id="toc_0.2">部分iPhone 4S搜索不到蓝牙主控的问题</h2>
@@ -94,14 +94,14 @@ However, the best solution is to save the device's UUID and use that to reconnec
 
 </ul>
 
-<h3 id="toc_0.2.1">关于BLE通信问题的纪录</h3>
+<h2 id="toc_0.3">关于BLE通信速率问题</h2>
 
 <p>
 昨天测试了BLE通信的速度丢包问题
 </p>
 
+<h3 id="toc_0.3.1">测试方式：</h3>
 <p>
-测试方式：
 touch以100ms的间隔向主控发送通道数据包（34bytes），主控需要回复的ack报文有66bytes，这样，一个交互过程为100字节的数据量，这应该也是对BLE缓存区buffer的要求。通信速率也就在8kbit/s，或者1.5kbytes/s。
 </p>
 
@@ -109,10 +109,7 @@ touch以100ms的间隔向主控发送通道数据包（34bytes），主控需要
 然后以125ms，160ms，200ms做同样的测试
 </p>
 
-<p>
-测试结果：
-</p>
-
+<h3 id="toc_0.3.2">测试结果：</h3>
 <p>
 在125ms和100ms的时候，出现了丢包的现象，也就是某些SN的报文没有回复，丢包的原因在于BLE接收到的某些包出现了错误。发包速度越快，丢包越严重。
 </p>
@@ -121,22 +118,29 @@ touch以100ms的间隔向主控发送通道数据包（34bytes），主控需要
 在发送速度为100ms，125ms，160ms的时候，ack报文回复的速度不能够保证在改时间内收到。
 </p>
 
-<p>
-一些结论和思考：
-1.发送速度是引起丢包的原因；
-2.丢包问题是由蓝牙接收到的数据有错误引起；
-3.ack报文回复的速度（从发出某个SN的报文，到收到该SN报文）大概在130ms~180ms左右；
-4.ack报文回复速度为200ms的原因尚未清楚：BLE的传输速率？BLE的处理速率？主控处理速率？can总线速率？等等
-</p>
+<h3 id="toc_0.3.3">一些结论和思考：</h3>
+<ol>
+<li>
+发送速度是引起丢包的原因；
 
+<li>
+丢包问题是由蓝牙接收到的数据有错误引起；
 
+<li>
+ack报文回复的速度（从发出某个SN的报文，到收到该SN报文）大概在130ms~180ms左右；
+
+<li>
+ack报文回复速度为200ms的原因尚未清楚：BLE的传输速率？BLE的处理速率？主控处理速率？can总线速率？等等
+
+</ol>
+
+<h3 id="toc_0.3.4">一些其他的异常问题：</h3>
 <p>
-一些其他的异常问题：
 在使用过程中，touch一直扫描不到主控，发现是在连接成功之后，无法发现蓝牙的service。最后，解决的办法是重启了设备的蓝牙，就一切ok。
 </p>
 
 
-<h3 id="toc_0.2.2">通道命令ack报文</h3>
+<h3 id="toc_0.3.5">通道命令ack报文</h3>
 <p>
 55aa55aa 3e002839 001006cd a8000405 080f4632
 37313038 32300000 0000010a e903000f 0000feff
@@ -181,9 +185,6 @@ touch以100ms的间隔向主控发送通道数据包（34bytes），主控需要
  [001] 当前发包的序号是：62;收到包序号:61
  send sn = 63
 
-
-
-
 encodedData = &lt;55aa55aa 1e000135 000f0600 80000000 00000000 00000000 00000000 00000000 74c1&gt;
 send sn = 54
 encodedData = &lt;55aa55aa 1e000136 000f0600 80000000 00000000 00000000 00000000 00000000 3e53&gt;
@@ -227,8 +228,8 @@ updatedValue = &lt;03004e00 00e90300 000095e4&gt;
 [001] 当前发包的序号是：59;收到包序号:58
 </pre>
 
-<h2 id="toc_0.3">蓝牙问题报告2</h2>
-<h3 id="toc_0.3.1">1.can总线无法发出数据的问题</h3>
+<h2 id="toc_0.4">蓝牙问题报告2</h2>
+<h3 id="toc_0.4.1">1.can总线无法发出数据的问题</h3>
 <p>
 dji的设计中，主控，蓝牙，电台等是挂在can总线上，所有的通信都是通过can总线；
 </p>
@@ -246,7 +247,7 @@ dji的设计中，主控，蓝牙，电台等是挂在can总线上，所有的�
 </p>
 
 
-<h3 id="toc_0.3.2">2.主控扫描失败率高的问题</h3>
+<h3 id="toc_0.4.2">2.主控扫描失败率高的问题</h3>
 <p>
 在对某个蓝牙进行测试时，出现了扫描失败率高的问题，失败率达到30％以上；
 </p>
@@ -259,7 +260,7 @@ dji的设计中，主控，蓝牙，电台等是挂在can总线上，所有的�
 在这里记下备忘；
 </p>
 
-<h3 id="toc_0.3.3">3.断开ble连接的问题</h3>
+<h3 id="toc_0.4.3">3.断开ble连接的问题</h3>
 
 <p>
 使用ios的库函数cancelPeripheralConnection断开一个主控的连接时，需要等待一段时间（5s以上），并且不一定能够成功。
@@ -274,7 +275,7 @@ dji工程师设计了另外一个断开的办法，直接对ble的特征（0x33f
 </p>
 
 
-<h2 id="toc_0.4">蓝牙问题报告3</h2>
+<h2 id="toc_0.5">蓝牙问题报告3</h2>
 <p>
 对于报告2中的“2.主控扫描失败率高的问题，3.断开ble连接的问题”的补充和修正：
 </p>
@@ -303,7 +304,7 @@ dji工程师设计了另外一个断开的办法，直接对ble的特征（0x33f
 
 </ol>
 
-<h2 id="toc_0.5">AD中发送出设备名方案</h2>
+<h2 id="toc_0.6">AD中发送出设备名方案</h2>
 <p>
 我们现在的做法是扫瞄主控阶段，就连接上蓝牙，给主控发命令，获取设备名和密码，再断开蓝牙。
 </p>
@@ -327,7 +328,7 @@ AD中一起发出的应该包括设备名，密码，hardwareID。如果只有�
 AD包中只有128bit，16字节，在长度上可能有问题
 </p>
 
-<h3 id="toc_0.5.1">2.20</h3>
+<h3 id="toc_0.6.1">2.20</h3>
 <p>
 到现在，代码方面大概完成了40％的工作量。并且就现在的实现，由于扫描结束之后，只有主控的设备名（不唯一）一个信息，所以扫描连接时的某些逻辑无法实现，现在发现的主要有以下几个：
 </p>
@@ -357,7 +358,7 @@ AD包中只有128bit，16字节，在长度上可能有问题
 至于下周一能否拿这个新的ble方案公测，则需要看开发的进度。我们必须注意到，主控和iphone调参app都可以通过升级改正问题，但是ble模块上的固件应该无法做升级。
 </p>
 
-<h3 id="toc_0.5.2">2.22</h3>
+<h3 id="toc_0.6.2">2.22</h3>
 <p>
 到现在，新的ble库的开发已经结束，并且移植到iphone调参软件，并且交付李做进一步的测试。
 </p>
@@ -371,7 +372,7 @@ AD包中只有128bit，16字节，在长度上可能有问题
 </p>
 
 
-<h2 id="toc_0.6">ble导致设备蓝牙模块奔溃的问题</h2>
+<h2 id="toc_0.7">ble导致设备蓝牙模块奔溃的问题</h2>
 <p>
 查看了Apple Mailing List 中关于Bluetooth的所有邮件（2012一年以来），发现其他人也遇到的该问题。详见下面该邮件：
 </p>
@@ -405,8 +406,8 @@ For more info, please see the two WWDC2012 talks about Core Bluetooth.
 
 </ul>
 
-<h2 id="toc_0.7">附件：邮件内容</h2>
-<h3 id="toc_0.7.1">ASK by RAM</h3>
+<h2 id="toc_0.8">附件：邮件内容</h2>
+<h3 id="toc_0.8.1">ASK by RAM</h3>
 <p>
 I repeatedly face connection problems where the only way to discover a BTLE device which is constantly advertising is to turn On/Off Bluetooth in the iPhone through settings or in rare cases restart the phone itself. My app runs in the background and is scanning for devices with a specific list of services and it works most of the time. With one of the BTLE devices were using we had some reliability issues so I have retry logic which will repeatedly attempt to connect to a recently discovered UUID for a short while before giving up, Iam not sure if this behavior is messing up the stack.
 </p>
@@ -415,7 +416,7 @@ I repeatedly face connection problems where the only way to discover a BTLE devi
 Is there a way to debug the discovery issue or any recommended steps to ensure we are not messing with the state of the BTLE stack [ like not doing repeated connection attempts etc ] ?
 </p>
 
-<h3 id="toc_0.7.2">ANSWER by Joakim</h3>
+<h3 id="toc_0.8.2">ANSWER by Joakim</h3>
 <p>
 Hi Ram,
 Let me see if I can help you.
@@ -443,7 +444,7 @@ You simply can connect to the device without scanning for it if you have previou
 For more info, please see the two WWDC2012 talks about Core Bluetooth.
 </p>
 
-<h3 id="toc_0.7.3">by RAM</h3>
+<h3 id="toc_0.8.3">by RAM</h3>
 <p>
 Thanks for the reply. Much appreciated. I understand the below pointers about the BT api. The logic I use is scan forever, once a device is discovered stop scanning and connect to the device. Once the device disconnects, scan again. The retries to repeatedly connect is an aberration in my question [ please ignore it ]. The above loop of scan,connect,scan seems to cause a problem of no device being discovered unless I restart BT through the Settings app. Of course this is not a consistent problem, I have had it work for days before this happened but sometimes it will show up in hours during my development .
 </p>
@@ -456,7 +457,7 @@ I am wondering if this is a known bug or are there anything I need to take speci
 Ram
 </p>
 
-<h3 id="toc_0.7.4">by Joakim</h3>
+<h3 id="toc_0.8.4">by Joakim</h3>
 <p>
 Hi Ram,
 </p>
@@ -466,7 +467,7 @@ I suggest you only scan for the device the first time. After connecting to it th
 </p>
 
 
-<h2 id="toc_0.8">3.7</h2>
+<h2 id="toc_0.9">3.7</h2>
 <p>
 本人使用cc2540做ble外设，在开发iOS的App时，发现使用iphone 4S时，在信号弱时断开重连时，反复几次之后，发现导致整个手机无法再次获取到服务和特征（能够扫描，连接），而且同一个手机上所有的ble App都出现该问题，只有重启整个手机，就可以。该问题在iphone 5上没有出现。
 </p>
@@ -475,13 +476,13 @@ I suggest you only scan for the device the first time. After connecting to it th
 重连的过程中，没有重新扫描，还是直接使用的原来的perpheril。
 </p>
 
-<h2 id="toc_0.9">3.8／iphone 4s在重连时ble奔溃</h2>
-<h3 id="toc_0.9.1">问题描述：</h3>
+<h2 id="toc_0.10">3.8／iphone 4s在重连时ble奔溃</h2>
+<h3 id="toc_0.10.1">问题描述：</h3>
 <p>
 使用iphone 4S时，在信号弱时断开重连时，反复几次断开重连之后，发现导致整个手机无法再连接上ble，具体表现为获取不到服务和特征（能够扫描，连接），而且同一个手机上所有的ble App都出现该问题，只有重启整个手机，才能够重新连接ble。该问题在iphone 5上没有出现。
 </p>
 
-<h3 id="toc_0.9.2">bug测试：</h3>
+<h3 id="toc_0.10.2">bug测试：</h3>
 <p>
 发现该问题在App的view页面最容易出现，在其他页面尚未重现。
 </p>
@@ -494,12 +495,12 @@ I suggest you only scan for the device the first time. After connecting to it th
 在ble的群中也有人遇到该问题，但是也没有解决。
 </p>
 
-<h3 id="toc_0.9.3">分析：</h3>
+<h3 id="toc_0.10.3">分析：</h3>
 <p>
 上面的测试说明，导致该bug的可能条件是iphone和ble外设之间存在大的数据通信。
 </p>
 
-<h3 id="toc_0.9.4">现有的修改方案：</h3>
+<h3 id="toc_0.10.4">现有的修改方案：</h3>
 <ul>
 <li>
 优化ble库中ping命令的发送
@@ -513,7 +514,7 @@ I suggest you only scan for the device the first time. After connecting to it th
 以上修改之后，室内的测试，该bug出现的概率要小很多了。明天将进行室外的测试。
 </p>
 
-<h3 id="toc_0.9.5">存在的隐患：</h3>
+<h3 id="toc_0.10.5">存在的隐患：</h3>
 <ul>
 <li>
 没有找到问题的根源所在（甚至没有查到出现该问题的代码位置和毕现方法）

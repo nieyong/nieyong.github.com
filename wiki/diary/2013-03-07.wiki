@@ -1,0 +1,8 @@
+ylqmatoMac-mini:DJIAssistantForIphone ylq$ git reflog
+7b01752 HEAD@{0}: rebase finished: returning to refs/heads/master
+7b01752 HEAD@{1}: pull --rebase --progress --prune origin: ＊修改ble库，优化ping命令发送
+5a69c8c HEAD@{2}: checkout: moving from master to 5a69c8c6ea3903522198fbe363ca4566a7f17470^0
+5d04f63 HEAD@{3}: commit: ＊修改view页面数据包的发送，不再同时发送两个page的数据
+1ace200 HEAD@{4}: commit: ＊修改ble库，优化ping命令发送
+358ffc5 HEAD@{5}: checkout: moving from bleMerge to master
+a4c435a HEAD@{6}: commit: ＋添加ble的文件，删除a文件

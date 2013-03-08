@@ -1,9 +1,9 @@
-== CoreBluetooth库接口断开还需等待60s才能够收到AD包 ==
+== CoreBluetooth库接口断开需60s ==
 When you disconnect a device with cancelPeripheralConnection the didDisconnectPeripheral delegate method will be invoked. However from iOS 6.0 the device remains connected for about 40-50 seconds (or more), so no didDiscoverPeripheral will be invoked in that timeframe. If you want to "discover" it again just call the retrieveConnectedPeripherals method and you will get the reference in didRetrieveConnectedPeripherals.
 
 However, the best solution is to save the device's UUID and use that to reconnect with the retrievePeripherals method. This will invoke didRetrievePeripherals and you can reconnect with connectPeripheral. This is the fastest way to reconnect to a device, no scanning is required in this case.
 
-http://stackoverflow.com/questions/13286487/how-can-i-reconnect-to-device-after-disconnecting-in-core-bluetooth
+[[http://stackoverflow.com/questions/13286487/how-can-i-reconnect-to-device-after-disconnecting-in-core-bluetooth|链接地址]]
 
 == 部分iPhone 4S搜索不到蓝牙主控的问题 ==
 一共测试了6台iphone 4s机器，其中5台机器测试可以连接到ble，1台不行。
@@ -27,29 +27,27 @@ http://stackoverflow.com/questions/13286487/how-can-i-reconnect-to-device-after-
 * 软件版本6.0以上也可能会无法连接到ble设备；
 * 导致无法连接的原因可能和ios的库，iphone 4s使用的蓝牙方案有关（iphone 4s和iphone 5是使用的不同蓝牙方案）。有这样的猜测，主要参考了iphone的一些邮件，尤其是[[http://lists.apple.com/archives/bluetooth-dev/2012/Nov/msg00031.html|Bluetooth LE problems with new iOS devices]]。这个邮件中出现的情况和我们的相近，只是他们的是iphone 4s能够连上，而iphone 5不能够。在邮件中谈到主要的问题出在蓝牙外设的参数配置。由于我们没有抓包工具等调试手段，所以无法深入跟踪。另外，我们的固件也尝试了几种参数配置，那台不能够连接的iphone 4s仍然无法连接。
 
-=== 关于BLE通信问题的纪录 ===
+== 关于BLE通信速率问题 ==
 
 昨天测试了BLE通信的速度丢包问题
 
-测试方式：
+=== 测试方式： ===
 touch以100ms的间隔向主控发送通道数据包（34bytes），主控需要回复的ack报文有66bytes，这样，一个交互过程为100字节的数据量，这应该也是对BLE缓存区buffer的要求。通信速率也就在8kbit/s，或者1.5kbytes/s。
 
 然后以125ms，160ms，200ms做同样的测试
 
-测试结果：
-
+=== 测试结果： ===
 在125ms和100ms的时候，出现了丢包的现象，也就是某些SN的报文没有回复，丢包的原因在于BLE接收到的某些包出现了错误。发包速度越快，丢包越严重。
 
 在发送速度为100ms，125ms，160ms的时候，ack报文回复的速度不能够保证在改时间内收到。
 
-一些结论和思考：
-1.发送速度是引起丢包的原因；
-2.丢包问题是由蓝牙接收到的数据有错误引起；
-3.ack报文回复的速度（从发出某个SN的报文，到收到该SN报文）大概在130ms~180ms左右；
-4.ack报文回复速度为200ms的原因尚未清楚：BLE的传输速率？BLE的处理速率？主控处理速率？can总线速率？等等
+=== 一些结论和思考： ===
+# 发送速度是引起丢包的原因；
+# 丢包问题是由蓝牙接收到的数据有错误引起；
+# ack报文回复的速度（从发出某个SN的报文，到收到该SN报文）大概在130ms~180ms左右；
+# ack报文回复速度为200ms的原因尚未清楚：BLE的传输速率？BLE的处理速率？主控处理速率？can总线速率？等等
 
-
-一些其他的异常问题：
+=== 一些其他的异常问题： ===
 在使用过程中，touch一直扫描不到主控，发现是在连接成功之后，无法发现蓝牙的service。最后，解决的办法是重启了设备的蓝牙，就一切ok。
 
 
@@ -93,9 +91,6 @@ touch以100ms的间隔向主控发送通道数据包（34bytes），主控需要
  encodedData = <55aa55aa 1e00013e 000f0600 80000000 00000000 00000000 00000000 00000000 323d>
  [001] 当前发包的序号是：62;收到包序号:61
  send sn = 63
-
-
-
 
 encodedData = <55aa55aa 1e000135 000f0600 80000000 00000000 00000000 00000000 00000000 74c1>
 send sn = 54
