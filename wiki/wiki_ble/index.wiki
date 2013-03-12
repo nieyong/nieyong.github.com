@@ -1,5 +1,10 @@
 [[bluetooth essentials for programmers]]
 
+2.1KB/s的传输速率
+
+音乐差的也要64Kbps啊
+
+jawbone手环就是这么做
 
 == Bluetooth笔记 ==
 
