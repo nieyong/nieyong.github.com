@@ -1,3 +1,16 @@
+== runUntilDate ==
+{{{name="code" class="c"
+    // The hud will dispable all input on the view (use the higest view possible in the view hierarchy)
+    self.HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+    [self.navigationController.view addSubview:self.HUD];
+    [self.HUD show:YES];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantPast]];
+    
+    //登陆
+    NSNumber* loginResult = [[LoginRegist sharedInstance] Login:userName password:password];
+    [self.HUD hide:YES];
+}}}
+
 == NSBundle与文件资源 ==
 获取app下的Error.html文件路径。
 {{{name="code" class="c"
