@@ -37,7 +37,169 @@
     <div class="container">
 	<div id="content">
 	
-<h2 id="toc_0.1">NSBundle与文件资源</h2>
+<h2 id="toc_0.1">Run Loop</h2>
+<p>
+NSRunLoop 是更好的因为它允许在您等待时响应事件 runloop。如果你只是睡了您的线程即使事件到达 （比如你在等待的网络响应），将阻止您的应用程序。
+</p>
+
+<p>
+在连续循环中，有可能会引起界面的停顿，可以考虑加入<code>[[NSRunLoop currentRunLoop] runUntilDate: [NSDate distantPast]]</code>，其实就是本身的loop暂停一下，让主线程分点时间。
+</p>
+
+<p>
+首先是Run Loop的部分概念，它的作用就是循环、处理事件。具体来说有两个方面：
+</p>
+<ul>
+<li>
+定时启动任务（一般用和Timer协作）；
+
+<li>
+处理事件。
+
+</ul>
+
+<p>
+在单线程的app中，不需要注意Run Loop，但不代表没有。程序启动时，系统已经在主线程中加入了Run Loop。它保证了我们的主线程在运行起来后，就处于一种“等待”的状态（而不像一些命令行程序一样运行一次就结束了），这个时候如果有接收到的事件（Timer的定时到了或是其他线程的消息），就会执行任务，否则就处于休眠状态。
+</p>
+
+<p>
+如果我们要写多线程的程序，可能就需要自己来管理Run Loop。
+</p>
+
+<pre name="code" class="c">
+    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]
+</pre>
+
+<p>
+RunMode: NSDefaultRunLoopMode，默认的run loop mode，可以把这个理解为一个”过滤器“，我们可以只对自己关心的事件进行监视。一般NSDefaultRunLoopMode是最常用的。
+</p>
+
+<p>
+启动run loop的方法就是runMode:，它的说明是：Runs the loop once, blocking for input in the specified mode until a given date。启动run loop一次，在特定的run loop mode下等待输入。
+</p>
+
+<p>
+如果没有附加input source或是timer，或是过limitDate，run loop就会退出，并且方法返回NO。
+</p>
+
+<p>
+下来是Run Loop的使用场合：
+</p>
+<ul>
+<li>
+使用port或是自定义的input source来和其他线程进行通信
+
+<li>
+在线程（非主线程）中使用timer
+
+<li>
+使用 performSelector...系列（如performSelectorOnThread, ...）
+
+<li>
+使用线程执行周期性工作
+
+</ul>
+
+<p>
+run loop不需要创建，在线程中只需要调用[NSRunLoop currentRunLoop]就可以得到。
+</p>
+
+<pre name="code" class="c">
+    // The hud will dispable all input on the view (use the higest view possible in the view hierarchy)
+    self.HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+    [self.navigationController.view addSubview:self.HUD];
+    [self.HUD show:YES];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantPast]];
+    
+    //登陆
+    NSNumber* loginResult = [[LoginRegist sharedInstance] Login:userName password:password];
+    [self.HUD hide:YES];
+</pre>
+
+
+<p>
+假设我们想要等待某个异步方法的回调。比如connection。如果我们的线程中没有启动run loop，是不会有效果的（因为线程已经运行完毕，正常退出了）。我们可以用一个条件来运行run loop。
+</p>
+
+<p>
+这样就可以一直进行等待，直到在别的位置将done置为YES，表示任务完成。
+</p>
+
+<pre name="code" class="c">
+-(void)start
+{
+    isFinished  = NO;
+
+    ...
+    while(isFinished != YES) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
+}
+</pre>
+
+
+<pre name="code" class="c">
+while(done)
+{
+    [ NSRunLoop currentRunLoop]  runMode:currentMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+}
+</pre>
+
+<p>
+上面这段话看似程序进入了死循环，其实并不是这样。这段程序的意思是：
+</p>
+
+<p>
+如果当前线程有当前设置的runMode下的事件发生，runloop就会启动，处理对应的事件。如果没有事件发生，runloop就会每过10秒钟启动一次当前线程的runloop.
+</p>
+
+<p>
+如果runloop每次启动成功   [ NSRunLoop currentRunLoop]  runMode:currentMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:10]]; 返回值为YES，这个启动成功包括了时间触发和10秒钟到了之后触发两种情况。如果启动失败返回false.
+</p>
+
+<p>
+说到这个地方可能还不明白，为什么要搞个循环，为什么要用runloop,我刚开始的时候也是搞得不太明白。
+</p>
+
+<p>
+这个地方解释一下：
+</p>
+
+<p>
+当我们在ios设备上面触摸屏幕之后，对应的tounch事件就会调用，这是为什么呢，其实这个地方就有runloop的功劳。
+</p>
+
+<p>
+其实runloop做为一种时间处理机制，类似一个车间的主任（不知道这种比喻是否恰当）,这个主任他负责处理这个车间流水线上面发生特定类型事件的处理（这里的特定事件就是runMode）这个事件可以包括安全事件，机械时间等等。该主任处理时间的传统方式可以是每隔一分钟巡逻生产线一次(对应的是cpu空转轮询消息队列的方式)，这种方式比较耗费工人体力（cpu资源，电量），当发现有问题发生，他就找对应的工人去处理，这里的工人对应于时间的处理函数；还有一种方式就是主任平时都在睡觉打麻将，当生产线发生问题的时候，如果是属于他的职责，系统就直接给他发送一条短信通知他，他收到之后再通知对应的工人去处理，上面那个十秒钟(这个是可以更改的）就是如果十秒内没有消息通知过来，主任才会去车间巡逻一次，但是这十秒由于主任是没有收到事件处理消息的，所以他通常是到了车间就走了（对应runLoop启动就结束，没有事件处理）。
+</p>
+
+<p>
+因此采用runloop的好处就显而易见了。
+</p>
+
+<p>
+runloop处理的事件包括：
+</p>
+<ul>
+<li>
+使用port或是自定义的input source来和其他线程进行通信
+
+<li>
+在线程（非主线程）中使用timer
+
+<li>
+使用 performSelector...系列（如performSelectorOnThread, ...）
+
+<li>
+使用线程执行周期性工作
+
+</ul>
+
+<p>
+如果在执行周期性工作的时候就可以采用上面那种，用一个循环，当时间回调的时候（这个地方的一个典型应用场景就是处理网络数据，网络有数据返回就启动一次runloop，直到所有数据处理完成之后将done设置为YES。结束）；
+</p>
+
+<h2 id="toc_0.2">NSBundle与文件资源</h2>
 <p>
 获取app下的Error.html文件路径。
 </p>
@@ -45,7 +207,7 @@
     path = [[NSBundle mainBundle] pathForResource:@"Error" ofType:@"html"];
 </pre>
 
-<h2 id="toc_0.2">NSLocale language</h2>
+<h2 id="toc_0.3">NSLocale language</h2>
 <p>
 判断当前的系统语言设置是否为中文简体。
 </p>
@@ -62,7 +224,7 @@
     }
 </pre>
 
-<h2 id="toc_0.3">amazon库中try  catch的使用</h2>
+<h2 id="toc_0.4">amazon库中try  catch的使用</h2>
 <pre name="code" class="c">
 
 + (NSMutableArray *)getFacets:(NSString *)withName
@@ -93,7 +255,7 @@
 }
 </pre>
 
-<h2 id="toc_0.4">removeFromSuperview</h2>
+<h2 id="toc_0.5">removeFromSuperview</h2>
 <pre name="code" class="c">
 
 [_overlay removeFromSuperview];
@@ -107,7 +269,7 @@ _overlay等在removeFromSupperview之后就会被释放掉（release）。
 If the receiver’s superview is not nil, the superview releases the receiver. If you plan to reuse a view, be sure to retain it before calling this method and release it again later as appropriate.
 </blockquote>
 
-<h2 id="toc_0.5">定时器循环</h2>
+<h2 id="toc_0.6">定时器循环</h2>
 <pre name="code" class="c">
 
 NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(scanMainControllerAssistantCmd) userInfo:nil repeats:NO];
@@ -116,7 +278,7 @@ NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self select
 [timer performSelector:@selector(invalidate) withObject:nil afterDelay:5.0f];
 </pre>
 
-<h2 id="toc_0.6">清空数组对象</h2>
+<h2 id="toc_0.7">清空数组对象</h2>
 <p>
 清空已经发现的BLE外设数组，清空已经已经获得deviceInfo信息的BLE外设数组
 </p>
@@ -134,13 +296,13 @@ authenPeripherals是NSMutableArray数组对象，对其清空不能够直接付�
 </pre>
 
 
-<h2 id="toc_0.7">IOS中view页面的堆栈操作</h2>
+<h2 id="toc_0.8">IOS中view页面的堆栈操作</h2>
 <pre name="code" class="c">
 
 [self.navigationController popViewControllerAnimated:YES];
 </pre>
 
-<h2 id="toc_0.8">headView使用addSubview之后，不能够delease</h2>
+<h2 id="toc_0.9">headView使用addSubview之后，不能够delease</h2>
 <pre name="code" class="c">
 
 UIView* headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
@@ -162,7 +324,7 @@ headLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
 </pre>
 
 
-<h2 id="toc_0.9">performSelector和respondsToSelector</h2>
+<h2 id="toc_0.10">performSelector和respondsToSelector</h2>
 <p>
 performSelector函数用于对象调用它自己的方法。
 </p>
@@ -190,7 +352,7 @@ if ([self.delegate respondsToSelector:@selector(didScanMainControllerPeripheral:
 </pre>
 
 
-<h2 id="toc_0.10">在cell中添加subview图片</h2>
+<h2 id="toc_0.11">在cell中添加subview图片</h2>
 <pre name="code" class="c">
 cell.inputView  或者 cell.contentView
 
@@ -203,40 +365,40 @@ for (UIImageView *item in [cell.contentView subviews]) {
 }
 </pre>
 
-<h2 id="toc_0.11">no appropriate for no-gc object</h2>
+<h2 id="toc_0.12">no appropriate for no-gc object</h2>
 
 <p>
 警告信息：“No 'assign', 'retain', or 'copy' attribute is specified - 'assign' is assumed”和“Default property attribute 'assign' not appropriate for non-gc object”。警告信息的意思是：“没有明确指出应该是assign还是retain或者是copy，却省的是assign”和“缺省得属性设置assign不适合非gc对象 ”
 </p>
 
-<h2 id="toc_0.12">objc中的for循环</h2>
+<h2 id="toc_0.13">objc中的for循环</h2>
 <p>
 for(CBPeripheral* tmpPeripheral in foundPeripherals){
 </p>
 
 
-<h2 id="toc_0.13">char a[20] -&gt; NSString</h2>
-<h2 id="toc_0.14">char* str -&gt; NSString</h2>
+<h2 id="toc_0.14">char a[20] -&gt; NSString</h2>
+<h2 id="toc_0.15">char* str -&gt; NSString</h2>
 <pre name="code" class="c">
 NSString* deviceName = [NSString stringWithFormat:@"%s", mcPeripheral.deviceInfo.deviceName];//以'\0'结尾的
 NSString* password = [[NSString alloc] initWithData:[NSData dataWithBytes:(const void *)mcPeripheral.deviceInfo.password length:sizeof(mcPeripheral.deviceInfo.password)] encoding:NSASCIIStringEncoding];;//不以'\0'结尾的
 NSLog(@" [ 008 ] hardwareID = %@, deviceName = %@, password = %@", hardwareID, deviceName, password);
 </pre>
 
-<h2 id="toc_0.15">NSData --&gt;  NSString</h2>
+<h2 id="toc_0.16">NSData --&gt;  NSString</h2>
 <pre name="code" class="c">
 NSMutableData *data;  //NSData *data;
 NSString *tmpdata=[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 NSString* hardwareID = [[NSString alloc] initWithData:mcPeripheral.hardwareID encoding:NSASCIIStringEncoding];//不以'\0'结尾的
 </pre>
 
-<h2 id="toc_0.16">NSSting --&gt; NSData</h2>
+<h2 id="toc_0.17">NSSting --&gt; NSData</h2>
 <pre name="code" class="c">
     NSString * str=@"test string";
     NSData *data=[str dataUsingEncoding:NSUTF8StringEncoding]; 
 </pre>
 
-<h2 id="toc_0.17">ios程序基本的起始代码</h2>
+<h2 id="toc_0.18">ios程序基本的起始代码</h2>
 <pre name="code" class="c">
 self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 // Override point for customization after application launch.
@@ -250,7 +412,7 @@ self.window.rootViewController = self.navigationController;
 </pre>
 
 
-<h2 id="toc_0.18">模态视图 presentModalViewController</h2>
+<h2 id="toc_0.19">模态视图 presentModalViewController</h2>
 <pre name="code" class="c">
 -(void)firstpressed
 {
@@ -260,7 +422,7 @@ self.window.rootViewController = self.navigationController;
 </pre>
 
 
-<h2 id="toc_0.19">成员变量的初始化</h2>
+<h2 id="toc_0.20">成员变量的初始化</h2>
 <pre name="code" class="c">
 
 @interface LoginRegist:NSObject {
@@ -308,7 +470,7 @@ self.window.rootViewController = self.navigationController;
 
 </pre>
 
-<h2 id="toc_0.20">nil指针被调用不会报错，区别于野指针</h2>
+<h2 id="toc_0.21">nil指针被调用不会报错，区别于野指针</h2>
 <pre name="code" class="c">
 //如果不存在该成员，则返回的值为nil，后面的调用也不会报错
 NSMutableArray * activeMainCtrl = [[NSUserDefaults standardUserDefaults] objectForKey:@"activeMainCtrl"];
@@ -318,12 +480,12 @@ NSLog(@"[001] saved mc : %@",activeMainCtrl);
 </pre>
 
 
-<h2 id="toc_0.21">阻塞线程，sleep</h2>
+<h2 id="toc_0.22">阻塞线程，sleep</h2>
 <pre name="code" class="c">
 [NSThread sleepForTimeInterval:30];
 </pre>
 
-<h2 id="toc_0.22">http get请求</h2>
+<h2 id="toc_0.23">http get请求</h2>
 <pre name="code" class="c">
     //登陆
     NSError *error;
@@ -370,7 +532,7 @@ NSLog(@"[001] saved mc : %@",activeMainCtrl);
     }
 </pre>
 
-<h2 id="toc_0.23">列举目录下的文件</h2>
+<h2 id="toc_0.24">列举目录下的文件</h2>
 <pre name="code" class="c">
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     
@@ -405,7 +567,7 @@ NSLog(@"path: %@",path);
 </p>
 
 
-<h2 id="toc_0.24">retain并未创建新对象，只是对象的生命值改变</h2>
+<h2 id="toc_0.25">retain并未创建新对象，只是对象的生命值改变</h2>
 <p>
 类A中定义了一个delegate。
 </p>
@@ -443,7 +605,7 @@ NSLog(@"path: %@",path);
 }
 </pre>
 
-<h2 id="toc_0.25">app跳转到系统程序</h2>
+<h2 id="toc_0.26">app跳转到系统程序</h2>
 <p>
 app跳转到浏览器，并且打开链接
 </p>
