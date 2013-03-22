@@ -10,6 +10,7 @@
 * [[调参app工作安排]]
 * [[iphone调参的git分支模型]]
 * [[公司相关纪录]]
+* [[bug纪录]]
 
 Bluetooth笔记：[[../wiki_ble/|Bluetooth Note]]
 
