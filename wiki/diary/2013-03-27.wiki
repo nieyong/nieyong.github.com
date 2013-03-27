@@ -1,0 +1,28 @@
+Which should be compatible with all ANSI-C compatible compilers.
+
+You can simply write:
+
+#elif defined X
+
+
+34002800 33
+0a06		cmdid
+cd 2d000505 0900
+3130 30303038 30303139		hardware id
+1a04
+
+//头结束
+01		result
+6e 6d000000 00000000 00		device name
+313131 313131	password
+11 434400			checksum
+
+05 7374cb6d
+
+1f002810 02
+0201		cmdid
+cd 2d000505 0900
+3130 30303038 30303139 
+1a01
+//头结束
+0125 2d1da2
