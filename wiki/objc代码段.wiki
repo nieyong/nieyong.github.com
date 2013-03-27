@@ -1,5 +1,5 @@
 == Run Loop ==
-NSRunLoop 是更好的因为它允许在您等待时响应事件 runloop。如果你只是睡了您的线程即使事件到达 （比如你在等待的网络响应），将阻止您的应用程序。
+NSRunLoop 允许在您等待时响应事件runloop。如果你只是睡了（调用sleep函数），您的线程即使事件到达 （比如你在等待的网络响应）也无法响应。
 
 在连续循环中，有可能会引起界面的停顿，可以考虑加入`[[NSRunLoop currentRunLoop] runUntilDate: [NSDate distantPast]]`，其实就是本身的loop暂停一下，让主线程分点时间。
 
@@ -17,9 +17,9 @@ NSRunLoop 是更好的因为它允许在您等待时响应事件 runloop。如�
 
 RunMode: NSDefaultRunLoopMode，默认的run loop mode，可以把这个理解为一个”过滤器“，我们可以只对自己关心的事件进行监视。一般NSDefaultRunLoopMode是最常用的。
 
-启动run loop的方法就是runMode:，它的说明是：Runs the loop once, blocking for input in the specified mode until a given date。启动run loop一次，在特定的run loop mode下等待输入。
+启动run loop的方法就是runMode:，它的说明是：Runs the loop once, blocking for input in the specified mode until a given date。启动run loop一次，在特定的run loop mode阻塞程序，直到有事件发生，或者设置的时间已经到期。blocking for input中input指的是需要响应的事件发生。
 
-如果没有附加input source或是timer，或是过limitDate，run loop就会退出，并且方法返回NO。
+如果没有附加input source或是timer，或是时间过了limitDate，run loop就会退出阻塞状态，并且方法返回NO。
 
 下来是Run Loop的使用场合：
 * 使用port或是自定义的input source来和其他线程进行通信

@@ -1,0 +1,3 @@
+* [[gitconfig]]
+* [[dvd-repo]] -- 将iso文件作为fedaro源的文件
+* [[vimrc]] -- vim配置文件
