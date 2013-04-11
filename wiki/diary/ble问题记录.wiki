@@ -1,3 +1,180 @@
+== CoreBluetooth库接口断开需60s ==
+When you disconnect a device with cancelPeripheralConnection the didDisconnectPeripheral delegate method will be invoked. However from iOS 6.0 the device remains connected for about 40-50 seconds (or more), so no didDiscoverPeripheral will be invoked in that timeframe. If you want to "discover" it again just call the retrieveConnectedPeripherals method and you will get the reference in didRetrieveConnectedPeripherals.
+
+However, the best solution is to save the device's UUID and use that to reconnect with the retrievePeripherals method. This will invoke didRetrievePeripherals and you can reconnect with connectPeripheral. This is the fastest way to reconnect to a device, no scanning is required in this case.
+
+[[http://stackoverflow.com/questions/13286487/how-can-i-reconnect-to-device-after-disconnecting-in-core-bluetooth|链接地址]]
+
+== 部分iPhone 4S搜索不到蓝牙主控的问题 ==
+一共测试了6台iphone 4s机器，其中5台机器测试可以连接到ble，1台不行。
+
+==== 测试根据： ====
+通过通信库代码跟踪，发现扫描不到主控，是因为无法连接成功，可以扫描到。具体的表现为在连接回调成功之后，立刻出现了断开连接的回调，导致无法进一步的交互。
+
+所以测试的时候，只要能够连接成功，并且读出ble的device信息，那么我们就算该机器能够连接上ble并且扫描到主控。
+
+==== 测试过程： ====
+测试的6台机器都安装软件lightblue（或者那个付费软件），然后看是否能够连接到我们的主控。其中，有5台能够连接，1台无法连接；
+
+在上面6台设备中，有3台拥有开发这权限，其中1台无法连接，另外两台可以；这也说明上面的测试方法是ok的。
+
+5台能够连接的iphone 4s系统为6.0.1；不能够连接的设备系统为6.0，升级到6.0.1仍然不能够连接；
+
+有另外几台iphone 4s设备，由于版本为6.0以下，提示不能够安装lightblue软件；
+
+==== 测试结果以及分析： ====
+* 软件版本6.0以上是能够使用ble的必要条件；
+* 软件版本6.0以上也可能会无法连接到ble设备；
+* 导致无法连接的原因可能和ios的库，iphone 4s使用的蓝牙方案有关（iphone 4s和iphone 5是使用的不同蓝牙方案）。有这样的猜测，主要参考了iphone的一些邮件，尤其是[[http://lists.apple.com/archives/bluetooth-dev/2012/Nov/msg00031.html|Bluetooth LE problems with new iOS devices]]。这个邮件中出现的情况和我们的相近，只是他们的是iphone 4s能够连上，而iphone 5不能够。在邮件中谈到主要的问题出在蓝牙外设的参数配置。由于我们没有抓包工具等调试手段，所以无法深入跟踪。另外，我们的固件也尝试了几种参数配置，那台不能够连接的iphone 4s仍然无法连接。
+
+== 关于BLE通信速率问题 ==
+
+昨天测试了BLE通信的速度丢包问题
+
+=== 测试方式： ===
+touch以100ms的间隔向主控发送通道数据包（34bytes），主控需要回复的ack报文有66bytes，这样，一个交互过程为100字节的数据量，这应该也是对BLE缓存区buffer的要求。通信速率也就在8kbit/s，或者1.5kbytes/s。
+
+然后以125ms，160ms，200ms做同样的测试
+
+=== 测试结果： ===
+在125ms和100ms的时候，出现了丢包的现象，也就是某些SN的报文没有回复，丢包的原因在于BLE接收到的某些包出现了错误。发包速度越快，丢包越严重。
+
+在发送速度为100ms，125ms，160ms的时候，ack报文回复的速度不能够保证在改时间内收到。
+
+=== 一些结论和思考： ===
+# 发送速度是引起丢包的原因；
+# 丢包问题是由蓝牙接收到的数据有错误引起；
+# ack报文回复的速度（从发出某个SN的报文，到收到该SN报文）大概在130ms~180ms左右；
+# ack报文回复速度为200ms的原因尚未清楚：BLE的传输速率？BLE的处理速率？主控处理速率？can总线速率？等等
+
+=== 一些其他的异常问题： ===
+在使用过程中，touch一直扫描不到主控，发现是在连接成功之后，无法发现蓝牙的service。最后，解决的办法是重启了设备的蓝牙，就一切ok。
+
+
+=== 通道命令ack报文 ===
+55aa55aa 3e002839 001006cd a8000405 080f4632
+37313038 32300000 0000010a e903000f 0000feff
+01000000 18fc00e6 ff01e903 00e90300 4e0000e9
+03000000 bbbd
+
+一个ack报文的长度是66bytes。
+
+{{{
+ send sn = 52
+ encodedData = <55aa55aa 1e000134 000f0600 80000000 00000000 00000000 00000000 00000000 bd48>
+ send sn = 53
+ encodedData = <55aa55aa 1e000135 000f0600 80000000 00000000 00000000 00000000 00000000 74c1>
+ [001] 当前发包的序号是：53;收到包序号:52
+ send sn = 54
+ encodedData = <55aa55aa 1e000136 000f0600 80000000 00000000 00000000 00000000 00000000 3e53>
+ [001] 当前发包的序号是：54;收到包序号:53
+ send sn = 55
+ encodedData = <55aa55aa 1e000137 000f0600 80000000 00000000 00000000 00000000 00000000 f7da>
+ [001] 当前发包的序号是：55;收到包序号:54
+ send sn = 56
+ encodedData = <55aa55aa 1e000138 000f0600 80000000 00000000 00000000 00000000 00000000 b711>
+ [001] 当前发包的序号是：56;收到包序号:55
+ send sn = 57
+ encodedData = <55aa55aa 1e000139 000f0600 80000000 00000000 00000000 00000000 00000000 7e98>
+ [001] 当前发包的序号是：57;收到包序号:56
+ send sn = 58
+ encodedData = <55aa55aa 1e00013a 000f0600 80000000 00000000 00000000 00000000 00000000 340a>
+ [001] 当前发包的序号是：58;收到包序号:57
+ send sn = 59
+ encodedData = <55aa55aa 1e00013b 000f0600 80000000 00000000 00000000 00000000 00000000 fd83>
+ [001] 当前发包的序号是：59;收到包序号:58
+ send sn = 60
+ encodedData = <55aa55aa 1e00013c 000f0600 80000000 00000000 00000000 00000000 00000000 b126>
+ send sn = 61
+ encodedData = <55aa55aa 1e00013d 000f0600 80000000 00000000 00000000 00000000 00000000 78af>
+ send sn = 62
+ encodedData = <55aa55aa 1e00013e 000f0600 80000000 00000000 00000000 00000000 00000000 323d>
+ [001] 当前发包的序号是：62;收到包序号:61
+ send sn = 63
+
+encodedData = <55aa55aa 1e000135 000f0600 80000000 00000000 00000000 00000000 00000000 74c1>
+send sn = 54
+encodedData = <55aa55aa 1e000136 000f0600 80000000 00000000 00000000 00000000 00000000 3e53>
+updatedValue = <55aa55aa 3e002835 001006cd a8000405 080f4632>
+updatedValue = <37313038 32300000 0000010a e903000f 0000feff>
+updatedValue = <01000000 18fc00e6 ff01e903 00e90300 4e0000e9>
+updatedValue = <03000000 12d155aa 55aa3e00 28360010 06cda800>
+[001] 当前发包的序号是：54;收到包序号:53
+updatedValue = <0405080f 46323731 30383230 00000000 010ae903>
+updatedValue = <000f0000 feff0100 000018fc 00e6>
+send sn = 55
+encodedData = <55aa55aa 1e000137 000f0600 80000000 00000000 00000000 00000000 00000000 f7da>
+send sn = 56
+encodedData = <55aa55aa 1e000138 000f0600 80000000 00000000 00000000 00000000 00000000 b711>
+updatedValue = <55aa55aa 3e002837 001006cd a8000405 080f4632>
+updatedValue = <37313038 32300000 0000010a e903000f 0000feff>
+updatedValue = <01000000 18fc00e6 ff01e903 00e90300 4e>
+updatedValue = <0000e9>
+updatedValue = <03000000 294755aa 55aa3e00 28380010 06cda800>
+updatedValue = <0405080f 46323731 30383230 00000000 010ae903>
+updatedValue = <000f0000 feff0100 000018fc 00e6ff01>
+updatedValue = <e90300e9>
+send sn = 57
+encodedData = <55aa55aa 1e000139 000f0600 80000000 00000000 00000000 00000000 00000000 7e98>
+updatedValue = <03004e00 00e90300 0000ae72>
+[001] 当前发包的序号是：57;收到包序号:56
+send sn = 58
+encodedData = <55aa55aa 1e00013a 000f0600 80000000 00000000 00000000 00000000 00000000 340a>
+updatedValue = <55aa55aa 3e002839 001006cd a8000405 080f4632>
+updatedValue = <37313038 32300000 0000010a e903000f 0000feff>
+updatedValue = <01000000 18fc00e6 ff01e903 00e90300 4e>
+updatedValue = <0000e9>
+updatedValue = <03000000 bbbd55aa 55aa3e00 283a0010 06cda800>
+[001] 当前发包的序号是：58;收到包序号:57
+updatedValue = <0405080f 46323731 30383230 00000000 010ae903>
+updatedValue = <000f0000 feff0100 000018fc 00e6ff01 e9>
+updatedValue = <0300e9>
+send sn = 59
+encodedData = <55aa55aa 1e00013b 000f0600 80000000 00000000 00000000 00000000 00000000 fd83>
+updatedValue = <03004e00 00e90300 000095e4>
+[001] 当前发包的序号是：59;收到包序号:58
+}}}
+
+== 蓝牙问题报告2 ==
+=== 1.can总线无法发出数据的问题 ===
+dji的设计中，主控，蓝牙，电台等是挂在can总线上，所有的通信都是通过can总线；
+
+测试了连续发包导致无法收到ack报文，ble蓝牙断开等问题
+
+测试了touch连续发包（也就是调参软件的view等页面的通信需求），导致无法收到ack报文，ble断开的问题。结果是can总线上无法测试到主控发出的ack报文，但是ble通过can总线发给主控的信息仍然能够测到。
+
+这样基本可以肯定是can总线，或者主控出了问题；暂时未找到导致该问题的原因；
+
+
+=== 2.主控扫描失败率高的问题 ===
+在对某个蓝牙进行测试时，出现了扫描失败率高的问题，失败率达到30％以上；
+
+该问题具体来说是在连接上ble之后，无法获取ble的device信息，导致无法扫描到主控；最后确定是ble蓝牙模块的问题，可能是该蓝牙的硬件设计，天线设计等问题，在以后的量产，封装设计等方面，肯定需要考虑和测试该问题；
+
+在这里记下备忘；
+
+=== 3.断开ble连接的问题 ===
+
+使用ios的库函数cancelPeripheralConnection断开一个主控的连接时，需要等待一段时间（5s以上），并且不一定能够成功。
+
+dji工程师设计了另外一个断开的办法，直接对ble的特征（0x33ff）写入字符xp，由ble上的软件控制断开连接。
+
+该方法已经写入了通信库中，但是如果出现上面2所提到的主控扫描失败率高的问题时，就可能再也无法断开该ble主控，需要等待使用ios库函数cancelPeripheralConnection来断开连接；
+
+
+== 蓝牙问题报告3 ==
+对于报告2中的“2.主控扫描失败率高的问题，3.断开ble连接的问题”的补充和修正：
+
+今天将新的通信库继承到调参软件后测试发现，使用了dji工程师提供的断开方式之后（直接对ble的特征0x33ff写入字符xp），主控的连接失败率会很高。
+
+调试发现，主控连接失败率高的原因还是出在无法获得device信息，和主控扫描失败率高存在同样的地方（ios的库级别）。
+
+最后删除了对0x33ff特征的直接写。
+
+一些结论和思考：
+# 出现该问题的原因猜测：ios的蓝牙库和蓝牙fireware的内部断开是重复的，可能导致了一些不可控制的问题。例如直接对特征0x33ff写入字符xp之后，ios库并不知道ble内部已经自动断开了，所以出现了问题；
+# 建议我们的蓝牙模块的设计，参考了苹果公司发布的《Bluetooth Accessory Design Guidelines for Apple Products》；
+
 == AD中发送出设备名方案 ==
 我们现在的做法是扫瞄主控阶段，就连接上蓝牙，给主控发命令，获取设备名和密码，再断开蓝牙。
 
@@ -38,15 +215,15 @@ AD包中只有128bit，16字节，在长度上可能有问题
 [[http://lists.apple.com/archives/bluetooth-dev/2012/Aug/msg00130.html|BTLE reconnection problems]]
 
 
-在邮件中使用“messing with the state of the BTLE stacA”描述该问题。别人的回复中提到，反复的scan，connect，disconnect并不是corebluetooth库建议方式。其中提到了下面这两个视频。有点困难就是该视频没有字幕。
+在邮件中使用“messing with the state of the BTLE stack”描述该问题。别人的回复中提到，反复的scan，connect，disconnect并不是corebluetooth库建议方式。其中提到了下面这两个视频。有点困难就是该视频没有字幕。
 
 For more info, please see the two WWDC2012 talks about Core Bluetooth.
 
 
 一些测试和结论：
-a）出现该问题的情况一般都发生在重连的过程中，确实和邮件中提到的一致；
-b）按照我们现在的ble设计，扫瞄主控就必须连接它，获取用户名和密码，也就是回出现上面的scan－discover－connect设计问题；
-c）谢鹏已经将设备名从AD中广播出来，我们也进行了简单的测试，如此将绕过上面的反复scan－discover－connect的过程；如果后续的开发顺利，ble通信计划在app第二次提交apple store时修改；同时，地面站也需要修改。
+* 出现该问题的情况一般都发生在重连的过程中，确实和邮件中提到的一致；
+* 按照我们现在的ble设计，扫瞄主控就必须连接它，获取用户名和密码，也就是回出现上面的scan－discover－connect设计问题；
+* 谢鹏已经将设备名从AD中广播出来，我们也进行了简单的测试，如此将绕过上面的反复scan－discover－connect的过程；如果后续的开发顺利，ble通信计划在app第二次提交apple store时修改；同时，地面站也需要修改。
 
 == 附件：邮件内容 ==
 === ASK by RAM ===
@@ -77,3 +254,36 @@ Ram
 Hi Ram,
 
 I suggest you only scan for the device the first time. After connecting to it the first time, simply just try to connect to it using it's UUID instead of scan-discover-connect.
+
+
+== 3.7 ==
+本人使用cc2540做ble外设，在开发iOS的App时，发现使用iphone 4S时，在信号弱时断开重连时，反复几次之后，发现导致整个手机无法再次获取到服务和特征（能够扫描，连接），而且同一个手机上所有的ble App都出现该问题，只有重启整个手机，就可以。该问题在iphone 5上没有出现。
+
+重连的过程中，没有重新扫描，还是直接使用的原来的perpheril。
+
+== 3.8／iphone 4s在重连时ble奔溃 ==
+=== 问题描述： ===
+使用iphone 4S时，在信号弱时断开重连时，反复几次断开重连之后，发现导致整个手机无法再连接上ble，具体表现为获取不到服务和特征（能够扫描，连接），而且同一个手机上所有的ble App都出现该问题，只有重启整个手机，才能够重新连接ble。该问题在iphone 5上没有出现。
+
+=== bug测试： ===
+发现该问题在App的view页面最容易出现，在其他页面尚未重现。
+
+写了一个测试的小程序，以1Hz的频率发送ping命令，没有发现该问题，如果在该程序中添加大量的通信命令，就回容易重现该bug。
+
+在ble的群中也有人遇到该问题，但是也没有解决。
+
+=== 分析： ===
+上面的测试说明，导致该bug的可能条件是iphone和ble外设之间存在大的数据通信。
+
+=== 现有的修改方案： ===
+* 优化ble库中ping命令的发送
+* 优化App的view页面的命令发送，在同一时间只发送必需的命令
+
+以上修改之后，室内的测试，该bug出现的概率要小很多了。明天将进行室外的测试。
+
+=== 存在的隐患： ===
+* 没有找到问题的根源所在（甚至没有查到出现该问题的代码位置和毕现方法）
+* 数据量大，收报延迟的问题和信号弱有关，但是否都导致该问题
+* 现在的修改方案并没有完全杜绝该bug的出现
+
+请李南宁和陈成确实是否添加FAQ页面。

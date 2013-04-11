@@ -1,0 +1,520 @@
+2013-03-06 10:53:33.861 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:53:33.978 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:53:33.981 testBluetoothLowEnergy[12060:907] [ble] new ble
+2013-03-06 10:53:34.048 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:53:34.050 testBluetoothLowEnergy[12060:907] [ble] new ble
+2013-03-06 10:53:34.075 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:53:34.445 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed514a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55646a69 33323100 00000005 837d40cc>)"
+    );
+}
+2013-03-06 10:53:34.447 testBluetoothLowEnergy[12060:907] [ble] new ble
+2013-03-06 10:53:34.465 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed514a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55646a69 33323100 00000005 837d40cc>)"
+    );
+}
+2013-03-06 10:53:36.873 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:53:39.872 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:53:40.060 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:53:40.071 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:53:40.423 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:53:40.434 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:53:41.243 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed514a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55646a69 33323100 00000005 837d40cc>)"
+    );
+}
+2013-03-06 10:53:41.253 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed514a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55646a69 33323100 00000005 837d40cc>)"
+    );
+}
+2013-03-06 10:53:42.872 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:53:45.875 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:53:45.917 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:53:45.928 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:53:45.986 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:53:45.996 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:53:47.692 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed514a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55646a69 33323100 00000005 837d40cc>)"
+    );
+}
+2013-03-06 10:53:48.872 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:53:51.874 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:53:51.922 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:53:51.933 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:53:52.079 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:53:52.089 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:53:54.874 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:53:57.871 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:53:57.928 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:53:57.938 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:53:57.958 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:53:57.969 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:00.871 testBluetoothLowEnergy[12060:907] delete ble
+2013-03-06 10:54:00.876 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:54:03.873 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:54:03.904 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:03.915 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:04.207 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:04.216 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:06.877 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:54:09.872 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:54:09.911 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:09.921 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:09.968 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:09.978 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:12.873 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:54:15.875 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:54:15.978 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:15.987 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:16.050 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:16.059 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:18.874 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:54:21.872 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:54:21.899 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:21.909 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:22.230 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:22.239 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:24.875 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:54:27.871 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:54:27.994 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:28.004 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:28.114 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:28.123 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:30.875 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:54:33.871 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:54:33.972 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:33.982 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:34.115 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:34.124 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:36.874 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:54:39.871 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:54:39.940 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:39.949 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:40.020 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:40.237 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:42.872 testBluetoothLowEnergy[12060:907] [ble] stop scan
+
+2013-03-06 10:54:45.872 testBluetoothLowEnergy[12060:907] [ble] start scan
+2013-03-06 10:54:45.913 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:45.923 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed637a0 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:54:45.941 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:54:45.951 testBluetoothLowEnergy[12060:907] [001] <CBConcretePeripheral: 0x1ed6b450 UUID = <CFUUID 0x1ed6b9d0> 4C904B38-2844-6B00-2A26-3C7BDE24A16E, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+
+
+
+
+2013-03-06 10:58:07.721 testBluetoothLowEnergy[1255:907] [001] <CBConcretePeripheral: 0x200a7b20 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:58:07.728 testBluetoothLowEnergy[1255:907] [001] <CBConcretePeripheral: 0x200a7b20 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:58:10.524 testBluetoothLowEnergy[1255:907] [ble] stop scan
+
+2013-03-06 10:58:13.523 testBluetoothLowEnergy[1255:907] [ble] start scan
+2013-03-06 10:58:13.595 testBluetoothLowEnergy[1255:907] [001] <CBConcretePeripheral: 0x200a7b20 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:58:13.603 testBluetoothLowEnergy[1255:907] [001] <CBConcretePeripheral: 0x200a7b20 UUID = (null), Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<5578786f 6f000000 00000005 a3a0a0cc>)"
+    );
+}
+2013-03-06 10:58:13.798 testBluetoothLowEnergy[1255:907] [001] <CBConcretePeripheral: 0x1ed09a10 UUID = <CFUUID 0x1ed0b670> 900B497A-0CA0-CE12-8A0E-7F347692D620, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:58:13.805 testBluetoothLowEnergy[1255:907] [001] <CBConcretePeripheral: 0x1ed09a10 UUID = <CFUUID 0x1ed0b670> 900B497A-0CA0-CE12-8A0E-7F347692D620, Name = "DJI Config", IsConnected = NO>   (null)    {
+    kCBAdvDataLocalName = "DJI Config";
+    kCBAdvDataServiceUUIDs =     (
+        "Unknown (<55637800 00000000 00000005 a43fc0cc>)"
+    );
+}
+2013-03-06 10:58:16.524 testBluetoothLowEnergy[1255:907] [ble] stop scan
+
+
+ASSConnectMainCtrlComm.m:308		[connect] 0x060a
+ASSConnectMainCtrlComm.m:344		[connect] authen success
+LoginRegist.m:344		statistic threadForActiveMainCtrl
+ASSConnectMainCtrlComm.m:234		[003] stopFlashAction
+ASSRootViewController.m:379		
+---[101]---:finish connect
+LoginRegist.m:375		upload statics success
+2013-03-06 12:11:34.808 AssistantForIphone[139:907] [ble] send ping cmd
+ASSView.m:686		Ping
+2013-03-06 12:11:35.767 AssistantForIphone[139:907] [ble] send ping cmd
+ASSView.m:686		Ping
+2013-03-06 12:11:36.768 AssistantForIphone[139:907] [ble] send ping cmd
+2013-03-06 12:11:36.772 AssistantForIphone[139:907] didWriteValueForCharacteristic Unknown (<33f0>) error: Unknown error.
+2013-03-06 12:11:36.773 AssistantForIphone[139:907] [ble] disconnected 
+2013-03-06 12:11:36.774 AssistantForIphone[139:907] [ble] reset service
+ASSRootViewController.m:167		
+---[100]---:start reconnet!
+ASSConnectMainCtrlComm.m:186		[000] reconnect
+2013-03-06 12:11:40.610 AssistantForIphone[139:907] [ble] connected 
+ASSConnectMainCtrlComm.m:242		[connect] didConnect
+ASSConnectMainCtrlComm.m:81		[connect] fw request
+2013-03-06 12:11:41.612 AssistantForIphone[139:907] [ble] send ping cmd
+ASSConnectMainCtrlComm.m:419		[connect] 0x060d
+ASSConnectMainCtrlComm.m:98		[connect] flash command
+ASSConnectMainCtrlComm.m:90		[connect] device info request
+ASSConnectMainCtrlComm.m:419		[connect] 0x060d
+ASSConnectMainCtrlComm.m:308		[connect] 0x060a
+ASSConnectMainCtrlComm.m:344		[connect] authen success
+LoginRegist.m:344		statistic threadForActiveMainCtrl
+ASSConnectMainCtrlComm.m:234		[003] stopFlashAction
+ASSRootViewController.m:379		
+---[101]---:finish connect
+2013-03-06 12:11:42.613 AssistantForIphone[139:907] [ble] send ping cmd
+LoginRegist.m:375		upload statics success
+2013-03-06 12:11:43.613 AssistantForIphone[139:907] [ble] send ping cmd
+ASSView.m:686		Ping
+2013-03-06 12:11:44.613 AssistantForIphone[139:907] [ble] send ping cmd
+2013-03-06 12:11:45.613 AssistantForIphone[139:907] [ble] send ping cmd
+2013-03-06 12:11:46.613 AssistantForIphone[139:907] [ble] send ping cmd
+2013-03-06 12:11:47.613 AssistantForIphone[139:907] [ble] send ping cmd
+ASSView.m:686		Ping
+2013-03-06 12:11:48.622 AssistantForIphone[139:907] [ble] send ping cmd
+2013-03-06 12:11:49.613 AssistantForIphone[139:907] [ble] send ping cmd
+ASSView.m:686		Ping
+2013-03-06 12:11:50.613 AssistantForIphone[139:907] [ble] send ping cmd
+ASSView.m:686		Ping
+2013-03-06 12:11:51.613 AssistantForIphone[139:907] [ble] send ping cmd
+ASSView.m:686		Ping
+2013-03-06 12:11:52.615 AssistantForIphone[139:907] [ble] send ping cmd
+ASSView.m:686		Ping
+2013-03-06 12:11:53.612 AssistantForIphone[139:907] [ble] send ping cmd
+ASSView.m:686		Ping
+2013-03-06 12:11:54.613 AssistantForIphone[139:907] [ble] send ping cmd
+ASSView.m:686		Ping
+2013-03-06 12:11:55.613 AssistantForIphone[139:907] [ble] send ping cmd
+2013-03-06 12:11:56.612 AssistantForIphone[139:907] [ble] send ping cmd
+2013-03-06 12:11:56.663 AssistantForIphone[139:907] [ble] disconnected 
+2013-03-06 12:11:56.664 AssistantForIphone[139:907] [ble] reset service
+ASSRootViewController.m:167		
+---[100]---:start reconnet!
+ASSConnectMainCtrlComm.m:186		[000] reconnect
+2013-03-06 12:12:01.514 AssistantForIphone[139:907] [ble] connected 
+ASSConnectMainCtrlComm.m:242		[connect] didConnect
+ASSConnectMainCtrlComm.m:81		[connect] fw request
+ASSConnectMainCtrlComm.m:57		[connect] RequestFWS timeout
+ASSConnectMainCtrlComm.m:234		[003] stopFlashAction
+2013-03-06 12:12:04.518 AssistantForIphone[139:907] [ble] disconnect manual
+2013-03-06 12:12:04.523 AssistantForIphone[139:907] [ble] disconnected 
+2013-03-06 12:12:04.525 AssistantForIphone[139:907] [ble] reset service
+ASSConnectMainCtrlComm.m:273		[connect] disconnectBySystem
+ASSConnectMainCtrlComm.m:234		[003] stopFlashAction
+ASSRootViewController.m:401		
+---[help]---:fail to reconnect!
+ASSRootViewController.m:167		
+
+
+
+
+
+2013-03-06 20:38:23.257 testBluetoothLowEnergy[840:907] [ble2] <CBConcretePeripheral: 0x1ddc5820 UUID = <CFUUID 0x1ddc59e0> D835AC61-8D22-D864-39F5-4C7A23E86606, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:38:23.260 testBluetoothLowEnergy[840:907] [ble2] <CBConcretePeripheral: 0x1f0d3b70 UUID = <CFUUID 0x1f0d3be0> 04C0287C-B2F5-5466-B62C-945BC31F0610, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:38:23.269 testBluetoothLowEnergy[840:907] [ble] connected 
+2013-03-06 20:38:23.271 testBluetoothLowEnergy[840:907] [ble3] <CBConcretePeripheral: 0x1dd921b0 UUID = <CFUUID 0x1dd88db0> 82129049-A156-6A22-E334-A248D1470635, Name = "DJI Config", IsConnected = YES>
+2013-03-06 20:38:23.273 testBluetoothLowEnergy[840:907] [ble3] <CBConcretePeripheral: 0x1ddc5820 UUID = <CFUUID 0x1ddc59e0> D835AC61-8D22-D864-39F5-4C7A23E86606, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:38:23.275 testBluetoothLowEnergy[840:907] [ble3] <CBConcretePeripheral: 0x1f0d3b70 UUID = <CFUUID 0x1f0d3be0> 04C0287C-B2F5-5466-B62C-945BC31F0610, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:38:23.278 testBluetoothLowEnergy[840:907] [connect] didConnect
+2013-03-06 20:38:23.280 testBluetoothLowEnergy[840:907] [connect] fw request
+2013-03-06 20:38:26.285 testBluetoothLowEnergy[840:907] [connect] RequestFWS timeout
+2013-03-06 20:38:26.288 testBluetoothLowEnergy[840:907] [connect] stopFlashAction
+2013-03-06 20:38:26.290 testBluetoothLowEnergy[840:907] [ble2] <CBConcretePeripheral: 0x1ddc5820 UUID = <CFUUID 0x1ddc59e0> D835AC61-8D22-D864-39F5-4C7A23E86606, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:38:26.292 testBluetoothLowEnergy[840:907] [ble2] <CBConcretePeripheral: 0x1f0d3b70 UUID = <CFUUID 0x1f0d3be0> 04C0287C-B2F5-5466-B62C-945BC31F0610, Name = "DJI Config", IsConnected = NO>
+
+
+
+2013-03-06 20:42:57.261 testBluetoothLowEnergy[854:907] [ble] stop scan
+
+2013-03-06 20:42:57.263 testBluetoothLowEnergy[854:907] [ble2] <CBConcretePeripheral: 0x1d850bb0 UUID = <CFUUID 0x1d850d50> 04C0287C-B2F5-5466-B62C-945BC31F0610, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:42:57.270 testBluetoothLowEnergy[854:907] [ble] connected 
+2013-03-06 20:42:57.272 testBluetoothLowEnergy[854:907] [ble3] <CBConcretePeripheral: 0x1d8399e0 UUID = <CFUUID 0x1d851ba0> 82129049-A156-6A22-E334-A248D1470635, Name = "DJI Config", IsConnected = YES>
+2013-03-06 20:42:57.274 testBluetoothLowEnergy[854:907] [ble3] <CBConcretePeripheral: 0x1d850bb0 UUID = <CFUUID 0x1d850d50> 04C0287C-B2F5-5466-B62C-945BC31F0610, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:42:57.277 testBluetoothLowEnergy[854:907] [connect] didConnect
+2013-03-06 20:42:57.280 testBluetoothLowEnergy[854:907] [connect] fw request
+2013-03-06 20:43:00.283 testBluetoothLowEnergy[854:907] [connect] RequestFWS timeout
+2013-03-06 20:43:00.286 testBluetoothLowEnergy[854:907] [connect] stopFlashAction
+2013-03-06 20:43:00.288 testBluetoothLowEnergy[854:907] [ble2] <CBConcretePeripheral: 0x1d850bb0 UUID = <CFUUID 0x1d850d50> 04C0287C-B2F5-5466-B62C-945BC31F0610, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:43:13.473 testBluetoothLowEnergy[854:907] [ble] didDiscoverServices Error Domain=CBErrorDomain Code=0 "Unknown error." UserInfo=0x1d8a18d0 {NSLocalizedDescription=Unknown error.}
+2013-03-06 20:43:13.476 testBluetoothLowEnergy[854:907] [ble] disconnected error: Error Domain=CBErrorDomain Code=0 "Unknown error." UserInfo=0x1d8a2380 {NSLocalizedDescription=Unknown error.}
+
+
+2013-03-06 20:50:54.915 testBluetoothLowEnergy[879:907] [ble] stop scan
+
+2013-03-06 20:50:54.917 testBluetoothLowEnergy[879:907] [ble0] <CBConcretePeripheral: 0x2109ff90 UUID = <CFUUID 0x2109ffc0> 82129049-A156-6A22-E334-A248D1470635, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:50:54.918 testBluetoothLowEnergy[879:907] [ble2] <CBConcretePeripheral: 0x1fd9a580 UUID = <CFUUID 0x1fd6a000> D835AC61-8D22-D864-39F5-4C7A23E86606, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:50:54.925 testBluetoothLowEnergy[879:907] [ble] connected 
+2013-03-06 20:50:54.927 testBluetoothLowEnergy[879:907] [ble3] <CBConcretePeripheral: 0x2109ff90 UUID = <CFUUID 0x2109ffc0> 82129049-A156-6A22-E334-A248D1470635, Name = "DJI Config", IsConnected = YES>
+2013-03-06 20:50:54.930 testBluetoothLowEnergy[879:907] [ble4] <CBConcretePeripheral: 0x1fd9a580 UUID = <CFUUID 0x1fd6a000> D835AC61-8D22-D864-39F5-4C7A23E86606, Name = "DJI Config", IsConnected = NO>
+2013-03-06 20:50:54.932 testBluetoothLowEnergy[879:907] [connect] didConnect
+2013-03-06 20:50:54.934 testBluetoothLowEnergy[879:907] [connect] fw request
+2013-03-06 20:50:57.936 testBluetoothLowEnergy[879:907] [connect] RequestFWS timeout
+2013-03-06 20:50:57.939 testBluetoothLowEnergy[879:907] [connect] stopFlashAction
+2013-03-06 20:50:57.941 testBluetoothLowEnergy[879:907] [ble2] <CBConcretePeripheral: 0x1fd9a580 UUID = <CFUUID 0x1fd6a000> D835AC61-8D22-D864-39F5-4C7A23E86606, Name = "DJI Config", IsConnected = NO>
+
+
+
+2013-03-06 21:09:20.665 testBluetoothLowEnergy[135:907] [ble] disconnected error: Error Domain=CBErrorDomain Code=6 "The connection has timed out unexpectedly." UserInfo=0x1d5c7760 {NSLocalizedDescription=The connection has timed out unexpectedly.}
+2013-03-06 21:09:20.667 testBluetoothLowEnergy[135:907] [ble] disconnected 
+2013-03-06 21:09:20.669 testBluetoothLowEnergy[135:907] [ble] reset service
+2013-03-06 21:09:20.671 testBluetoothLowEnergy[135:907] [connect] disconnectBySystem

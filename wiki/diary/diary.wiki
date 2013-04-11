@@ -1,20 +1,25 @@
 = Diary =
 * [[日报]]
+* [[工作日志]]
 * [[附近的小区]]
-* [[0111目标点]]
 * [[导入导出]]
 * [[ble问题记录]]
 * [[调参app的aws云端设计]]
 * [[调参app开发纪录]]
-* [[corebluetooth note]]
 * [[调参app奔溃bug纪录]]
 * [[调参app工作安排]]
+* [[iphone调参的git分支模型]]
+* [[公司相关纪录]]
+* [[bug纪录]]
+
+Bluetooth笔记：[[../wiki_ble/|Bluetooth Note]]
+
+
+== Help文档 ==
 * [[HELP页面]]
 * [[HELP EN]]
 * [[Error页面]]
 * [[Error EN]]
-* [[iphone调参的git分支模型]]
-
 
 * [[2012-11-30]] -- 收发报文的结构和实例
 * [[2012-12-03]]

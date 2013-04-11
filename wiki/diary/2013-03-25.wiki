@@ -1,0 +1,8 @@
+2013-03-25 11:42:23.378 testBluetoothLowEnergy[10126:907] [ble] start scan
+2013-03-25 11:42:23.386 testBluetoothLowEnergy[10126:907] retrieve  connected success: <CBConcretePeripheral: 0x1cda5a80 UUID = <CFUUID 0x1cda5bf0> 46F07033-EDAE-F065-B345-9C60E10D1828, Name = "DJI Config", IsConnected = NO>
+2013-03-25 11:42:26.388 testBluetoothLowEnergy[10126:907] [ble] stop scan
+
+
+2013-03-25 11:44:48.938 testBluetoothLowEnergy[10145:907] [ble] start scan
+2013-03-25 11:44:48.942 testBluetoothLowEnergy[10145:907] retrieve  connected success: <CBConcretePeripheral: 0x1fd4d520 UUID = <CFUUID 0x1fd4e790> 46F07033-EDAE-F065-B345-9C60E10D1828, Name = "DJI Config", IsConnected = YES>
+2013-03-25 11:44:51.939 testBluetoothLowEnergy[10145:907] [ble] stop scan

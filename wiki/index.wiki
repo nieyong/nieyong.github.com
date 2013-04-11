@@ -13,7 +13,7 @@ WEB笔记：[[wiki_web/|Web Note]]
 * [[git使用笔记]]
 * [[objc代码段]]
 * [[ios开发调试]]
-* [[gitconfig]]
+* [[my config file]]
 
 
 == 最近编辑 ==

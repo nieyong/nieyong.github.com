@@ -1,0 +1,8 @@
+文件名字为dvd.repo，路径为。
+{{{
+[dvd_iso]
+name = install from dvd_iso
+baseurl = file:///mnt/iso_cdrom
+enable = 0
+gpgcheck = 0
+}}}

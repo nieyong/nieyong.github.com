@@ -1,0 +1,53 @@
+做了一个公司招聘的ppt，放在地址http://df.didian.me/intro/index.html 上，图片和字体等还没有做好。主要有以下几个slide：
+* 欢迎页面
+* 我们的团队
+* 我们的产品
+* 我们的机会
+* 招聘的职位（多个slide）
+* 联系方式
+
+该ppt是一个单网页生成的，所以可以直接做成一个站点，使用到了github上impress.js这个库。
+
+拿这个库做网站的几个案例：
+
+http://www.hupoz.com/#/main
+http://valeka.net/#/cover
+http://remiescola.fr/curriculum/index.html#/titre
+http://www.pongoweb.it/#/project
+http://www.ava-bausoftware.de/#/overview
+
+
+寻找创业伙伴，寻找激情和能力并存的年轻人。
+求推荐，求扩散。 
+公司简介：http://www.strikingly.com/skypediatech
+招聘PPT：http://stat.skypedia.net/introduce/index.html
+
+能给什么条件
+
+创业的所有条件是指：资金／团队／项目
+根据能力给可观的薪水和股份
+
+
+
+这个项目挺不错
+有点炫，有点酷
+
+招聘－硬件工程师
+
+职位描述
+* 负责公司硬件研发，主要关键字：物联网，可穿戴设备，蓝牙ble。
+* 配合软件工程师，提供稳定优质的通信模块
+
+岗位要求
+* 本科以上学历
+* 有嵌入式硬件开发经验
+* 有创业激情
+
+下面是需要研发的蓝牙4.0方案：BLE CC2540
+
+你好，
+我是思开科技的聂勇，看到你们在做的基于物联网技术的运动社交，很感兴趣。
+
+我们的创业时间和方向和你们很相近，我希望能够有机会拜访你们公司。
+
+

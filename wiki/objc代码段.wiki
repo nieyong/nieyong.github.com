@@ -1,3 +1,95 @@
+== Run Loop ==
+NSRunLoop 允许在您等待时响应事件runloop。如果你只是睡了（调用sleep函数），您的线程即使事件到达 （比如你在等待的网络响应）也无法响应。
+
+在连续循环中，有可能会引起界面的停顿，可以考虑加入`[[NSRunLoop currentRunLoop] runUntilDate: [NSDate distantPast]]`，其实就是本身的loop暂停一下，让主线程分点时间。
+
+首先是Run Loop的部分概念，它的作用就是循环、处理事件。具体来说有两个方面：
+* 定时启动任务（一般用和Timer协作）；
+* 处理事件。
+
+在单线程的app中，不需要注意Run Loop，但不代表没有。程序启动时，系统已经在主线程中加入了Run Loop。它保证了我们的主线程在运行起来后，就处于一种“等待”的状态（而不像一些命令行程序一样运行一次就结束了），这个时候如果有接收到的事件（Timer的定时到了或是其他线程的消息），就会执行任务，否则就处于休眠状态。
+
+如果我们要写多线程的程序，可能就需要自己来管理Run Loop。
+
+{{{name="code" class="c"
+    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]
+}}}
+
+RunMode: NSDefaultRunLoopMode，默认的run loop mode，可以把这个理解为一个”过滤器“，我们可以只对自己关心的事件进行监视。一般NSDefaultRunLoopMode是最常用的。
+
+启动run loop的方法就是runMode:，它的说明是：Runs the loop once, blocking for input in the specified mode until a given date。启动run loop一次，在特定的run loop mode阻塞程序，直到有事件发生，或者设置的时间已经到期。blocking for input中input指的是需要响应的事件发生。
+
+如果没有附加input source或是timer，或是时间过了limitDate，run loop就会退出阻塞状态，并且方法返回NO。
+
+下来是Run Loop的使用场合：
+* 使用port或是自定义的input source来和其他线程进行通信
+* 在线程（非主线程）中使用timer
+* 使用 performSelector...系列（如performSelectorOnThread, ...）
+* 使用线程执行周期性工作
+
+run loop不需要创建，在线程中只需要调用[NSRunLoop currentRunLoop]就可以得到。
+
+{{{name="code" class="c"
+    // The hud will dispable all input on the view (use the higest view possible in the view hierarchy)
+    self.HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+    [self.navigationController.view addSubview:self.HUD];
+    [self.HUD show:YES];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantPast]];
+    
+    //登陆
+    NSNumber* loginResult = [[LoginRegist sharedInstance] Login:userName password:password];
+    [self.HUD hide:YES];
+}}}
+
+
+假设我们想要等待某个异步方法的回调。比如connection。如果我们的线程中没有启动run loop，是不会有效果的（因为线程已经运行完毕，正常退出了）。我们可以用一个条件来运行run loop。
+
+这样就可以一直进行等待，直到在别的位置将done置为YES，表示任务完成。
+
+{{{name="code" class="c"
+-(void)start
+{
+    isFinished  = NO;
+
+    ...
+    while(isFinished != YES) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
+}
+}}}
+
+
+{{{name="code" class="c"
+while(done)
+{
+    [ NSRunLoop currentRunLoop]  runMode:currentMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+}
+}}}
+
+上面这段话看似程序进入了死循环，其实并不是这样。这段程序的意思是：
+
+如果当前线程有当前设置的runMode下的事件发生，runloop就会启动，处理对应的事件。如果没有事件发生，runloop就会每过10秒钟启动一次当前线程的runloop.
+
+如果runloop每次启动成功   [ NSRunLoop currentRunLoop]  runMode:currentMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:10]]; 返回值为YES，这个启动成功包括了时间触发和10秒钟到了之后触发两种情况。如果启动失败返回false.
+
+说到这个地方可能还不明白，为什么要搞个循环，为什么要用runloop,我刚开始的时候也是搞得不太明白。
+
+这个地方解释一下：
+
+当我们在ios设备上面触摸屏幕之后，对应的tounch事件就会调用，这是为什么呢，其实这个地方就有runloop的功劳。
+
+其实runloop做为一种时间处理机制，类似一个车间的主任（不知道这种比喻是否恰当）,这个主任他负责处理这个车间流水线上面发生特定类型事件的处理（这里的特定事件就是runMode）。这个事件可以包括安全事件，机械事件等等。该主任处理事件的传统方式可以是每隔一分钟巡逻生产线一次(对应的是cpu空转轮询消息队列的方式)，这种方式比较耗费工人体力（cpu资源，电量），当发现有问题发生，他就找对应的工人去处理，这里的工人对应于时间的处理函数；还有一种方式就是主任平时都在睡觉打麻将，当生产线发生问题的时候，如果是属于他的职责，系统就直接给他发送一条短信通知他，他收到之后再通知对应的工人去处理，上面那个十秒钟(这个是可以更改的）就是如果十秒内没有消息通知过来，主任才会去车间巡逻一次，但是这十秒由于主任是没有收到事件处理消息的，所以他通常是到了车间就走了（对应runLoop启动就结束，没有事件处理）。
+
+因此采用runloop的好处就显而易见了。
+
+runloop处理的事件包括：
+* 使用port或是自定义的input source来和其他线程进行通信
+* 在线程（非主线程）中使用timer
+* 使用 performSelector...系列（如performSelectorOnThread, ...）
+* 使用线程执行周期性工作
+
+如果在执行周期性工作的时候就可以采用上面那种，用一个循环，当时间回调的时候（这个地方的一个典型应用场景就是处理网络数据，网络有数据返回就启动一次runloop，直到所有数据处理完成之后将done设置为YES。结束）；
+
 == NSBundle与文件资源 ==
 获取app下的Error.html文件路径。
 {{{name="code" class="c"

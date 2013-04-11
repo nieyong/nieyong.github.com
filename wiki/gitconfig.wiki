@@ -1,3 +1,5 @@
+.gitconfig文件为git的配置文件，真对用户而言，路径一般为~/.gitconfig。
+
 MAC下的配置
 {{{
 [alias]

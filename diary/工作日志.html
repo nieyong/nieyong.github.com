@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>corebluetooth note</title>
+	<title>工作日志</title>
 
   	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
 	<link rel="stylesheet" href="templates/style.css">
@@ -37,16 +37,33 @@
     <div class="container">
 	<div id="content">
 	
+<h2 id="toc_0.1">2.27</h2>
 <p>
-When you disconnect a device with cancelPeripheralConnection the didDisconnectPeripheral delegate method will be invoked. However from iOS 6.0 the device remains connected for about 40-50 seconds (or more), so no didDiscoverPeripheral will be invoked in that timeframe. If you want to "discover" it again just call the retrieveConnectedPeripherals method and you will get the reference in didRetrieveConnectedPeripherals.
+今天偶遇一篇关于retina屏幕开发的博文，和大家分享一下。
 </p>
 
 <p>
-However, the best solution is to save the device's UUID and use that to reconnect with the retrievePeripherals method. This will invoke didRetrievePeripherals and you can reconnect with connectPeripheral. This is the fastest way to reconnect to a device, no scanning is required in this case.
+<a href="http://iblog.tencent.com/mac-retina-guide/">Mac平台retina高分屏开发技术分享</a>。
 </p>
 
 <p>
-<a href="http://stackoverflow.com/questions/13286487/how-can-i-reconnect-to-device-after-disconnecting-in-core-bluetooth">http://stackoverflow.com/questions/13286487/how-can-i-reconnect-to-device-after-disconnecting-in-core-bluetooth</a>
+下面是我摘抄的一些技术点，有些点的理解可能还不够到位，欢迎大家指正。
+</p>
+
+<ul>
+<li>
+系统对高分屏的支持上，Mac OS和iOS基本上是一样的：都是两倍的Scale Factor，都是系统自动来完成这个Scaling。
+
+<li>
+Point是苹果给的定义，指用户空间的一个单位。在普通屏上，Point和Pixel是一比一的关系，而在高分屏上，它们的关系是一比四。这点Mac和iOS是一样的。
+
+<li>
+大部分情况下，我们根本不需要去考虑Pixel，因为我们程序中用到的坐标基本上都是以Point为单位的。
+
+</ul>
+
+<p>
+终于明白，为什么在代码中设置大小时，都是以320的宽度值作为屏幕的最大宽度。
 </p>
 
 	</div>
