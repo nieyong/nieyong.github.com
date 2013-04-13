@@ -1,3 +1,4 @@
+
 == TI Packet sniffer ==
 The CC2540 USB Dongle must be pre-programmed with special firmware in order to work with the packet sniffer. After installation of the packet sniffer, the hex file to be programmed can be found on the following directory: <installation directory>\General\Firmware\sniffer_fw_cc2540.hex
 The firmware can be programmed with the SmartRF Flash Programmer. To program the firmware on the CC2540 Dongle, it must be connected to SmartRF05EB or the CC Debugger via the debug connector. See user manual for the flash programmer for details on how to use the flash programmer.
