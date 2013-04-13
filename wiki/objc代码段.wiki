@@ -1,3 +1,39 @@
+{{{
+-(NSNumber*)postDeviceToken:(NSString*)deviceToken
+{
+    // unix时间字符串
+    NSString *datestr = [NSString stringWithFormat:@"%0.f",[[NSDate date] timeIntervalSince1970]];;
+    
+    NSString* nonce = [self nonce];
+    ....
+}
+
+
+
+- (NSString *)nonce
+{
+    // 随机20个字符，字符可以为不可见字符，0 ～ 255，需要使用urlencode
+    NSMutableString *randstr = [NSMutableString stringWithCapacity:20];
+    for(int i = 0 ; i < 20 ; i++)
+    {
+        uint8_t thisChar = arc4random()%0xff;
+        
+        if (thisChar == '.' || thisChar == '-' || thisChar == '_' || thisChar == '~' ||
+            (thisChar >= 'a' && thisChar <= 'z') ||
+            (thisChar >= 'A' && thisChar <= 'Z') ||
+            (thisChar >= '0' && thisChar <= '9')) {
+            [randstr appendFormat:@"%c", thisChar];
+        } else {
+            NSString *tmp = [NSString stringWithFormat:@"%%%02X", thisChar];
+            tmp = [tmp uppercaseString];
+            [randstr appendString:tmp];
+        }
+    }
+    
+    return randstr;
+}
+}}}
+
 == Run Loop ==
 NSRunLoop 允许在您等待时响应事件runloop。如果你只是睡了（调用sleep函数），您的线程即使事件到达 （比如你在等待的网络响应）也无法响应。
 
