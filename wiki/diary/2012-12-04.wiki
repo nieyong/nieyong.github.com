@@ -1,6 +1,0 @@
-# 内存泄漏的问题，类方法中常见的做法，如何return一个实例，是否需要关心内存泄漏的问题？
-
-
-    assert(self.window != nil);
-    assert(self.navController != nil);    assert(self.window != nil);
-    assert(self.navController != nil);

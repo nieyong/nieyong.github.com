@@ -1,7 +1,0 @@
-== review ==
-[_overlay removeFromSuperview];
-[_transition removeFromSuperview];
-
-_overlay等在removeFromSupperview之后就会被释放掉（release）。
-
-    If the receiver’s superview is not nil, the superview releases the receiver. If you plan to reuse a view, be sure to retain it before calling this method and release it again later as appropriate.
