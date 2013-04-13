@@ -35,4 +35,3 @@ WEB笔记：[[wiki_web/|Web Note]]
 * [[about]] -- 关于本站
 * [[Navigate]] -- 本站导图
 * [[wikiword|所有wiki条目]]
-* [[diary/diary|每日随手记]]

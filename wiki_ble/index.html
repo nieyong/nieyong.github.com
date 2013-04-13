@@ -41,6 +41,21 @@
 <a href="bluetooth essentials for programmers.html">bluetooth essentials for programmers</a>
 </p>
 
+<p>
+<a href="TI CC254x develop.html">TI CC254x develop</a>
+</p>
+
+<p>
+2.1KB/s的传输速率
+</p>
+
+<p>
+音乐差的也要64Kbps啊
+</p>
+
+<p>
+jawbone手环就是这么做
+</p>
 
 <h2 id="toc_0.1">Bluetooth笔记</h2>
 
@@ -144,6 +159,63 @@ GATT_CLIENT_CHAR_CFG_UUID – This attribute represents a characteristic descrip
 GATT_CHAR_USER_DESC_UUID – This attribute represents a characteristic descriptor that corresponds to the nearest preceding (by handle) characteristic value in the attribute table. It contains an ASCII string with a description of the corresponding characteristic
 
 </ul>
+
+<h2 id="toc_0.5">固定／可变连接时间间隔</h2>
+<p>
+标准蓝牙技术是一种“面向连接”的无线技术,具有固定的连接时间间隔。相反,蓝牙低能耗技术采用可变连接时间间隔,这个间隔根据具体应用可以设置为几毫秒到几秒不等。
+</p>
+
+<h2 id="toc_0.6">快速的连接方式</h2>
+<p>
+另外,因为BLE技术采用非常快速的连接方式,因此平时可以 处于“非连接”状态(节省能源),此时链路两端相互间只是知晓对方,只有在必要时才开启链路,然后 在尽可能短的时间内关闭链路。
+</p>
+
+<h2 id="toc_0.7">ble的三大ULP特征</h2>
+<p>
+蓝牙低能耗技术的三大特性成就了ULP性能,这三大特性分别是：
+</p>
+<ul>
+<li>
+最大化的待机时间
+
+<li>
+快速连接
+
+<li>
+低峰值的发送/接收功耗。
+
+</ul>
+
+<h2 id="toc_0.8">ble最小化无线开启时间的技巧</h2>
+<h3 id="toc_0.8.1">使用3个广告信道</h3>
+<p>
+蓝牙低能耗技术最小化无线开启时间的第一个技巧是仅用3个“广告”信道搜索其它设备,或向寻求建立连接的设备宣告自身存在。相比之下,标准蓝牙技术使用了32个信道。这意味着蓝牙低能耗技术扫描其它设备只需“开启”0.6至1.2ms时间,而标准蓝牙技术需要22.5ms时间来扫描它的32个信道。
+</p>
+
+<h3 id="toc_0.8.2">使用37个数据信道</h3>
+<p>
+连接成功后,蓝牙低能耗技术就会切换到37个数据信道之一。在短暂的数据传送期间,无线信号将使用标准蓝牙技术倡导的自适应跳频(AFH)技术以伪随机的方式在信道间切换，标准蓝牙技术使用79个数据信道。
+</p>
+
+<h3 id="toc_0.8.3">使用更大的原始数据带宽</h3>
+<p>
+蓝牙低能耗技术无线开启时间最短的另一个原因是它具有1Mbps的原始数据带宽，更大的带宽允许在更短的时间内发送更多的信息。
+</p>
+
+<p>
+蓝牙低能耗技术“完成”一次连接(即扫描其它设备、建立链路、发送数据、认证和适当地结束)只需3ms。
+</p>
+
+<h2 id="toc_0.9">ble限制峰值功耗</h2>
+<h3 id="toc_0.9.1">采用更加“宽松的”射频参数</h3>
+<p>
+两种技术都使用高斯频移键控(GFSK)调制,但蓝牙低能耗技术使用的调制指数是0.5,而标准蓝牙技术是0.35。0.5的指数接近高斯最小频移键控(GMSK)方案,可以降低无线设备的功耗要求。
+</p>
+
+<h3 id="toc_0.9.2">发送很短的数据包</h3>
+<p>
+发送较长的数据包-&gt;无线设备在相对较高的功耗状态保持更长的时间-&gt;硅片发热-&gt;改变材料的物理特性-&gt;改变传送频率(中断链路)-&gt;频繁地对无线设备进行再次校准-&gt;再次校准将消耗更多的功率(并且要求闭环架构, 使得无线设备更加复杂,从而推高设备价格)。
+</p>
 
 	</div>
     </div>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>TI CC254x develop</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">TI Packet sniffer</h2>
+<p>
+The CC2540 USB Dongle must be pre-programmed with special firmware in order to work with the packet sniffer. After installation of the packet sniffer, the hex file to be programmed can be found on the following directory: &lt;installation directory&gt;\General\Firmware\sniffer_fw_cc2540.hex
+The firmware can be programmed with the SmartRF Flash Programmer. To program the firmware on the CC2540 Dongle, it must be connected to SmartRF05EB or the CC Debugger via the debug connector. See user manual for the flash programmer for details on how to use the flash programmer.
+</p>
+
+
+<p>
+The capture device can be configured to follow a data connection between a specific Bluetooth low energy master (initiator) and slave device. In the "Radio Configuration tab", click the checkbox next to the "Connect to Initiator Address" and write the address of the initiator (master) device. If this option is not selected, the capture device will start following the first data connection that appears on the current advertising channel
+</p>
+
+
+<p>
+4.1 Bluetooth Low Energy
+The capture device currently ignores the connection timeout parameter for an active connection. This means that the sniffer will not know that a connection between two BLE devices is "down" if no new packets are received for the duration of the connection timeout. The reason this is not supported by the sniffer, is to remedy the case where the sniffer follows a data connection between two remote devices and thus is likely to lose a number of packets for a period of time that exceeds the connection timeout.
+When the actual connection is terminated due to a connection timeout, the sniffer must be stopped (click the pause/stop icon) and restarted (click the play icon) in order to follow a new connection.
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

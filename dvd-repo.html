@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>gitconfig</title>
+	<title>dvd-repo</title>
 
   	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
 	<link rel="stylesheet" href="templates/style.css">
@@ -38,62 +38,14 @@
 	<div id="content">
 	
 <p>
-.gitconfig文件为git的配置文件，真对用户而言，路径一般为~/.gitconfig。
-</p>
-
-<p>
-MAC下的配置
+文件名字为dvd.repo，路径为。
 </p>
 <pre>
-[alias]
-	co = checkout
-	ci = commit
-	st = status
-	br = branch
-	ll = log --oneline --decorate --since='2 days ago'
-	ol = log -p -1
-[color]
-	status = auto
-	branch = auto
-	ui = auto
-</pre>
-
-<p>
-windows下的配置
-</p>
-<pre>
-[core]
-	symlinks = false
-	autocrlf = true
-[color]
-	diff = auto
-	status = auto
-	branch = auto
-	interactive = true
-[alias]
-	co = checkout
-	ci = commit -a
-	st = status
-	br = branch
-	oneline = log --pretty=oneline -n 5
-	onelog = log -p -1
-	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit --
-[pack]
-	packSizeLimit = 2g
-[help]
-	format = html
-[http]
-	sslCAinfo = /bin/curl-ca-bundle.crt
-[sendemail]
-	smtpserver = /bin/msmtp.exe
-
-[diff "astextplain"]
-	textconv = astextplain
-[rebase]
-	autosquash = true
-[i18n]
-	logoutputencoding = gbk
-
+[dvd_iso]
+name = install from dvd_iso
+baseurl = file:///mnt/iso_cdrom
+enable = 0
+gpgcheck = 0
 </pre>
 
 	</div>
