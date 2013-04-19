@@ -1,0 +1,28 @@
+整个TI的BLE协议栈是以库文件的形式提供的，核心的代码并不提供。其中，最中用的对外接口为GAP和GATT层接口函数。我们的应用层代码和Profile层都是建立在GAP或者GATT之上，例如GAP Peripheral Profile就是建立在GAP层之上。
+
+== Generic Access Profile（GAP） ==
+GAP层主要负责设备之间的连接，包括：
+* 设备发现
+* 设备之间连接的建立
+* 连接终止
+* 安全认证
+* 设备连接参数配置等
+
+GAP层可以配置为以下4种模式之一：
+* Broadcaster模式：只能够通告自身的信息，不能够被连接
+* Observer模式：只能够扫瞄通告信息，不能够建立连接
+* Peripheral模式
+* Central模式
+
+设备发现（扫瞄）的过程是这样：
+* Peripheral设备发送通告
+* Cental设备接收到通告，并且知道其是一个可以连接的外设
+* Central设备发送一个scan request到该外设
+* Peripheral设备接收到该scan request，并且发送一个scan response作为应答
+
+到此，整个扫瞄外设的过程结束。扫瞄的过程结束之后，就可以由Central设备发起连接请求。一个连接请求包括下面这些参数：
+* Connection Interval
+* Slave Latency
+* Supervision Timeout
+
+注意：iOS的连接接口`- (void)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options;`并没有要求输入上面的这些参数，这时候，被连接的Peripheral设备如果参数不匹配，那么就无法正常建立连接。所以这个时候，The peripheral device can request the central device to change the connection settings by sending a “Connection Parameter Update Request”。但是我记得我们的项目中，好像该选项被设置为FALSE，这需要确认一下。

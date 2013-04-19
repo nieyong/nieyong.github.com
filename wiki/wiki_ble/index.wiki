@@ -2,11 +2,9 @@
 
 [[TI CC254x develop]]
 
-2.1KB/s的传输速率
+[[TI BLE Protocol Stack]]
 
-音乐差的也要64Kbps啊
-
-jawbone手环就是这么做
+BLE协议只有2.1Kbps的传输速率，如果做音乐等音频数据传输，差的也要64Kbps。
 
 == Bluetooth笔记 ==
 
