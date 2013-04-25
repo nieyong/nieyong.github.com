@@ -3,6 +3,19 @@
 * [[wiki_ny/git基本配置记录]]
 * [[wiki_ny/git基本概念记录]]
 
+== 二进制文件冲突 ==
+对于二进制文件的冲突，你肯定不想通过编辑二进制文件来解决冲突，那是不可能完成的事情。你要做的就是：要么选择对方的修改，要么选择自己的修改。
+
+你可以用git checkout的--theirs或--ours选项。
+{{{
+git pull
+git checkout --theirs YOUR_BINARY_FILE
+// git checkout --ours YOUR_BINARY_FILE
+git add YOUR_BINARY_FILE
+git commit -m 'merged with the remote repos.'
+git push
+}}}
+
 == 删除某一次提交 ==
 * `git reset HEAD^` 	//回退第一个记录 
 * `git reset HEAD~2` 	//回退第二个记录 

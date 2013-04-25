@@ -2,9 +2,20 @@
 
 [[TI CC254x develop]]
 
+[[BLE Overview]]
+
 [[TI BLE Protocol Stack]]
 
+[[BLE速率问题]]
+
 BLE协议只有2.1Kbps的传输速率，如果做音乐等音频数据传输，差的也要64Kbps。
+
+模块会根据数据包大小
+自动分包发送,每个无线包最大载荷为 20 个字节。移动设备方发往模块的数据包,必须自 行分包(1-20 字节/包)发送。
+
+模块的蓝牙 默认连接间隔为 20 ms,如果需要节省功耗采用低速转发模式,需通过 AT 指令调整连接间隔(最长连接间隔 2000ms),每个连接间隔最多传输 80 个字节
+
+
 
 == Bluetooth笔记 ==
 
@@ -17,47 +28,6 @@ In order to write an application on a smartphone that can communicate with the C
 * Contain hardware that supports dual-mode Bluetooth (traditional BT and Bluetooth low energy)
 * Have some kind of support in their SDK for using the Bluetooth low energy
 
-== BLE的连接参数 ==
-*connection event & connection interval*
-
-Even if there is no application data to be sent or received, the two devices will still exchange link layer data to maintain the connection. The connection interval is the amount of time between two connection events, in units of 1.25ms. The connection interval can range from a minimum value of 6 (7.5ms) to a maximum of 3200 (4.0s).
-
-设备必须在连接事件发生的时候，才能够收发数据。
-
-*Slave Latency*
-
-This parameter gives the slave (peripheral) device the option of skipping a number of connection events.跳过连接事件的前提是自己没有数据要发送，所以该参数只会影响对方发送数据给自己的时间，例如设置slave latency为5，而它自己又正好没有数据要发送出去，结果它就要等5个connection interval才应答一次对方，接收对方发来的数据。
-
-*Supervision Timeout*
-
-This is the maximum amount of time between two successful connection events. 
-
-== Apple的蓝牙外设连接参数要求 ==
-Interval Max * (Slave Latency + 1) ≤ 2 seconds
-Interval Min ≥ 20 ms
-Interval Min + 20 ms ≤ Interval Max 
-Slave Latency ≤ 4
-connSupervisionTimeout ≤ 6 seconds
-Interval Max * (Slave Latency + 1) * 3 < connSupervisionTimeout
-
-=== dji对ble的配置参数 ===
-看了上次你给我的ble固件源代码，其中ble的一些参数配置为：
-Interval Max为16（20ms）
-Interval Min为8（10ms）
-Slave Latency为0
-connSupervisionTimeout为10（100ms）
-
-== GATT server ==
-A GATT server consists of one or more GATT services, which are collections of data to accomplish a particular function or feature.
-
-The characteristic values, along with their properties and their configuration data (known as “descriptors”) on the GATT Server are stored in the attribute table. The attribute table is simply a database containing small pieces of data called attributes. In addition to the value itself, each attribute has the following properties associated with it:
-
-There are a few special attribute types that are found in the GATT attribute table, with values defined by the Bluetooth SIG:（由蓝牙技术联盟规定的一些attribute）
-
-* GATT_PRIMARY_SERVICE_UUID – This indicates the start of a new service, and the type of the service provided
-* GATT_CHARACTER_UUID – This is known as the “characteristic declaration”, and it indicates that the attribute immediately following it is a GATT characteristic value
-* GATT_CLIENT_CHAR_CFG_UUID – This attribute represents a characteristic descriptor that corresponds to the nearest preceding (by handle) characteristic value in the attribute table. It allows the GATT client to enable notifications of the characteristic value
-* GATT_CHAR_USER_DESC_UUID – This attribute represents a characteristic descriptor that corresponds to the nearest preceding (by handle) characteristic value in the attribute table. It contains an ASCII string with a description of the corresponding characteristic
 
 == 固定／可变连接时间间隔 ==
 标准蓝牙技术是一种“面向连接”的无线技术,具有固定的连接时间间隔。相反,蓝牙低能耗技术采用可变连接时间间隔,这个间隔根据具体应用可以设置为几毫秒到几秒不等。

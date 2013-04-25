@@ -1,0 +1,13 @@
+下面纪录一下ble得速率问题。
+
+== ble固件端 ==
+ble固件这一端数据发送是这样处理的，20ms发送一次（20ms是ble之间最短连接间隔），每次发送80bytes，这80bytes分4次发送（需要分4次发送的原因是每个无线包最多载荷为20bytes）。
+
+这样设计下来，理论上的速率可以达到：80*1000／20=4K/s。
+
+== iOS corebluetooth端 ==
+iOS软件端对发包的处理是，每40ms调用一次发包函数，每次发送60bytes，这60bytes分3次发送，每次20bytes。
+
+这样设计下来，iOS端能够提供的速率是：60*1000/40 ＝ 1.5K/s。
+
+思考：corebluetooth提供的写数据函数`- (void)writeValue:(NSData *)data forCharacteristic:(CBCharacteristic *)characteristic type:(CBCharacteristicWriteType)type;`难道没有将无线包最多载荷为20bytes这个特性封装掉，还需要我们自己对数据进行拆装？

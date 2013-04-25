@@ -1,0 +1,8 @@
+== Host Controller Interface (HCI) ==
+该部分内容在蓝牙4.0手册的以下章节：
+* Volume 2 - Core System Package [BR/EDR Controller volume] 
+* Part E - HOST CONTROLLER INTERFACE FUNCTIONAL SPECIFICATION
+
+This Part of the Bluetooth Core Specification describes the functional specifications for the Host Controller Interface (HCI). The HCI provides a uniform interface method of accessing a Bluetooth Controller’s capabilities. The next three sections provide a brief overview of the lower layers of the Bluetooth software stack and of the Bluetooth hardware. 
+
+了解HCI接口，是学习各种蓝牙协议栈的基础。这样你才知道，协议栈的代码地层是从什么地方开始的，设计协议栈需要考虑哪些问题。这里最先遇到这个问题的是Linux的蓝牙协议栈Bluez。当然，我们使用的TI CC254x的协议栈无法看到源代码，所以也就无法深究。理解了Host和Controller直接的关系，对于理解BLE的模式也是有好处的。
