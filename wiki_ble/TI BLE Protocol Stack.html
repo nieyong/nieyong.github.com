@@ -118,6 +118,102 @@ Supervision Timeout
 注意：iOS的连接接口<code>- (void)connectPeripheral:(CBPeripheral *)peripheral options:(NSDictionary *)options;</code>并没有要求输入上面的这些参数，这时候，被连接的Peripheral设备如果参数不匹配，那么就无法正常建立连接。所以这个时候，The peripheral device can request the central device to change the connection settings by sending a “Connection Parameter Update Request”。但是我记得我们的项目中，好像该选项被设置为FALSE，这需要确认一下。
 </p>
 
+<p>
+下面重点说明连接的各个参数的作用。
+</p>
+
+<h3 id="toc_0.1.1">BLE的连接参数</h3>
+<ul>
+<li>
+connection event &amp; connection interval
+
+</ul>
+<p>
+Even if there is no application data to be sent or received, the two devices will still exchange link layer data to maintain the connection. The connection interval is the amount of time between two connection events, in units of 1.25ms. The connection interval can range from a minimum value of 6 (7.5ms) to a maximum of 3200 (4.0s).
+</p>
+
+<p>
+ble连接的两端，虽然没有数据需要传送，也需要有连接事件发生。设备必须在连接事件发生的时候，才能够收发数据。
+</p>
+
+<ul>
+<li>
+Slave Latency
+
+</ul>
+<p>
+This parameter gives the slave (peripheral) device the option of skipping a number of connection events.跳过连接事件是针对peripheral端设备而言，并且前提是自己没有数据要发送。所以该参数只会影响central端发送数据给peripheral端的时间，例如设置slave latency为5，而peripheral端正好没有数据要发送，结果cental端就要等5个connection interval才有对方的应答，这是才能够把数据发送给peripheral端。
+</p>
+
+<ul>
+<li>
+Supervision Timeout
+
+</ul>
+<p>
+This is the maximum amount of time between two successful connection events. 
+</p>
+
+<h3 id="toc_0.1.2">Apple的蓝牙外设连接参数要求</h3>
+<p>
+该部分参考Apple公司的《Bluetooth Accessory Design Guidelines for Apple Products.pdf》文档。
+</p>
+<pre>
+Interval Max * (Slave Latency + 1) ≤ 2 seconds
+Interval Min ≥ 20 ms
+Interval Min + 20 ms ≤ Interval Max 
+Slave Latency ≤ 4
+connSupervisionTimeout ≤ 6 seconds
+Interval Max * (Slave Latency + 1) * 3 &lt; connSupervisionTimeout
+</pre>
+
+<p>
+看了ble固件源代码，其中ble的一些参数配置为：
+</p>
+<pre>
+Interval Max为16（20ms）
+Interval Min为8（10ms）
+Slave Latency为0
+connSupervisionTimeout为10（100ms）
+</pre>
+
+<h2 id="toc_0.2">Generic Attribute Profile (GATT)</h2>
+<p>
+上面的GAP主要负责设备的发现，连接等，GAP Peripheral Profile／GAP Central Profile等都是建立在GAP的基础上，使用的是GAP的API接口。本节介绍的GATT负责数据的传输。既然是数据的传输，就一定有发送端和接收端，对应GATT Client和GATT Server。
+</p>
+
+<p>
+注意：这里的GATT Client／Server和GAP角色的中的Peripheral／Central没有必然关系，一个Peripheral设备既可以发送数据（GATT Server），又可以接收数据（GATT Client）。
+</p>
+
+<h3 id="toc_0.2.1">Characteristic &amp; Attribute</h3>
+<p>
+A GATT server consists of one or more GATT services, which are collections of data to accomplish a particular function or feature.
+</p>
+
+<p>
+The characteristic values, along with their properties and their configuration data (known as “descriptors”) on the GATT Server are stored in the attribute table. The attribute table is simply a database containing small pieces of data called attributes. In addition to the value itself, each attribute has the following properties associated with it:
+</p>
+
+<p>
+There are a few special attribute types that are found in the GATT attribute table, with values defined by the Bluetooth SIG:（由蓝牙技术联盟规定的一些attribute）
+</p>
+
+<ul>
+<li>
+GATT_PRIMARY_SERVICE_UUID – This indicates the start of a new service, and the type of the service provided
+
+<li>
+GATT_CHARACTER_UUID – This is known as the “characteristic declaration”, and it indicates that the attribute immediately following it is a GATT characteristic value
+
+<li>
+GATT_CLIENT_CHAR_CFG_UUID – This attribute represents a characteristic descriptor that corresponds to the nearest preceding (by handle) characteristic value in the attribute table. It allows the GATT client to enable notifications of the characteristic value
+
+<li>
+GATT_CHAR_USER_DESC_UUID – This attribute represents a characteristic descriptor that corresponds to the nearest preceding (by handle) characteristic value in the attribute table. It contains an ASCII string with a description of the corresponding characteristic
+
+</ul>
+
 	</div>
     </div>
 

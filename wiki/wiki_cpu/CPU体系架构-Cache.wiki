@@ -5,7 +5,7 @@ Cache是用来对内存数据的缓存。CPU要访问的数据在Cache中有缓�
 
 现在 CPU 的 Cache 又被细分了几层，常见的有 L1 Cache, L2 Cache, L3 Cache，其读写延迟依次增加，实现的成本依次降低。现代系统采用从 Register ―> L1 Cache ―> L2 Cache ―> L3 Cache ―> Memory ―> Mass storage的层次结构，是为解决性能与价格矛盾所采用的折中设计。下图描述的就是CPU、Cache、内存、以及DMA之间的关系。程序的指令部分和数据部分一般分别存放在两片不同的cache中，对应指令缓存（I-Cache）和数据缓存（D-Cache）。
 
-[[CPU体系架构-image/cache/cache01.jpg]]
+{{CPU体系架构-image/cache/cache01.jpg}}
 
 引入 Cache 的理论基础是程序局部性原理，包括时间局部性和空间局部性。即最近被CPU访问的数据，短期内CPU
 还要访问（时间）；被 CPU 访问的数据附近的数据，CPU 短期内还要访问（空间）。因此如果将刚刚访问过的数据缓存在Cache中，那下次访问时，可以直接从Cache中取，其速度可以得到数量级的提高。
@@ -14,7 +14,7 @@ Cache是用来对内存数据的缓存。CPU要访问的数据在Cache中有缓�
 == Cache结构 ==
 根据Cache相联方式的不同，Cache有3类：直接相联，全相联，组相联。在这里我们只介绍组相连的Cache结构。因为组相联 Cache 则是直接相联与全相联的一个折衷，兼顾性能与价格，也是最常见，最普遍的Cache结构。首先给出组相连Cache的结构图。以harrier平台的CPU芯片BCM5836的Cache为例。
 
-[[CPU体系架构-image/cache/cache02.png]]
+{{CPU体系架构-image/cache/cache02.png}}
 
 对照上面的Cache结构图，下面说明如何来说明Cache的指标。
 # Cache的大小，也就是能够存放多少字节。一般有16KBytes，32KBytes等。例如上面的这个Cache的大小就是16KBytes。后面会说明这16KB是如何组成的。
@@ -26,14 +26,14 @@ Cache是用来对内存数据的缓存。CPU要访问的数据在Cache中有缓�
 
 例如，在我的个人PC上，使用软件检测获得到Cache的数据如下图所示。
 
-[[CPU体系架构-image/cache/cache06.gif]]
+{{CPU体系架构-image/cache/cache06.gif}}
 
 == 工作方式 ==
 下面介绍组相连Cache的工作方式。
 
 *首先看的是CPU是如何获取Cache中的数据的。* 如下图所示。
 
-[[CPU体系架构-image/cache/cache03.png]]
+{{CPU体系架构-image/cache/cache03.png}}
 
 假设这里是16KBytes的指令Cache（I-Cache），那么左上角32位的虚拟地址就是PC指针中的值（如果PC指针存在的话）。32位的地址在图中使用了3中颜色标记（黑色：bit0~bit3；蓝色：bit4~bit12；红色：bit13~bit31）。下面就是CPU从Cache中获取指令的过程：
 # 匹配组。蓝色的9bit选择某一个组（一共512个组，9bit表示完）；
@@ -46,7 +46,7 @@ CPU和数据Cache（D-Cache）的交互基本上也是这样的。存在差别�
 
 *然后要看的是Cache和内存如何交互数据。* 如下图所示。
 
-[[CPU体系架构-image/cache/cache07.png]]
+{{CPU体系架构-image/cache/cache07.png}}
 
 在CPU如何获取Cache中的数据的问题中，还遗留有三个问题：第一，CPU读取Cache中的数据，没有命中（miss）应该怎么办？第二，对于数据Cache，CPU修改了某个数据的值，并把它写回到Cache中，造成Cache中的数据和内存中的数据不一致怎么办？第三，对于数据Cache，CPU修改了某个数据的值，并把它写回到Cache中，结果没有命中（miss）应该怎么办？这三个问题，就是这一段Cache和内存如何交互需要解决的问题。
 

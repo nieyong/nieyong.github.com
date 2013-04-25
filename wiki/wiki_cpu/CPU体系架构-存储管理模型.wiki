@@ -9,7 +9,7 @@ MIPS32中的存储器模型被划分为四个大块，如下表所示：
 
 下面在给出一个存储器管理模型图，又叫做虚拟内存映射图，该图和上面的表是一一对应关系。如下图所示：
 
-[[CPU体系架构-image/cpu_memory_map/MIPS_mem_map.png]]
+{{CPU体系架构-image/cpu_memory_map/MIPS_mem_map.png}}
 
 这样的存储器管理模型和X86差距比较大，X86有实模式和保护模式之分，CPU刚启动时运行在实模式之下，直到设定了保护模式之后才能运行在保护模式下。在MIPS32中没有保护模式那么系统是如何启动的呢？ 
 
@@ -75,9 +75,9 @@ board_draminit:
 
 这个时候，关系到SOC片上资源地址空间的划分问题。例如，对于芯片bcm5836来说，地址映射关系如下表：
  
-[[CPU体系架构-image/cpu_memory_map/image002.jpg]]
+{{CPU体系架构-image/cpu_memory_map/image002.jpg}}
 
-[[CPU体系架构-image/cpu_memory_map/image003.jpg]]
+{{CPU体系架构-image/cpu_memory_map/image003.jpg}}
 
 每一个地址范围对应什么资源都是由上表确定的。在这里的地址，就是物理地址。
 
@@ -86,15 +86,15 @@ board_draminit:
 
 左边的虚拟地址分布，就是MIPS CPU架构的基本地址空间的情况，对于某一固定的CPU架构，一般是不会变化的。参考《See MIPS Run》P47。右边的物理地址分布，主要是由SOC芯片来决定的。对于采用同一MIPS CPU架构的不同SOC，可能不会相同。具体的分布，需要参考的是SOC的设计说明书。
 
-[[CPU体系架构-image/cpu_memory_map/image004.jpg]]
+{{CPU体系架构-image/cpu_memory_map/image004.jpg}}
  
 下面图 2 5 TL-SL5428的FLASH和SDRAM虚拟物理地址映射，介绍的是采用harrier方案的交换机TL-SL5428中，有关VA和PA的映射关系图。需要对照上面两节的图表来分析。
  
-[[CPU体系架构-image/cpu_memory_map/va_pa_flash.png]]
+{{CPU体系架构-image/cpu_memory_map/va_pa_flash.png}}
 
 上图中，需要说明的一点就是FLASH空间的映射关系。可以看到，从0xbfc0.0000到0xc000.0000的4M空间和从0xbc00.0000到0xbc80,0000的8M空间是由重合的。其实，我们可以翻过去看到，在图 2 3 bcm5836地址映射关系（2）中，有这么一段：
  
-[[CPU体系架构-image/cpu_memory_map/image006.jpg]]
+{{CPU体系架构-image/cpu_memory_map/image006.jpg}}
 
 那上面这两行是什么意思呢？其实，就是说，物理地址从0x1fc0.0000到0x1fff.ffff的4M空间和从0x1c00.0000开始的32M空间，被flash控制模块映射到实际的flash器件的时候，是属于同一位置。其实，这里是MIPS CPU的虚拟地址转化成物理地址（在这里就是kseg1段去掉高位3根地址线）之后，flash控制模块又将物理地址映射到实际器件的时候，将某一部分物理地址进行了重合。
 在开发过程中，常说，CPU上电之后的开始运行的地址是0xbfc0.0000（又叫做系统启动向量），所以我们bootrom的第一行代码就放在虚拟地址0xbfc0.0000所对应的物理地址处（对于软件开发，可能无需了解该地址。因为芯片设计的原因，可能有多个虚拟地址对应此处的同一个物理地址）。

@@ -194,7 +194,7 @@ C语言函数的调用，请参考C语言-Stack的相关内容。涉及堆栈帧
 * 名字修饰为下划线+函数名；
 首先我们给出一个cdecl调用惯例的模型，不针对任何处理器架构，然后我们再看看不同的处理器架构下cdecl调用惯例有什么样的特点。下图为cdecl调用惯例的一般情况示意图。
 
-[[CPU体系架构-image/cdel_call_convention.png]]
+{{CPU体系架构-image/cdel_call_convention.png}}
 
 下面分析cdecl调用惯例中，调用函数和被调用函数分别负责活动记录（堆帧栈）中的什么操作呢？首先是被调用函数，在函数的入口，需要做以下操作：
 * 需要将返回地址入栈，例如MIPS下的 `sw $ra,28($sp)` 一句，就是将函数的返回地址入栈。对于x86架构，由于call命令会自动将返回地址入栈，所以在函数入口处没有返回地址入栈的指令；
@@ -244,15 +244,15 @@ ldmdb	r11, {r11, sp, pc}
 
 海报
 
-[[CPU体系架构-image/inception03.jpg]]
+{{CPU体系架构-image/inception03.jpg}}
 
 海报-男主角
 
-[[CPU体系架构-image/inception01.jpg]]
+{{CPU体系架构-image/inception01.jpg}}
 
 海报-最终没有回到现实的女主角
 
-[[CPU体系架构-image/inception02.jpg]]
+{{CPU体系架构-image/inception02.jpg}}
 
 
 * 2012.1.16	终于完成函数调用部分内容，虽然还很粗糙；

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>BLE Overview</title>
+
+  	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
+	<link rel="stylesheet" href="templates/style.css">
+	
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script language="javascript" src="templates/shCore.js"></script>
+	<script language="javascript" src="templates/shBrushCpp.js"></script>
+	<script language="javascript" src="templates/shBrushJScript.js"></script>
+	<script language="javascript" src="templates/shBrushPhp.js"></script>
+	<script language="javascript" src="templates/shBrushJava.js"></script>
+	<script language="javascript" src="templates/shBrushXml.js"></script>
+	<script language="javascript" src="templates/shBrushCss.js"></script>
+	<script language="javascript" src="templates/shBrushObjectiveC.js"></script>
+	
+	<script language="javascript" src="templates/vimwiki.js"></script>
+</head>
+
+
+<body>
+    <div class="navbar">
+      <div class="navbar-container">
+	  <a class="brand" href="index.html">NieNet</a>
+	  <div class="nav-collapse">
+		<ul class="nav">
+		  <li><a href="index.html">主页</a></li>
+		  <li><a href="about.html">关于</a></li>
+		</ul>
+	  </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+	<div id="content">
+	
+<h2 id="toc_0.1">Host Controller Interface (HCI)</h2>
+<p>
+该部分内容在蓝牙4.0手册的以下章节：
+</p>
+<ul>
+<li>
+Volume 2 - Core System Package [BR/EDR Controller volume] 
+
+<li>
+Part E - HOST CONTROLLER INTERFACE FUNCTIONAL SPECIFICATION
+
+</ul>
+
+<p>
+This Part of the Bluetooth Core Specification describes the functional specifications for the Host Controller Interface (HCI). The HCI provides a uniform interface method of accessing a Bluetooth Controller’s capabilities. The next three sections provide a brief overview of the lower layers of the Bluetooth software stack and of the Bluetooth hardware. 
+</p>
+
+<p>
+了解HCI接口，是学习各种蓝牙协议栈的基础。这样你才知道，协议栈的代码地层是从什么地方开始的，设计协议栈需要考虑哪些问题。这里最先遇到这个问题的是Linux的蓝牙协议栈Bluez。当然，我们使用的TI CC254x的协议栈无法看到源代码，所以也就无法深究。理解了Host和Controller直接的关系，对于理解BLE的模式也是有好处的。
+</p>
+
+	</div>
+    </div>
+
+    <footer>
+	<p id="legal">Copyright &copy; 2012 NIE-YONG. All Rights Reserved.</p>
+    </footer>
+
+    <a class="go2top" style="display: none;"><span></span></a>
+
+</body>
+
+
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</html>
+

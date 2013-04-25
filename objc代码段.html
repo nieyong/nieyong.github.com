@@ -38,6 +38,17 @@
 	<div id="content">
 	
 <pre>
+    NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:NO selector:@selector(localizedCompare:)];
+    NSArray* sortedArray = [[self.configItems allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    
+    NSArray *sortKey = [[self.configItems allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSLog(@"descending: %@",sortedArray);
+    NSLog(@"ascending: %@",sortKey);
+</pre>
+
+
+<pre>
 -(NSNumber*)postDeviceToken:(NSString*)deviceToken
 {
     // unix时间字符串

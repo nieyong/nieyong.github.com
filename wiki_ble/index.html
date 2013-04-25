@@ -46,12 +46,31 @@
 </p>
 
 <p>
+<a href="BLE Overview.html">BLE Overview</a>
+</p>
+
+<p>
 <a href="TI BLE Protocol Stack.html">TI BLE Protocol Stack</a>
+</p>
+
+<p>
+<a href="BLE速率问题.html">BLE速率问题</a>
 </p>
 
 <p>
 BLE协议只有2.1Kbps的传输速率，如果做音乐等音频数据传输，差的也要64Kbps。
 </p>
+
+<p>
+模块会根据数据包大小
+自动分包发送,每个无线包最大载荷为 20 个字节。移动设备方发往模块的数据包,必须自 行分包(1-20 字节/包)发送。
+</p>
+
+<p>
+模块的蓝牙 默认连接间隔为 20 ms,如果需要节省功耗采用低速转发模式,需通过 AT 指令调整连接间隔(最长连接间隔 2000ms),每个连接间隔最多传输 80 个字节
+</p>
+
+
 
 <h2 id="toc_0.1">Bluetooth笔记</h2>
 
@@ -80,93 +99,18 @@ Have some kind of support in their SDK for using the Bluetooth low energy
 
 </ul>
 
-<h2 id="toc_0.2">BLE的连接参数</h2>
-<p>
-<strong>connection event &amp; connection interval</strong>
-</p>
 
-<p>
-Even if there is no application data to be sent or received, the two devices will still exchange link layer data to maintain the connection. The connection interval is the amount of time between two connection events, in units of 1.25ms. The connection interval can range from a minimum value of 6 (7.5ms) to a maximum of 3200 (4.0s).
-</p>
-
-<p>
-设备必须在连接事件发生的时候，才能够收发数据。
-</p>
-
-<p>
-<strong>Slave Latency</strong>
-</p>
-
-<p>
-This parameter gives the slave (peripheral) device the option of skipping a number of connection events.跳过连接事件的前提是自己没有数据要发送，所以该参数只会影响对方发送数据给自己的时间，例如设置slave latency为5，而它自己又正好没有数据要发送出去，结果它就要等5个connection interval才应答一次对方，接收对方发来的数据。
-</p>
-
-<p>
-<strong>Supervision Timeout</strong>
-</p>
-
-<p>
-This is the maximum amount of time between two successful connection events. 
-</p>
-
-<h2 id="toc_0.3">Apple的蓝牙外设连接参数要求</h2>
-<p>
-Interval Max * (Slave Latency + 1) ≤ 2 seconds
-Interval Min ≥ 20 ms
-Interval Min + 20 ms ≤ Interval Max 
-Slave Latency ≤ 4
-connSupervisionTimeout ≤ 6 seconds
-Interval Max * (Slave Latency + 1) * 3 &lt; connSupervisionTimeout
-</p>
-
-<h3 id="toc_0.3.1">dji对ble的配置参数</h3>
-<p>
-看了上次你给我的ble固件源代码，其中ble的一些参数配置为：
-Interval Max为16（20ms）
-Interval Min为8（10ms）
-Slave Latency为0
-connSupervisionTimeout为10（100ms）
-</p>
-
-<h2 id="toc_0.4">GATT server</h2>
-<p>
-A GATT server consists of one or more GATT services, which are collections of data to accomplish a particular function or feature.
-</p>
-
-<p>
-The characteristic values, along with their properties and their configuration data (known as “descriptors”) on the GATT Server are stored in the attribute table. The attribute table is simply a database containing small pieces of data called attributes. In addition to the value itself, each attribute has the following properties associated with it:
-</p>
-
-<p>
-There are a few special attribute types that are found in the GATT attribute table, with values defined by the Bluetooth SIG:（由蓝牙技术联盟规定的一些attribute）
-</p>
-
-<ul>
-<li>
-GATT_PRIMARY_SERVICE_UUID – This indicates the start of a new service, and the type of the service provided
-
-<li>
-GATT_CHARACTER_UUID – This is known as the “characteristic declaration”, and it indicates that the attribute immediately following it is a GATT characteristic value
-
-<li>
-GATT_CLIENT_CHAR_CFG_UUID – This attribute represents a characteristic descriptor that corresponds to the nearest preceding (by handle) characteristic value in the attribute table. It allows the GATT client to enable notifications of the characteristic value
-
-<li>
-GATT_CHAR_USER_DESC_UUID – This attribute represents a characteristic descriptor that corresponds to the nearest preceding (by handle) characteristic value in the attribute table. It contains an ASCII string with a description of the corresponding characteristic
-
-</ul>
-
-<h2 id="toc_0.5">固定／可变连接时间间隔</h2>
+<h2 id="toc_0.2">固定／可变连接时间间隔</h2>
 <p>
 标准蓝牙技术是一种“面向连接”的无线技术,具有固定的连接时间间隔。相反,蓝牙低能耗技术采用可变连接时间间隔,这个间隔根据具体应用可以设置为几毫秒到几秒不等。
 </p>
 
-<h2 id="toc_0.6">快速的连接方式</h2>
+<h2 id="toc_0.3">快速的连接方式</h2>
 <p>
 另外,因为BLE技术采用非常快速的连接方式,因此平时可以 处于“非连接”状态(节省能源),此时链路两端相互间只是知晓对方,只有在必要时才开启链路,然后 在尽可能短的时间内关闭链路。
 </p>
 
-<h2 id="toc_0.7">ble的三大ULP特征</h2>
+<h2 id="toc_0.4">ble的三大ULP特征</h2>
 <p>
 蓝牙低能耗技术的三大特性成就了ULP性能,这三大特性分别是：
 </p>
@@ -182,18 +126,18 @@ GATT_CHAR_USER_DESC_UUID – This attribute represents a characteristic descript
 
 </ul>
 
-<h2 id="toc_0.8">ble最小化无线开启时间的技巧</h2>
-<h3 id="toc_0.8.1">使用3个广告信道</h3>
+<h2 id="toc_0.5">ble最小化无线开启时间的技巧</h2>
+<h3 id="toc_0.5.1">使用3个广告信道</h3>
 <p>
 蓝牙低能耗技术最小化无线开启时间的第一个技巧是仅用3个“广告”信道搜索其它设备,或向寻求建立连接的设备宣告自身存在。相比之下,标准蓝牙技术使用了32个信道。这意味着蓝牙低能耗技术扫描其它设备只需“开启”0.6至1.2ms时间,而标准蓝牙技术需要22.5ms时间来扫描它的32个信道。
 </p>
 
-<h3 id="toc_0.8.2">使用37个数据信道</h3>
+<h3 id="toc_0.5.2">使用37个数据信道</h3>
 <p>
 连接成功后,蓝牙低能耗技术就会切换到37个数据信道之一。在短暂的数据传送期间,无线信号将使用标准蓝牙技术倡导的自适应跳频(AFH)技术以伪随机的方式在信道间切换，标准蓝牙技术使用79个数据信道。
 </p>
 
-<h3 id="toc_0.8.3">使用更大的原始数据带宽</h3>
+<h3 id="toc_0.5.3">使用更大的原始数据带宽</h3>
 <p>
 蓝牙低能耗技术无线开启时间最短的另一个原因是它具有1Mbps的原始数据带宽，更大的带宽允许在更短的时间内发送更多的信息。
 </p>
@@ -202,13 +146,13 @@ GATT_CHAR_USER_DESC_UUID – This attribute represents a characteristic descript
 蓝牙低能耗技术“完成”一次连接(即扫描其它设备、建立链路、发送数据、认证和适当地结束)只需3ms。
 </p>
 
-<h2 id="toc_0.9">ble限制峰值功耗</h2>
-<h3 id="toc_0.9.1">采用更加“宽松的”射频参数</h3>
+<h2 id="toc_0.6">ble限制峰值功耗</h2>
+<h3 id="toc_0.6.1">采用更加“宽松的”射频参数</h3>
 <p>
 两种技术都使用高斯频移键控(GFSK)调制,但蓝牙低能耗技术使用的调制指数是0.5,而标准蓝牙技术是0.35。0.5的指数接近高斯最小频移键控(GMSK)方案,可以降低无线设备的功耗要求。
 </p>
 
-<h3 id="toc_0.9.2">发送很短的数据包</h3>
+<h3 id="toc_0.6.2">发送很短的数据包</h3>
 <p>
 发送较长的数据包-&gt;无线设备在相对较高的功耗状态保持更长的时间-&gt;硅片发热-&gt;改变材料的物理特性-&gt;改变传送频率(中断链路)-&gt;频繁地对无线设备进行再次校准-&gt;再次校准将消耗更多的功率(并且要求闭环架构, 使得无线设备更加复杂,从而推高设备价格)。
 </p>

@@ -50,7 +50,24 @@
 
 </ul>
 
-<h2 id="toc_0.1">删除某一次提交</h2>
+<h2 id="toc_0.1">二进制文件冲突</h2>
+<p>
+对于二进制文件的冲突，你肯定不想通过编辑二进制文件来解决冲突，那是不可能完成的事情。你要做的就是：要么选择对方的修改，要么选择自己的修改。
+</p>
+
+<p>
+你可以用git checkout的--theirs或--ours选项。
+</p>
+<pre>
+git pull
+git checkout --theirs YOUR_BINARY_FILE
+// git checkout --ours YOUR_BINARY_FILE
+git add YOUR_BINARY_FILE
+git commit -m 'merged with the remote repos.'
+git push
+</pre>
+
+<h2 id="toc_0.2">删除某一次提交</h2>
 <ul>
 <li>
 <code>git reset HEAD^</code> 	//回退第一个记录 
@@ -86,7 +103,7 @@
 </ul>
 </ol>
 
-<h2 id="toc_0.2">清除已经缓存的（staged）文件</h2>
+<h2 id="toc_0.3">清除已经缓存的（staged）文件</h2>
 <ul>
 <li>
 <code>git reset filename</code>		//相当于git reset --mixed HEAD filename
@@ -100,7 +117,7 @@
 参见《progit》的p28。
 </p>
 
-<h2 id="toc_0.3">tag记录发布版本</h2>
+<h2 id="toc_0.4">tag记录发布版本</h2>
 <ul>
 <li>
 <code>git tag -a v1.0 -m 'my version 1.0</code>		//创建一个tag
@@ -119,7 +136,7 @@
 
 </ul>
 
-<h2 id="toc_0.4">多份代码拷贝的合并</h2>
+<h2 id="toc_0.5">多份代码拷贝的合并</h2>
 <ul>
 <li>
 <code>git pull ../mbooke_usb/</code>
@@ -141,7 +158,7 @@
 使用命令git pull可以达到目的。
 </p>
 
-<h2 id="toc_0.5">git分支与合并</h2>
+<h2 id="toc_0.6">git分支与合并</h2>
 <p>
 git分支与合并主要阅读了《pro git》一书的分支一章，强烈建议。
 </p>
@@ -203,7 +220,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 
 </ul>
 
-<h2 id="toc_0.6">git使用小技巧</h2>
+<h2 id="toc_0.7">git使用小技巧</h2>
 <p>
 将修改添加到版本库中，使用git add .命令，而不要使用git add *命令。因为*代表所有的文件，那么别.gitignore文件忽略的文件（或者文件夹）也会被添加。
 </p>
@@ -229,7 +246,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 </blockquote>
 
 
-<h2 id="toc_0.7">git diff的用法</h2>
+<h2 id="toc_0.8">git diff的用法</h2>
 <p>
 查看文件的修改情况，使用命令 git diff src。
 </p>
@@ -241,7 +258,7 @@ git diff命令没有选项，不会去比较已经位于暂存区（staged）的
 git diff --cached
 </blockquote>
 
-<h2 id="toc_0.8">git checkout</h2>
+<h2 id="toc_0.9">git checkout</h2>
 <p>
 代码在回溯时，到了一个未命名的分支。
 </p>
@@ -269,7 +286,7 @@ ylqmatoMac-mini:CommLibrary ylq$ git branch
   refact
 </pre>
 
-<h2 id="toc_0.9">git ignore</h2>
+<h2 id="toc_0.10">git ignore</h2>
 <p>
 The idea is to keep locally your ".DS_Store", while removing them from the git repo.
 </p>
@@ -290,7 +307,7 @@ git push
 </p>
 
 
-<h2 id="toc_0.10">git log的用法</h2>
+<h2 id="toc_0.11">git log的用法</h2>
 <p>
 以适当的形式显示整个工程，或者多个文件，整个目录等的log信息。
 </p>
@@ -313,7 +330,7 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 </p>
 
 
-<h2 id="toc_0.11">github mac gui的sync操作</h2>
+<h2 id="toc_0.12">github mac gui的sync操作</h2>
 <p>
 两人合作开发，从某个共同的节点开始，A做了几次提交，并且上传github。B也做了几次提交，在本地。然后B使用github的mac端gui做一个syn（同步到github）。如果A和B的修改没有冲突，那么B的提交就会rebase到A的提交上，并且上传github成功，这样看上去就是一个线性的提交纪录。如果B的修改和A有冲突，那么有冲突的提交版本就会rebase失败。
 </p>
@@ -371,7 +388,7 @@ nothing to commit, working directory clean
 整个过程，只需要明白一点，那就是github的mac gui在sync的时候，默认是做的rebase操作。知晓了这一点，其他的就迎刃而解了。
 </p>
 
-<h2 id="toc_0.12">merge 时没有合并到origin分支的警告</h2>
+<h2 id="toc_0.13">merge 时没有合并到origin分支的警告</h2>
 <p>
 在开发过程中，出现下面这样的警告
 </p>
@@ -397,7 +414,7 @@ git clean -f -x -d # CAUTION: as above but removes ignored files like config.
 </p>
 
 
-<h2 id="toc_0.13">git中不可恢复的操作</h2>
+<h2 id="toc_0.14">git中不可恢复的操作</h2>
 <p>
 删除工作空间中的某个文件的所有修改，恢复到上一次提交时的状态。
 </p>
@@ -421,7 +438,7 @@ git reset --hard HEAD~2
 
 </ul>
 
-<h2 id="toc_0.14">参考资料</h2>
+<h2 id="toc_0.15">参考资料</h2>
 <ul>
 <li>
 <a href="http://zhwen.org/?p=articles/git">git使用总结 作者：许振文</a>
