@@ -1,11 +1,15 @@
+== NSArray的升序或者降序排列 ==
+需要对一个NSDictionary的key进行排序（降序或者升序），我们应该如何做呢？注意`- (NSArray *)allKeys`函数返回的数组是没有顺序的。我们可以对该数组进行排序，数组的降序或者升序排列使用下面的方法。
+
 {{{
     NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:NO selector:@selector(localizedCompare:)];
-    NSArray* sortedArray = [[self.configItems allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    //降序排列
+    NSArray* sortedArrayDescending = [[self.configItems allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    //升序排列 
+    NSArray *sortedArrayAscending = [[self.configItems allKeys] sortedArrayUsingSelector:@selector(compare:)];
     
-    NSArray *sortKey = [[self.configItems allKeys] sortedArrayUsingSelector:@selector(compare:)];
-    
-    NSLog(@"descending: %@",sortedArray);
-    NSLog(@"ascending: %@",sortKey);
+    NSLog(@"descending: %@",sortedArrayDescending);
+    NSLog(@"ascending: %@",sortedArrayAscending);
 }}}
 
 

@@ -37,14 +37,20 @@
     <div class="container">
 	<div id="content">
 	
+<h2 id="toc_0.1">NSArray的升序或者降序排列</h2>
+<p>
+需要对一个NSDictionary的key进行排序（降序或者升序），我们应该如何做呢？注意<code>- (NSArray *)allKeys</code>函数返回的数组是没有顺序的。我们可以对该数组进行排序，数组的降序或者升序排列使用下面的方法。
+</p>
+
 <pre>
     NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:NO selector:@selector(localizedCompare:)];
-    NSArray* sortedArray = [[self.configItems allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    //降序排列
+    NSArray* sortedArrayDescending = [[self.configItems allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    //升序排列 
+    NSArray *sortedArrayAscending = [[self.configItems allKeys] sortedArrayUsingSelector:@selector(compare:)];
     
-    NSArray *sortKey = [[self.configItems allKeys] sortedArrayUsingSelector:@selector(compare:)];
-    
-    NSLog(@"descending: %@",sortedArray);
-    NSLog(@"ascending: %@",sortKey);
+    NSLog(@"descending: %@",sortedArrayDescending);
+    NSLog(@"ascending: %@",sortedArrayAscending);
 </pre>
 
 
@@ -84,7 +90,7 @@
 }
 </pre>
 
-<h2 id="toc_0.1">Run Loop</h2>
+<h2 id="toc_0.2">Run Loop</h2>
 <p>
 NSRunLoop 允许在您等待时响应事件runloop。如果你只是睡了（调用sleep函数），您的线程即使事件到达 （比如你在等待的网络响应）也无法响应。
 </p>
@@ -246,7 +252,7 @@ runloop处理的事件包括：
 如果在执行周期性工作的时候就可以采用上面那种，用一个循环，当时间回调的时候（这个地方的一个典型应用场景就是处理网络数据，网络有数据返回就启动一次runloop，直到所有数据处理完成之后将done设置为YES。结束）；
 </p>
 
-<h2 id="toc_0.2">NSBundle与文件资源</h2>
+<h2 id="toc_0.3">NSBundle与文件资源</h2>
 <p>
 获取app下的Error.html文件路径。
 </p>
@@ -254,7 +260,7 @@ runloop处理的事件包括：
     path = [[NSBundle mainBundle] pathForResource:@"Error" ofType:@"html"];
 </pre>
 
-<h2 id="toc_0.3">NSLocale language</h2>
+<h2 id="toc_0.4">NSLocale language</h2>
 <p>
 判断当前的系统语言设置是否为中文简体。
 </p>
@@ -271,7 +277,7 @@ runloop处理的事件包括：
     }
 </pre>
 
-<h2 id="toc_0.4">amazon库中try  catch的使用</h2>
+<h2 id="toc_0.5">amazon库中try  catch的使用</h2>
 <pre name="code" class="c">
 
 + (NSMutableArray *)getFacets:(NSString *)withName
@@ -302,7 +308,7 @@ runloop处理的事件包括：
 }
 </pre>
 
-<h2 id="toc_0.5">removeFromSuperview</h2>
+<h2 id="toc_0.6">removeFromSuperview</h2>
 <pre name="code" class="c">
 
 [_overlay removeFromSuperview];
@@ -316,7 +322,7 @@ _overlay等在removeFromSupperview之后就会被释放掉（release）。
 If the receiver’s superview is not nil, the superview releases the receiver. If you plan to reuse a view, be sure to retain it before calling this method and release it again later as appropriate.
 </blockquote>
 
-<h2 id="toc_0.6">定时器循环</h2>
+<h2 id="toc_0.7">定时器循环</h2>
 <pre name="code" class="c">
 
 NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(scanMainControllerAssistantCmd) userInfo:nil repeats:NO];
@@ -325,7 +331,7 @@ NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self select
 [timer performSelector:@selector(invalidate) withObject:nil afterDelay:5.0f];
 </pre>
 
-<h2 id="toc_0.7">清空数组对象</h2>
+<h2 id="toc_0.8">清空数组对象</h2>
 <p>
 清空已经发现的BLE外设数组，清空已经已经获得deviceInfo信息的BLE外设数组
 </p>
@@ -343,13 +349,13 @@ authenPeripherals是NSMutableArray数组对象，对其清空不能够直接付�
 </pre>
 
 
-<h2 id="toc_0.8">IOS中view页面的堆栈操作</h2>
+<h2 id="toc_0.9">IOS中view页面的堆栈操作</h2>
 <pre name="code" class="c">
 
 [self.navigationController popViewControllerAnimated:YES];
 </pre>
 
-<h2 id="toc_0.9">headView使用addSubview之后，不能够delease</h2>
+<h2 id="toc_0.10">headView使用addSubview之后，不能够delease</h2>
 <pre name="code" class="c">
 
 UIView* headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
@@ -371,7 +377,7 @@ headLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
 </pre>
 
 
-<h2 id="toc_0.10">performSelector和respondsToSelector</h2>
+<h2 id="toc_0.11">performSelector和respondsToSelector</h2>
 <p>
 performSelector函数用于对象调用它自己的方法。
 </p>
@@ -399,7 +405,7 @@ if ([self.delegate respondsToSelector:@selector(didScanMainControllerPeripheral:
 </pre>
 
 
-<h2 id="toc_0.11">在cell中添加subview图片</h2>
+<h2 id="toc_0.12">在cell中添加subview图片</h2>
 <pre name="code" class="c">
 cell.inputView  或者 cell.contentView
 
@@ -412,40 +418,40 @@ for (UIImageView *item in [cell.contentView subviews]) {
 }
 </pre>
 
-<h2 id="toc_0.12">no appropriate for no-gc object</h2>
+<h2 id="toc_0.13">no appropriate for no-gc object</h2>
 
 <p>
 警告信息：“No 'assign', 'retain', or 'copy' attribute is specified - 'assign' is assumed”和“Default property attribute 'assign' not appropriate for non-gc object”。警告信息的意思是：“没有明确指出应该是assign还是retain或者是copy，却省的是assign”和“缺省得属性设置assign不适合非gc对象 ”
 </p>
 
-<h2 id="toc_0.13">objc中的for循环</h2>
+<h2 id="toc_0.14">objc中的for循环</h2>
 <p>
 for(CBPeripheral* tmpPeripheral in foundPeripherals){
 </p>
 
 
-<h2 id="toc_0.14">char a[20] -&gt; NSString</h2>
-<h2 id="toc_0.15">char* str -&gt; NSString</h2>
+<h2 id="toc_0.15">char a[20] -&gt; NSString</h2>
+<h2 id="toc_0.16">char* str -&gt; NSString</h2>
 <pre name="code" class="c">
 NSString* deviceName = [NSString stringWithFormat:@"%s", mcPeripheral.deviceInfo.deviceName];//以'\0'结尾的
 NSString* password = [[NSString alloc] initWithData:[NSData dataWithBytes:(const void *)mcPeripheral.deviceInfo.password length:sizeof(mcPeripheral.deviceInfo.password)] encoding:NSASCIIStringEncoding];;//不以'\0'结尾的
 NSLog(@" [ 008 ] hardwareID = %@, deviceName = %@, password = %@", hardwareID, deviceName, password);
 </pre>
 
-<h2 id="toc_0.16">NSData --&gt;  NSString</h2>
+<h2 id="toc_0.17">NSData --&gt;  NSString</h2>
 <pre name="code" class="c">
 NSMutableData *data;  //NSData *data;
 NSString *tmpdata=[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 NSString* hardwareID = [[NSString alloc] initWithData:mcPeripheral.hardwareID encoding:NSASCIIStringEncoding];//不以'\0'结尾的
 </pre>
 
-<h2 id="toc_0.17">NSSting --&gt; NSData</h2>
+<h2 id="toc_0.18">NSSting --&gt; NSData</h2>
 <pre name="code" class="c">
     NSString * str=@"test string";
     NSData *data=[str dataUsingEncoding:NSUTF8StringEncoding]; 
 </pre>
 
-<h2 id="toc_0.18">ios程序基本的起始代码</h2>
+<h2 id="toc_0.19">ios程序基本的起始代码</h2>
 <pre name="code" class="c">
 self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 // Override point for customization after application launch.
@@ -459,7 +465,7 @@ self.window.rootViewController = self.navigationController;
 </pre>
 
 
-<h2 id="toc_0.19">模态视图 presentModalViewController</h2>
+<h2 id="toc_0.20">模态视图 presentModalViewController</h2>
 <pre name="code" class="c">
 -(void)firstpressed
 {
@@ -469,7 +475,7 @@ self.window.rootViewController = self.navigationController;
 </pre>
 
 
-<h2 id="toc_0.20">成员变量的初始化</h2>
+<h2 id="toc_0.21">成员变量的初始化</h2>
 <pre name="code" class="c">
 
 @interface LoginRegist:NSObject {
@@ -517,7 +523,7 @@ self.window.rootViewController = self.navigationController;
 
 </pre>
 
-<h2 id="toc_0.21">nil指针被调用不会报错，区别于野指针</h2>
+<h2 id="toc_0.22">nil指针被调用不会报错，区别于野指针</h2>
 <pre name="code" class="c">
 //如果不存在该成员，则返回的值为nil，后面的调用也不会报错
 NSMutableArray * activeMainCtrl = [[NSUserDefaults standardUserDefaults] objectForKey:@"activeMainCtrl"];
@@ -527,12 +533,12 @@ NSLog(@"[001] saved mc : %@",activeMainCtrl);
 </pre>
 
 
-<h2 id="toc_0.22">阻塞线程，sleep</h2>
+<h2 id="toc_0.23">阻塞线程，sleep</h2>
 <pre name="code" class="c">
 [NSThread sleepForTimeInterval:30];
 </pre>
 
-<h2 id="toc_0.23">http get请求</h2>
+<h2 id="toc_0.24">http get请求</h2>
 <pre name="code" class="c">
     //登陆
     NSError *error;
@@ -579,7 +585,7 @@ NSLog(@"[001] saved mc : %@",activeMainCtrl);
     }
 </pre>
 
-<h2 id="toc_0.24">列举目录下的文件</h2>
+<h2 id="toc_0.25">列举目录下的文件</h2>
 <pre name="code" class="c">
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     
@@ -614,7 +620,7 @@ NSLog(@"path: %@",path);
 </p>
 
 
-<h2 id="toc_0.25">retain并未创建新对象，只是对象的生命值改变</h2>
+<h2 id="toc_0.26">retain并未创建新对象，只是对象的生命值改变</h2>
 <p>
 类A中定义了一个delegate。
 </p>
@@ -652,7 +658,7 @@ NSLog(@"path: %@",path);
 }
 </pre>
 
-<h2 id="toc_0.26">app跳转到系统程序</h2>
+<h2 id="toc_0.27">app跳转到系统程序</h2>
 <p>
 app跳转到浏览器，并且打开链接
 </p>
