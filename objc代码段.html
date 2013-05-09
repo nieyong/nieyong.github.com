@@ -37,60 +37,73 @@
     <div class="container">
 	<div id="content">
 	
-<h2 id="toc_0.1">NSArray的升序或者降序排列</h2>
+<ul>
+<li>
+<a href="iOS--Objc.html">iOS--Objc</a>
+
+<li>
+<a href="iOS--UI.html">iOS--UI</a>
+
+</ul>
+
+<h2 id="toc_0.1">iOS--Quartz 2D</h2>
 <p>
-需要对一个NSDictionary的key进行排序（降序或者升序），我们应该如何做呢？注意<code>- (NSArray *)allKeys</code>函数返回的数组是没有顺序的。我们可以对该数组进行排序，数组的降序或者升序排列使用下面的方法。
+为了在一个ios应用上面绘制，应该先建立一个UIView对象，然后重写其drawRect:方法进行绘制。当view变的可见的时候或者其内容需要更新的时候，view的drawRect:方法会被调用。在调用自定义的drawRect：方法之前，view对象会自动的配置其绘制环境，然后代码可以立即的绘制。作为配置的一部分，UIView对象先为当前的绘制环境创建一个Graphics Context。我们可以在drawRect:方法中通过调用UIKit的<code>UIGraphicsGetCurrentContext</code>函数去得到此Graphics Context。
 </p>
 
-<pre>
-    NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:NO selector:@selector(localizedCompare:)];
-    //降序排列
-    NSArray* sortedArrayDescending = [[self.configItems allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    //升序排列 
-    NSArray *sortedArrayAscending = [[self.configItems allKeys] sortedArrayUsingSelector:@selector(compare:)];
-    
-    NSLog(@"descending: %@",sortedArrayDescending);
-    NSLog(@"ascending: %@",sortedArrayAscending);
-</pre>
+<p>
+UIKit使用的缺省坐标系统与Quartz的坐标系统不相同。在UIKit中，原点在左上角。UIView对象通过translating 原点并且通过在y轴乘以-1来改变Quartz Graphics Context使其与UIKit相匹配。
+</p>
 
-
-<pre>
--(NSNumber*)postDeviceToken:(NSString*)deviceToken
+<p>
+下面是摘自iphone调参的DDProgressView类中的实现，该类是动画的进度条的实现。
+</p>
+<pre name="code" class="c">
+- (void)drawBackgroundWithRect:(CGRect)rect
 {
-    // unix时间字符串
-    NSString *datestr = [NSString stringWithFormat:@"%0.f",[[NSDate date] timeIntervalSince1970]];;
+    CGContextRef context = UIGraphicsGetCurrentContext();
     
-    NSString* nonce = [self nonce];
-    ....
-}
-
-
-
-- (NSString *)nonce
-{
-    // 随机20个字符，字符可以为不可见字符，0 ～ 255，需要使用urlencode
-    NSMutableString *randstr = [NSMutableString stringWithCapacity:20];
-    for(int i = 0 ; i &lt; 20 ; i++)
+    CGContextSaveGState(context);
     {
-        uint8_t thisChar = arc4random()%0xff;
+        // Draw the white shadow
+        [[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.2] set];
         
-        if (thisChar == '.' || thisChar == '-' || thisChar == '_' || thisChar == '~' ||
-            (thisChar &gt;= 'a' &amp;&amp; thisChar &lt;= 'z') ||
-            (thisChar &gt;= 'A' &amp;&amp; thisChar &lt;= 'Z') ||
-            (thisChar &gt;= '0' &amp;&amp; thisChar &lt;= '9')) {
-            [randstr appendFormat:@"%c", thisChar];
-        } else {
-            NSString *tmp = [NSString stringWithFormat:@"%%%02X", thisChar];
-            tmp = [tmp uppercaseString];
-            [randstr appendString:tmp];
-        }
+        UIBezierPath* shadow        = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0.5, 0, rect.size.width - 1, rect.size.height - 1)
+                                                                 cornerRadius:_cornerRadius];
+        [shadow stroke];
+        
+        // Draw the track
+        [ProgressBarColorBackground set];
+        
+        UIBezierPath* roundedRect   = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, rect.size.width, rect.size.height-1) cornerRadius:_cornerRadius];
+        [roundedRect fill];
+        
+        // Draw the inner glow，背景条目的底部效果，一根白色的线条，可以显示出凹凸的质感
+        [ProgressBarColorBackgroundGlow set];
+        
+        CGMutablePathRef glow       = CGPathCreateMutable();
+        CGPathMoveToPoint(glow, NULL, _cornerRadius, 0);
+        CGPathAddLineToPoint(glow, NULL, rect.size.width - _cornerRadius, 0);
+        CGContextAddPath(context, glow);
+        CGContextDrawPath(context, kCGPathStroke);
+        CGPathRelease(glow);
     }
+    CGContextRestoreGState(context);
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    //...
+
+    // Draw the background track
+    [self drawBackgroundWithRect:rect];
     
-    return randstr;
+    //...
 }
 </pre>
 
-<h2 id="toc_0.2">Run Loop</h2>
+
+<h2 id="toc_0.2">iOS--Run Loop</h2>
 <p>
 NSRunLoop 允许在您等待时响应事件runloop。如果你只是睡了（调用sleep函数），您的线程即使事件到达 （比如你在等待的网络响应）也无法响应。
 </p>
@@ -252,7 +265,8 @@ runloop处理的事件包括：
 如果在执行周期性工作的时候就可以采用上面那种，用一个循环，当时间回调的时候（这个地方的一个典型应用场景就是处理网络数据，网络有数据返回就启动一次runloop，直到所有数据处理完成之后将done设置为YES。结束）；
 </p>
 
-<h2 id="toc_0.3">NSBundle与文件资源</h2>
+<h2 id="toc_0.3">iOS--其他</h2>
+<h3 id="toc_0.3.1">NSBundle与文件资源</h3>
 <p>
 获取app下的Error.html文件路径。
 </p>
@@ -260,7 +274,7 @@ runloop处理的事件包括：
     path = [[NSBundle mainBundle] pathForResource:@"Error" ofType:@"html"];
 </pre>
 
-<h2 id="toc_0.4">NSLocale language</h2>
+<h3 id="toc_0.3.2">NSLocale language</h3>
 <p>
 判断当前的系统语言设置是否为中文简体。
 </p>
@@ -277,7 +291,7 @@ runloop处理的事件包括：
     }
 </pre>
 
-<h2 id="toc_0.5">amazon库中try  catch的使用</h2>
+<h3 id="toc_0.3.3">amazon库中try  catch的使用</h3>
 <pre name="code" class="c">
 
 + (NSMutableArray *)getFacets:(NSString *)withName
@@ -308,21 +322,7 @@ runloop处理的事件包括：
 }
 </pre>
 
-<h2 id="toc_0.6">removeFromSuperview</h2>
-<pre name="code" class="c">
-
-[_overlay removeFromSuperview];
-[_transition removeFromSuperview];
-</pre>
-
-<p>
-_overlay等在removeFromSupperview之后就会被释放掉（release）。
-</p>
-<blockquote>
-If the receiver’s superview is not nil, the superview releases the receiver. If you plan to reuse a view, be sure to retain it before calling this method and release it again later as appropriate.
-</blockquote>
-
-<h2 id="toc_0.7">定时器循环</h2>
+<h3 id="toc_0.3.4">定时器循环</h3>
 <pre name="code" class="c">
 
 NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(scanMainControllerAssistantCmd) userInfo:nil repeats:NO];
@@ -331,53 +331,10 @@ NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self select
 [timer performSelector:@selector(invalidate) withObject:nil afterDelay:5.0f];
 </pre>
 
-<h2 id="toc_0.8">清空数组对象</h2>
-<p>
-清空已经发现的BLE外设数组，清空已经已经获得deviceInfo信息的BLE外设数组
-</p>
-<pre name="code" class="c">
-
-foundPeripherals = nil;
-authenPeripherals = nil;
-</pre>
-<p>
-authenPeripherals是NSMutableArray数组对象，对其清空不能够直接付值nil，而应该使用对象的方法。
-</p>
-<pre name="code" class="c">
-
-[authenPeripherals removeAllObjects];
-</pre>
 
 
-<h2 id="toc_0.9">IOS中view页面的堆栈操作</h2>
-<pre name="code" class="c">
 
-[self.navigationController popViewControllerAnimated:YES];
-</pre>
-
-<h2 id="toc_0.10">headView使用addSubview之后，不能够delease</h2>
-<pre name="code" class="c">
-
-UIView* headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
-
-headView.backgroundColor = [UIColor redColor];
-
-UILabel* headLabel        = [[UILabel alloc] initWithFrame:CGRectMake(20,10, 200, 21)];
-headLabel.backgroundColor = [UIColor greenColor];
-headLabel.text            = @"Available control system";
-headLabel.textColor       = [[UIColor alloc] initWithRed:128.0/255.0 green:133.0/255.0 blue:141.0/255.0 alpha:1.0];
-//headLabel.center          = CGPointMake(headLabel.frame.size.width/2+18, headView.frame.size.height-headLabel.frame.size.height/2);
-headLabel.shadowColor = [UIColor whiteColor];
-headLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
-
-[headView addSubview:headLabel];
-[headView addSubview:self.scaningIndicatorView];
-
-//[headView release];
-</pre>
-
-
-<h2 id="toc_0.11">performSelector和respondsToSelector</h2>
+<h1 id="toc_1">performSelector和respondsToSelector</h1>
 <p>
 performSelector函数用于对象调用它自己的方法。
 </p>
@@ -405,53 +362,15 @@ if ([self.delegate respondsToSelector:@selector(didScanMainControllerPeripheral:
 </pre>
 
 
-<h2 id="toc_0.12">在cell中添加subview图片</h2>
-<pre name="code" class="c">
-cell.inputView  或者 cell.contentView
 
-// Configure the cell...
-
-for (UIImageView *item in [cell.contentView subviews]) {
-    if ([item isKindOfClass:[UIImageView class]]) {
-	[item removeFromSuperview];
-    }
-}
-</pre>
-
-<h2 id="toc_0.13">no appropriate for no-gc object</h2>
+<h3 id="toc_1.0.1">no appropriate for no-gc object</h3>
 
 <p>
 警告信息：“No 'assign', 'retain', or 'copy' attribute is specified - 'assign' is assumed”和“Default property attribute 'assign' not appropriate for non-gc object”。警告信息的意思是：“没有明确指出应该是assign还是retain或者是copy，却省的是assign”和“缺省得属性设置assign不适合非gc对象 ”
 </p>
 
-<h2 id="toc_0.14">objc中的for循环</h2>
-<p>
-for(CBPeripheral* tmpPeripheral in foundPeripherals){
-</p>
 
-
-<h2 id="toc_0.15">char a[20] -&gt; NSString</h2>
-<h2 id="toc_0.16">char* str -&gt; NSString</h2>
-<pre name="code" class="c">
-NSString* deviceName = [NSString stringWithFormat:@"%s", mcPeripheral.deviceInfo.deviceName];//以'\0'结尾的
-NSString* password = [[NSString alloc] initWithData:[NSData dataWithBytes:(const void *)mcPeripheral.deviceInfo.password length:sizeof(mcPeripheral.deviceInfo.password)] encoding:NSASCIIStringEncoding];;//不以'\0'结尾的
-NSLog(@" [ 008 ] hardwareID = %@, deviceName = %@, password = %@", hardwareID, deviceName, password);
-</pre>
-
-<h2 id="toc_0.17">NSData --&gt;  NSString</h2>
-<pre name="code" class="c">
-NSMutableData *data;  //NSData *data;
-NSString *tmpdata=[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-NSString* hardwareID = [[NSString alloc] initWithData:mcPeripheral.hardwareID encoding:NSASCIIStringEncoding];//不以'\0'结尾的
-</pre>
-
-<h2 id="toc_0.18">NSSting --&gt; NSData</h2>
-<pre name="code" class="c">
-    NSString * str=@"test string";
-    NSData *data=[str dataUsingEncoding:NSUTF8StringEncoding]; 
-</pre>
-
-<h2 id="toc_0.19">ios程序基本的起始代码</h2>
+<h3 id="toc_1.0.2">ios程序基本的起始代码</h3>
 <pre name="code" class="c">
 self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 // Override point for customization after application launch.
@@ -465,65 +384,9 @@ self.window.rootViewController = self.navigationController;
 </pre>
 
 
-<h2 id="toc_0.20">模态视图 presentModalViewController</h2>
-<pre name="code" class="c">
--(void)firstpressed
-{
-    //[[(ASSAppDelegate*)[UIApplication sharedApplication].delegate topStatusBar] setHidden:NO];
-    [self.navigationController presentModalViewController:[[ASSRootViewController alloc] init] animated:YES];
-}
-</pre>
 
 
-<h2 id="toc_0.21">成员变量的初始化</h2>
-<pre name="code" class="c">
-
-@interface LoginRegist:NSObject {
-    MainControllerPeripheral* _connectedMainCtrl;
-    
-    //统计字段
-    NSString* _type;
-    NSString* _appVersion;
-    NSString* _sysVersion;
-    NSString* _language;
-    NSString* _locale;
-    NSString* _sysDeviceID;
-    NSString* _sysDeviceType;
-    NSString* _command;
-    
-}
-
-- (id) init {
-    
-    if (self = [super init]) {
-        
-        //这样是不正确的，在init这个scope之外，所有在此声明的NSString都已经销毁了，成员指针都变成了野指针。
-	_type = [NSString stringWithFormat:@"assistant"];
-	_command = [NSString stringWithFormat:@"connected"];
-	_appVersion = [NSString stringWithFormat:@"1.0.0"];
-	_sysVersion = [[UIDevice currentDevice] systemVersion];
-	_language = [[NSLocale preferredLanguages] objectAtIndex:0];
-	
-
-	//这样才正确，使用alloc函数
-        _type = [[NSString alloc] initWithFormat:@"assistant"];
-        _command = [[NSString alloc] initWithFormat:@"connected"];
-        _appVersion = [[NSString alloc] initWithFormat:@"1.0.0"];
-        _sysVersion = [[[UIDevice currentDevice] systemVersion] retain];
-        _language = [[[NSLocale preferredLanguages] objectAtIndex:0] retain];
-        _locale = [[NSString alloc] initWithFormat:@"china"];
-        _sysDeviceID = [[NSString alloc] initWithFormat:@"abcdddd"];
-        
-    	......
-    }
-    
-    return self;
-    
-}
-
-</pre>
-
-<h2 id="toc_0.22">nil指针被调用不会报错，区别于野指针</h2>
+<h3 id="toc_1.0.3">nil指针被调用不会报错，区别于野指针</h3>
 <pre name="code" class="c">
 //如果不存在该成员，则返回的值为nil，后面的调用也不会报错
 NSMutableArray * activeMainCtrl = [[NSUserDefaults standardUserDefaults] objectForKey:@"activeMainCtrl"];
@@ -533,12 +396,12 @@ NSLog(@"[001] saved mc : %@",activeMainCtrl);
 </pre>
 
 
-<h2 id="toc_0.23">阻塞线程，sleep</h2>
+<h3 id="toc_1.0.4">阻塞线程，sleep</h3>
 <pre name="code" class="c">
 [NSThread sleepForTimeInterval:30];
 </pre>
 
-<h2 id="toc_0.24">http get请求</h2>
+<h3 id="toc_1.0.5">http get请求</h3>
 <pre name="code" class="c">
     //登陆
     NSError *error;
@@ -585,7 +448,7 @@ NSLog(@"[001] saved mc : %@",activeMainCtrl);
     }
 </pre>
 
-<h2 id="toc_0.25">列举目录下的文件</h2>
+<h3 id="toc_1.0.6">列举目录下的文件</h3>
 <pre name="code" class="c">
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     
@@ -620,45 +483,8 @@ NSLog(@"path: %@",path);
 </p>
 
 
-<h2 id="toc_0.26">retain并未创建新对象，只是对象的生命值改变</h2>
-<p>
-类A中定义了一个delegate。
-</p>
-<pre name="code" class="c">
--(void) getDevicePlist
-{
-    self.devicePlistMainCtrl = [self _readDevicePlist];
-    
-    NSLog(@"[006] %@",self.devicePlistMainCtrl);
-    
-    //delegate通知上层应用
-    if ([self.delegate respondsToSelector:@selector(didDevicePlistChanged:)]) {
-        [self.delegate performSelector:@selector(didDevicePlistChanged:) withObject:self.devicePlistMainCtrl];
-    }
-    
-    NSLog(@"[005] %@",self.devicePlistMainCtrl);
-    
-}
 
-</pre>
-
-<p>
-下面是再另外一个类B中对上面类A的delegate的实现：
-</p>
-<pre name="code" class="c">
-#pragma mark - DevicePlistDelegate
-- (void) didDevicePlistChanged:(NSMutableDictionary*) devicePlistMainCtrl
-{
-    //这里对出入的dict进行了retain，但是其实还是指向的同一个dict，所以在类B中对self.devicePlistMainCtrl的任何操作，都会影响类A中的该dict。
-    self.devicePlistMainCtrl = devicePlistMainCtrl;
-
-    //在类B中删除了dict的一个key，在类A中的［005］和［006］处打印可以看出。
-    [self.devicePlistMainCtrl removeObjectForKey:DEVICE_KEY_USERNAME];
-
-}
-</pre>
-
-<h2 id="toc_0.27">app跳转到系统程序</h2>
+<h3 id="toc_1.0.7">app跳转到系统程序</h3>
 <p>
 app跳转到浏览器，并且打开链接
 </p>

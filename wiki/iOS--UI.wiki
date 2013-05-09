@@ -1,0 +1,87 @@
+== iOS--UI ==
+== 在cell中添加subview图片 ==
+{{{name="code" class="c"
+cell.inputView  或者 cell.contentView
+
+// Configure the cell...
+
+for (UIImageView *item in [cell.contentView subviews]) {
+    if ([item isKindOfClass:[UIImageView class]]) {
+	[item removeFromSuperview];
+    }
+}
+}}}
+== 模态视图 presentModalViewController ==
+{{{name="code" class="c"
+-(void)firstpressed
+{
+    //[[(ASSAppDelegate*)[UIApplication sharedApplication].delegate topStatusBar] setHidden:NO];
+    [self.navigationController presentModalViewController:[[ASSRootViewController alloc] init] animated:YES];
+}
+}}}
+
+== 关于覆盖层 ==
+下面是一段覆盖层的代码，特点是使用了keyWindow。
+{{{name="code" class="c"
+- (id)init
+{
+	CGRect frame = CGRectMake(0, 0, 320.0f, 400.0f);
+	
+	if((self = [super initWithFrame:frame]))
+	{
+		[super setBackgroundColor:[UIColor clearColor]];
+        
+		UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
+        
+        UIImageView *dimView = [[UIImageView alloc] initWithFrame:keyWindow.bounds];
+        dimView.image = [self backgroundGradientImageWithSize:keyWindow.bounds.size];
+        dimView.userInteractionEnabled = YES;
+        
+        [keyWindow addSubview:dimView];
+        [self setCenter:CGPointMake(dimView.frame.size.width/2, dimView.frame.size.height/2)];
+        [dimView addSubview:self];
+        
+        //...
+    }
+}
+}}}
+
+== removeFromSuperview ==
+{{{name="code" class="c"
+
+[_overlay removeFromSuperview];
+[_transition removeFromSuperview];
+}}}
+
+_overlay等在removeFromSupperview之后就会被释放掉（release）。
+
+    If the receiver’s superview is not nil, the superview releases the receiver. If you plan to reuse a view, be sure to retain it before calling this method and release it again later as appropriate.
+
+
+== IOS中view页面的堆栈操作 ==
+{{{name="code" class="c"
+
+[self.navigationController popViewControllerAnimated:YES];
+}}}
+
+== headView使用addSubview之后，不能够delease ==
+{{{name="code" class="c"
+
+UIView* headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];
+
+headView.backgroundColor = [UIColor redColor];
+
+UILabel* headLabel        = [[UILabel alloc] initWithFrame:CGRectMake(20,10, 200, 21)];
+headLabel.backgroundColor = [UIColor greenColor];
+headLabel.text            = @"Available control system";
+headLabel.textColor       = [[UIColor alloc] initWithRed:128.0/255.0 green:133.0/255.0 blue:141.0/255.0 alpha:1.0];
+//headLabel.center          = CGPointMake(headLabel.frame.size.width/2+18, headView.frame.size.height-headLabel.frame.size.height/2);
+headLabel.shadowColor = [UIColor whiteColor];
+headLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
+
+[headView addSubview:headLabel];
+[headView addSubview:self.scaningIndicatorView];
+
+//[headView release];
+}}}
+

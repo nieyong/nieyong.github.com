@@ -1,0 +1,4 @@
+@property (nonatomic, getter = isAnimated) BOOL animated;
+
+
+

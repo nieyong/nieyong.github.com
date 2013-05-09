@@ -1,10 +1,11 @@
 == 插件 ==
 vimwiki
-bufexplorer	:查看buffer中打开的文件列表
-calendar	:显示日历，并且可以和vimwiki配合使用diary功能
+* bufexplorer	:查看buffer中打开的文件列表
+* calendar	:显示日历，并且可以和vimwiki配合使用diary功能
 
 == 命令 ==
-:g/^$/d
+* :g/^$/d
+* ctrl+w l/h/k/j    :在多屏中移动光标
 
 更多的关于vim的使用，参考[[wiki_ny/Vim|Nie Yong Note's VIM]]。
 

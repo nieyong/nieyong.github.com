@@ -1,0 +1,167 @@
+== char a[20] -> NSString ==
+== char* str -> NSString ==
+{{{name="code" class="c"
+NSString* deviceName = [NSString stringWithFormat:@"%s", mcPeripheral.deviceInfo.deviceName];//以'\0'结尾的
+NSString* password = [[NSString alloc] initWithData:[NSData dataWithBytes:(const void *)mcPeripheral.deviceInfo.password length:sizeof(mcPeripheral.deviceInfo.password)] encoding:NSASCIIStringEncoding];;//不以'\0'结尾的
+NSLog(@" [ 008 ] hardwareID = %@, deviceName = %@, password = %@", hardwareID, deviceName, password);
+}}}
+
+== NSData -->  NSString ==
+{{{name="code" class="c"
+NSMutableData *data;  //NSData *data;
+NSString *tmpdata=[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+NSString* hardwareID = [[NSString alloc] initWithData:mcPeripheral.hardwareID encoding:NSASCIIStringEncoding];//不以'\0'结尾的
+}}}
+
+== NSSting --> NSData ==
+{{{name="code" class="c"
+    NSString * str=@"test string";
+    NSData *data=[str dataUsingEncoding:NSUTF8StringEncoding]; 
+}}}
+
+== retain并未创建新对象，只是对象的生命值改变 ==
+类A中定义了一个delegate。
+{{{name="code" class="c"
+-(void) getDevicePlist
+{
+    self.devicePlistMainCtrl = [self _readDevicePlist];
+    
+    NSLog(@"[006] %@",self.devicePlistMainCtrl);
+    
+    //delegate通知上层应用
+    if ([self.delegate respondsToSelector:@selector(didDevicePlistChanged:)]) {
+        [self.delegate performSelector:@selector(didDevicePlistChanged:) withObject:self.devicePlistMainCtrl];
+    }
+    
+    NSLog(@"[005] %@",self.devicePlistMainCtrl);
+    
+}
+
+}}}
+
+下面是再另外一个类B中对上面类A的delegate的实现：
+{{{name="code" class="c"
+#pragma mark - DevicePlistDelegate
+- (void) didDevicePlistChanged:(NSMutableDictionary*) devicePlistMainCtrl
+{
+    //这里对出入的dict进行了retain，但是其实还是指向的同一个dict，所以在类B中对self.devicePlistMainCtrl的任何操作，都会影响类A中的该dict。
+    self.devicePlistMainCtrl = devicePlistMainCtrl;
+
+    //在类B中删除了dict的一个key，在类A中的［005］和［006］处打印可以看出。
+    [self.devicePlistMainCtrl removeObjectForKey:DEVICE_KEY_USERNAME];
+
+}
+}}}
+
+
+== NSArray的升序或者降序排列 ==
+需要对一个NSDictionary的key进行排序（降序或者升序），我们应该如何做呢？注意`- (NSArray *)allKeys`函数返回的数组是没有顺序的。我们可以对该数组进行排序，数组的降序或者升序排列使用下面的方法。
+
+{{{name="code" class="c"
+    NSSortDescriptor* sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:nil ascending:NO selector:@selector(localizedCompare:)];
+    //降序排列
+    NSArray* sortedArrayDescending = [[self.configItems allKeys] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    //升序排列 
+    NSArray *sortedArrayAscending = [[self.configItems allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSLog(@"descending: %@",sortedArrayDescending);
+    NSLog(@"ascending: %@",sortedArrayAscending);
+}}}
+
+
+{{{name="code" class="c"
+-(NSNumber*)postDeviceToken:(NSString*)deviceToken
+{
+    // unix时间字符串
+    NSString *datestr = [NSString stringWithFormat:@"%0.f",[[NSDate date] timeIntervalSince1970]];;
+    
+    NSString* nonce = [self nonce];
+    ....
+}
+
+
+
+- (NSString *)nonce
+{
+    // 随机20个字符，字符可以为不可见字符，0 ～ 255，需要使用urlencode
+    NSMutableString *randstr = [NSMutableString stringWithCapacity:20];
+    for(int i = 0 ; i < 20 ; i++)
+    {
+        uint8_t thisChar = arc4random()%0xff;
+        
+        if (thisChar == '.' || thisChar == '-' || thisChar == '_' || thisChar == '~' ||
+            (thisChar >= 'a' && thisChar <= 'z') ||
+            (thisChar >= 'A' && thisChar <= 'Z') ||
+            (thisChar >= '0' && thisChar <= '9')) {
+            [randstr appendFormat:@"%c", thisChar];
+        } else {
+            NSString *tmp = [NSString stringWithFormat:@"%%%02X", thisChar];
+            tmp = [tmp uppercaseString];
+            [randstr appendString:tmp];
+        }
+    }
+    
+    return randstr;
+}
+}}}
+
+== 清空数组对象 ==
+清空已经发现的BLE外设数组，清空已经已经获得deviceInfo信息的BLE外设数组
+{{{name="code" class="c"
+
+foundPeripherals = nil;
+authenPeripherals = nil;
+}}}
+authenPeripherals是NSMutableArray数组对象，对其清空不能够直接付值nil，而应该使用对象的方法。
+{{{name="code" class="c"
+
+[authenPeripherals removeAllObjects];
+}}}
+
+== 成员变量的初始化 ==
+{{{name="code" class="c"
+
+@interface LoginRegist:NSObject {
+    MainControllerPeripheral* _connectedMainCtrl;
+    
+    //统计字段
+    NSString* _type;
+    NSString* _appVersion;
+    NSString* _sysVersion;
+    NSString* _language;
+    NSString* _locale;
+    NSString* _sysDeviceID;
+    NSString* _sysDeviceType;
+    NSString* _command;
+    
+}
+
+- (id) init {
+    
+    if (self = [super init]) {
+        
+        //这样是不正确的，在init这个scope之外，所有在此声明的NSString都已经销毁了，成员指针都变成了野指针。
+	_type = [NSString stringWithFormat:@"assistant"];
+	_command = [NSString stringWithFormat:@"connected"];
+	_appVersion = [NSString stringWithFormat:@"1.0.0"];
+	_sysVersion = [[UIDevice currentDevice] systemVersion];
+	_language = [[NSLocale preferredLanguages] objectAtIndex:0];
+	
+
+	//这样才正确，使用alloc函数
+        _type = [[NSString alloc] initWithFormat:@"assistant"];
+        _command = [[NSString alloc] initWithFormat:@"connected"];
+        _appVersion = [[NSString alloc] initWithFormat:@"1.0.0"];
+        _sysVersion = [[[UIDevice currentDevice] systemVersion] retain];
+        _language = [[[NSLocale preferredLanguages] objectAtIndex:0] retain];
+        _locale = [[NSString alloc] initWithFormat:@"china"];
+        _sysDeviceID = [[NSString alloc] initWithFormat:@"abcdddd"];
+        
+    	......
+    }
+    
+    return self;
+    
+}
+
+}}}
