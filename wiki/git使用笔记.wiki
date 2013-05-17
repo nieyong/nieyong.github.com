@@ -231,3 +231,4 @@ git clean -f -x -d # CAUTION: as above but removes ignored files like config.
 * [[http://progit.org/|Pro Git]]
 * [[http://gitx.laullon.com/|gitx下载地址]]
 * [[http://mac.github.com/|Github for MAC]]
+* [[https://github.com/nieyong/GitStats|Git统计工具GitStats]]
