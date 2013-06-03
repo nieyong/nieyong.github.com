@@ -50,7 +50,91 @@
 
 </ul>
 
-<h2 id="toc_0.1">二进制文件冲突</h2>
+<h2 id="toc_0.1">远程版本和分支</h2>
+<p>
+从远程clone了一个项目到本地，使用git br查看分支，只有master分支（imgScale为本地创建），如下所示：
+</p>
+<pre>
+nieyong@mac:~/github/reveal.js &gt; git br
+* imgScale
+  master
+</pre>
+
+<p>
+但是该项目在远程（github上）还有两个分支，dev和gh-pages，我在本地怎么看到呢？使用下面的命令，-r表示remote的含义：
+</p>
+<pre>
+nieyong@mac:~/github/reveal.js &gt; git br -r
+  origin/HEAD -&gt; origin/master
+  origin/dev
+  origin/gh-pages
+  origin/imgScale
+  origin/master
+
+//如果这个时候，别人新创建了一个分支在远程版本库github中，则可以使用下面的命令：
+
+nieyong@mac:~/github/reveal.js &gt; git ls-remote --heads
+From https://github.com/nieyong/reveal.js.git
+4ff462078b9ce4acd27210764bac3950db046173	refs/heads/dev
+b12a93f79cbddb1f72d5bf5a8d71fb0e0eb8a248	refs/heads/gh-pages
+de4669e51f0fe4888fa4a64008d1ef3a92bcdc2c	refs/heads/imgScale
+09507bb4eee7c6cc48f5f3c02eb70679e18cd7da	refs/heads/master
+
+</pre>
+
+<p>
+这个时候，为什么本地没有分支dev和gp-pages呢？看两个地方可以看出一些端倪：
+</p>
+<pre>
+nieyong@mac:~/github/reveal.js &gt; git show-ref
+de4669e51f0fe4888fa4a64008d1ef3a92bcdc2c refs/heads/imgScale
+09507bb4eee7c6cc48f5f3c02eb70679e18cd7da refs/heads/master
+09507bb4eee7c6cc48f5f3c02eb70679e18cd7da refs/remotes/origin/HEAD
+4ff462078b9ce4acd27210764bac3950db046173 refs/remotes/origin/dev
+b12a93f79cbddb1f72d5bf5a8d71fb0e0eb8a248 refs/remotes/origin/gh-pages
+de4669e51f0fe4888fa4a64008d1ef3a92bcdc2c refs/remotes/origin/imgScale
+09507bb4eee7c6cc48f5f3c02eb70679e18cd7da refs/remotes/origin/master
+c96826a3f2b2572c9cfc7ffbc24615d8e2834f8f refs/tags/v0.3
+60bf19789090d1c9da1d52a2da364205ed5ae7d7 refs/tags/v1.0
+2313dfef6de10128feccb28d067a2be818e690ff refs/tags/v1.1
+f59e64a5711fcc90afe6c396f3ccd4e7a59afa9f refs/tags/v1.2
+43da46f06b602b179df18e86f442eb8dde9e0590 refs/tags/v1.3
+c513500269c770c0a18fd944c17e6941d9c936d0 refs/tags/v1.4
+310ba170c1db7576fb4f77288aa1003b7d72d1bb refs/tags/v2.0
+f51067b00e8099bb576858e70db6e2fc44ce3d61 refs/tags/v2.1
+784fa9d2e3570054728d21f8098199dc9d4164b9 refs/tags/v2.2
+d2cf21028eac378bdefe145fefa6d49841ecea1c refs/tags/v2.3
+//注意，上面的refs/remotes/origin/*并不是真正意义的分支，而是类似于tag的一个引用，该引用在clone的时候从远程版本库复制到本地的.git/refs/remotes/origin/目录下。
+
+nieyong@mac:~/github/reveal.js &gt; more .git/config
+//...
+[remote "origin"]
+        fetch = +refs/heads/*:refs/remotes/origin/*
+        url = https://github.com/nieyong/reveal.js.git
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+[branch "imgScale"]
+        remote = origin
+        merge = refs/heads/imgScale
+</pre>
+
+<p>
+那么在clone之后，如何将一个远程分支真正checkout到本地呢？我们在使用上面的命令知道了远程还有dev分支之后，就可以使用下面的命令将该分支checkout到本地。
+</p>
+<pre>
+nieyong@mac:~/github/reveal.js &gt; git co dev
+Branch dev set up to track remote branch dev from origin.
+Switched to a new branch 'dev'
+
+//上面的命令相当于git co -b dev origin/dev
+</pre>
+
+<p>
+使用github的gui端无需手动查看远程分支。
+</p>
+
+<h2 id="toc_0.2">二进制文件冲突</h2>
 <p>
 对于二进制文件的冲突，你肯定不想通过编辑二进制文件来解决冲突，那是不可能完成的事情。你要做的就是：要么选择对方的修改，要么选择自己的修改。
 </p>
@@ -67,7 +151,7 @@ git commit -m 'merged with the remote repos.'
 git push
 </pre>
 
-<h2 id="toc_0.2">删除某一次提交</h2>
+<h2 id="toc_0.3">删除某一次提交</h2>
 <ul>
 <li>
 <code>git reset HEAD^</code> 	//回退第一个记录 
@@ -103,7 +187,7 @@ git push
 </ul>
 </ol>
 
-<h2 id="toc_0.3">清除已经缓存的（staged）文件</h2>
+<h2 id="toc_0.4">清除已经缓存的（staged）文件</h2>
 <ul>
 <li>
 <code>git reset filename</code>		//相当于git reset --mixed HEAD filename
@@ -117,7 +201,7 @@ git push
 参见《progit》的p28。
 </p>
 
-<h2 id="toc_0.4">tag记录发布版本</h2>
+<h2 id="toc_0.5">tag记录发布版本</h2>
 <ul>
 <li>
 <code>git tag -a v1.0 -m 'my version 1.0</code>		//创建一个tag
@@ -136,7 +220,7 @@ git push
 
 </ul>
 
-<h2 id="toc_0.5">多份代码拷贝的合并</h2>
+<h2 id="toc_0.6">多份代码拷贝的合并</h2>
 <ul>
 <li>
 <code>git pull ../mbooke_usb/</code>
@@ -158,7 +242,7 @@ git push
 使用命令git pull可以达到目的。
 </p>
 
-<h2 id="toc_0.6">git分支与合并</h2>
+<h2 id="toc_0.7">git分支与合并</h2>
 <p>
 git分支与合并主要阅读了《pro git》一书的分支一章，强烈建议。
 </p>
@@ -220,7 +304,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 
 </ul>
 
-<h2 id="toc_0.7">git使用小技巧</h2>
+<h2 id="toc_0.8">git使用小技巧</h2>
 <p>
 将修改添加到版本库中，使用git add .命令，而不要使用git add *命令。因为*代表所有的文件，那么别.gitignore文件忽略的文件（或者文件夹）也会被添加。
 </p>
@@ -246,7 +330,7 @@ git分支与合并主要阅读了《pro git》一书的分支一章，强烈建�
 </blockquote>
 
 
-<h2 id="toc_0.8">git diff的用法</h2>
+<h2 id="toc_0.9">git diff的用法</h2>
 <p>
 查看文件的修改情况，使用命令 git diff src。
 </p>
@@ -258,7 +342,7 @@ git diff命令没有选项，不会去比较已经位于暂存区（staged）的
 git diff --cached
 </blockquote>
 
-<h2 id="toc_0.9">git checkout</h2>
+<h2 id="toc_0.10">git checkout</h2>
 <p>
 代码在回溯时，到了一个未命名的分支。
 </p>
@@ -286,7 +370,7 @@ ylqmatoMac-mini:CommLibrary ylq$ git branch
   refact
 </pre>
 
-<h2 id="toc_0.10">git ignore</h2>
+<h2 id="toc_0.11">git ignore</h2>
 <p>
 The idea is to keep locally your ".DS_Store", while removing them from the git repo.
 </p>
@@ -307,7 +391,7 @@ git push
 </p>
 
 
-<h2 id="toc_0.11">git log的用法</h2>
+<h2 id="toc_0.12">git log的用法</h2>
 <p>
 以适当的形式显示整个工程，或者多个文件，整个目录等的log信息。
 </p>
@@ -330,7 +414,7 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 </p>
 
 
-<h2 id="toc_0.12">github mac gui的sync操作</h2>
+<h2 id="toc_0.13">github mac gui的sync操作</h2>
 <p>
 两人合作开发，从某个共同的节点开始，A做了几次提交，并且上传github。B也做了几次提交，在本地。然后B使用github的mac端gui做一个syn（同步到github）。如果A和B的修改没有冲突，那么B的提交就会rebase到A的提交上，并且上传github成功，这样看上去就是一个线性的提交纪录。如果B的修改和A有冲突，那么有冲突的提交版本就会rebase失败。
 </p>
@@ -388,7 +472,7 @@ nothing to commit, working directory clean
 整个过程，只需要明白一点，那就是github的mac gui在sync的时候，默认是做的rebase操作。知晓了这一点，其他的就迎刃而解了。
 </p>
 
-<h2 id="toc_0.13">merge 时没有合并到origin分支的警告</h2>
+<h2 id="toc_0.14">merge 时没有合并到origin分支的警告</h2>
 <p>
 在开发过程中，出现下面这样的警告
 </p>
@@ -414,7 +498,7 @@ git clean -f -x -d # CAUTION: as above but removes ignored files like config.
 </p>
 
 
-<h2 id="toc_0.14">git中不可恢复的操作</h2>
+<h2 id="toc_0.15">git中不可恢复的操作</h2>
 <p>
 删除工作空间中的某个文件的所有修改，恢复到上一次提交时的状态。
 </p>
@@ -438,7 +522,7 @@ git reset --hard HEAD~2
 
 </ul>
 
-<h2 id="toc_0.15">参考资料</h2>
+<h2 id="toc_0.16">参考资料</h2>
 <ul>
 <li>
 <a href="http://zhwen.org/?p=articles/git">git使用总结 作者：许振文</a>
@@ -454,6 +538,9 @@ git reset --hard HEAD~2
 
 <li>
 <a href="http://mac.github.com/">Github for MAC</a>
+
+<li>
+<a href="https://github.com/nieyong/GitStats">Git统计工具GitStats</a>
 
 </ul>
 
