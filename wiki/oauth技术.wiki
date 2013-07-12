@@ -28,7 +28,7 @@ oauth常见的有oauth 1.1和oauth 2.0两个版本，现在绝大部分网站都
 
 一个典型的OAuth流程，这里描述的OAuth，被称为三条腿的OAuth（3-Legged OAuth），这也是OAuth的标准版本。：
 
-{{images/ioauth_flow.png}}
+{{images/oauth_flow.png}}
 
 === OAUTH2的四种角色 ===
 oauth2中角色的命名和oauth1.1稍有不同，如下所示：
