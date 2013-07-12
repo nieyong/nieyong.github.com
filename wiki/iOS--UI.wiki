@@ -1,4 +1,27 @@
 == iOS--UI ==
+== 如何修改默认返回按钮的title ==
+A视图-->B视图
+
+现在想改变B视图返回A视图的返回按钮的title，只需在A视图中加上如下代码：
+
+{{{name="code" class="c"
+self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc]
+                                             initWithTitle:@"返回"
+                                             style:UIBarButtonItemStylePlain
+                                             target:self
+                                             action:nil];
+}}}
+
+B视图不用做任何操作。
+
+== 获取iphone屏幕的宽度 ==
+{{{name="code" class="c"
+    CGRect r = [ UIScreen mainScreen ].applicationFrame;
+    r=0，20，320，460
+    CGRect rx = [ UIScreen mainScreen ].bounds;
+    r=0，0，320，480
+}}}
+
 == 在cell中添加subview图片 ==
 {{{name="code" class="c"
 cell.inputView  或者 cell.contentView

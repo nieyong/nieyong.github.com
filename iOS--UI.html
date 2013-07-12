@@ -38,7 +38,36 @@
 	<div id="content">
 	
 <h2 id="toc_0.1">iOS--UI</h2>
-<h2 id="toc_0.2">在cell中添加subview图片</h2>
+<h2 id="toc_0.2">如何修改默认返回按钮的title</h2>
+<p>
+A视图--&gt;B视图
+</p>
+
+<p>
+现在想改变B视图返回A视图的返回按钮的title，只需在A视图中加上如下代码：
+</p>
+
+<pre name="code" class="c">
+self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc]
+                                             initWithTitle:@"返回"
+                                             style:UIBarButtonItemStylePlain
+                                             target:self
+                                             action:nil];
+</pre>
+
+<p>
+B视图不用做任何操作。
+</p>
+
+<h2 id="toc_0.3">获取iphone屏幕的宽度</h2>
+<pre name="code" class="c">
+    CGRect r = [ UIScreen mainScreen ].applicationFrame;
+    r=0，20，320，460
+    CGRect rx = [ UIScreen mainScreen ].bounds;
+    r=0，0，320，480
+</pre>
+
+<h2 id="toc_0.4">在cell中添加subview图片</h2>
 <pre name="code" class="c">
 cell.inputView  或者 cell.contentView
 
@@ -50,7 +79,7 @@ for (UIImageView *item in [cell.contentView subviews]) {
     }
 }
 </pre>
-<h2 id="toc_0.3">模态视图 presentModalViewController</h2>
+<h2 id="toc_0.5">模态视图 presentModalViewController</h2>
 <pre name="code" class="c">
 -(void)firstpressed
 {
@@ -59,7 +88,7 @@ for (UIImageView *item in [cell.contentView subviews]) {
 }
 </pre>
 
-<h2 id="toc_0.4">关于覆盖层</h2>
+<h2 id="toc_0.6">关于覆盖层</h2>
 <p>
 下面是一段覆盖层的代码，特点是使用了keyWindow。
 </p>
@@ -87,7 +116,7 @@ for (UIImageView *item in [cell.contentView subviews]) {
 }
 </pre>
 
-<h2 id="toc_0.5">removeFromSuperview</h2>
+<h2 id="toc_0.7">removeFromSuperview</h2>
 <pre name="code" class="c">
 
 [_overlay removeFromSuperview];
@@ -102,13 +131,13 @@ If the receiver’s superview is not nil, the superview releases the receiver. I
 </blockquote>
 
 
-<h2 id="toc_0.6">IOS中view页面的堆栈操作</h2>
+<h2 id="toc_0.8">IOS中view页面的堆栈操作</h2>
 <pre name="code" class="c">
 
 [self.navigationController popViewControllerAnimated:YES];
 </pre>
 
-<h2 id="toc_0.7">headView使用addSubview之后，不能够delease</h2>
+<h2 id="toc_0.9">headView使用addSubview之后，不能够delease</h2>
 <pre name="code" class="c">
 
 UIView* headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];

@@ -1,3 +1,7 @@
+注：在OC中并没有abstract class的概念，只有protocol，如果在基类中只定义接口(没有具体方法的实现)，则可以使用protocol，这样会更方便。 
+
+创建一个NSObject的类别称为“创建一个非正式协议”，任何类的对象都可以作为委托对象使用，既不需要从特定的serviceBrowserDelegate类中继承（如C++中那样），也不需要符合某种特定的接口（如在java中那样）。——摘自《Objective-C基础教程》的p187。
+
 == char a[20] -> NSString ==
 == char* str -> NSString ==
 {{{name="code" class="c"

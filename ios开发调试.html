@@ -58,6 +58,23 @@ ylqmatoMac-mini:test ylq$ dwarfdump  --uuid AssistantForIphone.app.dSYM/
 UUID: BE6DE594-A4D7-328B-A3BC-43D031FB45C9 (armv7) AssistantForIphone.app.dSYM/Contents/Resources/DWARF/AssistantForIphone
 </pre>
 
+<h2 id="toc_0.2">Build Active Architecture Only</h2>
+<p>
+Xcode4 Linking Problem. File was built for archive which is not the architecture being linked (arm6).
+</p>
+
+<p>
+在将一个.a的工程嵌入到另外一个工程中时，遇到了该问题。下面是解决的办法。
+</p>
+
+<p>
+I figured out what caused the problem. I changed 'Build Active Architecture Only' of TapkuLibrary from Yes to No and it compiles with no problem.
+</p>
+
+<p>
+<a href="http://stackoverflow.com/questions/5303933/xcode4-linking-problem-file-was-built-for-archive-which-is-not-the-architecture">Link</a>
+</p>
+
 	</div>
     </div>
 

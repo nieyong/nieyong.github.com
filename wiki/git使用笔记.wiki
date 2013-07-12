@@ -303,6 +303,7 @@ git clean -f -x -d # CAUTION: as above but removes ignored files like config.
 * [[http://zhwen.org/?p=articles/git|git使用总结 作者：许振文]]
 * [[http://www.worldhello.net/gotgithub/index.html|GotGitHub 作者：蒋鑫]]
 * [[http://progit.org/|Pro Git]]
-* [[http://gitx.laullon.com/|gitx下载地址]]
+* [[http://gitx.laullon.com/|gitx下载地址]] ——Mac下的git历史记录查看工具
 * [[http://mac.github.com/|Github for MAC]]
 * [[https://github.com/nieyong/GitStats|Git统计工具GitStats]]
+* [[https://wiki.gnome.org/giggle|Giggle]] is a graphical frontend for the git content tracker,just for Linux.
