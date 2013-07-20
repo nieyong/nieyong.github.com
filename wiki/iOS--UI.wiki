@@ -1,4 +1,22 @@
 == iOS--UI ==
+== loadView ==
+loadView仅仅应该在开发者希望自行通过编码而不是Interface Builder定制view的时候被实现，而且不应该在其中调用[super loadView]，你的loadView中应该有self.view = xxx这样的行为。
+
+如果仅仅是想要在当前view上增加一些UIButton或是UILabel，应该在viewDidLoad里使用[self.view addSubView:xxx]去做，此时不要实现自己的loadView。下面是重写loadView的一个案例。
+
+{{{name="code" class="c"
+- ( void ) loadView {
+    UIView *view = [ [ UIView alloc] initWithFrame:[ UIScreen
+mainScreen] .applicationFrame] ;
+    [ view setBackgroundColor:_color] ;
+    self.view = view;
+    [ view release] ;
+}
+}}}
+
+你在控制器中实现了loadView方法，那么你可能会在应用运行的某个时候被内存管理控制调用。 如果设备内存不足的时候， view 控制器会收到didReceiveMemoryWarning的消息。 默认的实现是检查当前控制器的view是否在使用。 如果它的view不在当前正在使用的view hierarchy里面，且你的控制器实现了loadView方法，那么这个view将被release, loadView方法将被再次调用来创建一个新的view。
+
+
 == 如何修改默认返回按钮的title ==
 A视图-->B视图
 

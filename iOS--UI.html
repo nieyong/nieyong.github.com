@@ -38,7 +38,31 @@
 	<div id="content">
 	
 <h2 id="toc_0.1">iOS--UI</h2>
-<h2 id="toc_0.2">如何修改默认返回按钮的title</h2>
+<h2 id="toc_0.2">loadView</h2>
+<p>
+loadView仅仅应该在开发者希望自行通过编码而不是Interface Builder定制view的时候被实现，而且不应该在其中调用[super loadView]，你的loadView中应该有self.view = xxx这样的行为。
+</p>
+
+<p>
+如果仅仅是想要在当前view上增加一些UIButton或是UILabel，应该在viewDidLoad里使用[self.view addSubView:xxx]去做，此时不要实现自己的loadView。下面是重写loadView的一个案例。
+</p>
+
+<pre name="code" class="c">
+- ( void ) loadView {
+    UIView *view = [ [ UIView alloc] initWithFrame:[ UIScreen
+mainScreen] .applicationFrame] ;
+    [ view setBackgroundColor:_color] ;
+    self.view = view;
+    [ view release] ;
+}
+</pre>
+
+<p>
+你在控制器中实现了loadView方法，那么你可能会在应用运行的某个时候被内存管理控制调用。 如果设备内存不足的时候， view 控制器会收到didReceiveMemoryWarning的消息。 默认的实现是检查当前控制器的view是否在使用。 如果它的view不在当前正在使用的view hierarchy里面，且你的控制器实现了loadView方法，那么这个view将被release, loadView方法将被再次调用来创建一个新的view。
+</p>
+
+
+<h2 id="toc_0.3">如何修改默认返回按钮的title</h2>
 <p>
 A视图--&gt;B视图
 </p>
@@ -59,7 +83,7 @@ self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc]
 B视图不用做任何操作。
 </p>
 
-<h2 id="toc_0.3">获取iphone屏幕的宽度</h2>
+<h2 id="toc_0.4">获取iphone屏幕的宽度</h2>
 <pre name="code" class="c">
     CGRect r = [ UIScreen mainScreen ].applicationFrame;
     r=0，20，320，460
@@ -67,7 +91,7 @@ B视图不用做任何操作。
     r=0，0，320，480
 </pre>
 
-<h2 id="toc_0.4">在cell中添加subview图片</h2>
+<h2 id="toc_0.5">在cell中添加subview图片</h2>
 <pre name="code" class="c">
 cell.inputView  或者 cell.contentView
 
@@ -79,7 +103,7 @@ for (UIImageView *item in [cell.contentView subviews]) {
     }
 }
 </pre>
-<h2 id="toc_0.5">模态视图 presentModalViewController</h2>
+<h2 id="toc_0.6">模态视图 presentModalViewController</h2>
 <pre name="code" class="c">
 -(void)firstpressed
 {
@@ -88,7 +112,7 @@ for (UIImageView *item in [cell.contentView subviews]) {
 }
 </pre>
 
-<h2 id="toc_0.6">关于覆盖层</h2>
+<h2 id="toc_0.7">关于覆盖层</h2>
 <p>
 下面是一段覆盖层的代码，特点是使用了keyWindow。
 </p>
@@ -116,7 +140,7 @@ for (UIImageView *item in [cell.contentView subviews]) {
 }
 </pre>
 
-<h2 id="toc_0.7">removeFromSuperview</h2>
+<h2 id="toc_0.8">removeFromSuperview</h2>
 <pre name="code" class="c">
 
 [_overlay removeFromSuperview];
@@ -131,13 +155,13 @@ If the receiver’s superview is not nil, the superview releases the receiver. I
 </blockquote>
 
 
-<h2 id="toc_0.8">IOS中view页面的堆栈操作</h2>
+<h2 id="toc_0.9">IOS中view页面的堆栈操作</h2>
 <pre name="code" class="c">
 
 [self.navigationController popViewControllerAnimated:YES];
 </pre>
 
-<h2 id="toc_0.9">headView使用addSubview之后，不能够delease</h2>
+<h2 id="toc_0.10">headView使用addSubview之后，不能够delease</h2>
 <pre name="code" class="c">
 
 UIView* headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 30)];

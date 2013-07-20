@@ -169,3 +169,22 @@ authenPeripherals是NSMutableArray数组对象，对其清空不能够直接付�
 }
 
 }}}
+
+
+2013-07-15 23:04:10.825 IRRemoteControl[8301:907] <00000000>
+2013-07-15 23:04:10.828 IRRemoteControl[8301:907] -[NSConcreteValue integerValue]: unrecognized selector sent to instance 0x1d8832e0
+2013-07-15 23:04:10.831 IRRemoteControl[8301:907] *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[NSConcreteValue integerValue]: unrecognized selector sent to instance 0x1d8832e0'
+*** First throw call stack:
+(0x320172a3 0x39cfb97f 0x3201ae07 0x32019531 0x31f70f68 0x5c179 0x33e86311 0x33e9279b 0x33e924c1 0x33e634e9 0x33e22803 0x33bccd8b 0x33bcc929 0x33bfb7cf 0x33ecc0e9 0x33ecb2d5 0x33eca4a7 0x33eca431 0x34000309 0x33e88691 0x33e883d5 0x33e87d3b 0x33e7eeab 0x33e7aaed 0x33ebc1e9 0x5af47 0x33e7fad9 0x33e7f663 0x33e7784b 0x33e1fc39 0x33e1f6cd 0x33e1f11b 0x35b265a3 0x35b261d3 0x31fec173 0x31fec117 0x31feaf99 0x31f5debd 0x31f5dd49 0x33e76485 0x33e73301 0x5ac37 0x3a132b20)
+libc++abi.dylib: terminate called throwing an exception
+
+    int count = 0;
+    for (int i = 0; i < [[RCCoreDataManager sharedInstance] getRemoteControlCount]; i++) {
+        count++;
+        //初始化所有的遥控器页面
+        RCButtonBoardView* btnBoard = [[RCButtonBoardView alloc] initWithFrame:CGRectMake(320.0f*i, 30.0f, self.view.frame.size.width,self.view.frame.size.height - 30.0f)];
+        [self.allButtonBoards setObject:btnBoard forKey:[NSNumber numberWithInt:i]];
+//        [self.allButtonBoards setObject:btnBoard forKey:[NSValue valueWithBytes:&i objCType:@encode(int)]];
+//        [self.allButtonBoards setObject:btnBoard forKey:[NSString stringWithFormat:@"rc%d",i]];
+        [_container addSubview:btnBoard];
+    }

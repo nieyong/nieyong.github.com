@@ -37,7 +37,31 @@
     <div class="container">
 	<div id="content">
 	
-<h2 id="toc_0.1">硬盘分区情况分析</h2>
+<h2 id="toc_0.1">分区、格式化、挂载</h2>
+<p>
+开机启动时自动挂载某个分区，需要修改文件：/etc/fstab则可。
+</p>
+
+<p>
+查看某个分区的文件系统类型：<code>file -s /dev/sda2</code>
+</p>
+
+<p>
+将某个分区格式化，指定格式的文件系统：
+</p>
+<blockquote>
+sudo mkfs.ext4 /dev/sda2    //将/dev/sda2盘格式化为ext4格式
+</blockquote>
+
+<p>
+将格式化的分区挂在到系统某个路径上：
+</p>
+<blockquote>
+mount -t ext4 /dev/sda2 ~/workspace
+</blockquote>
+
+
+<h2 id="toc_0.2">硬盘分区情况分析</h2>
 <pre>
 [root@localhost grub]# fdisk -l
 
@@ -91,7 +115,7 @@ Disk /dev/dm-2
 其中，我们可以看到磁盘/dev/sda的分区情况。“Partition table entries are not in disk order”的含义是，分区命名的顺序和其中磁盘中的位置并不一致。/dev/sda7 的分区数是最大的，但是，其实他再磁盘中，cylinders是从 5473到5498，再逻辑分区/dev/sda5的前面，占据我们的扩展分区/dev/sda4的最开始的位置。
 </p>
 
-<h2 id="toc_0.2">UUID和grub</h2>
+<h2 id="toc_0.3">UUID和grub</h2>
 <p>
 查看硬盘各分区的UUID，用命令ls -al /dev/disk/by-uuid 查看你的所有的硬盘的UUID信息！
 </p>
@@ -133,11 +157,6 @@ initrd  /boot/initrd.img-2.6.28-11-generic
 
 <p>
 参考文章[<a href="http://www.fedoraforum.org/forum/showthread.php?t=252004">http://www.fedoraforum.org/forum/showthread.php?t=252004</a> What eats my disk space]。
-</p>
-
-<h2 id="toc_0.3">开机分区自动挂载</h2>
-<p>
-开机启动时自动挂载某个分区，需要修改文件：/etc/fstab则可。
 </p>
 
 	</div>

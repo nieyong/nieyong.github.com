@@ -1,3 +1,15 @@
+== 分区、格式化、挂载 ==
+开机启动时自动挂载某个分区，需要修改文件：/etc/fstab则可。
+
+查看某个分区的文件系统类型：`file -s /dev/sda2`
+
+将某个分区格式化，指定格式的文件系统：
+    sudo mkfs.ext4 /dev/sda2    //将/dev/sda2盘格式化为ext4格式
+
+将格式化的分区挂在到系统某个路径上：
+    mount -t ext4 /dev/sda2 ~/workspace
+
+
 == 硬盘分区情况分析 ==
 {{{
 [root@localhost grub]# fdisk -l
@@ -84,5 +96,3 @@ initrd  /boot/initrd.img-2.6.28-11-generic
 
 参考文章[http://www.fedoraforum.org/forum/showthread.php?t=252004 What eats my disk space]。
 
-== 开机分区自动挂载 ==
-开机启动时自动挂载某个分区，需要修改文件：/etc/fstab则可。

@@ -1,3 +1,8 @@
+== 尚未解决的几个命令 ==
+* 列出一个压缩包的最上层内容，不要解压缩，不要列举所有文件。对于一个压缩包内容很多时有用，例如linux kernel、android代码等得压缩包。
+* 显示路径下的所有文件夹名，不要子文件。
+
+
 == alternatives 命令 ==
 这是一个只有 root 才能执行的命令。alternatives 的意思是 “可选择的内容”。假如你的系统中有几个命令功能十分类似，却又不能随意删除，那么可以用 alternatives 来指定一个全局的设置。在 FC3 中，全局默认输入法和 java 系统等等都是用它来进行设置的。它有几种功能，可以用命令行参数来指定。alternatives --install <link> <name> <path> <priority> 意思是在 alternatives 数据库中添加一个 <path>，使它成为 <link> 的可选项，优先级是 <priority>。而 <name> 则是一个中转站。这样说似乎有些抽象 所以，执行一下看看
 
@@ -94,6 +99,18 @@ find . -type f -name "*.wiki" \
 
 在zip命令中，压缩某个目录下的所有文件，但是不包含某个子目录，这次应该怎么写呢？
     zip -r test6 test3 -x ./test3/bin/\* -x ./test3/.git/\*	//压缩test3目录为test6.zip文件，但是不包含./test3/bin/目录下的所有文件（包括路径），也不包括./test3/.git/目录下的所有文件和目录。这里，如果将反斜杠去掉，则不能够达到去除目录的作用，则只会不包括./test3/bin/目录下的所有文件（注意，不包括目录）。
+
+=== tar.gz ===
+tar.gz文件的基本操作：
+
+解压缩：`tar -xzvf xxx.tar.gz`
+查看包内容，-v命令表示显示详细的信息：`tar -tzvf xxx.tar.gz`
+
+=== tar.bz2 ===
+tar.bz2文件的基本操作：
+
+解压缩：`tar -xjvf xxx.tar.bz2`
+
 
 == 内存检查命令 ==
 * free
