@@ -38,6 +38,10 @@
 	<div id="content">
 	
 <h2 id="toc_0.1">iOS--UI</h2>
+<p>
+Don't know if it helps your specific problem, however UITextAlignmentCenter does work if you use initWithStyle:UITableViewCellStyleDefault
+</p>
+
 <h2 id="toc_0.2">loadView</h2>
 <p>
 loadView仅仅应该在开发者希望自行通过编码而不是Interface Builder定制view的时候被实现，而且不应该在其中调用[super loadView]，你的loadView中应该有self.view = xxx这样的行为。
@@ -82,6 +86,43 @@ self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc]
 <p>
 B视图不用做任何操作。
 </p>
+
+<p>
+The backBarButtonItem exists specifically to change the appearance of the back button. If you need a custom action, you should consider using leftBarButtonItem instead.
+</p>
+
+<p>
+下面就是使用leftBarButtonItem代替backBarButtonTtem的代码段，在B视图中viewDidLoad函数中实现。
+</p>
+
+<p>
+在使用中发现，这样的实现其实是有问题的。返回按键只在B页面完全加载之后才出现，也就没有了从右向左滑入的效果。
+</p>
+
+<pre name="code" class="c">
+    //返回按键
+    UIBarButtonItem *backBarBtn = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:self action:@selector(backItemAction:)];
+    UIImage *originalImage_normal = [UIImage imageNamed:@"nav_bar_back_button_normal.png"];
+    UIImage *originalImage_selected = [UIImage imageNamed:@"nav_bar_back_button_selected.png"];
+    UIImage *image_normal;
+    UIImage *image_selected;
+    
+    // 拉伸图片
+    if ([[UIImage class] respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+        image_normal = [originalImage_normal resizableImageWithCapInsets:UIEdgeInsetsMake(0, 12.5, 0, 7.5)];
+        image_selected = [originalImage_selected resizableImageWithCapInsets:UIEdgeInsetsMake(0, 12.5, 0, 7.5)];
+    }
+    else {
+        image_normal = [originalImage_normal stretchableImageWithLeftCapWidth:12.5 topCapHeight:0];
+        image_selected = [originalImage_selected stretchableImageWithLeftCapWidth:12.5 topCapHeight:0];
+    }
+    [backBarBtn setBackgroundImage:image_normal forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [backBarBtn setBackgroundImage:image_selected forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
+    self.navigationItem.leftBarButtonItem = backBarBtn;
+    self.navigationItem.leftBarButtonItem.target = self;
+    [backBarBtn release];
+</pre>
+
 
 <h2 id="toc_0.4">获取iphone屏幕的宽度</h2>
 <pre name="code" class="c">
