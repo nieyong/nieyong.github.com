@@ -42,6 +42,100 @@ vimrc文件，用于配置vim编辑器。在Linux下位于~/.vimrc。
 </p>
 
 <p>
+ubuntu下的vimrc配置：
+</p>
+<pre>
+""""""""""""""""""""""""""
+" set mapleader
+""""""""""""""""""""""""""
+let mapleader=","
+
+""""""""""""""""""""""""""
+"shotcut of the vim configFile vimrc
+""""""""""""""""""""""""""
+"Fast reloading of the vimrc
+map &lt;silent&gt;&lt;leader&gt;sv :source ~/.vimrc&lt;cr&gt;
+"Fast edit of the vimrc
+map &lt;silent&gt;&lt;leader&gt;ee :e ~/.vimrc&lt;cr&gt;
+"When vimrc is edited,reload it
+autocmd!bufwritepost .vimrc source ~/.vimrc
+
+""""""""""""""""""""""""""
+" session viminfo
+""""""""""""""""""""""""""
+map &lt;silent&gt;&lt;leader&gt;so :source session-kernel.vim&lt;cr&gt;
+map &lt;silent&gt;&lt;leader&gt;ss :mks! session-kernel.vim&lt;cr&gt;
+" execute project related configuration in current directory
+autocmd VimEnter * :call s:ReadSession()  
+function! s:ReadSession()  
+    let session_file = "./session-kernel.vim"  
+    if filereadable( session_file )  
+        execute "so " . session_file  
+    endif  
+
+    let session_file = "./session-android-4412.vim"  
+    if filereadable( session_file )  
+        execute "so " . session_file  
+    endif  
+endfunction  
+
+autocmd VimLeave * :call s:WriteSession()  
+function! s:WriteSession()  
+    let session_file = "./session-kernel.vim"  
+    if filereadable( session_file )  
+        execute "mks! " . session_file  
+    endif  
+
+    let session_file = "./session-android-4412.vim"  
+    if filereadable( session_file )  
+        execute "mks! " . session_file  
+    endif  
+endfunction  
+
+""""""""""""""""""""""""""
+" autoindent,backup,fold,color
+""""""""""""""""""""""""""
+set autoindent
+set shiftwidth=4
+set tabstop=4
+set smarttab
+set expandtab
+set nobackup
+set foldmethod=syntax
+
+""""""""""""""""""""""""""
+" netrw setting
+""""""""""""""""""""""""""
+let g:netrw_winsize = 30
+nmap &lt;silent&gt;&lt;leader&gt;fe :Sexplore!&lt;cr&gt;
+
+""""""""""""""""""""""""""
+" install buffer explorer plugin,use the cmd &lt;leader&gt;be
+""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""
+" File Encode
+""""""""""""""""""""""""""""""
+set encoding=utf-8
+set fileencodings=gb2313,ucs-bom,utf-8,chinese
+set fileencoding=utf-8
+
+
+""""""""""""""""""""""""""
+" 对于vimwiki 1.2而言，html模板的配置有变化
+""""""""""""""""""""""""""
+set nocompatible
+filetype plugin on
+syntax on
+
+let g:vimwiki_list=[{'path':'/home/ny/github/nieyong.github.com/wiki/', 
+		\'path_html':'/home/ny/github/nieyong.github.com/',
+		\'template_path':'/home/ny/github/nieyong.github.com/templates/',
+		\'template_default':'default',
+		\'template_ext':'.tpl'}]
+</pre>
+
+<p>
 Linux下的vimrc配置：
 </p>
 <pre>
