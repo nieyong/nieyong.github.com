@@ -50,6 +50,22 @@ index.wiki                                            100%   52     0.1KB/s   00
 
 另外，获取其它服务器上的文件，可以在SSH下面使用wget命令。
 
+== 基于SSH的git服务器 ==
+例如ssh服务器的地址为ny@x.x.x.x，git代码库在ssh服务器上存放的地址为/opt/git目录下，需要存放的git版本控制工程为test。
+
+* 需要先把现有test工程仓库导出为裸仓库 — 即一个不包含当前工作目录的仓库。做法直截了当，克隆时用 --bare 选项即可。裸仓库的目录名一般以.git结尾。
+
+$git clone --bare test test.git
+
+* 将导出的裸仓库test.git上传到ssh服务器的/opt/git目录下
+
+$scp -r test.git ny@x.x.x.x:/opt/git
+
+* 下面就可以从任何可以登录该ssh服务器的地方clone，push该工程
+
+$git clone ny@x.x.x.x:/opt/git/test.git     //将test工程clone下载到本地
+$git push   //将本地对test工程的修改上传到ssh服务器的test.git仓库中
+
 == SSH和github ==
 版本控制工具git必须使用SSH安全配置，有关git的使用，可以查看[[git使用笔记]]。在这里，我们只说明git中SSH的使用。首先，产生一对SSH密钥，包括一个私钥和一个公钥。命令如下：
 {{{

@@ -1,3 +1,4 @@
+[[Vim2IDE]]
 == 插件 ==
 vimwiki
 * bufexplorer	:查看buffer中打开的文件列表
@@ -19,3 +20,9 @@ vimwiki
 * ctrl-d	：删除光标后的一个字符（delete）
 * ctrl-k	：删除当前行光标后的所有字符（kill）
 * ctrl-l	：将光标所在行移动到屏幕中间
+
+
+高亮显示选中的单词
+
+:set hlsearch
+:set nohlsearch

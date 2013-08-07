@@ -1,0 +1,45 @@
+记录使用vim查看kernel代码的过程，逐步打造成为一个Souce Insight。
+
+使用vim打开编辑了一些文件，并想把这些文件作为一个工程，下次直接打开回复。
+
+:mks sesseion-kernel.vim
+
+可以在vim启动时设置参数读取session文件来还原设置  
+
+$vim -S /path/to/Session.vim  
+
+如果启动vim后想读取一个session设置,重新打开该工程
+
+:source session-kernel.vim
+
+后面编辑增减了文件
+
+:mks! session-kernel.vim
+
+工程文件中保存相对路径（这样该工程文件就可以在不同机器上通用）。
+
+:set sessionoptions -= curdir
+:set sessionoptions += sesdir
+:set sessionoptions?
+sessionoptions=blank,buffers,folds,help,options,tabpages,winsize,sesdir
+
+使用.vimrc配置简化操作
+{{{
+" execute project related configuration in current directory
+autocmd VimEnter * :call s:ReadSession()  
+function! s:ReadSession()  
+    let session_file = "./session-kernel.vim"  
+    if filereadable( session_file )  
+        execute "so " . session_file  
+    endif  
+endfunction  
+
+autocmd VimLeave * :call s:WriteSession()  
+function! s:WriteSession()  
+    let session_file = "./session-kernel.vim"  
+    if filereadable( session_file )  
+        execute "mks! " . session_file  
+    endif  
+endfunction  
+
+}}}

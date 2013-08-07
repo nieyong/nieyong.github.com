@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>my config file</title>
+	<title>apt source</title>
 
   	<link rel="stylesheet" href="templates/SyntaxHighlighter.css"></link>
 	<link rel="stylesheet" href="templates/style.css">
@@ -37,20 +37,36 @@
     <div class="container">
 	<div id="content">
 	
-<ul>
-<li>
-<a href="gitconfig.html">gitconfig</a>
+<p>
+ubuntu下的源修改为国内163（ubuntu 12.04）。文件为/etc/apt/sources.list。
+</p>
 
-<li>
-<a href="dvd-repo.html">dvd-repo</a> -- 将iso文件作为fedaro源的文件
+<pre>
+deb http://mirrors.163.com/ubuntu/ precise main restricted
+deb-src http://mirrors.163.com/ubuntu/ precise main restricted
+deb http://mirrors.163.com/ubuntu/ precise-updates main restricted
+deb-src http://mirrors.163.com/ubuntu/ precise-updates main restricted
+deb http://mirrors.163.com/ubuntu/ precise universe
+deb-src http://mirrors.163.com/ubuntu/ precise universe
+deb http://mirrors.163.com/ubuntu/ precise-updates universe
+deb-src http://mirrors.163.com/ubuntu/ precise-updates universe
+deb http://mirrors.163.com/ubuntu/ precise multiverse
+deb-src http://mirrors.163.com/ubuntu/ precise multiverse
+deb http://mirrors.163.com/ubuntu/ precise-updates multiverse
+deb-src http://mirrors.163.com/ubuntu/ precise-updates multiverse
+deb http://mirrors.163.com/ubuntu/ precise-backports main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ precise-backports main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ precise-security main restricted
+deb-src http://mirrors.163.com/ubuntu/ precise-security main restricted
+deb http://mirrors.163.com/ubuntu/ precise-security universe
+deb-src http://mirrors.163.com/ubuntu/ precise-security universe
+deb http://mirrors.163.com/ubuntu/ precise-security multiverse
+deb-src http://mirrors.163.com/ubuntu/ precise-security multiverse
+deb http://extras.ubuntu.com/ubuntu precise main
+deb-src http://extras.ubuntu.com/ubuntu precise main 
 
-<li>
-<a href="vimrc.html">vimrc</a> -- vim配置文件
-
-<li>
-<a href="apt source.html">apt source</a>
-
-</ul>
+deb http://us.archive.ubuntu.com/ubuntu/ hardy multiverse
+</pre>
 
 	</div>
     </div>

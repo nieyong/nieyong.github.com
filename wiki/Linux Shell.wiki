@@ -1,3 +1,21 @@
+== 内部命令 ==
+android的adb等工具，并不是内部命令，每次使用都需要指定路径。将其所在的路径添加到~/.bashrc文件中：
+{{{
+# android adb
+# export ANDROID_HOME=/home/ny/android/adt-bundle-linux-x86-20130729/sdk
+# export PATH=$PATH:$ANDROID_HOME/platform-tools
+}}}
+
+使用命令`source ~/.bashrc`使修改生效。
+
+可以使用type命令查看现在执行的adb命令的位置。
+
+{{{
+root@ny-server01:~# type adb
+adb 是 /home/ny/android/adt-bundle-linux-x86-20130729/sdk/platform-tools/adb
+root@ny-server01:~# 
+}}}
+
 == shell的定制 ==
 工作中经常使用Cygwin的shell，但是其中ls命令所有显示都是黑白，其实可以如下定制：
 修改用户目录下的.bashrc文件。

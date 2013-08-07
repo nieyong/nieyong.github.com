@@ -11,7 +11,7 @@ nieyong@mac:~/github/reveal.js > git br
   master
 }}}
 
-但是该项目在远程（github上）还有两个分支，dev和gh-pages，我在本地怎么看到呢？使用下面的命令，-r表示remote的含义：
+但是该项目在远程（github上）还有两个分支，dev和gh-pages，我在本地怎么看到呢？使用下面的命令，-r表示remote的含义。这就是查看在clone的时候已经保存在本地的远程分支信息。
 {{{
 nieyong@mac:~/github/reveal.js > git br -r
   origin/HEAD -> origin/master
@@ -19,9 +19,11 @@ nieyong@mac:~/github/reveal.js > git br -r
   origin/gh-pages
   origin/imgScale
   origin/master
+}}}
 
-//如果这个时候，别人新创建了一个分支在远程版本库github中，则可以使用下面的命令：
 
+如果clone结束之后，别人新创建了一个分支在远程版本库github中，那么在本地就没有这个远程分支信息，使用上面的`git br -r`命令没用了。那么使用下面的命令：
+{{{
 nieyong@mac:~/github/reveal.js > git ls-remote --heads
 From https://github.com/nieyong/reveal.js.git
 4ff462078b9ce4acd27210764bac3950db046173	refs/heads/dev
@@ -31,7 +33,7 @@ de4669e51f0fe4888fa4a64008d1ef3a92bcdc2c	refs/heads/imgScale
 
 }}}
 
-这个时候，为什么本地没有分支dev和gp-pages呢？看两个地方可以看出一些端倪：
+为什么本地没有分支dev和gp-pages呢？看两个地方可以看出一些端倪：
 {{{
 nieyong@mac:~/github/reveal.js > git show-ref
 de4669e51f0fe4888fa4a64008d1ef3a92bcdc2c refs/heads/imgScale
@@ -220,8 +222,13 @@ ced6d79 - 2011-08-14 : Changed: New icon for text entry
 [ny@localhost android-xbmcremote]$ git log --date=short --pretty=format:"%ad : %s" --stat ./src/  ./res/layout/
 }}}
 
-详细的显示某次提交的log信息。
+详细的显示某次提交的log信息，修改了哪些文件的什么内容。 
+{{{
+git show
+git show 3dc5868    //显示某次提交
+}}}
 
+显示某次提交的修改了哪些文件。
 
 == github mac gui的sync操作 ==
 两人合作开发，从某个共同的节点开始，A做了几次提交，并且上传github。B也做了几次提交，在本地。然后B使用github的mac端gui做一个syn（同步到github）。如果A和B的修改没有冲突，那么B的提交就会rebase到A的提交上，并且上传github成功，这样看上去就是一个线性的提交纪录。如果B的修改和A有冲突，那么有冲突的提交版本就会rebase失败。
@@ -307,3 +314,4 @@ git clean -f -x -d # CAUTION: as above but removes ignored files like config.
 * [[http://mac.github.com/|Github for MAC]]
 * [[https://github.com/nieyong/GitStats|Git统计工具GitStats]]
 * [[https://wiki.gnome.org/giggle|Giggle]] is a graphical frontend for the git content tracker,just for Linux.
+* gitk是Linux下的git历史记录查看工具，`sudo apt-get install gitk`.

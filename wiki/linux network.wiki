@@ -1,0 +1,8 @@
+== apache2 ==
+
+查看是否运行，在浏览器上输入http://127.0.0.1 。
+
+Apache 在 Ubuntu 中默认文档根目录为 /var/www，配置文件 /etc/apache2/apache2.conf
+
+然后重启apache:
+/etc/init.d/apache2 restart

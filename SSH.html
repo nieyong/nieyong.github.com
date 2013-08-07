@@ -133,7 +133,43 @@ index.wiki                                            100%   52     0.1KB/s   00
 另外，获取其它服务器上的文件，可以在SSH下面使用wget命令。
 </p>
 
-<h2 id="toc_0.4">SSH和github</h2>
+<h2 id="toc_0.4">基于SSH的git服务器</h2>
+<p>
+例如ssh服务器的地址为ny@x.x.x.x，git代码库在ssh服务器上存放的地址为/opt/git目录下，需要存放的git版本控制工程为test。
+</p>
+
+<ul>
+<li>
+需要先把现有test工程仓库导出为裸仓库 — 即一个不包含当前工作目录的仓库。做法直截了当，克隆时用 --bare 选项即可。裸仓库的目录名一般以.git结尾。
+
+</ul>
+
+<p>
+$git clone --bare test test.git
+</p>
+
+<ul>
+<li>
+将导出的裸仓库test.git上传到ssh服务器的/opt/git目录下
+
+</ul>
+
+<p>
+$scp -r test.git ny@x.x.x.x:/opt/git
+</p>
+
+<ul>
+<li>
+下面就可以从任何可以登录该ssh服务器的地方clone，push该工程
+
+</ul>
+
+<p>
+$git clone ny@x.x.x.x:/opt/git/test.git     //将test工程clone下载到本地
+$git push   //将本地对test工程的修改上传到ssh服务器的test.git仓库中
+</p>
+
+<h2 id="toc_0.5">SSH和github</h2>
 <p>
 版本控制工具git必须使用SSH安全配置，有关git的使用，可以查看<a href="git使用笔记.html">git使用笔记</a>。在这里，我们只说明git中SSH的使用。首先，产生一对SSH密钥，包括一个私钥和一个公钥。命令如下：
 </p>
@@ -153,7 +189,7 @@ id_rsa  id_rsa.pub  known_hosts
 如果你只建立一对密钥，那么另外一个用户肯定找不到私钥的位置（因为不是默认路径下了），这样使用git push提交的时候，会出现权限不够的提示。
 </p>
 
-<h3 id="toc_0.4.1">其它参考</h3>
+<h3 id="toc_0.5.1">其它参考</h3>
 <ul>
 <li>
 <a href="http://www.pureweber.com/article/git-and-github/">http://www.pureweber.com/article/git-and-github/</a>
