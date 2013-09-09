@@ -43,7 +43,7 @@ Linux的LCD驱动通常是以Framebuffer的方式工作的，不管是何种LCD�
 </p>
 
 <p>
-标准内核中就有LCD驱动的例子，你可以参考内核源代码的drivers/video/*下的代码，那些就是Framebuffer的显示驱动，每种显卡或者LCD控制器都会有自己的一个C文件，比如说你自己的你可以叫做mylcd_fb.c，所有特定的设备都会用到其中的一个叫做fbmem.c的文件。 
+标准内核中就有LCD驱动的例子，可以参考内核源代码的drivers/video/*下的代码，那些就是Framebuffer的显示驱动，每种显卡或者LCD控制器都会有自己的一个C文件，比如说你自己的你可以叫做mylcd_fb.c，所有特定的设备都会用到其中的一个叫做fbmem.c的文件。 
 </p>
 
 <p>
@@ -61,12 +61,23 @@ GUI程序对LCD的操作是通过内存映射mmap()的机制来往LCD屏上写�
 
 <h2 id="toc_0.2">Frame buffer 设备驱动的特殊之处</h2>
 <p>
-对于三楼的Samuel_Teng,你的说法我很理解,因为我最近在看标准内核中LCD驱动的例子,但是在读这个驱动的过程中,有一些地方我还不是很明白,希望你能指点. 
+对Frame Buffer驱动几个不明白的地方：
+</p>
+
+<p>
 首先,对于drivers/video/下的fbmem.c文件,在它里面虽然提供了register_framebuffer()等接口,这个函数中只有一个参数: *fb_info,这与我们看到的一般驱动不一样,一般的驱动利用register_chrdev()函数注册设备,在register_chrdev()中包括三个参数:主设备号,设备名和一个对设备操作的结构. 
+</p>
+
+<p>
 第二,fbmem.c文件中提供的是一些函数的原形,它不是一个标准的模块形式(标准的模块一般为init_module和cleanup_module两部分),如果我要把它变成一个可动态加载的模块,应该怎么做? 
+</p>
+
+<p>
 第三,你所说的"每种显卡或者LCD控制器都会有自己的一个C文件，比如说你自己的你可以叫做mylcd_fb.c",这里提到的mylcd_fb.c文件是指什么,是不是你在后门提到的"硬件的LCD控制器的初始化"文件,也就是说,把硬件的LCD控制器的初始化写到mylcd_fb.c文件中? 
+</p>
+
+<p>
 第四,如果我把硬件LCD控制器的初始化写成一个文件,比如:init.c;而且也已经把fbmem.c文件修改成为一个可动态加载的模块(包含有init_module和cleanup_module两部分),那么把这两个文件放在一起并编译成一个module,这样是不是一个完整的lcd驱动? 
-期待你的回音,谢谢!!!
 </p>
 
 <ul>
@@ -80,10 +91,6 @@ fbmem.c不是用来修改的，而是一个基础的文件，用户的驱动要�
 fb.h,fbmem.c,skeletonfb.c,再看一个具体的驱动。如果都能看懂，大概就会写LDD驱动了：） 
 
 </ul>
-<p>
-我也正在看：） 
-</p>
-
 
 
 <h2 id="toc_0.3">Frame buffer与console</h2>
@@ -94,7 +101,6 @@ fb.h,fbmem.c,skeletonfb.c,再看一个具体的驱动。如果都能看懂，大
 <p>
 在准fb设备设备驱动中是没有对console支持的。只有在非标准的fb驱动，也就是基于skeletonfb.c架构的程序，需要提供这部分代码。下面从各个方面介绍framebuffer对console的支持。
 </p>
-
 
 <h3 id="toc_0.3.1">Frame buffer与console</h3>
 <p>

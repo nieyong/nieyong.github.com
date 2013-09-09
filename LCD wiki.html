@@ -39,7 +39,7 @@
 	
 <h2 id="toc_0.1">LCD显示屏幕</h2>
 <p>
-单从LCD屏幕的显示技术上来说，现在市场上有很多种使用不同的显示技术的屏幕，其中有些参数会影响驱动程序的设计。下面是在嵌入式产品上几种常用的显示屏。
+从LCD屏幕的显示技术上来说，现在市场上有很多种使用不同的显示技术的屏幕，其中有些参数会影响驱动程序的设计。下面是在嵌入式产品上几种常用的显示屏。
 </p>
 
 <h3 id="toc_0.1.1">TFT LCD</h3>
@@ -62,7 +62,7 @@ Super Twisted Nematic。过去使用的灰阶手机的屏幕都是STN 的。STN�
 </p>
 
 <p>
-在没有LCD控制器的SOC上，也可能用GPIO口模拟控制器。这某些没有使用MCU的场合，或者有特殊要求的场合，可以使用FPGA来当作控制器；
+在没有LCD控制器的SOC上，也可能用GPIO口模拟控制器。某些没有使用MCU的场合，或者有特殊要求的场合，可以使用FPGA来当作控制器；
 </p>
 
 <h3 id="toc_0.2.1">驱动器</h3>
@@ -101,7 +101,7 @@ MCU Smart LCD Controller
 
 </ul>
 <p>
-都是指SOC上一个LCD控制的接口，其实就是SOC片上系统上的接口IC。在某些MCU上，可能既有普通的LCD Controller接口，还有Smart LCD Controller接口。
+都是指SOC上一个LCD控制的接口，其实就是SOC片上系统上的接口IC。在某些MCU上，可能既有普通的LCD Controller接口，还有Smart LCD Controller接口。君正的芯片使用上面两个名字，在三星芯片上使用FIMD（Fully Interactive Mobile Display ，完全交互式移动显示）控制器。
 </p>
 
 <p>
@@ -111,7 +111,13 @@ MCU Smart LCD Controller
 <h2 id="toc_0.3">LCD接口技术</h2>
 <p>
 上面说的LCD的驱动电路的发展，而接口都是一直是CPU接口。因为这个发展的方向是：LCD driver作为MCU的一片协处理芯片，接受MCU发过来的command/data，而可以相对独立的处理显示工作。而怎么处理显示工作的过程，对于MCU和程序员来说，都是透明的。
+</p>
+
+<p>
 后来为什么出现了RGB的接口电路，小弟真的还不知道为什么。但是有两点很清楚：一是用RGB接口的MCU/Backend IC一般都更加的强大，有专门的接口电路来配合RGB显示。一是一般用RGB接口的LCD driver都没有GRAM，这大大的降低了LCD driver的成本，而将这些成本转移到更大的液晶显示区域去。所以不难看出，高端的显示屏（&gt;=2.2"，QCIFF）的一般都会选用RGB接口。想想吧，26w色的QCIFF的显示屏至少需要多少GRAM啊，这都是钱啊！
+</p>
+
+<p>
 其实RGB接口的LCD也很简单了，甚至比CPU接口的LCD还要简单。和CPU接口的LCD driver相比，RGB接口的driver去掉了一个接口电路，就是去掉了CPU接口中的一个处理COMMAND/DATA数据的IO电路。（这个我光用语言说不大清楚，等小弟有空做一个ppt再放上来）这样的话，就需要MCU提供两个场同步信号（H,V），无疑提高了对MCU的要求，而且，LCD的帧率唯一受MCU/Backend IC的接口速度限制，所以如果MCU足够nb的话，LCD的刷新速度还是很不错的。还有就是有的GRB接口的driver做得还不是很nb，需要用SPI来传输一些少量的命令，而很多MCU没有这么一个专用的SPI，所以要用GPIO来模拟SPI。呵呵，看看也是够麻烦的。而且最郁闷的是，因为考虑到很多MCU/Backend IC芯片的接口速度还不是足够的快，所以很多厂家在LCD driver里还是放了部分或者是整个显示内存——唉，还是没有达到省钱的目的啊！
 </p>
 

@@ -42,7 +42,7 @@
 </p>
 
 <p>
-使用vim打开编辑了一些文件，并想把这些文件作为一个工程，下次直接打开回复。
+使用vim打开编辑了一些文件，并想把这些文件作为一个工程，下次直接恢复编辑。
 </p>
 
 <p>
@@ -66,7 +66,7 @@ $vim -S /path/to/Session.vim
 </p>
 
 <p>
-后面编辑增减了文件
+后面编辑增减了文件，更新session文件
 </p>
 
 <p>
@@ -91,7 +91,7 @@ sessionoptions=blank,buffers,folds,help,options,tabpages,winsize,sesdir
 " execute project related configuration in current directory
 autocmd VimEnter * :call s:ReadSession()  
 function! s:ReadSession()  
-    let session_file = "./session-kernel.vim"  
+    let session_file = "./session.vim"  
     if filereadable( session_file )  
         execute "so " . session_file  
     endif  
@@ -99,13 +99,79 @@ endfunction
 
 autocmd VimLeave * :call s:WriteSession()  
 function! s:WriteSession()  
-    let session_file = "./session-kernel.vim"  
+    let session_file = "./session.vim"  
     if filereadable( session_file )  
         execute "mks! " . session_file  
     endif  
 endfunction  
 
 </pre>
+
+
+<h2 id="toc_0.1">多窗口</h2>
+<p>
+打开当前文件所在的目录
+,fe
+</p>
+
+<p>
+使用,fe打开了一个目录窗口，需要在上一个窗口打开目录窗口中的某个文件
+P
+</p>
+
+<p>
+浏览当前打开的所有文件
+,be
+,bv
+</p>
+
+<p>
+Ctrl-W h    移动到窗口左边
+Ctrl-W j    移动到窗口下边
+Ctrl-W k    移动到窗口上边
+Ctrl-W l    移动到窗口右边
+</p>
+
+
+<h2 id="toc_0.2">tags</h2>
+<p>
+将当前目录下的所有文件生成tags文，放置在当前路径下
+#ctags -R ./
+</p>
+
+<p>
+打开vim，设置tags选项为当前目录下的tags文件
+:set tags=tags
+</p>
+
+<p>
+跳转到指定的标签，例如跳转到main函数
+:tag main
+</p>
+
+<p>
+显示标签栈
+:tags
+</p>
+
+<p>
+跳转到当前光标下的标签
+CTRL-]
+</p>
+
+<p>
+跳到标签栈中较早的标签
+CTRL-T
+</p>
+
+
+<h2 id="toc_0.3">打开gitk工具</h2>
+<p>
+#gitk       //当前目录打开gitk这个GUI
+Ctrl + Z    //将gitk到后台运行
+#jobs       //查看后台运行的程序
+#bg         //将程序到后台运行
+</p>
 
 	</div>
     </div>

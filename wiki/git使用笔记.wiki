@@ -315,3 +315,36 @@ git clean -f -x -d # CAUTION: as above but removes ignored files like config.
 * [[https://github.com/nieyong/GitStats|Git统计工具GitStats]]
 * [[https://wiki.gnome.org/giggle|Giggle]] is a graphical frontend for the git content tracker,just for Linux.
 * gitk是Linux下的git历史记录查看工具，`sudo apt-get install gitk`.
+
+
+== git pull ==
+git的pull默认使用--merge参数。如果想获得线性的提交记录，可以使用--rebase参数。如下：
+{{{
+ny@ny-server2:~/workspace/4412/u-boot-4412$ git pull --rebase
+Cannot pull with rebase: You have unstaged changes.
+Please commit or stash them.
+}}}
+
+本地有修改没有提交，远程有新的提交，所以出现了上面的提示。使用git fetch命令之后，参看log记录如下：
+{{{
+ny@ny-server2:~/workspace/4412/u-boot-4412$ git ll origin/master
+579f18d (origin/master, origin/HEAD) 1. utscript脚本加入对cache与userdata分区的格式化操作。解决安卓启动后不能保存用户配置的问题。
+f1057f4 (HEAD, master) *添加升级时LCD提示信息，font为8*8
+036fc67 *修改lcd分辨率等参数
+9897bf4 *修改uboot的fb驱动，实现uboot的lcd显示
+}}}
+
+从上面的记录可以看到，本地的提交记录还是f1057f4，远程已经是579f18d，并且远程的修改已经拉到了本地。然后再使用git rebase命令进行合并（git fetch和git rebase origin/master命令就是对应git pull --rebase命令）。
+{{{
+ny@ny-server2:~/workspace/4412/u-boot-4412$ git rebase origin/master
+Cannot rebase: You have unstaged changes.
+Please commit or stash them.
+}}}
+
+那么下面如何合并origin/master分支呢？使用git stash命令进行暂时存储：
+{{{
+$git stash
+$git stash list
+$git rebase origin/master
+$git stash pop
+}}}

@@ -14,6 +14,7 @@ WEB笔记：[[wiki_web/|Web Note]]
 * [[objc代码段]]
 * [[ios开发调试]]
 * [[my config file]]
+* [[Vim2IDE]]
 
 
 == 最近编辑 ==
