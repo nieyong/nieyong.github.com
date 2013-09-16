@@ -42,6 +42,7 @@ pre {
     border: solid 1px #ddd;
     background: #f7f7f7;
     color: #060;
+    font: 14px/1.5 monospace;
 }
 a,a:hover,a:visited { color:#0645AD; text-decoration:none; padding-left:2px; padding-right:2px; }
 a:hover { text-decoration:underline; }
