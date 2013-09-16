@@ -81,6 +81,8 @@ CTRL-]
 跳到标签栈中较早的标签
 CTRL-T
 
+查看所有的main函数
+:ts main
 
 == 打开gitk工具 ==
 #gitk       //当前目录打开gitk这个GUI
