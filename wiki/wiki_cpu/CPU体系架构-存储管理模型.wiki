@@ -1,6 +1,6 @@
 == MIPS的存储管理模型 == 
 MIPS32中的存储器模型被划分为四个大块，如下表所示： 
-| 虚拟地址范围                             | 命名    | 描述                                                                                  |
+| 虚拟地址范围                             | 命名    | 描述                                                                        |
 |------------------------------------+-------+-------------------------------------------------------------------------------------|
 | 0x0000,0000~0x7fff,ffff(0~2G-1)    | USEG  | must be mapped (set page table and TLB)and set cache before use                     |
 | 0x8000,0000~0x9fff,ffff(2G~2.5G-1) | KSEG0 | directly mapped(no need to set page table and TLB) but need to set cache before use |
@@ -22,7 +22,23 @@ MIPS32中的 *处理器启动向量* 位于KSEG1中0xbfc0,0000。由于KSEG1是d
 待续
 
 == ARM的存储器管理模型 ==
-待续
+因为ARM公司只做ARM的内核，其他公司在获得ARM的内核后自行生产自己的SOC芯片 ,所以不同厂家生产的芯片，启动代码也不尽相同，但是启动代码大都实现以下功能：异常向量表的定义、堆栈初始化、系统变量初始化、中断系统初始化、地址重映射等。
+
+1. 中断向量表
+ARM要求中断向量表必须放置在从0地址开始，连续8X4字节的空间内。
+每当一个中断发生以后，ARM处理器便强制把PC指针置为向量表中对应中断类型的地址值。因为每个中断只占据向量表中1个字的存储空间，只能放置一条ARM指令，使程序跳转到存储器的其他地方，再执行中断处理。
+中断向量表的程序实现通常如下表示：
+AREA Boot ,CODE, READONLY
+ENTRY
+B ResetHandler
+B UndefHandler
+B SWIHandler
+B PreAbortHandler
+B DataAbortHandler
+B
+B IRQHandler
+B FIQHandler
+其中关键字ENTRY是指定编译器保留这段代码，因为编译器可能会认为这是一段亢余代码而加以优化。链接的时候要确保这段代码被链接在0地址处，并且作为整个程序的入口。
 
 == 虚拟地址和物理地址 ==
 对于底层软件工程师来说，很多时候都在和地址打交道。由于以前学习不够系统，各种技术资料专业术语不统一，以及现代SOC芯片的模块集成的复杂，在开发和阅读中，地址的概念可能比较混淆。下面以bcm5836芯片为例，说明其中需要使用到的各类地址的关系。其中重点是虚拟地址（Virtual Address VA）和物理地址（Physical Address PA）。

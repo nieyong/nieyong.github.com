@@ -39,15 +39,15 @@
 	
 <h2 id="toc_0.1">关于Linux字体</h2>
 <p>
-以前一直没有关注Linux的字体。最近遇到好几个关于字体的问题，特地了解了以下Linux下字体的相关知识。下面，首先列出遇到的问题：
+以前没有关注Linux的字体。最近遇到好几个关于字体的问题，特地了解了字体的相关知识。下面，首先列出遇到的问题：
 </p>
 
 <ul>
 <li>
-在fedora下，中文字体在很多地方表现得很糟糕，很不美观。一个最大的问题，就是在chrome浏览器下的中文字体表现的很差，笔画不清晰，很多字体发虚（网上很多文章都用这个词，我只是借用过来，至于是否和最先想表达的想法相同，也就不追究了）。
+在fedora下，中文字体在很多地方表现得很糟糕，很不美观。一个最大的问题，就是在chrome浏览器下的中文字体表现的很差，笔画不清晰，很多字体发虚。
 
 <li>
-IDE工具NetBeans文件中的中文无法显示，现象为用“口”字代替。这里，首先得明白一点，NetBeans这个IDE是使用JAVA开发的，也就是说NetBeans是一个JAVA应用程序。
+IDE工具NetBeans打开文件，中文无法显示，用“口”字代替。这里，首先得明白一点，NetBeans这个IDE是使用JAVA开发的，也就是说NetBeans是一个JAVA应用程序。
 
 </ul>
 
@@ -96,8 +96,7 @@ wqy-zenhei-fonts		wqy正黑体
 
 <h2 id="toc_0.3">NetBeans中文字体</h2>
 <p>
-缺省的NetBeans在使用Swing的缺省字体，大小为11
-IDE工具NetBeans文件中的中文显示为方框的原因:
+缺省的NetBeans在使用Swing的缺省字体，大小为11。IDE工具NetBeans打开文件，中文显示为方框的原因:
 </p>
 
 <p>
@@ -105,14 +104,14 @@ NetBeans是一个Java应用程序，Java程序启动的时候会去在$JAVA_HOME
 </p>
 
 <p>
-netbeans是一个java应用程序，所以在安装是，肯定会在你的系统中安装有java development kit (jdk) 或 java runtime environment (jre) 的安装包。可以通过NetBeans的配置文件查看到其运行时jre所在的位置。在NetBeans安装目录的etc/netbeans.conf文件中，可以看到需要的jre的位置如下所示：
+Netbeans是一个java应用程序，所以在安装时，肯定会在你的系统中安装有java development kit (jdk) 或 java runtime environment (jre) 的安装包。可以通过NetBeans的配置文件查看到其运行时jre所在的位置。在NetBeans安装目录的etc/netbeans.conf文件中，可以看到需要的jre的位置如下所示：
 </p>
 <pre>
 # Default location of JDK, can be overridden by using --jdkhome &lt;dir&gt;:
 netbeans_jdkhome="/usr/lib/jvm/jre"
 </pre>
 <p>
-下面你需要作的，就是配置好这个JRE中的字体，让这个JRE支持中文字体。那么，怎么让jre支持中文字体，或者说找到系统中的中文字体呢？
+下面你需要做的，就是配置好这个JRE中的字体，让这个JRE支持中文字体。那么，怎么让jre支持中文字体，或者说找到系统中的中文字体呢？
 </p>
 
 <h3 id="toc_0.3.1">jrd的中文支持</h3>
