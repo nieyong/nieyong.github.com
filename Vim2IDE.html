@@ -41,6 +41,7 @@
 记录使用vim查看kernel代码的过程，逐步打造成为一个Souce Insight。
 </p>
 
+<h2 id="toc_0.1">session &amp; viminfo</h2>
 <p>
 使用vim打开编辑了一些文件，并想把这些文件作为一个工程，下次直接恢复编辑。
 </p>
@@ -108,7 +109,7 @@ endfunction
 </pre>
 
 
-<h2 id="toc_0.1">多窗口</h2>
+<h2 id="toc_0.2">多窗口</h2>
 <p>
 打开当前文件所在的目录
 ,fe
@@ -133,7 +134,7 @@ Ctrl-W l    移动到窗口右边
 </p>
 
 
-<h2 id="toc_0.2">tags</h2>
+<h2 id="toc_0.3">tags</h2>
 <p>
 将当前目录下的所有文件生成tags文，放置在当前路径下
 #ctags -R ./
@@ -169,13 +170,53 @@ CTRL-T
 :ts main
 </p>
 
-<h2 id="toc_0.3">打开gitk工具</h2>
-<p>
+<h2 id="toc_0.4">打开gitk工具</h2>
+<pre>
 #gitk       //当前目录打开gitk这个GUI
 Ctrl + Z    //将gitk到后台运行
 #jobs       //查看后台运行的程序
 #bg         //将程序到后台运行
+</pre>
+
+
+<h2 id="toc_0.5">文件搜索</h2>
+<p>
+set path=.,/usr/include,,~/workspace/4412/kernel-4412/**
 </p>
+
+
+<p>
+稍微解释一下各项的含义,更详细的信息,请查看path选项的帮助页:
+</p>
+<ul>
+<li>
+.                 //在当前文件所在目录中搜索
+
+<li>
+/usr/include      //在/usr/include目录中搜索
+
+<li>
+,,                //在当前工作路径中搜索，也就是:pwd命令显示的路径
+
+<li>
+~/workspace/4412/kernel-4412/**       //在其所有子目录树中进行搜索
+
+</ul>
+
+<p>
+设置了path之后，如何查找文件呢？
+</p>
+<ul>
+<li>
+将光标定位到某个文件的单词，在normal模式下按下"gf"，使用Ctrl+^可以返回上一个文件；
+
+<li>
+将光标定位到某个文件的单词，在normal模式下按下"ctrl+w f"可以在一个水平窗口打开该文件
+
+<li>
+使用:find命令，例如:find printk.c
+
+</ul>
 
 	</div>
     </div>
