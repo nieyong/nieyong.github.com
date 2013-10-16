@@ -37,7 +37,24 @@
     <div class="container">
 	<div id="content">
 	
-<h2 id="toc_0.1">git用户信息</h2>
+<h2 id="toc_0.1">git autocrlf问题</h2>
+<p>
+$ git config --global core.autocrlf input
+</p>
+
+<p>
+<a href="https://help.github.com/articles/dealing-with-line-endings#platform-all">https://help.github.com/articles/dealing-with-line-endings#platform-all</a>
+</p>
+
+<h2 id="toc_0.2">git用户信息</h2>
+<pre>
+$ git config --global core.autocrlf input
+$ git config --list --global
+</pre>
+<p>
+上面的--global选项会修改~/.gitconfig文件中的配置，或者现实~/.gitconfig文件中的配置。
+</p>
+
 <p>
 查看git用户信息，使用命令 <strong>git config --list</strong>
 </p>
@@ -82,7 +99,7 @@ user.email=nieyong_1947@126.com
 </p>
 
 
-<h2 id="toc_0.2">git配置文件</h2>
+<h2 id="toc_0.3">git配置文件</h2>
 <ul>
 <li>
 /etc/gitconfig文件，对应MS下的安装路径下的gitconfig文件。命令<code>git config</code>的--system选项就是配置该文件，例如：<code>git config --system i18n.logOutputEncoding gbk</code>。
@@ -97,7 +114,7 @@ user.email=nieyong_1947@126.com
 </p>
 
 
-<h2 id="toc_0.3">git使用外部的diff或者merge工具</h2>
+<h2 id="toc_0.4">git使用外部的diff或者merge工具</h2>
 <p>
 git可以配置使用外部的diff或者merge工具，例如使用p4merge工具。
 </p>
@@ -120,7 +137,7 @@ git config --global mergetool.p4merge.path "C:/Progra~1/Perfoce/p4merge.exe"
 最后实验的结果，不需要配置也没有关系，在安装了p4merge之后，直接使用命令<code>git difftool 232e 21dk</code>就可以切换到p4merge查看。但是如果使用<code>git diff 232e 21dk</code>，则无论配置与否，都不能够切换到p4merge查看。
 </p>
 
-<h2 id="toc_0.4">msysGit使用笔记</h2>
+<h2 id="toc_0.5">msysGit使用笔记</h2>
 <p>
 在Windows下使用git，然后和Linux下进行协作开发，最让我恼火的是编码的问题。下面记录在msysGit配置过程中的一些知识点。
 </p>

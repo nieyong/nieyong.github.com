@@ -1,4 +1,15 @@
+== git autocrlf问题 ==
+$ git config --global core.autocrlf input
+
+https://help.github.com/articles/dealing-with-line-endings#platform-all
+
 == git用户信息 ==
+{{{
+$ git config --global core.autocrlf input
+$ git config --list --global
+}}}
+上面的--global选项会修改~/.gitconfig文件中的配置，或者现实~/.gitconfig文件中的配置。
+
 查看git用户信息，使用命令 *git config --list*
 {{{
 [root@localhost jzcode]# git config --list
