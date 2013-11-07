@@ -217,10 +217,10 @@ zip -r test.zip dir1 -x \*.o	//压缩dir1目录下所有的文件，除去所有
 </blockquote>
 
 <p>
-在zip命令中，压缩某个目录下的所有文件，但是不包含某个子目录，这次应该怎么写呢？
+在zip命令中，压缩某个目录下的所有文件，但是不包含某个子目录，这次应该怎么写呢？命令如下，下面进行详细的解释。压缩test3目录为test6.zip文件，但是不包含./test3/bin/目录下的所有文件（包括路径），也不包括./test3/.git/目录下的所有文件和目录。这里，如果将反斜杠去掉，则不能够达到去除目录的作用，则只会不包括./test3/bin/目录下的所有文件（注意，不包括目录）。
 </p>
 <blockquote>
-zip -r test6 test3 -x ./test3/bin/\* -x ./test3/.git/\*	//压缩test3目录为test6.zip文件，但是不包含./test3/bin/目录下的所有文件（包括路径），也不包括./test3/.git/目录下的所有文件和目录。这里，如果将反斜杠去掉，则不能够达到去除目录的作用，则只会不包括./test3/bin/目录下的所有文件（注意，不包括目录）。
+zip -r test6 test3 -x ./test3/bin/\* -x ./test3/.git/\*	
 </blockquote>
 
 <h3 id="toc_0.5.1">tar.gz</h3>

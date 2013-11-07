@@ -39,13 +39,37 @@
 	
 <h2 id="toc_0.1">列出全部的共享</h2>
 <p>
+列出某个IP地址所提供的共享文件夹
+</p>
+<pre>
 #smbclient -L 机器IP -U 用户名%密码
-</p>
+</pre>
 
-<h2 id="toc_0.2">看到共享目录后</h2>
+<h2 id="toc_0.2">登陆到smb服务器</h2>
 <p>
-#smbclient //机器IP/共享目录 -U 用户名称
+通过上面的命令看到共享目录后，就可以通过下面的命令登陆到smb服务器
 </p>
+<pre>
+#smbclient //机器IP/共享目录 -U 用户名称
+</pre>
+
+<p>
+如果smb未设置账户，则可以直接登陆。
+</p>
+<pre>
+$ smbclient //10.10.1.136/public
+Enter ny's password: 
+Domain=[WORKGROUP] OS=[Unix] Server=[Samba 3.6.5]
+smb: \&gt; 
+</pre>
+
+<p>
+将smb以fs挂载到本地
+</p>
+<pre>
+# smbmount //10.10.1.136/public mybooklive/
+# Password: 
+</pre>
 
 	</div>
     </div>

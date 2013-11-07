@@ -1,5 +1,25 @@
 == 列出全部的共享 ==
+列出某个IP地址所提供的共享文件夹
+{{{
 #smbclient -L 机器IP -U 用户名%密码
+}}}
 
-== 看到共享目录后 ==
+== 登陆到smb服务器 ==
+通过上面的命令看到共享目录后，就可以通过下面的命令登陆到smb服务器
+{{{
 #smbclient //机器IP/共享目录 -U 用户名称
+}}}
+
+如果smb未设置账户，则可以直接登陆。
+{{{
+$ smbclient //10.10.1.136/public
+Enter ny's password: 
+Domain=[WORKGROUP] OS=[Unix] Server=[Samba 3.6.5]
+smb: \> 
+}}}
+
+将smb以fs挂载到本地
+{{{
+# smbmount //10.10.1.136/public mybooklive/
+# Password: 
+}}}
