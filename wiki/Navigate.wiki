@@ -33,6 +33,7 @@
 * [[SSH]]
 * [[Vim]]
 * [[vimwiki-HTML站点]]
+* [[oauth技术]]
 
 == 嵌入式开发 ==
 * [[LCD wiki]]

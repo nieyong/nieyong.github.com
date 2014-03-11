@@ -62,6 +62,7 @@ Ctrl-W j    移动到窗口下边
 Ctrl-W k    移动到窗口上边
 Ctrl-W l    移动到窗口右边
 
+:vnew   //垂直打开一个新的窗口
 
 == tags ==
 将当前目录下的所有文件生成tags文，放置在当前路径下
@@ -95,16 +96,28 @@ Ctrl + Z    //将gitk到后台运行
 
 
 == 文件搜索 ==
+设置vim的文件搜索路径：
+{{{
 set path=.,/usr/include,,~/workspace/4412/kernel-4412/**
+}}}
 
 
-稍微解释一下各项的含义,更详细的信息,请查看path选项的帮助页:
+解释一下各项的含义：
 * .                 //在当前文件所在目录中搜索
 * /usr/include      //在/usr/include目录中搜索
-* ,,                //在当前工作路径中搜索，也就是:pwd命令显示的路径
+*                   //表示一个空的字符，在当前工作路径中搜索，也就是:pwd命令显示的路径
 * ~/workspace/4412/kernel-4412/**       //在其所有子目录树中进行搜索
 
 设置了path之后，如何查找文件呢？
 * 将光标定位到某个文件的单词，在normal模式下按下"gf"，使用Ctrl+^可以返回上一个文件；
 * 将光标定位到某个文件的单词，在normal模式下按下"ctrl+w f"可以在一个水平窗口打开该文件
 * 使用:find命令，例如:find printk.c
+
+== lookupfile插件 ==
+生成文件名列表tag文件，为lookupfile插件所用：
+{{{
+$echo '!_TAG_FILE_SORTED    2    /2=foldcase/' >tagfile
+$find `pwd` -type f \( -name "*.[ch]"  -o -name "*.[ch]pp" \) -printf "%f\t%p\t1\n"|sort -f >> filenametags
+}}}
+
+有关lookupfile插件的使用，参考vimrc的gist文件。

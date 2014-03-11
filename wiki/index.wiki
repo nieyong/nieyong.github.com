@@ -16,23 +16,6 @@ WEB笔记：[[wiki_web/|Web Note]]
 * [[my config file]]
 * [[Vim2IDE]]
 
-
-== 最近编辑 ==
-最近经常编辑的文章，一般是最近的工作内容或者学习领域。
-* [[oauth技术]]
-* [[sae]]
-* [[linux apt]]
-* [[s5]]
-* [[Python]]
-* [[java base]]
-* [[ADW launcher]]
-* [[Android tool chain]]
-* [[Android UI]]
-* [[Android]]
-* [[search]]
-* [[每周畅销书]]
-
-
 == 要补充的 ==
 * [[about]] -- 关于本站
 * [[Navigate]] -- 本站导图

@@ -133,6 +133,9 @@ Ctrl-W k    移动到窗口上边
 Ctrl-W l    移动到窗口右边
 </p>
 
+<p>
+:vnew   //垂直打开一个新的窗口
+</p>
 
 <h2 id="toc_0.3">tags</h2>
 <p>
@@ -181,12 +184,15 @@ Ctrl + Z    //将gitk到后台运行
 
 <h2 id="toc_0.5">文件搜索</h2>
 <p>
-set path=.,/usr/include,,~/workspace/4412/kernel-4412/**
+设置vim的文件搜索路径：
 </p>
+<pre>
+set path=.,/usr/include,,~/workspace/4412/kernel-4412/**
+</pre>
 
 
 <p>
-稍微解释一下各项的含义,更详细的信息,请查看path选项的帮助页:
+解释一下各项的含义：
 </p>
 <ul>
 <li>
@@ -196,7 +202,7 @@ set path=.,/usr/include,,~/workspace/4412/kernel-4412/**
 /usr/include      //在/usr/include目录中搜索
 
 <li>
-,,                //在当前工作路径中搜索，也就是:pwd命令显示的路径
+                  //表示一个空的字符，在当前工作路径中搜索，也就是:pwd命令显示的路径
 
 <li>
 ~/workspace/4412/kernel-4412/**       //在其所有子目录树中进行搜索
@@ -217,6 +223,19 @@ set path=.,/usr/include,,~/workspace/4412/kernel-4412/**
 使用:find命令，例如:find printk.c
 
 </ul>
+
+<h2 id="toc_0.6">lookupfile插件</h2>
+<p>
+生成文件名列表tag文件，为lookupfile插件所用：
+</p>
+<pre>
+$echo '!_TAG_FILE_SORTED    2    /2=foldcase/' &gt;tagfile
+$find `pwd` -type f \( -name "*.[ch]"  -o -name "*.[ch]pp" \) -printf "%f\t%p\t1\n"|sort -f &gt;&gt; filenametags
+</pre>
+
+<p>
+有关lookupfile插件的使用，参考vimrc的gist文件。
+</p>
 
 	</div>
     </div>

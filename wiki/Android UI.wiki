@@ -1,4 +1,0 @@
-网上有很多关于GridView的文章，有兴趣的话可以做做练习熟悉一下GridView的使用，android上类似GridView、ListView等涉及到数组操作的组件都是使用Adapter的方式，也是很重要的基本功了。
-
-
-
